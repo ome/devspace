@@ -1,5 +1,5 @@
-data:
-    image: jenkins
+home:
+    build: home
     volumes:
         - /var/jenkins_home
     command: true
@@ -41,10 +41,17 @@ frontend:
 jenkins:
     build: jenkins
     volumes_from:
-        - data
+        - home
 
+git:
+    image: openmicroscopy/tags:5.1.1
+    volumes:
+        - /src
+    command: true
 
 slave:
     build: slave
     links:
         - jenkins
+    volumes_from:
+        - git

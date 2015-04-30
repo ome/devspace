@@ -14,6 +14,6 @@ RUN chmod a+x /usr/local/bin/jenkins-slave.sh
 
 USER jenkins-slave
 
-VOLUME /home/jenkins-slave
+#VOLUME /home/jenkins-slave
 
 ENTRYPOINT ["/usr/local/bin/jenkins-slave.sh"]
