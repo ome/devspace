@@ -2,7 +2,7 @@ FROM java:8-jdk
 
 MAINTAINER OME
 
-ENV JENKINS_SWARM_VERSION 1.22
+ENV JENKINS_SWARM_VERSION 1.24
 ENV HOME /home/jenkins-slave
 
 RUN useradd -c "Jenkins Slave user" -d $HOME -m jenkins-slave
@@ -16,5 +16,4 @@ USER jenkins-slave
 
 VOLUME /home/jenkins-slave
 
-ENTRYPOINT ["bash"]
-CMD ["/usr/local/bin/jenkins-slave.X"]
+ENTRYPOINT ["/usr/local/bin/jenkins-slave.sh"]
