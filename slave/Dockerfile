@@ -1,6 +1,6 @@
 FROM java:8-jdk
 
-MAINTAINER Carlos Sanchez <carlos@apache.org>
+MAINTAINER OME
 
 ENV JENKINS_SWARM_VERSION 1.22
 ENV HOME /home/jenkins-slave
@@ -10,10 +10,11 @@ RUN curl --create-dirs -sSLo /usr/share/jenkins/swarm-client-$JENKINS_SWARM_VERS
   && chmod 755 /usr/share/jenkins
 
 COPY jenkins-slave.sh /usr/local/bin/jenkins-slave.sh
+RUN chmod a+x /usr/local/bin/jenkins-slave.sh
 
 USER jenkins-slave
 
 VOLUME /home/jenkins-slave
 
-ENTRYPOINT ["bash", "/usr/local/bin/jenkins-slave.sh"]
-
+ENTRYPOINT ["bash"]
+CMD ["/usr/local/bin/jenkins-slave.X"]
