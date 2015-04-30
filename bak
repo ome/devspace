@@ -1,0 +1,4 @@
+#!/bin/bash
+SPACE=$(basename $(pwd))
+NAME=${NAME:-$SPACE}
+exec docker cp "$NAME"_jenkins_1:/var/jenkins_home/jobs/ home/
