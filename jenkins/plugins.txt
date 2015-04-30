@@ -1,3 +1,12 @@
-dockerhub:1.0
-disk-usage:0.25
 swarm:1.24
+git:2.3.5
+mailer:1.11
+scm-api:0.2
+matrix-project:1.4
+git-client:1.16.1
+ssh-credentials:1.10
+credentials:1.22
+# Optional
+parameterized-trigger:2.4
+token-macro:1.10
+promoted-builds:2.20
