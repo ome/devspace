@@ -40,8 +40,8 @@ frontend:
 
 jenkins:
     build: jenkins
-    volumes_from:
-        - home
+    volumes:
+        - ./home:/var/jenkins_home
 
 git:
     image: openmicroscopy/tags:5.1.1
