@@ -6,6 +6,12 @@ matrix-project:1.4
 git-client:1.16.1
 ssh-credentials:1.10
 credentials:1.22
+rundeck:3.4
+
+# As a repository
+repository:1.2
+maven-plugin:2.1
+
 # Optional
 parameterized-trigger:2.4
 token-macro:1.10
