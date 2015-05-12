@@ -9,7 +9,7 @@ jenkins:
     volumes:
         - ./home:/var/jenkins_home
     environment:
-        SERVICE_NAME
+        - SERVICE_NAME
 
 git:
     image: openmicroscopy/tags:5.1.1
