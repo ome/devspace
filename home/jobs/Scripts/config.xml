@@ -37,7 +37,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>rm -f &quot;$WORKSPACE&quot;.zip
-zip -r &quot;$WORKSPACE&quot;.zip &quot;$WORKSPACE&quot;</command>
+tar czf &quot;$WORKSPACE&quot;.tar.gz &quot;$WORKSPACE&quot;</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
