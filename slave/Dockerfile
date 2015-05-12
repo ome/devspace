@@ -1,4 +1,4 @@
-FROM java:8-jdk
+FROM openmicroscopy/omero-build-c6-multienv
 
 MAINTAINER OME
 

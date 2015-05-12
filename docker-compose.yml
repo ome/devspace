@@ -49,9 +49,17 @@ git:
         - /src
     command: true
 
+pg:
+    image: postgres
+
+nginx:
+    image: nginx
+
 slave:
     build: slave
     links:
         - jenkins
+        - nginx
+        - pg
     volumes_from:
         - git
