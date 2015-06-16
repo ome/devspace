@@ -1,15 +1,9 @@
-storage:
-  image: redis
-  volumes:
-        - /var/lib/docker/registry
-  command: true
-
 jenkins:
     build: jenkins
     volumes:
         - ./home:/var/jenkins_home
     environment:
-        - SERVICE_NAME
+        - SERVICE_NAME=metadata-ci
 
 git:
     image: openmicroscopy/tags:5.1.1
@@ -20,14 +14,21 @@ git:
 pg:
     image: postgres
 
-nginx:
-    image: nginx
-
 slave:
     build: slave
     links:
         - jenkins
-        - nginx
         - pg
+    volumes:
+        - ./slave:home/jenkins-slave
     volumes_from:
         - git
+
+nginx:
+    image: nginx
+    links:
+        - slave
+    volumes:
+        - ./slave:home/jenkins-slave
+    environment:
+        - SERVICE_NAME=metadata-web
