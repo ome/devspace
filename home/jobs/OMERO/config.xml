@@ -8,12 +8,12 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>/src/omero.git</url>
+        <url>git://github.com/openmicroscopy/openmicroscopy.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>*/master</name>
+        <name>metadata</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -52,15 +52,15 @@ source docs/hudson/functions.sh
 
 
 # PURGE
-dist/bin/omero admin stop
+dist/bin/omero admin stop || echo First build
 sleep 5
 mkdir -p $OMERO_DATA_DIR
 rm -rf $OMERO_DATA_DIR/*
 dropdb -h pg -U postgres $OMERO_DB_NAME || echo Already exists maybe
 createdb -h pg -U postgres $OMERO_DB_NAME
 
-
-
+pip install --user scc
+$HOME/.local/bin/scc merge metadata --no-ask --reset --update-gitmodules -S none --push metadata/merge/trigger
 ./build.py clean
 ./build.py build-default test-compile
 cd dist
@@ -70,6 +70,7 @@ bin/omero config set omero.db.name $OMERO_DB_NAME
 bin/omero config set omero.db.host pg
 bin/omero config set omero.db.user postgres
 bin/omero config set omero.data.dir $OMERO_DATA_DIR
+bin/omero config set omero.web.application_server.host 0.0.0.0
 # DONE
 
 
@@ -82,6 +83,7 @@ BUILD_ID=DONT_KILL_ME bin/omero admin start
 BUILD_ID=DONT_KILL_ME bin/omero web start
 
 bin/omero admin waitup
+exit 0
 
 export OMERO_SESSION_DIR=/tmp/$JOB_NAME/$BUILD_NUMBER
 export ICE_CONFIG=$WORKSPACE/src/dist/etc/ice.config
