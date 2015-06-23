@@ -21,6 +21,7 @@ promoted-builds:2.20
 
 # Workflow
 # See: https://github.com/jenkinsci/workflow-plugin/blob/master/demo/plugins.txt
+durable-task:1.5
 workflow-aggregator:1.8
 workflow-api:1.8
 workflow-basic-steps:1.8
