@@ -13,7 +13,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>metadata</name>
+        <name>SPACEBRANCH</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -60,7 +60,7 @@ dropdb -h pg -U postgres $OMERO_DB_NAME || echo Already exists maybe
 createdb -h pg -U postgres $OMERO_DB_NAME
 
 pip install --user scc
-$HOME/.local/bin/scc merge metadata --no-ask --reset --update-gitmodules -S none --push metadata/merge/trigger
+$HOME/.local/bin/scc merge SPACEBRANCH --no-ask --reset --update-gitmodules -S none --push SPACEBRANCH/merge/trigger
 ./build.py clean
 ./build.py build-default test-compile
 cd dist
@@ -73,7 +73,7 @@ bin/omero config set omero.data.dir $OMERO_DATA_DIR
 
 bin/omero config set omero.web.check_version false
 bin/omero config set omero.web.application_server.host 0.0.0.0
-bin/omero config set omero.web.server_list &apos;[[&quot;localhost&quot;, 4064, &quot;metadata&quot;],[&quot;dogfish.openmicroscopy.org&quot;, 4064, &quot;dogfish&quot;]]&apos;
+bin/omero config set omero.web.server_list &apos;[[&quot;localhost&quot;, 4064, &quot;SPACENAME&quot;],[&quot;dogfish.openmicroscopy.org&quot;, 4064, &quot;dogfish&quot;]]&apos;
 # DONE
 
 

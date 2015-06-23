@@ -13,7 +13,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>metadata</name>
+        <name>SPACEBRANCH</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -49,9 +49,9 @@
 pip install --user scc
 
 cd src
-$HOME/.local/bin/scc merge metadata --no-ask --reset --update-gitmodules -S none --push metadata/merge/trigger
+$HOME/.local/bin/scc merge SPACEBRANCH--no-ask --reset --update-gitmodules -S none --push SPACEBRANCH/merge/trigger
 
-export OMERO_BRANCH=metadata
+export OMERO_BRANCH=SPACEBRANCH
 source docs/hudson/OMERO.sh
 </command>
     </hudson.tasks.Shell>
