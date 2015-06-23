@@ -8,12 +8,12 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>git://github.com/openmicroscopy/openmicroscopy.git</url>
+        <url>git://github.com/snoopycrimecop/openmicroscopy.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>SPACEBRANCH</name>
+        <name>SPACEBRANCH/merge/trigger</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -36,21 +36,13 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <hudson.triggers.TimerTrigger>
-      <spec>H H(3-5) * * 1-5</spec>
-    </hudson.triggers.TimerTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
       <command>eval $(bash /opt/multi-config.sh ice3.4)
 
-pip install --user scc
-
 cd src
-$HOME/.local/bin/scc merge SPACEBRANCH--no-ask --reset --update-gitmodules -S none --push SPACEBRANCH/merge/trigger
-
 export OMERO_BRANCH=SPACEBRANCH
 source docs/hudson/OMERO.sh
 </command>

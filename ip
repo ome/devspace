@@ -1,4 +1,4 @@
 #!/bin/bash
-SPACE=$(basename $(pwd))
+SPACE=$(basename $(pwd) | tr -d '.')
 NAME=${NAME:-$SPACE}
 exec docker inspect --format '{{ .NetworkSettings.IPAddress }}' ${NAME}_jenkins_1

@@ -36,7 +36,11 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
+  <triggers>
+    <hudson.triggers.TimerTrigger>
+      <spec>H H(3-5) * * 1-5</spec>
+    </hudson.triggers.TimerTrigger>
+  </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
@@ -54,10 +58,11 @@ source docs/hudson/functions.sh
 # PURGE
 dist/bin/omero admin stop || echo First build
 sleep 5
-mkdir -p $OMERO_DATA_DIR
-rm -rf $OMERO_DATA_DIR/*
-dropdb -h pg -U postgres $OMERO_DB_NAME || echo Already exists maybe
-createdb -h pg -U postgres $OMERO_DB_NAME
+
+## mkdir -p $OMERO_DATA_DIR
+## rm -rf $OMERO_DATA_DIR/*
+## dropdb -h pg -U postgres $OMERO_DB_NAME || echo Already exists maybe
+## createdb -h pg -U postgres $OMERO_DB_NAME
 
 pip install --user scc
 $HOME/.local/bin/scc merge SPACEBRANCH --no-ask --reset --update-gitmodules -S none --push SPACEBRANCH/merge/trigger
@@ -78,15 +83,14 @@ bin/omero config set omero.web.server_list &apos;[[&quot;localhost&quot;, 4064, 
 
 
 # PURGE
-bin/omero db script -f dbsetup.sql &quot;&quot; &quot;&quot; omero
-psql -h pg -U postgres -d $OMERO_DB_NAME -f dbsetup.sql
-rm dbsetup.sql
+## bin/omero db script -f dbsetup.sql &quot;&quot; &quot;&quot; omero
+## psql -h pg -U postgres -d $OMERO_DB_NAME -f dbsetup.sql
+## rm dbsetup.sql
 
 BUILD_ID=DONT_KILL_ME bin/omero admin start
 BUILD_ID=DONT_KILL_ME bin/omero web start
 
 bin/omero admin waitup
-exit 0
 
 export OMERO_SESSION_DIR=/tmp/$JOB_NAME/$BUILD_NUMBER
 export ICE_CONFIG=$WORKSPACE/src/dist/etc/ice.config
