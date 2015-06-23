@@ -17,8 +17,8 @@ pg:
 slave:
     build: slave
     links:
-        - jenkins
         - pg
+        - jenkins
     volumes:
         - ./slave:home/jenkins-slave
     volumes_from:

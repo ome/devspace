@@ -4,6 +4,7 @@ mailer:1.15
 scm-api:0.2
 matrix-project:1.4
 git-client:1.17.0
+git-server:1.6
 ssh-credentials:1.10
 credentials:1.22
 rundeck:3.4
