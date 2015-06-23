@@ -16,3 +16,16 @@ maven-plugin:2.1
 parameterized-trigger:2.4
 token-macro:1.10
 promoted-builds:2.20
+
+# Workflow
+# See: https://github.com/jenkinsci/workflow-plugin/blob/master/demo/plugins.txt
+workflow-aggregator:1.8
+workflow-api:1.8
+workflow-basic-steps:1.8
+workflow-cps:1.8
+workflow-cps-global-lib:1.8
+workflow-durable-task-step:1.8
+workflow-job:1.8
+workflow-scm-step:1.8
+workflow-step-api:1.8
+workflow-support:1.8
