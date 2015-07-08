@@ -23,6 +23,8 @@ slave:
         - ./slave:home/jenkins-slave
     volumes_from:
         - git
+    environment:
+        - JAVA_HOME=/etc/alternatives/java_sdk
 
 nginx:
     image: nginx
