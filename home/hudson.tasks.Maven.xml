@@ -2,12 +2,12 @@
 <hudson.tasks.Maven_-DescriptorImpl>
   <installations>
     <hudson.tasks.Maven_-MavenInstallation>
-      <name>3.2.2</name>
+      <name>Default</name>
       <properties>
         <hudson.tools.InstallSourceProperty>
           <installers>
             <hudson.tasks.Maven_-MavenInstaller>
-              <id>3.2.2</id>
+              <id>3.3.3</id>
             </hudson.tasks.Maven_-MavenInstaller>
           </installers>
         </hudson.tools.InstallSourceProperty>
