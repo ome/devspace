@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1.8">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@1.8">
+    <script>build job: &apos;BIOFORMATS-push&apos;
+
+build &apos;BIOFORMATS-maven&apos;
+
+build job: &apos;OMERO-push&apos;
+
+build job: &apos;OMERO-build&apos;</script>
+    <sandbox>false</sandbox>
+  </definition>
+  <triggers/>
+</flow-definition>
