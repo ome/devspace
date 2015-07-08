@@ -42,6 +42,7 @@
     <hudson.tasks.Shell>
       <command>eval $(bash /opt/multi-config.sh ice3.4)
 
+export PATH=/opt/texlive/bin/x86_64-linux:$PATH # for dockerfile
 cd src
 export OMERO_BRANCH=SPACEBRANCH
 source docs/hudson/OMERO.sh
