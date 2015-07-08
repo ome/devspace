@@ -30,7 +30,7 @@
     <groupId>ome</groupId>
     <artifactId>pom-bio-formats</artifactId>
   </rootModule>
-  <goals>clean package</goals>
+  <goals>-U -DdryRun=true clean install</goals>
   <defaultGoals>install</defaultGoals>
   <aggregatorStyleBuild>true</aggregatorStyleBuild>
   <incrementalBuild>false</incrementalBuild>
