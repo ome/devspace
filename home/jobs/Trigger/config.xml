@@ -14,5 +14,9 @@ build job: &apos;OMERO-push&apos;
 build job: &apos;OMERO-build&apos;</script>
     <sandbox>false</sandbox>
   </definition>
-  <triggers/>
+  <triggers>
+    <hudson.triggers.TimerTrigger>
+      <spec>H H(2-6) * * 1-5</spec>
+    </hudson.triggers.TimerTrigger>
+  </triggers>
 </flow-definition>
