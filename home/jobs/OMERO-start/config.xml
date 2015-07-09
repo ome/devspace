@@ -4,43 +4,12 @@
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties/>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.3.5">
-    <configVersion>2</configVersion>
-    <userRemoteConfigs>
-      <hudson.plugins.git.UserRemoteConfig>
-        <url>git://github.com/openmicroscopy/openmicroscopy.git</url>
-      </hudson.plugins.git.UserRemoteConfig>
-    </userRemoteConfigs>
-    <branches>
-      <hudson.plugins.git.BranchSpec>
-        <name>SPACEBRANCH</name>
-      </hudson.plugins.git.BranchSpec>
-    </branches>
-    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-    <browser class="hudson.plugins.git.browser.AssemblaWeb">
-      <url></url>
-    </browser>
-    <submoduleCfg class="list"/>
-    <extensions>
-      <hudson.plugins.git.extensions.impl.SubmoduleOption>
-        <disableSubmodules>false</disableSubmodules>
-        <recursiveSubmodules>true</recursiveSubmodules>
-        <trackingSubmodules>false</trackingSubmodules>
-      </hudson.plugins.git.extensions.impl.SubmoduleOption>
-      <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
-        <relativeTargetDir>src</relativeTargetDir>
-      </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
-    </extensions>
-  </scm>
+  <scm class="hudson.scm.NullSCM"/>
   <canRoam>true</canRoam>
-  <disabled>true</disabled>
+  <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <hudson.triggers.TimerTrigger>
-      <spec>H H(3-5) * * 1-5</spec>
-    </hudson.triggers.TimerTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
@@ -65,7 +34,8 @@ sleep 5
 ## createdb -h pg -U postgres $OMERO_DB_NAME
 
 pip install --user scc
-$HOME/.local/bin/scc merge SPACEBRANCH --no-ask --reset --update-gitmodules -S none --push SPACEBRANCH/merge/trigger
+$HOME/.local/bin/scc merge metadata --no-ask --reset --update-gitmodules -S none --push metadata/merge/trigger
+exit 0
 ./build.py clean
 ./build.py build-default test-compile
 cd dist
@@ -78,7 +48,7 @@ bin/omero config set omero.data.dir $OMERO_DATA_DIR
 
 bin/omero config set omero.web.check_version false
 bin/omero config set omero.web.application_server.host 0.0.0.0
-bin/omero config set omero.web.server_list &apos;[[&quot;localhost&quot;, 4064, &quot;SPACENAME&quot;],[&quot;dogfish.openmicroscopy.org&quot;, 4064, &quot;dogfish&quot;]]&apos;
+bin/omero config set omero.web.server_list &apos;[[&quot;localhost&quot;, 4064, &quot;metadata&quot;],[&quot;dogfish.openmicroscopy.org&quot;, 4064, &quot;dogfish&quot;]]&apos;
 # DONE
 
 
