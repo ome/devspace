@@ -13,14 +13,31 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
+      <command>rm -rf openmicroscopy*</command>
+    </hudson.tasks.Shell>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.35.2">
+      <project>OMERO-build</project>
+      <filter>src/target/openmicroscopy*zip</filter>
+      <target></target>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.tasks.Shell>
       <command># FUTURE ENV. VARS
 OMERO_DATA_DIR=$WORKSPACE/data
 OMERO_DB_NAME=$JOB_NAME
 
+mkdir -p $OMERO_DATA_DIR
 
-#
-eval $(bash /opt/multi-config.sh ice3.5)
-cd src
+ZIP=$(ls openmicroscopy*zip)
+SRC=$WORKSPACE/${ZIP%.zip}
+unzip $ZIP
+
+
+eval $(bash /opt/multi-config.sh ice3.4)
+cd $SRC
 source docs/hudson/functions.sh
 
 
@@ -33,9 +50,6 @@ sleep 5
 ## dropdb -h pg -U postgres $OMERO_DB_NAME || echo Already exists maybe
 ## createdb -h pg -U postgres $OMERO_DB_NAME
 
-pip install --user scc
-$HOME/.local/bin/scc merge metadata --no-ask --reset --update-gitmodules -S none --push metadata/merge/trigger
-exit 0
 ./build.py clean
 ./build.py build-default test-compile
 cd dist
@@ -63,9 +77,9 @@ BUILD_ID=DONT_KILL_ME bin/omero web start
 bin/omero admin waitup
 
 export OMERO_SESSION_DIR=/tmp/$JOB_NAME/$BUILD_NUMBER
-export ICE_CONFIG=$WORKSPACE/src/dist/etc/ice.config
+export ICE_CONFIG=$SRC/dist/etc/ice.config
 echo Running the integration tests with -Dtestng.useDefaultListeners=true
-cd $WORKSPACE/src
+cd $SRC
 ./build.py -f components/tools/OmeroJava/build.xml -Dtestng.useDefaultListeners=true -Dtestreports.dir=target/reports/integration integration
 ./build.py -f components/tools/OmeroJava/build.xml -Dtestng.useDefaultListeners=true -Dtestreports.dir=target/reports/broken broken
 ./build.py -f components/tools/OmeroPy/build.xml integration  -Dtestreports.dir=target/reports/integration
