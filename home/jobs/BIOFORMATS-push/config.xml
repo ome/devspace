@@ -9,7 +9,7 @@
         <hudson.model.StringParameterDefinition>
           <name>MERGE_COMMAND</name>
           <description></description>
-          <defaultValue>merge metadata --no-ask --reset</defaultValue>
+          <defaultValue>merge SPACENAME --no-ask --reset</defaultValue>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>STATUS</name>
@@ -25,7 +25,7 @@
         <hudson.model.StringParameterDefinition>
           <name>PUSH_BRANCH</name>
           <description></description>
-          <defaultValue>metadata/merge/trigger</defaultValue>
+          <defaultValue>SPACEBRANCH/merge/trigger</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
@@ -39,7 +39,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>metadata</name>
+        <name>SPACEBRANCH</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
