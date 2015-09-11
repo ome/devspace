@@ -13,7 +13,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>SPACEBRANCH/merge/trigger</name>
+        <name>regions/merge/trigger</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -51,12 +51,12 @@
         <artifactoryName>1481416184@1436387151094</artifactoryName>
         <artifactoryUrl>http://artifacts.openmicroscopy.org/artifactory</artifactoryUrl>
         <deployReleaseRepository>
-          <keyFromText>ome.SPACENAME</keyFromText>
+          <keyFromText>ome.regions</keyFromText>
           <keyFromSelect>ome.experimental</keyFromSelect>
           <dynamicMode>true</dynamicMode>
         </deployReleaseRepository>
         <deploySnapshotRepository>
-          <keyFromText>ome.SPACENAME</keyFromText>
+          <keyFromText>ome.regions</keyFromText>
           <keyFromSelect>ome.experimental</keyFromSelect>
           <dynamicMode>true</dynamicMode>
         </deploySnapshotRepository>

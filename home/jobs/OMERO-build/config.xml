@@ -13,7 +13,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>SPACEBRANCH/merge/trigger</name>
+        <name>regions/merge/trigger</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -39,7 +39,7 @@
     <hudson.tasks.Shell>
       <command># from https://github.com/openmicroscopy/openmicroscopy/pull/3944
 echo ome.resolver=ome-simple-artifactory &gt; src/etc/local.properties
-echo simple.repository=ome.SPACENAME &gt;&gt; src/etc/local.properties
+echo simple.repository=ome.regions &gt;&gt; src/etc/local.properties
 echo versions.bioformats=5.1.3-SNAPSHOT &gt;&gt; src/etc/local.properties</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
@@ -47,7 +47,7 @@ echo versions.bioformats=5.1.3-SNAPSHOT &gt;&gt; src/etc/local.properties</comma
 
 export PATH=/opt/texlive/bin/x86_64-linux:$PATH # for dockerfile
 cd src
-export OMERO_BRANCH=SPACEBRANCH
+export OMERO_BRANCH=regions
 source docs/hudson/OMERO.sh
 </command>
     </hudson.tasks.Shell>

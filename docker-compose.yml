@@ -3,7 +3,7 @@ jenkins:
     volumes:
         - ./home:/var/jenkins_home
     environment:
-        - SERVICE_NAME=SPACENAME-ci
+        - SERVICE_NAME=regions-ci
 
 git:
     image: openmicroscopy/tags:5.1.1
@@ -33,4 +33,4 @@ nginx:
     volumes:
         - ./slave:home/jenkins-slave
     environment:
-        - SERVICE_NAME=SPACENAME-web
+        - SERVICE_NAME=regions-web
