@@ -43,7 +43,7 @@ echo simple.repository=ome.SPACENAME &gt;&gt; src/etc/local.properties
 echo versions.bioformats=5.1.3-SNAPSHOT &gt;&gt; src/etc/local.properties</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>eval $(bash /opt/multi-config.sh ice3.4)
+      <command>eval $(bash /opt/multi-config.sh ice3.5)
 
 export PATH=/opt/texlive/bin/x86_64-linux:$PATH # for dockerfile
 cd src

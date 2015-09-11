@@ -16,9 +16,9 @@
           <description></description>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
-              <string>success-only</string>
-              <string>no-error</string>
               <string>none</string>
+              <string>no-error</string>
+              <string>success-only</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
