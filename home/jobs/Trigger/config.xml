@@ -11,7 +11,13 @@ build &apos;BIOFORMATS-maven&apos;
 
 build job: &apos;OMERO-push&apos;
 
-build job: &apos;OMERO-build&apos;</script>
+build job: &apos;OMERO-build&apos;
+
+build job: &apos;OMERO-start&apos;, wait: false
+
+build job: &apos;OMERO-unit&apos;, wait: false
+
+</script>
     <sandbox>false</sandbox>
   </definition>
   <triggers>
