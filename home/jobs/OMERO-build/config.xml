@@ -27,6 +27,7 @@
       <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
         <relativeTargetDir>src</relativeTargetDir>
       </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+      <hudson.plugins.git.extensions.impl.CleanCheckout/>
     </extensions>
   </scm>
   <canRoam>true</canRoam>
