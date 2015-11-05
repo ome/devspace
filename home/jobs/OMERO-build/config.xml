@@ -27,6 +27,7 @@
       <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
         <relativeTargetDir>src</relativeTargetDir>
       </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+      <hudson.plugins.git.extensions.impl.CleanCheckout/>
     </extensions>
   </scm>
   <canRoam>true</canRoam>
@@ -36,12 +37,6 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <hudson.tasks.Shell>
-      <command># from https://github.com/openmicroscopy/openmicroscopy/pull/3944
-echo ome.resolver=ome-simple-artifactory &gt; src/etc/local.properties
-echo simple.repository=ome.SPACENAME &gt;&gt; src/etc/local.properties
-echo versions.bioformats=5.1.3-SNAPSHOT &gt;&gt; src/etc/local.properties</command>
-    </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>eval $(bash /opt/multi-config.sh ice3.5)
 
