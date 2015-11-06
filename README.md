@@ -13,7 +13,14 @@ Getting started
 
  * Optionally, commit those changes to a new branch
 
+   git checkout -b MYTOPIC && git commit -a -m "Start MYTOPIC branch"
+
  * Configure the .ssh and .gitconfig files in the slave directory (TBD)
+
+ * Start up the jenkins slave (which starts up all requirements)
+
+   ./up slave
+   docker ps
 
  * Configure artifactory:
    - Add an artifactory user (optional)
