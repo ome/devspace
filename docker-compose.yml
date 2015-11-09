@@ -9,7 +9,7 @@ git:
     image: openmicroscopy/tags:5.1.1
     volumes:
         - /src
-    command: true
+    command: 'true'
 
 pg:
     image: postgres
