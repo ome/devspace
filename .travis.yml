@@ -1,0 +1,13 @@
+sudo: required
+
+language: java
+
+services:
+  - docker
+
+before_install:
+- docker-compose build
+
+install:
+- docker-compose up -d slave
+- docker-compose stop
