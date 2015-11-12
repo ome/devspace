@@ -6,7 +6,7 @@ jenkins:
         - SERVICE_NAME=SPACENAME-ci
 
 git:
-    image: openmicroscopy/tags:5.1.1
+    build: git
     volumes:
         - /src
     command: 'true'

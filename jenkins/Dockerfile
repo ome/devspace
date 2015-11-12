@@ -2,9 +2,8 @@ FROM jenkins
 MAINTAINER OME
 
 USER root
-RUN usermod -u 11521 jenkins
+RUN usermod -u SPACEUSER jenkins
 RUN chown -R jenkins /usr/share/jenkins/
-RUN chown -R jenkins /var/log/copy_reference_file.log
 USER jenkins
 
 COPY plugins.txt /usr/share/jenkins/plugins.txt
