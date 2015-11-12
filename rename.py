@@ -6,6 +6,7 @@ import fnmatch
 import os
 
 def replace(name, branch, uid):
+  cnt = 0
   for root, dir, files in os.walk("."):
     yml = list(fnmatch.filter(files, "*.yml"))
     xml = list(fnmatch.filter(files, "*.xml"))
@@ -14,14 +15,19 @@ def replace(name, branch, uid):
       fname = os.path.join(root, f)
       print "Setting space to '%s' in %s" % (name, fname)
       for line in fileinput.input([fname], inplace=True):
-        line = line.replace("SPACENAME", name)
-        line = line.replace("SPACEBRANCH", name)
+        if "SPACE" in line:
+          cnt += 1
+          line = line.replace("SPACENAME", name)
+          line = line.replace("SPACEBRANCH", name)
         print line,
     for f in dkr:
       fname = os.path.join(root, f)
       for line in fileinput.input([fname], inplace=True):
-        line = line.replace("SPACEUSER", str(uid))
+        if "SPACE" in line:
+          cnt += 1
+          line = line.replace("SPACEUSER", str(uid))
         print line,
+  return cnt
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
@@ -34,5 +40,6 @@ if __name__ == "__main__":
   if not branch:
     branch = name
 
-  replace(name, branch, ns.uid)
+  # This number will need to be updated when new changes are commited.
+  assert 19 == replace(name, branch, ns.uid)
   print "Done. You may want to review and commit your changes now"
