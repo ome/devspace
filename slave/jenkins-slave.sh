@@ -5,7 +5,7 @@
 if [[ $# -lt 1 ]] || [[ "$1" == "-"* ]]; then
 
   # jenkins swarm slave
-  JAR=`ls -1 /usr/share/jenkins/swarm-client-*.jar | tail -n 1`
+  JAR=`ls -1 /tmp/swarm-client-*.jar | tail -n 1`
 
   # if -master is not provided and using --link jenkins:jenkins
   if [[ "$@" != *"-master "* ]] && [ ! -z "$JENKINS_PORT_8080_TCP_ADDR" ]; then
