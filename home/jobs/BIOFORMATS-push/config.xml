@@ -51,6 +51,10 @@
       <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
         <relativeTargetDir>src</relativeTargetDir>
       </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+      <hudson.plugins.git.extensions.impl.CloneOption>
+        <shallow>false</shallow>
+        <reference>/src/bio-formats.git</reference>
+      </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
   <canRoam>true</canRoam>
