@@ -1,0 +1,9 @@
+jenkins:
+    # UID that is mapped in docker-machine
+    user: "1000"
+    ports:
+        - "8080:8080"
+
+slave:
+    # UID that is mapped in docker-machine
+    user: "1000"
