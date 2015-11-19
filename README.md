@@ -15,7 +15,9 @@ Getting started
 
         git checkout -b MYTOPIC && git commit -a -m "Start MYTOPIC branch"
 
- *  Configure the .ssh and .gitconfig files in the slave directory (TBD)
+ * Configure the .ssh and .gitconfig files in the slave directory:
+
+        cp ~/.gitconfig slave/
 
  *  Start up the jenkins slave (which starts up all requirements)::
 
