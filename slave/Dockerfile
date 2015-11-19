@@ -4,7 +4,8 @@ MAINTAINER OME
 
 ENV JENKINS_SWARM_VERSION 1.24
 
-USER nobody
+RUN adduser -u 1000 slave
+USER slave
 WORKDIR /tmp
 RUN curl --create-dirs -sSLo /tmp/swarm-client-$JENKINS_SWARM_VERSION-jar-with-dependencies.jar http://maven.jenkins-ci.org/content/repositories/releases/org/jenkins-ci/plugins/swarm-client/$JENKINS_SWARM_VERSION/swarm-client-$JENKINS_SWARM_VERSION-jar-with-dependencies.jar
 
