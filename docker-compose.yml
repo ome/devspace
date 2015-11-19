@@ -20,7 +20,7 @@ slave:
         - pg
         - jenkins
     volumes:
-        - ./slave:home/jenkins-slave
+        - ./slave:/home/jenkins-slave
     volumes_from:
         - git
     environment:
@@ -31,6 +31,6 @@ nginx:
     links:
         - slave
     volumes:
-        - ./slave:home/jenkins-slave
+        - ./slave:/home/jenkins-slave
     environment:
         - SERVICE_NAME=SPACENAME-web
