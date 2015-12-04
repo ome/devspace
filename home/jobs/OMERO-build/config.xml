@@ -45,6 +45,10 @@ echo versions.bioformats=5.1.3-SNAPSHOT &gt;&gt; src/etc/local.properties</comma
     <hudson.tasks.Shell>
       <command>eval $(bash /opt/multi-config.sh ice3.5)
 
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.en
+export LC_ALL=en_US.UTF-8
+
 export PATH=/opt/texlive/bin/x86_64-linux:$PATH # for dockerfile
 cd src
 export OMERO_BRANCH=regions

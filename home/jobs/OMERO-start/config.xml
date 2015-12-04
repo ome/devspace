@@ -14,8 +14,9 @@
   <builders>
     <hudson.tasks.Shell>
       <command># PURGE
-DEPLOY=$(find . -type d -name &quot;openmicroscopy*&quot;)/dist
-$DEPLOY/bin/omero admin stop || echo First build
+eval $(bash /opt/multi-config.sh ice3.4)
+DEPLOY=$(find . -maxdepth 1 -type d -name &quot;openmicroscopy*&quot;)/dist
+$DEPLOY/bin/omero admin stop --force-rewrite || echo First build
 sleep 5
 rm -rf openmicroscopy*</command>
     </hudson.tasks.Shell>
@@ -33,6 +34,10 @@ rm -rf openmicroscopy*</command>
 OMERO_DATA_DIR=$WORKSPACE/data
 OMERO_DB_NAME=$JOB_NAME
 
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.en
+export LC_ALL=en_US.UTF-8
+
 
 ZIP=$(ls openmicroscopy*zip)
 SRC=$WORKSPACE/${ZIP%.zip}
@@ -42,11 +47,11 @@ unzip $ZIP
 eval $(bash /opt/multi-config.sh ice3.4)
 cd $SRC
 source docs/hudson/functions.sh
-./build.py build-default test-compile
+./build.py build-schema build-default test-compile
 
 
 # PURGE
-dist/bin/omero admin stop || echo First build
+dist/bin/omero admin stop --force-rewrite || echo First build
 sleep 5
 
 mkdir -p $OMERO_DATA_DIR
@@ -72,6 +77,10 @@ bin/omero config set omero.web.server_list &apos;[[&quot;localhost&quot;, 4064, 
 bin/omero db script -f dbsetup.sql &quot;&quot; &quot;&quot; omero
 psql -h pg -U postgres -d $OMERO_DB_NAME -f dbsetup.sql
 rm dbsetup.sql
+
+pip install --user -U pip
+export PATH=$HOME/.local/bin/:$PATH # `pip` and `gunicorn`
+pip install --user -r share/web/requirements-py26-nginx.txt
 
 BUILD_ID=DONT_KILL_ME bin/omero admin start
 BUILD_ID=DONT_KILL_ME bin/omero web start
