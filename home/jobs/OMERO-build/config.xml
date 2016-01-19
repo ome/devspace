@@ -49,7 +49,7 @@ source docs/hudson/OMERO.sh
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>src/target/*.zip,src/target/*.pdf,src/target/pkg/*.zip,src/target/*.egg,src/dist/lib/client/omero_client*,src/target/*.log,src/target/*INFO, src/docs/sphinx/_build/latex/OMERO*.pdf,src/docs/install/VM/*.ova</artifacts>
+      <artifacts>src/target/*.zip,src/target/*.eggsrc/target/*.log,src/target/*INFO</artifacts>
       <allowEmptyArchive>false</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
