@@ -10,7 +10,6 @@ def replace(name, branch, uid):
   for root, dir, files in os.walk("."):
     yml = list(fnmatch.filter(files, "*.yml"))
     xml = list(fnmatch.filter(files, "*.xml"))
-    dkr = list(fnmatch.filter(files, "Dockerfile"))
     for f in yml + xml:
       fname = os.path.join(root, f)
       print "Setting space to '%s' in %s" % (name, fname)
@@ -19,13 +18,6 @@ def replace(name, branch, uid):
           cnt += 1
           line = line.replace("SPACENAME", name)
           line = line.replace("SPACEBRANCH", name)
-        print line,
-    for f in dkr:
-      fname = os.path.join(root, f)
-      for line in fileinput.input([fname], inplace=True):
-        if "SPACE" in line:
-          cnt += 1
-          line = line.replace("SPACEUSER", str(uid))
         print line,
   return cnt
 
@@ -41,5 +33,5 @@ if __name__ == "__main__":
     branch = name
 
   # This number will need to be updated when new changes are commited.
-  assert 19 == replace(name, branch, ns.uid)
+  assert 17 == replace(name, branch, ns.uid)
   print "Done. You may want to review and commit your changes now"
