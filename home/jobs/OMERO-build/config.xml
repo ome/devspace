@@ -49,7 +49,7 @@ source docs/hudson/OMERO.sh
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>src/target/*.zip,src/target/*.eggsrc/target/*.log,src/target/*INFO</artifacts>
+      <artifacts>src/target/*.zip,src/target/*.egg,src/target/*.log,src/target/*INFO</artifacts>
       <allowEmptyArchive>false</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
