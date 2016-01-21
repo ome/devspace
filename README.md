@@ -23,6 +23,9 @@ Getting started
         cp ~/.ssh/id_rsa slave/.ssh
         cp ~/.ssh/id_rsa.pub slave/.ssh
 
+ * **If not using docker-machine**, you will need to fix the user ID
+    for jenkins and slave!
+
  *  Start up the jenkins slave (which starts up all requirements)::
 
         ./ds up      # Ctrl-C to stop or
