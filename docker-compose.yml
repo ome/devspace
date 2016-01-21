@@ -20,7 +20,7 @@ slave:
         - pg
         - jenkins
     volumes:
-        - ./slave:/workspace
+        - ./slave:/home/slave
     volumes_from:
         - git
     environment:
