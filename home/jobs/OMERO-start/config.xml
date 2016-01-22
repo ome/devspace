@@ -74,7 +74,7 @@ psql -h pg -U postgres -d $OMERO_DB_NAME -f dbsetup.sql
 rm dbsetup.sql
 
 BUILD_ID=DONT_KILL_ME bin/omero admin start
-BUILD_ID=DONT_KILL_ME bin/omero web start
+# BUILD_ID=DONT_KILL_ME bin/omero web start
 
 bin/omero admin waitup
 
