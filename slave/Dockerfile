@@ -3,6 +3,7 @@ FROM openmicroscopy/omero-build-c6-multienv
 MAINTAINER OME
 
 ENV JENKINS_SWARM_VERSION 1.24
+ENV LANG en_US.UTF-8
 
 RUN adduser -u 1000 slave
 USER slave
