@@ -46,7 +46,7 @@ source docs/hudson/functions.sh
 
 
 # PURGE
-dist/bin/omero admin stop || echo First build
+dist/bin/omero admin stop --force-rewrite || echo First build
 sleep 5
 
 mkdir -p $OMERO_DATA_DIR
