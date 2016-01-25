@@ -46,7 +46,7 @@ source docs/hudson/functions.sh
 
 
 # PURGE
-dist/bin/omero admin stop || echo First build
+dist/bin/omero admin stop --force-rewrite || echo First build
 sleep 5
 
 mkdir -p $OMERO_DATA_DIR
@@ -74,7 +74,7 @@ psql -h pg -U postgres -d $OMERO_DB_NAME -f dbsetup.sql
 rm dbsetup.sql
 
 BUILD_ID=DONT_KILL_ME bin/omero admin start
-BUILD_ID=DONT_KILL_ME bin/omero web start
+# BUILD_ID=DONT_KILL_ME bin/omero web start
 
 bin/omero admin waitup
 
