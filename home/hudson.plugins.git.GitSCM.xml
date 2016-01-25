@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<hudson.plugins.git.GitSCM_-DescriptorImpl plugin="git@2.3.5">
+<hudson.plugins.git.GitSCM_-DescriptorImpl plugin="git@2.4.0">
   <generation>12</generation>
   <globalConfigName></globalConfigName>
   <globalConfigEmail></globalConfigEmail>
