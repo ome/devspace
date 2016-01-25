@@ -4,8 +4,4 @@
     <job>Trigger</job>
     <id>2</id>
   </flow-owner>
-  <flow-owner plugin="workflow-job@1.11">
-    <job>Trigger</job>
-    <id>3</id>
-  </flow-owner>
 </list>
