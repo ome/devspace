@@ -25,5 +25,8 @@ slave/omero
 slave/tools
 slave/workspace
 slave/*.jar
-slave/.ssh/id_rsa*
+slave/.ssh
 slave/.gitconfig
+slave/.jenkins
+slave/.matplotlib
+slave/.local
