@@ -19,7 +19,7 @@ $DEPLOY/bin/omero admin stop || echo First build
 sleep 5
 rm -rf openmicroscopy*</command>
     </hudson.tasks.Shell>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.35.2">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
       <project>OMERO-build</project>
       <filter>src/target/openmicroscopy*zip</filter>
       <target></target>
@@ -93,7 +93,7 @@ cd $SRC
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.junit.JUnitResultArchiver plugin="junit@1.5">
+    <hudson.tasks.junit.JUnitResultArchiver plugin="junit@1.9">
       <testResults>**/target/reports/integration/**/*.xml</testResults>
       <keepLongStdio>false</keepLongStdio>
       <healthScaleFactor>1.0</healthScaleFactor>

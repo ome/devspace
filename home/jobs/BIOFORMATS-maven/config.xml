@@ -4,7 +4,7 @@
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties/>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.3.5">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -45,7 +45,7 @@
   <globalSettings class="jenkins.mvn.DefaultGlobalSettingsProvider"/>
   <reporters/>
   <publishers>
-    <org.jfrog.hudson.ArtifactoryRedeployPublisher plugin="artifactory@2.3.0">
+    <org.jfrog.hudson.ArtifactoryRedeployPublisher plugin="artifactory@2.4.4">
       <evenIfUnstable>false</evenIfUnstable>
       <details>
         <artifactoryName>1481416184@1436387151094</artifactoryName>
