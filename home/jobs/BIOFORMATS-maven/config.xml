@@ -44,64 +44,7 @@
   <settings class="jenkins.mvn.DefaultSettingsProvider"/>
   <globalSettings class="jenkins.mvn.DefaultGlobalSettingsProvider"/>
   <reporters/>
-  <publishers>
-    <org.jfrog.hudson.ArtifactoryRedeployPublisher plugin="artifactory@2.4.4">
-      <evenIfUnstable>false</evenIfUnstable>
-      <details>
-        <artifactoryName>1481416184@1436387151094</artifactoryName>
-        <artifactoryUrl>http://artifacts.openmicroscopy.org/artifactory</artifactoryUrl>
-        <deployReleaseRepository>
-          <keyFromText>ome.SPACENAME</keyFromText>
-          <keyFromSelect>ome.experimental</keyFromSelect>
-          <dynamicMode>true</dynamicMode>
-        </deployReleaseRepository>
-        <deploySnapshotRepository>
-          <keyFromText>ome.SPACENAME</keyFromText>
-          <keyFromSelect>ome.experimental</keyFromSelect>
-          <dynamicMode>true</dynamicMode>
-        </deploySnapshotRepository>
-        <stagingPlugin>
-          <pluginName>None</pluginName>
-        </stagingPlugin>
-        <userPluginKey>None</userPluginKey>
-      </details>
-      <deployArtifacts>true</deployArtifacts>
-      <artifactDeploymentPatterns>
-        <includePatterns></includePatterns>
-        <excludePatterns></excludePatterns>
-      </artifactDeploymentPatterns>
-      <includeEnvVars>false</includeEnvVars>
-      <envVarsPatterns>
-        <includePatterns></includePatterns>
-        <excludePatterns>*password*,*secret*</excludePatterns>
-      </envVarsPatterns>
-      <runChecks>false</runChecks>
-      <violationRecipients></violationRecipients>
-      <includePublishArtifacts>false</includePublishArtifacts>
-      <passIdentifiedDownstream>false</passIdentifiedDownstream>
-      <scopes></scopes>
-      <licenseAutoDiscovery>true</licenseAutoDiscovery>
-      <disableLicenseAutoDiscovery>false</disableLicenseAutoDiscovery>
-      <discardOldBuilds>false</discardOldBuilds>
-      <discardBuildArtifacts>true</discardBuildArtifacts>
-      <matrixParams></matrixParams>
-      <enableIssueTrackerIntegration>false</enableIssueTrackerIntegration>
-      <allowPromotionOfNonStagedBuilds>false</allowPromotionOfNonStagedBuilds>
-      <allowBintrayPushOfNonStageBuilds>true</allowBintrayPushOfNonStageBuilds>
-      <filterExcludedArtifactsFromBuild>true</filterExcludedArtifactsFromBuild>
-      <recordAllDependencies>false</recordAllDependencies>
-      <deployBuildInfo>true</deployBuildInfo>
-      <aggregateBuildIssues>false</aggregateBuildIssues>
-      <blackDuckRunChecks>false</blackDuckRunChecks>
-      <blackDuckAppName></blackDuckAppName>
-      <blackDuckAppVersion></blackDuckAppVersion>
-      <blackDuckReportRecipients></blackDuckReportRecipients>
-      <blackDuckScopes></blackDuckScopes>
-      <blackDuckIncludePublishedArtifacts>false</blackDuckIncludePublishedArtifacts>
-      <autoCreateMissingComponentRequests>true</autoCreateMissingComponentRequests>
-      <autoDiscardStaleComponentRequests>true</autoDiscardStaleComponentRequests>
-    </org.jfrog.hudson.ArtifactoryRedeployPublisher>
-  </publishers>
+  <publishers/>
   <buildWrappers/>
   <prebuilders/>
   <postbuilders/>
