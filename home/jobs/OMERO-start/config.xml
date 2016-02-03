@@ -14,7 +14,8 @@
   <builders>
     <hudson.tasks.Shell>
       <command># PURGE
-DEPLOY=$(find . -type d -name &quot;openmicroscopy*&quot;)/dist
+eval $(bash /opt/multi-config.sh ice3.5)
+DEPLOY=$(find . -type d -name &quot;openmicroscopy-*&quot;)/dist
 $DEPLOY/bin/omero admin stop || echo First build
 sleep 5
 rm -rf openmicroscopy*</command>
@@ -39,7 +40,7 @@ SRC=$WORKSPACE/${ZIP%.zip}
 unzip $ZIP
 
 
-eval $(bash /opt/multi-config.sh ice3.4)
+eval $(bash /opt/multi-config.sh ice3.5)
 cd $SRC
 source docs/hudson/functions.sh
 ./build.py build-default test-compile
