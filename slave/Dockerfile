@@ -5,6 +5,8 @@ MAINTAINER OME
 ENV JENKINS_SWARM_VERSION 1.24
 ENV LANG en_US.UTF-8
 
+RUN yum install -y http://download-aws.ej-technologies.com/exe4j/exe4j_linux_5_0_1.rpm
+
 RUN adduser -u 1000 slave
 USER slave
 WORKDIR /tmp
