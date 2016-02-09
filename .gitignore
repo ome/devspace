@@ -25,6 +25,8 @@ slave/omero
 slave/tools
 slave/workspace
 slave/*.jar
+slave/.install4j
+slave/.exe4j4
 slave/.ssh
 slave/.gitconfig
 slave/.jenkins
