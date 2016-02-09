@@ -27,6 +27,7 @@ slave/workspace
 slave/*.jar
 slave/.ssh
 slave/.gitconfig
+slave/.java
 slave/.jenkins
 slave/.matplotlib
 slave/.local
