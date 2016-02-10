@@ -25,10 +25,13 @@ slave/omero
 slave/tools
 slave/workspace
 slave/*.jar
-slave/.install4j
+slave/.bash_history
 slave/.exe4j4
-slave/.ssh
+slave/.install4j
 slave/.gitconfig
+slave/.java
 slave/.jenkins
 slave/.matplotlib
+slave/.oracle_jre_usage
 slave/.local
+slave/.ssh
