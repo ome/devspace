@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <jenkins.plugins.slack.SlackNotifier_-SlackJobProperty plugin="slack@1.8.1">
+      <teamDomain></teamDomain>
+      <token></token>
+      <room></room>
+      <startNotification>true</startNotification>
+      <notifySuccess>true</notifySuccess>
+      <notifyAborted>true</notifyAborted>
+      <notifyNotBuilt>true</notifyNotBuilt>
+      <notifyUnstable>true</notifyUnstable>
+      <notifyFailure>true</notifyFailure>
+      <notifyBackToNormal>true</notifyBackToNormal>
+      <notifyRepeatedFailure>false</notifyRepeatedFailure>
+      <includeTestSummary>false</includeTestSummary>
+      <showCommitList>false</showCommitList>
+      <includeCustomMessage>false</includeCustomMessage>
+      <customMessage></customMessage>
+    </jenkins.plugins.slack.SlackNotifier_-SlackJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>if [ -e $WORKSPACE/OMERO.py ]; then
+
+	if [ -e $WORKSPACE/omeropy-virtualenv ]; then
+		source $WORKSPACE/omeropy-virtualenv/bin/activate
+        eval $(bash /opt/multi-config.sh ice3.5)
+    	$WORKSPACE/OMERO.py/bin/omero web stop
+  		sleep 5
+        $WORKSPACE/OMERO.py/bin/omero web status
+  		deactivate
+        rm -rf $WORKSPACE/omeropy-virtualenv
+    fi
+    rm -rf OMERO.py
+fi
+
+</command>
+    </hudson.tasks.Shell>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
+      <project>OMERO-build</project>
+      <filter>src/target/OMERO.py*zip</filter>
+      <target></target>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.tasks.Shell>
+      <command>ZIP=$(ls OMERO.py*.zip)
+DIST=${ZIP%.zip}
+unzip $ZIP
+rm -f $ZIP
+mv $WORKSPACE/$DIST $WORKSPACE/OMERO.py
+
+virtualenv $WORKSPACE/omeropy-virtualenv --system-site-packages
+source $WORKSPACE/omeropy-virtualenv/bin/activate
+
+pip install --upgrade -r $WORKSPACE/OMERO.py/share/web/requirements-py26-nginx.txt
+
+eval $(bash /opt/multi-config.sh ice3.5)
+BUILD_ID=DONT_KILL_ME $WORKSPACE/OMERO.py/bin/omero web start
+
+$WORKSPACE/OMERO.py/bin/omero admin diagnostics</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
