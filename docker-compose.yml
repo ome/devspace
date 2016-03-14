@@ -26,9 +26,7 @@ slave:
     environment:
         - JAVA_HOME=/etc/alternatives/java_sdk
         - SERVICE_NAME=SPACENAME-omero
-    ports:
-        - "4064:4064"
-        - "4063:4063"
+        - DOCKER_FIX='   '
 
 nginx:
     image: nginx
