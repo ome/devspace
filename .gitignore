@@ -1,6 +1,7 @@
 .*un~
 home/.*
 home/*.log
+home/cache/
 home/fingerprints/
 home/identity.key.enc
 home/init.groovy.d/

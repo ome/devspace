@@ -23,7 +23,8 @@
     </jenkins.plugins.slack.SlackNotifier_-SlackJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
+  <assignedNode>web</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
@@ -31,18 +32,19 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>if [ -e $WORKSPACE/OMERO.py ]; then
+      <command>OMERO_DIST=$HOME/OMERO.server
+if [ -e $OMERO_DIST ]; then
 
 	if [ -e $WORKSPACE/omeropy-virtualenv ]; then
 		source $WORKSPACE/omeropy-virtualenv/bin/activate
         eval $(bash /opt/multi-config.sh ice3.5)
-    	$WORKSPACE/OMERO.py/bin/omero web stop
+    	$OMERO_DIST/bin/omero web stop
   		sleep 5
-        $WORKSPACE/OMERO.py/bin/omero web status
+        $OMERO_DIST/bin/omero web status
   		deactivate
         rm -rf $WORKSPACE/omeropy-virtualenv
     fi
-    rm -rf OMERO.py
+    rm -rf $OMERO_DIST
 fi
 
 </command>
@@ -57,21 +59,31 @@ fi
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command>ZIP=$(ls OMERO.py*.zip)
+      <command>OMERO_DIST=$HOME/OMERO.server
+OMERO_INSTALL=/tmp/omero-install/linux
+
+ZIP=$(ls OMERO.py*.zip)
 DIST=${ZIP%.zip}
 unzip $ZIP
 rm -f $ZIP
-mv $WORKSPACE/$DIST $WORKSPACE/OMERO.py
+mv $WORKSPACE/$DIST $OMERO_DIST
 
 virtualenv $WORKSPACE/omeropy-virtualenv --system-site-packages
 source $WORKSPACE/omeropy-virtualenv/bin/activate
 
-pip install --upgrade -r $WORKSPACE/OMERO.py/share/web/requirements-py26-nginx.txt
+cd $OMERO_INSTALL
+source settings.env
+
+# From step04
+$OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt; $OMERO_DIST/nginx.conf.tmp
+
+sudo -u root bash step05_centos7_nginx.sh
+sudo -u root bash step06_centos7_daemon.sh
 
 eval $(bash /opt/multi-config.sh ice3.5)
-BUILD_ID=DONT_KILL_ME $WORKSPACE/OMERO.py/bin/omero web start
+BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero web start
 
-$WORKSPACE/OMERO.py/bin/omero admin diagnostics</command>
+$OMERO_DIST/bin/omero admin diagnostics</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
