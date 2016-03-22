@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <jenkins.plugins.slack.SlackNotifier_-SlackJobProperty plugin="slack@1.8.1">
+      <teamDomain></teamDomain>
+      <token></token>
+      <room></room>
+      <startNotification>true</startNotification>
+      <notifySuccess>true</notifySuccess>
+      <notifyAborted>true</notifyAborted>
+      <notifyNotBuilt>true</notifyNotBuilt>
+      <notifyUnstable>true</notifyUnstable>
+      <notifyFailure>true</notifyFailure>
+      <notifyBackToNormal>true</notifyBackToNormal>
+      <notifyRepeatedFailure>false</notifyRepeatedFailure>
+      <includeTestSummary>false</includeTestSummary>
+      <showCommitList>false</showCommitList>
+      <includeCustomMessage>false</includeCustomMessage>
+      <customMessage></customMessage>
+    </jenkins.plugins.slack.SlackNotifier_-SlackJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>web</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>OMERO_DIST=$HOME/OMERO.server
+if [ -e $OMERO_DIST ]; then
+
+	if [ -e $WORKSPACE/omeropy-virtualenv ]; then
+		source $WORKSPACE/omeropy-virtualenv/bin/activate
+        eval $(bash /opt/multi-config.sh ice3.5)
+    	$OMERO_DIST/bin/omero web stop
+  		sleep 5
+        $OMERO_DIST/bin/omero web status
+  		deactivate
+        rm -rf $WORKSPACE/omeropy-virtualenv
+    fi
+    rm -rf $OMERO_DIST
+fi
+
+</command>
+    </hudson.tasks.Shell>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
+      <project>OMERO-build</project>
+      <filter>src/target/OMERO.py*zip</filter>
+      <target></target>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.tasks.Shell>
+      <command>OMERO_DIST=$HOME/OMERO.server
+OMERO_INSTALL=/tmp/omero-install/linux
+
+ZIP=$(ls OMERO.py*.zip)
+DIST=${ZIP%.zip}
+unzip $ZIP
+rm -f $ZIP
+mv $WORKSPACE/$DIST $OMERO_DIST
+
+virtualenv $WORKSPACE/omeropy-virtualenv --system-site-packages
+source $WORKSPACE/omeropy-virtualenv/bin/activate
+
+cd $OMERO_INSTALL
+source settings.env
+
+# From step04
+$OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt; $OMERO_DIST/nginx.conf.tmp
+
+sudo -u root bash step05_centos7_nginx.sh
+sudo -u root bash step06_centos7_daemon.sh
+
+eval $(bash /opt/multi-config.sh ice3.5)
+BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero web start
+
+$OMERO_DIST/bin/omero admin diagnostics</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
