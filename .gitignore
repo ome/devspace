@@ -36,3 +36,4 @@ slave/.matplotlib
 slave/.oracle_jre_usage
 slave/.local
 slave/.ssh
+web/.jenkins
