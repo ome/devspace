@@ -1,0 +1,15 @@
+[Unit]
+Description=Jenkins slave
+
+[Service]
+User=omero
+WorkingDirectory=/tmp
+PIDFile=/tmp/jenkins.pid
+Type=forking
+Restart=on-failure
+RestartSec=10
+ExecStart=/tmp/jenkins-slave.sh
+ExecStop=/usr/bin/bash -c 'test -e /tmp/jenkins.pid && kill $(cat jenkins.pid)'
+
+[Install]
+WantedBy=multi-user.target

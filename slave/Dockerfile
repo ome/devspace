@@ -2,7 +2,7 @@ FROM openmicroscopy/omero-build-c6-multienv
 
 MAINTAINER OME
 
-ENV JENKINS_SWARM_VERSION 1.24
+ENV JENKINS_SWARM_VERSION 2.0
 ENV LANG en_US.UTF-8
 
 RUN yum install -y http://download-aws.ej-technologies.com/exe4j/exe4j_linux_5_0_1.rpm

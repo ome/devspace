@@ -77,8 +77,7 @@ source settings.env
 # From step04
 $OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt; $OMERO_DIST/nginx.conf.tmp
 
-sudo -u root bash step05_centos7_nginx.sh
-sudo -u root bash step06_centos7_daemon.sh
+sudo -u root bash _step05_centos7_nginx.sh
 
 eval $(bash /opt/multi-config.sh ice3.5)
 BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero web start

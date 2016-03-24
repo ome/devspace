@@ -27,19 +27,20 @@ slave:
         - JAVA_HOME=/etc/alternatives/java_sdk
         - SERVICE_NAME=SPACENAME-omero
         - DOCKER_FIX='   '
-    command: -labels java -labels slave -name slave -executors 4
+    command: -labels java -labels slave -name slave -disableClientsUniqueId -executors 4
 
 web:
     build: web
+    links:
+        - jenkins
     environment:
         - JENKINS_LABEL=/etc/alternatives/java_sdk
         - JENKINS_MODE=exclusive
         - SERVICE_NAME=SPACENAME-omero
-    links:
-        - jenkins
     volumes:
         - ./web:/home/omero
-    command: -labels web -name web -executors 4
+    command: -labels centos7 -labels java -name web -disableClientsUniqueId -executors 4
+    
 
 nginx:
     image: nginx

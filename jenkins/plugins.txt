@@ -1,4 +1,4 @@
-swarm:1.24
+swarm:2.0
 git:2.4.0
 mailer:1.15
 scm-api:0.2
