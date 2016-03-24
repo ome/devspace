@@ -32,22 +32,22 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>OMERO_DIST=$HOME/OMERO.server
+      <command>
+OMERO_DIST=$HOME/OMERO.server
 if [ -e $OMERO_DIST ]; then
-
-	if [ -e $WORKSPACE/omeropy-virtualenv ]; then
-		source $WORKSPACE/omeropy-virtualenv/bin/activate
+	if [ -e $HOME/omero-virtualenv ]; then
+		source $HOME/omero-virtualenv/bin/activate
         eval $(bash /opt/multi-config.sh ice3.5)
-    	$OMERO_DIST/bin/omero web stop
+        sudo systemctl stop omero-web.service
   		sleep 5
         $OMERO_DIST/bin/omero web status
   		deactivate
-        rm -rf $WORKSPACE/omeropy-virtualenv
     fi
     rm -rf $OMERO_DIST
+else
+	virtualenv $HOME/omero-virtualenv --system-site-packages
 fi
-
-</command>
+      </command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
       <project>OMERO-build</project>
@@ -59,7 +59,8 @@ fi
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command>OMERO_DIST=$HOME/OMERO.server
+      <command>
+OMERO_DIST=$HOME/OMERO.server
 OMERO_INSTALL=/tmp/omero-install/linux
 
 ZIP=$(ls OMERO.py*.zip)
@@ -68,23 +69,56 @@ unzip $ZIP
 rm -f $ZIP
 mv $WORKSPACE/$DIST $OMERO_DIST
 
-virtualenv $WORKSPACE/omeropy-virtualenv --system-site-packages
-source $WORKSPACE/omeropy-virtualenv/bin/activate
+source $HOME/omero-virtualenv/bin/activate
 
-cd $OMERO_INSTALL
-source settings.env
+source $OMERO_INSTALL/settings.env
 
-# From step04
-$OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt; $OMERO_DIST/nginx.conf.tmp
 
-sudo -u root bash _step05_centos7_nginx.sh
+pip install --upgrade --no-deps --force-reinstall -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
+
+
+#start-config
+$OMERO_DIST/bin/omero config set omero.web.application_server &apos;wsgi-tcp&apos;
+$OMERO_DIST/bin/omero config set omero.web.application_server.max_requests 0
+
+$OMERO_DIST/bin/omero config set omero.web.prefix &apos;/web&apos;
+$OMERO_DIST/bin/omero config set omero.web.static_url &apos;/web/static/&apos;
+$OMERO_DIST/bin/omero config set omero.web.static_root &apos;/home/omero/nginx/web&apos;
+
+$OMERO_DIST/bin/omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;
+$OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;redis_cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;192.168.99.100:6379&quot;}}&apos;
+
+$OMERO_DIST/bin/omero config set omero.web.application_server.host 192.168.99.100
+$OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
+
+$OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt;$OMERO_DIST/nginx.conf.tmp
+
+sudo -u root cp $OMERO_DIST/nginx.conf.tmp $HOME/nginx/omero-web.conf
+
+cat $HOME/nginx/omero-web.conf
+
+$OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
+$OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
 
 eval $(bash /opt/multi-config.sh ice3.5)
-BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero web start
+sudo systemctl start omero-web.service
 
-$OMERO_DIST/bin/omero admin diagnostics</command>
+$OMERO_DIST/bin/omero admin diagnostics
+
+deactivate
+      </command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.BuildTrigger>
+      <childProjects>nginx</childProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </hudson.tasks.BuildTrigger>
+  </publishers>
   <buildWrappers/>
 </project>

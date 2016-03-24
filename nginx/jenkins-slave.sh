@@ -1,6 +1,8 @@
 #!/bin/bash
 # https://raw.githubusercontent.com/carlossg/jenkins-swarm-slave-docker/master/jenkins-slave.sh
 
+eval `(sudo cat /proc/1/environ; echo) | tr '\000' '\n' | while read line; do if [[ $line == JENKINS_PORT_8080_TCP_* ]] ; then echo export $line; fi done`
+
 # if `docker run` first argument start with `-` the user is passing jenkins swarm launcher arguments
 if [[ $# -lt 1 ]] || [[ "$1" == "-"* ]]; then
 
@@ -18,4 +20,5 @@ fi
 
 # As argument is not jenkins, assume user want to run his own process, for sample a `bash` shell to explore this image
 exec "$@"
+
 

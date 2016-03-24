@@ -21,8 +21,10 @@ slave:
         - jenkins
     volumes:
         - ./slave:/home/slave
+        - ./nginx/conf.d:/home/slave/nginx
     volumes_from:
         - git
+        - nginx
     environment:
         - JAVA_HOME=/etc/alternatives/java_sdk
         - SERVICE_NAME=SPACENAME-omero
@@ -31,23 +33,40 @@ slave:
 
 web:
     build: web
+    ports:
+        - "4080:4080"
+    privileged: true
     links:
         - jenkins
+        - redis
+    volumes:
+        - ./web:/home/omero
+        - ./nginx/conf.d:/home/omero/nginx
+    volumes_from:
+        - nginx
     environment:
         - JENKINS_LABEL=/etc/alternatives/java_sdk
         - JENKINS_MODE=exclusive
-        - SERVICE_NAME=SPACENAME-omero
-    volumes:
-        - ./web:/home/omero
-    command: -labels centos7 -labels java -name web -disableClientsUniqueId -executors 4
-    
+        - SERVICE_NAME=SPACENAME-web
 
 nginx:
-    image: nginx
+    build: nginx
+    ports:
+        - "8888:80"
+    privileged: true
     links:
-        - slave
-        - web
+        - jenkins
     volumes:
-        - ./slave:/home/jenkins-slave
+        - ./nginx/conf.d:/etc/nginx/conf.d
+        - ./web/OMERO.server/lib/python/omeroweb/static:/home/omero/nginx/web/static
     environment:
-        - SERVICE_NAME=SPACENAME-web
+        - JENKINS_LABEL=/etc/alternatives/java_sdk
+        - JENKINS_MODE=exclusive
+        - SERVICE_NAME=SPACENAME-nginx
+
+redis:
+    image: redis
+    ports:
+        - "6379:6379"
+    environment:
+        - SERVICE_NAME=SPACENAME-redis
