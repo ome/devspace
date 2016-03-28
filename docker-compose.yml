@@ -33,9 +33,6 @@ slave:
 
 web:
     build: web
-    ports:
-        - "4080:4080"
-    privileged: true
     links:
         - jenkins
         - redis
@@ -51,9 +48,6 @@ web:
 
 nginx:
     build: nginx
-    ports:
-        - "8888:80"
-    privileged: true
     links:
         - jenkins
     volumes:
@@ -66,7 +60,5 @@ nginx:
 
 redis:
     image: redis
-    ports:
-        - "6379:6379"
     environment:
         - SERVICE_NAME=SPACENAME-redis
