@@ -47,6 +47,7 @@ RUN sed -i.bak -re 's/(systemctl daemon-reload)/#\1/' $OMERO_INSTALL/step06_cent
 WORKDIR /tmp/omero-install/linux
 
 RUN JAVAVER=$JAVAVER PGVER=nopg bash install_centos7_nginx.sh
+RUN yum install -y redis python-redis && yum clean all
 
 RUN yum install -y http://download-aws.ej-technologies.com/exe4j/exe4j_linux_5_0_1.rpm
 
