@@ -88,7 +88,7 @@ $OMERO_DIST/bin/omero config set omero.web.static_root &apos;/home/omero/static/
 #$OMERO_DIST/bin/omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;
 #$OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;redis_cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;$REDIS_IP:6379&quot;}}&apos;
 
-$OMERO_DIST/bin/omero config set omero.web.application_server.host 192.168.99.100
+$OMERO_DIST/bin/omero config set omero.web.application_server.host SPACENAME-ci.docker.openmicroscopy.org
 $OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
 
 $OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt;$OMERO_DIST/nginx.conf.tmp
