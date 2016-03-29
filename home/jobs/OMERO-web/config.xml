@@ -38,7 +38,7 @@ if [ -e $OMERO_DIST ]; then
     if [ -e $HOME/omero-virtualenv ]; then
         #eval $(bash /opt/multi-config.sh ice3.5)
         sudo systemctl stop omero-web.service
-        #sleep 5
+        sleep 5
         sudo systemctl status omero-web.service || true
     fi
     rm -rf $OMERO_DIST
@@ -72,6 +72,9 @@ source $HOME/omero-virtualenv/bin/activate
 
 source $OMERO_INSTALL/settings.env
 
+# redis IP
+REDIS_IP=$(getent hosts 'redis' | awk '{print $1}')
+
 pip install --upgrade --no-deps --force-reinstall -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
 
 #start-config
@@ -83,7 +86,7 @@ $OMERO_DIST/bin/omero config set omero.web.static_url &apos;/web/static/&apos;
 $OMERO_DIST/bin/omero config set omero.web.static_root &apos;/home/omero/static/web&apos;
 
 #$OMERO_DIST/bin/omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;
-#$OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;redis_cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;192.168.99.100:6379&quot;}}&apos;
+#$OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;redis_cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;$REDIS_IP:6379&quot;}}&apos;
 
 $OMERO_DIST/bin/omero config set omero.web.application_server.host 192.168.99.100
 $OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
