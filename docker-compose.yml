@@ -52,7 +52,7 @@ nginx:
         - jenkins
     volumes:
         - ./nginx/conf.d:/etc/nginx/conf.d
-        - ./web/OMERO.server/lib/python/omeroweb/static:/home/omero/nginx/web/static
+        - ./web/static/web:/home/omero/static/web
     environment:
         - JENKINS_LABEL=/etc/alternatives/java_sdk
         - JENKINS_MODE=exclusive

@@ -35,17 +35,16 @@
       <command>
 OMERO_DIST=$HOME/OMERO.server
 if [ -e $OMERO_DIST ]; then
-	if [ -e $HOME/omero-virtualenv ]; then
-		source $HOME/omero-virtualenv/bin/activate
-        eval $(bash /opt/multi-config.sh ice3.5)
+    if [ -e $HOME/omero-virtualenv ]; then
+        #eval $(bash /opt/multi-config.sh ice3.5)
         sudo systemctl stop omero-web.service
-  		sleep 5
-        $OMERO_DIST/bin/omero web status
-  		deactivate
+        #sleep 5
+        sudo systemctl status omero-web.service || true
     fi
     rm -rf $OMERO_DIST
 else
-	virtualenv $HOME/omero-virtualenv --system-site-packages
+    sudo systemctl stop omero-web.service
+    virtualenv $HOME/omero-virtualenv --system-site-packages
 fi
       </command>
     </hudson.tasks.Shell>
@@ -73,9 +72,7 @@ source $HOME/omero-virtualenv/bin/activate
 
 source $OMERO_INSTALL/settings.env
 
-
 pip install --upgrade --no-deps --force-reinstall -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
-
 
 #start-config
 $OMERO_DIST/bin/omero config set omero.web.application_server &apos;wsgi-tcp&apos;
@@ -83,10 +80,10 @@ $OMERO_DIST/bin/omero config set omero.web.application_server.max_requests 0
 
 $OMERO_DIST/bin/omero config set omero.web.prefix &apos;/web&apos;
 $OMERO_DIST/bin/omero config set omero.web.static_url &apos;/web/static/&apos;
-$OMERO_DIST/bin/omero config set omero.web.static_root &apos;/home/omero/nginx/web&apos;
+$OMERO_DIST/bin/omero config set omero.web.static_root &apos;/home/omero/static/web&apos;
 
-$OMERO_DIST/bin/omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;
-$OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;redis_cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;192.168.99.100:6379&quot;}}&apos;
+#$OMERO_DIST/bin/omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;
+#$OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;redis_cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;192.168.99.100:6379&quot;}}&apos;
 
 $OMERO_DIST/bin/omero config set omero.web.application_server.host 192.168.99.100
 $OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
@@ -100,12 +97,12 @@ cat $HOME/nginx/omero-web.conf
 $OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
 $OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
 
-eval $(bash /opt/multi-config.sh ice3.5)
-sudo systemctl start omero-web.service
-
-$OMERO_DIST/bin/omero admin diagnostics
+#eval $(bash /opt/multi-config.sh ice3.5)
 
 deactivate
+
+sudo systemctl start omero-web.service
+
       </command>
     </hudson.tasks.Shell>
   </builders>
