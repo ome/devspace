@@ -37,13 +37,13 @@ OMERO_DIST=$HOME/OMERO.server
 if [ -e $OMERO_DIST ]; then
     if [ -e $HOME/omero-virtualenv ]; then
         #eval $(bash /opt/multi-config.sh ice3.5)
-        sudo systemctl stop omero-web.service
+        sudo sudo service omero-web stop
         sleep 5
-        sudo systemctl status omero-web.service || true
+        sudo sudo service omero-web status || true
     fi
     rm -rf $OMERO_DIST
 else
-    sudo systemctl stop omero-web.service
+    sudo service omero-web stop
     virtualenv $HOME/omero-virtualenv --system-site-packages
 fi
       </command>
@@ -106,7 +106,7 @@ $OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
 
 deactivate
 
-sudo systemctl start omero-web.service
+sudo sudo service omero-web start
 
       </command>
     </hudson.tasks.Shell>

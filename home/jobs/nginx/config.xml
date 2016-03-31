@@ -14,7 +14,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>sudo systemctl reload nginx.service</command>
+      <command>sudo service nginx reload
+sudo service nginx status</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
