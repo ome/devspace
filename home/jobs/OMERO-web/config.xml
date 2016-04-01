@@ -75,6 +75,8 @@ source $OMERO_INSTALL/settings.env
 # redis IP
 REDIS_IP=$(getent hosts &apos;redis&apos; | awk &apos;{print $1}&apos;)
 WEB_IP=$(hostname -I)
+SLAVE_IP=$(getent hosts &apos;slave&apos; | awk &apos;{print $1}&apos;)
+
 pip install --upgrade --no-deps --force-reinstall -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
 
 pip install django-redis-cache&gt;=1.6.5
@@ -89,6 +91,9 @@ $OMERO_DIST/bin/omero config set omero.web.static_root &apos;/home/omero/static/
 
 $OMERO_DIST/bin/omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;
 $OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;redis_cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;&apos;$REDIS_IP&apos;:6379&quot;}}&apos;
+
+$OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;&apos;$SLAVE_IP&apos;&quot;, 4064, &quot;slave&quot;]]&apos;
+
 
 $OMERO_DIST/bin/omero config set omero.web.application_server.host $WEB_IP
 $OMERO_DIST/bin/omero config set omero.web.application_server.port 4080

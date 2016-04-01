@@ -32,6 +32,7 @@ web:
     links:
         - jenkins
         - redis
+        - slave
     volumes:
         - ./web:/home/omero
         - ./nginx/conf.d:/home/omero/nginx
