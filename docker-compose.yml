@@ -65,12 +65,14 @@ seleniumhub:
 seleniumfirefox:
     image: selenium/node-firefox
     links:
-        - seleniumhub
+        - seleniumhub:hub
     environment:
+        - "JAVA_OPTS: -Djava.security.egd=file:/dev/./urandom"
         - SERVICE_NAME=SPACENAME-seleniumfirefox
 seleniumchrome:
     image: selenium/node-chrome
     links:
-        - seleniumhub
+        - seleniumhub:hub
     environment:
+        - "JAVA_OPTS: -Djava.security.egd=file:/dev/./urandom"
         - SERVICE_NAME=SPACENAME-seleniumchrome
