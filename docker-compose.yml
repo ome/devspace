@@ -21,10 +21,6 @@ slave:
         - jenkins
     volumes:
         - ./slave:/home/slave
-        - ./nginx/conf.d:/home/slave/nginx
-    volumes_from:
-        - git
-        - nginx
     environment:
         - JAVA_HOME=/etc/alternatives/java_sdk
         - SERVICE_NAME=SPACENAME-omero
@@ -39,8 +35,6 @@ web:
     volumes:
         - ./web:/home/omero
         - ./nginx/conf.d:/home/omero/nginx
-    volumes_from:
-        - nginx
     environment:
         - JENKINS_LABEL=/etc/alternatives/java_sdk
         - JENKINS_MODE=exclusive
@@ -62,3 +56,21 @@ redis:
     image: redis
     environment:
         - SERVICE_NAME=SPACENAME-redis
+
+seleniumhub:
+    image: selenium/hub
+    environment:
+        - "JAVA_OPTS: -Xmx512m"
+        - SERVICE_NAME=SPACENAME-seleniumhub
+seleniumfirefox:
+    image: selenium/node-firefox
+    links:
+        - seleniumhub
+    environment:
+        - SERVICE_NAME=SPACENAME-seleniumfirefox
+seleniumchrome:
+    image: selenium/node-chrome
+    links:
+        - seleniumhub
+    environment:
+        - SERVICE_NAME=SPACENAME-seleniumchrome

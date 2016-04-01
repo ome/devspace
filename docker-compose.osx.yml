@@ -16,3 +16,6 @@ nginx:
 redis:
     ports:
         - "6379:6379"
+seleniumhub:
+    ports:
+        - "4444:4444"
