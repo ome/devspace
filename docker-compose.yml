@@ -25,7 +25,7 @@ slave:
         - JAVA_HOME=/etc/alternatives/java_sdk
         - SERVICE_NAME=SPACENAME-omero
         - DOCKER_FIX='   '
-    command: -labels java -labels slave -name slave -disableClientsUniqueId -executors 4
+    command: -labels centos6 -labels slave -executors 4
 
 web:
     build: web
