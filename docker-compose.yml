@@ -77,3 +77,14 @@ seleniumchrome:
     environment:
         - "JAVA_OPTS: -Djava.security.egd=file:/dev/./urandom"
         - SERVICE_NAME=SPACENAME-seleniumchrome
+
+robot:
+    build: robot
+    links:
+        - jenkins
+    volumes:
+        - ./robot/tests:/home/omero/tests
+    environment:
+        - JENKINS_LABEL=/etc/alternatives/java_sdk
+        - JENKINS_MODE=exclusive
+        - SERVICE_NAME=SPACENAME-robot
