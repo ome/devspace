@@ -86,10 +86,8 @@ cd $SRC/dist
 bash ../components/tests/ui/robot_setup.sh
 mv $SRC/dist/robot_ice.config $SRC/components/tests/ui/resources/
 export ICE_CONFIG=$SRC/components/tests/ui/resources/robot_ice.config
-$SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --protocol http --webhost nginx --remoteurl http://seleniumhub:4444/wd/hub --dc browserName:${BROWSER},javascriptEnabled:True &gt; $SRC/components/tests/ui/resources/config.txt</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>
+$SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --protocol http --webhost &apos;develop-nginx.docker.openmicroscopy.org&apos; --remoteurl &apos;http://seleniumhub:4444/wd/hub&apos; --dc &apos;browserName:${BROWSER},javascriptEnabled:True&apos; &gt; $SRC/components/tests/ui/resources/
+
 echo Running the UI tests
 export JAVA_OPTS=&quot;-d32&quot;
 
@@ -97,7 +95,8 @@ export JAVA_OPTS=&quot;-d32&quot;
 $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web
 
 #aggregate the various output files.
-$SRC/build.py -f components/tests/ui/build.xml aggregate-results</command>
+$SRC/build.py -f components/tests/ui/build.xml aggregate-results
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
