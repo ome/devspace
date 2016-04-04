@@ -38,5 +38,7 @@ RUN chmod +x /tmp/jenkins-slave.sh
 ADD ./jenkins.service /etc/systemd/system/jenkins.service
 RUN systemctl enable jenkins.service
 
+RUN yum install -y unzip \
+    && yum clean all
 
 #ENTRYPOINT ["/tmp/jenkins-slave.sh"]
