@@ -45,6 +45,7 @@ nginx:
     build: nginx
     links:
         - jenkins
+        - web
     volumes:
         - ./nginx/conf.d:/etc/nginx/conf.d
         - ./web/static/web:/home/omero/static/web

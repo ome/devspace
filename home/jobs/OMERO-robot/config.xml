@@ -55,15 +55,12 @@ unzip $ZIP_DIST
 rm -f $ZIP_DIST
 mv $WORKSPACE/${ZIP_DIST%.zip} $SRC/dist
 
-NGINX_IP=$(getent hosts &apos;nginx&apos; | awk &apos;{print $1}&apos;)
-SELENIUMHUB_IP=$(getent hosts &apos;seleniumhub&apos; | awk &apos;{print $1}&apos;)
-
 $SRC/dist/bin/omero config set omero.web.prefix &quot;/web&quot;
 
 bash $SRC/components/tests/ui/robot_setup.sh
 mv $SRC/dist/robot_ice.config $SRC/components/tests/ui/resources/
 export ICE_CONFIG=$SRC/components/tests/ui/resources/robot_ice.config
-$SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --protocol http --webhost $NGINX_IP --remoteurl &apos;http://&apos;$SELENIUMHUB_IP&apos;:4444/wd/hub --dc browserName:${BROWSER},javascriptEnabled:True&apos; &gt; $SRC/components/tests/ui/resources/config.txt</command>
+$SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --protocol http --webhost nginx --remoteurl &apos;http://seleniumhub:4444/wd/hub --dc browserName:${BROWSER},javascriptEnabled:True&apos; &gt; $SRC/components/tests/ui/resources/config.txt</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>
