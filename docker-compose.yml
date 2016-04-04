@@ -82,6 +82,8 @@ robot:
     build: robot
     links:
         - jenkins
+        - nginx
+        - seleniumhub
     volumes:
         - ./robot/tests:/home/omero/tests
     environment:

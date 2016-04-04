@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>-1</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <hudson.model.ParametersDefinitionProperty/>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>robot</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
+      <project>OMERO-build</project>
+      <filter>src/target/openmicroscopy*zip</filter>
+      <target></target>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
+      <project>OMERO-build</project>
+      <filter>src/target/OMERO.server*zip</filter>
+      <target></target>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.tasks.Shell>
+      <command>
+
+# Setup configuration for robot job
+ZIP_SRC=$(ls openmicroscopy*zip)
+SRC=$WORKSPACE/${ZIP_SRC%.zip}
+unzip $ZIP_SRC
+rm -f $ZIP_SRC
+
+ZIP_DIST=$(ls OMERO.server*.zip)
+unzip $ZIP_DIST
+rm -f $ZIP_DIST
+mv $WORKSPACE/${ZIP_DIST%.zip} $SRC/dist
+
+NGINX_IP=$(getent hosts &apos;nginx&apos; | awk &apos;{print $1}&apos;)
+SELENIUMHUB_IP=$(getent hosts &apos;seleniumhub&apos; | awk &apos;{print $1}&apos;)
+
+$SRC/dist/bin/omero config set omero.web.prefix &quot;/web&quot;
+
+bash $SRC/components/tests/ui/robot_setup.sh
+mv $SRC/dist/robot_ice.config $SRC/components/tests/ui/resources/
+export ICE_CONFIG=$SRC/components/tests/ui/resources/robot_ice.config
+$SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --protocol http --webhost $NGINX_IP --remoteurl &apos;http://&apos;$SELENIUMHUB_IP&apos;:4444/wd/hub --dc browserName:${BROWSER},javascriptEnabled:True&apos; &gt; $SRC/components/tests/ui/resources/config.txt</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>
+echo Running the UI tests
+export JAVA_OPTS=&quot;-d32&quot;
+
+
+$SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web
+
+#aggregate the various output files.
+$SRC/build.py -f components/tests/ui/build.xml aggregate-results</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
