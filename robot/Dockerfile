@@ -23,7 +23,7 @@ RUN yum install -y git \
 RUN bash $OMERO_INSTALL/step01_centos7_init.sh
 RUN bash $OMERO_INSTALL/step01_centos_java_deps.sh
 RUN bash $OMERO_INSTALL/step01_centos7_deps.sh
-RUN bash $OMERO_INSTALL/step01_centos7_ice_deps.sh
+RUN export ICEVER=ice35-devel; bash /tmp/omero-install/linux/step01_centos7_ice_deps.sh
 
 RUN yum install -y http://download-aws.ej-technologies.com/exe4j/exe4j_linux_5_0_1.rpm && yum clean all
 
