@@ -83,6 +83,7 @@ robot:
     build: robot
     links:
         - jenkins
+        - slave
         - nginx
         - seleniumhub
     volumes:

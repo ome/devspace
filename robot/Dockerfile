@@ -22,30 +22,27 @@ RUN yum install -y git \
 # Customize: run particular scripts from omero-install
 RUN bash $OMERO_INSTALL/step01_centos7_init.sh
 RUN bash $OMERO_INSTALL/step01_centos_java_deps.sh
+RUN bash $OMERO_INSTALL/step01_centos7_deps.sh
 RUN bash $OMERO_INSTALL/step01_centos7_ice_deps.sh
-
-RUN yum install -y python python-pip \
-    && yum clean all
-RUN pip install robotframework
-RUN pip install robotframework-selenium2library
-
-VOLUME ["/home/omero/tests"]
-
-WORKDIR /home/omero
 
 RUN yum install -y http://download-aws.ej-technologies.com/exe4j/exe4j_linux_5_0_1.rpm && yum clean all
 
 USER omero
 RUN curl --create-dirs -sSLo /tmp/swarm-client-$JENKINS_SWARM_VERSION-jar-with-dependencies.jar http://maven.jenkins-ci.org/content/repositories/releases/org/jenkins-ci/plugins/swarm-client/$JENKINS_SWARM_VERSION/swarm-client-$JENKINS_SWARM_VERSION-jar-with-dependencies.jar
 
+RUN virtualenv /home/omero/omero-virtualenv --system-site-packages
+RUN source /home/omero/omero-virtualenv/bin/activate; pip install robotframework
+RUN source /home/omero/omero-virtualenv/bin/activate; pip install robotframework-selenium2library
+
 USER root
+
+VOLUME ["/home/omero/tests"]
+
+WORKDIR /home/omero
 
 ADD ./jenkins-slave.sh /tmp/jenkins-slave.sh
 RUN chmod +x /tmp/jenkins-slave.sh
 ADD ./jenkins.service /etc/systemd/system/jenkins.service
 RUN systemctl enable jenkins.service
-
-RUN yum install -y unzip \
-    && yum clean all
 
 #ENTRYPOINT ["/tmp/jenkins-slave.sh"]

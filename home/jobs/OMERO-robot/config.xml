@@ -21,6 +21,15 @@
       <includeCustomMessage>false</includeCustomMessage>
       <customMessage></customMessage>
     </jenkins.plugins.slack.SlackNotifier_-SlackJobProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>HOSTNAME</name>
+          <description></description>
+          <defaultValue>slave</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>robot</assignedNode>
@@ -31,6 +40,10 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
+    <hudson.tasks.Shell>
+      <command>rm -rf openmicroscopy*
+rm -rf OMERO.server*</command>
+    </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
       <project>OMERO-build</project>
       <filter>src/target/openmicroscopy*zip</filter>
@@ -63,10 +76,14 @@ unzip $ZIP_DIST
 rm -f $ZIP_DIST
 mv $WORKSPACE/${ZIP_DIST%.zip} $SRC/dist
 
+source $HOME/omero-virtualenv/bin/activate
+
+pip install --upgrade --no-deps --force-reinstall -r $SRC/dist/share/web/requirements-py27-nginx.txt
+
 $SRC/dist/bin/omero config set omero.web.prefix &quot;/web&quot;
 
-cd $SRC
-bash components/tests/ui/robot_setup.sh
+cd $SRC/dist
+bash ../components/tests/ui/robot_setup.sh
 mv $SRC/dist/robot_ice.config $SRC/components/tests/ui/resources/
 export ICE_CONFIG=$SRC/components/tests/ui/resources/robot_ice.config
 $SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --protocol http --webhost nginx --remoteurl http://seleniumhub:4444/wd/hub --dc browserName:${BROWSER},javascriptEnabled:True &gt; $SRC/components/tests/ui/resources/config.txt</command>
