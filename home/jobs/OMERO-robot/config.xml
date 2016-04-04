@@ -4,23 +4,6 @@
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
-    <jenkins.plugins.slack.SlackNotifier_-SlackJobProperty plugin="slack@1.8.1">
-      <teamDomain></teamDomain>
-      <token></token>
-      <room></room>
-      <startNotification>true</startNotification>
-      <notifySuccess>true</notifySuccess>
-      <notifyAborted>true</notifyAborted>
-      <notifyNotBuilt>true</notifyNotBuilt>
-      <notifyUnstable>true</notifyUnstable>
-      <notifyFailure>true</notifyFailure>
-      <notifyBackToNormal>true</notifyBackToNormal>
-      <notifyRepeatedFailure>false</notifyRepeatedFailure>
-      <includeTestSummary>false</includeTestSummary>
-      <showCommitList>false</showCommitList>
-      <includeCustomMessage>false</includeCustomMessage>
-      <customMessage></customMessage>
-    </jenkins.plugins.slack.SlackNotifier_-SlackJobProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
@@ -63,13 +46,13 @@ rm -rf OMERO.server*</command>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command>
+      <command>SRC=$WORKSPACE/src
 
 # Setup configuration for robot job
 ZIP_SRC=$(ls openmicroscopy*zip)
-SRC=$WORKSPACE/${ZIP_SRC%.zip}
 unzip $ZIP_SRC
 rm -f $ZIP_SRC
+mv $WORKSPACE/${ZIP_SRC%.zip} $SRC
 
 ZIP_DIST=$(ls OMERO.server*.zip)
 unzip $ZIP_DIST
@@ -86,19 +69,35 @@ cd $SRC/dist
 bash ../components/tests/ui/robot_setup.sh
 mv $SRC/dist/robot_ice.config $SRC/components/tests/ui/resources/
 export ICE_CONFIG=$SRC/components/tests/ui/resources/robot_ice.config
-$SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --protocol http --webhost &apos;develop-nginx.docker.openmicroscopy.org&apos; --remoteurl &apos;http://seleniumhub:4444/wd/hub&apos; --dc &apos;browserName:${BROWSER},javascriptEnabled:True&apos; &gt; $SRC/components/tests/ui/resources/
+$SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --protocol http --webhost &apos;develop-nginx.docker.openmicroscopy.org&apos; --remoteurl &apos;http://seleniumhub:4444/wd/hub&apos; --dc &apos;browserName:${BROWSER},javascriptEnabled:True&apos; &gt; $SRC/components/tests/ui/resources/config.txt
 
 echo Running the UI tests
 export JAVA_OPTS=&quot;-d32&quot;
 
-
-$SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web
+#$SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web
+$SRC/build.py -f components/tests/ui/build.xml web-chrome -Dtest.with.fail=false
+$SRC/build.py -f components/tests/ui/build.xml web-firefox -Dtest.with.fail=false
 
 #aggregate the various output files.
 $SRC/build.py -f components/tests/ui/build.xml aggregate-results
 </command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.plugins.robot.RobotPublisher plugin="robot@1.6.4">
+      <outputPath>$WORKSPACE/src/components/tests/ui/target/reports</outputPath>
+      <reportFileName>report.html</reportFileName>
+      <logFileName>log.html</logFileName>
+      <outputFileName>output.xml</outputFileName>
+      <disableArchiveOutput>false</disableArchiveOutput>
+      <passThreshold>100.0</passThreshold>
+      <unstableThreshold>80.0</unstableThreshold>
+      <otherFiles>
+        <string></string>
+      </otherFiles>
+      <enableCache>true</enableCache>
+      <onlyCritical>true</onlyCritical>
+    </hudson.plugins.robot.RobotPublisher>
+  </publishers>
   <buildWrappers/>
 </project>
