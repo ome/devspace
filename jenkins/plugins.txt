@@ -38,3 +38,6 @@ workflow-job:1.11
 workflow-scm-step:1.11
 workflow-step-api:1.11
 workflow-support:1.11
+
+# Robot
+robot:1.6.4
