@@ -33,9 +33,9 @@
           <description></description>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
+              <string>no-error</string>
               <string>none</string>
               <string>success-only</string>
-              <string>no-error</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
