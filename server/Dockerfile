@@ -21,6 +21,9 @@ RUN yum install -y git \
     && git clone -b java-parameters https://github.com/jburel/omero-install.git /tmp/omero-install \
     && yum clean all
 
+ADD ./settings.env $OMERO_INSTALL/settings.env
+RUN chmod +x $OMERO_INSTALL/settings.env
+
 # Customize: run particular scripts from omero-install
 RUN rm -f $OMERO_INSTALL/setup_centos_selinux.sh
 RUN touch $OMERO_INSTALL/setup_centos_selinux.sh
