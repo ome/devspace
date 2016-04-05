@@ -62,21 +62,21 @@ redis:
 seleniumhub:
     image: selenium/hub
     environment:
-        - "JAVA_OPTS: -Xmx512m"
+        - "JAVA_OPTS: -d32 -Xmx512m"
         - SERVICE_NAME=SPACENAME-seleniumhub
 seleniumfirefox:
     image: selenium/node-firefox
     links:
         - seleniumhub:hub
     environment:
-        - "JAVA_OPTS: -Djava.security.egd=file:/dev/./urandom"
+        - "JAVA_OPTS: -d32 -Djava.security.egd=file:/dev/./urandom"
         - SERVICE_NAME=SPACENAME-seleniumfirefox
 seleniumchrome:
     image: selenium/node-chrome
     links:
         - seleniumhub:hub
     environment:
-        - "JAVA_OPTS: -Djava.security.egd=file:/dev/./urandom"
+        - "JAVA_OPTS: -d32 -Djava.security.egd=file:/dev/./urandom"
         - SERVICE_NAME=SPACENAME-seleniumchrome
 
 robot:
