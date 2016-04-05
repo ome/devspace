@@ -9,7 +9,7 @@
         <hudson.model.StringParameterDefinition>
           <name>HOSTNAME</name>
           <description></description>
-          <defaultValue>slave</defaultValue>
+          <defaultValue>server</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
