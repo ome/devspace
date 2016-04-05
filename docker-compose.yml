@@ -27,12 +27,25 @@ slave:
         - DOCKER_FIX='   '
     command: -labels centos6 -labels slave -executors 4
 
+server:
+    build: server
+    links:
+        - jenkins
+        - pg
+    volumes:
+        - ./server:/home/omero
+    environment:
+        - JENKINS_LABEL=/etc/alternatives/java_sdk
+        - JENKINS_MODE=exclusive
+        - SERVICE_NAME=SPACENAME-server
+
 web:
     build: web
     links:
         - jenkins
         - redis
         - slave
+        - server
     volumes:
         - ./web:/home/omero
         - ./nginx/conf.d:/home/omero/nginx
@@ -84,6 +97,7 @@ robot:
     links:
         - jenkins
         - slave
+        - server
         - nginx
         - seleniumhub
     volumes:

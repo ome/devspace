@@ -5,6 +5,8 @@ jenkins:
     user: "1000"
 slave:
     user: "1000"
+server:
+    privileged: true
 web:
     ports:
         - "4080:4080"
