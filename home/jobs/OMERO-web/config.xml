@@ -88,7 +88,7 @@ $OMERO_DIST/bin/omero config set omero.web.static_root &apos;/home/omero/static/
 $OMERO_DIST/bin/omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;
 $OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;redis_cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;redis:6379&quot;}}&apos;
 
-$OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;server&quot;, 4064, &quot;server&quot;], [&quot;slave&quot;, 4064, &quot;slave&quot;]]&apos;
+$OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;omero&quot;, 4064, &quot;omero&quot;], [&quot;slave&quot;, 4064, &quot;slave&quot;]]&apos;
 
 
 $OMERO_DIST/bin/omero config set omero.web.application_server.host web

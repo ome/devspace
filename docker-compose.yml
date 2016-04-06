@@ -23,11 +23,10 @@ slave:
         - ./slave:/home/slave
     environment:
         - JAVA_HOME=/etc/alternatives/java_sdk
-        - SERVICE_NAME=SPACENAME-omero
         - DOCKER_FIX='   '
     command: -labels centos6 -labels slave -executors 4
 
-server:
+omero:
     build: server
     links:
         - jenkins
@@ -37,7 +36,7 @@ server:
     environment:
         - JENKINS_LABEL=/etc/alternatives/java_sdk
         - JENKINS_MODE=exclusive
-        - SERVICE_NAME=SPACENAME-server
+        - SERVICE_NAME=SPACENAME-omero
 
 web:
     build: web
@@ -45,14 +44,13 @@ web:
         - jenkins
         - redis
         - slave
-        - server
+        - omero
     volumes:
         - ./web:/home/omero
         - ./nginx/conf.d:/home/omero/nginx
     environment:
         - JENKINS_LABEL=/etc/alternatives/java_sdk
         - JENKINS_MODE=exclusive
-        - SERVICE_NAME=SPACENAME-web
 
 nginx:
     build: nginx
@@ -85,21 +83,19 @@ seleniumfirefox:
         - seleniumhub:hub
     environment:
         - "JAVA_OPTS: -d64 -Xmx512m -Djava.security.egd=file:/dev/./urandom"
-        - SERVICE_NAME=SPACENAME-seleniumfirefox
 seleniumchrome:
     image: selenium/node-chrome
     links:
         - seleniumhub:hub
     environment:
         - "JAVA_OPTS: -d64 -Xmx512m -Djava.security.egd=file:/dev/./urandom"
-        - SERVICE_NAME=SPACENAME-seleniumchrome
 
 robot:
     build: robot
     links:
         - jenkins
         - slave
-        - server
+        - omero
         - nginx
         - seleniumhub
     volumes:

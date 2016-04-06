@@ -21,7 +21,7 @@ build job: &apos;nginx&apos;
 
 build job: &apos;OMERO-robot&apos;, wait: false
 
-build job: &apos;OMERO-start&apos;, wait: false
+build job: &apos;OMERO-test-integration&apos;, wait: false
 </script>
     <sandbox>false</sandbox>
   </definition>
