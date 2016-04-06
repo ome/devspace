@@ -98,8 +98,6 @@ robot:
         - omero
         - nginx
         - seleniumhub
-    volumes:
-        - ./robot/tests:/home/omero/tests
     environment:
         - JENKINS_LABEL=/etc/alternatives/java_sdk
         - JENKINS_MODE=exclusive

@@ -36,8 +36,6 @@ RUN source /home/omero/omero-virtualenv/bin/activate; pip install robotframework
 
 USER root
 
-VOLUME ["/home/omero/tests"]
-
 WORKDIR /home/omero
 
 ADD ./jenkins-slave.sh /tmp/jenkins-slave.sh
