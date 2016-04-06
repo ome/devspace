@@ -18,7 +18,7 @@ RUN yum install -y initscripts \
 ENV OMERO_INSTALL /tmp/omero-install/linux
 
 RUN yum install -y git \
-    && git clone -b java-parameters https://github.com/jburel/omero-install.git /tmp/omero-install \
+    && git clone https://github.com/ome/omero-install.git /tmp/omero-install \
     && yum clean all
 
 ADD ./settings.env $OMERO_INSTALL/settings.env
