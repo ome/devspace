@@ -68,7 +68,7 @@ cd $SRC/dist
 bash ../components/tests/ui/robot_setup.sh
 mv $SRC/dist/robot_ice.config $SRC/components/tests/ui/resources/
 export ICE_CONFIG=$SRC/components/tests/ui/resources/robot_ice.config
-$SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --protocol http --webhost &apos;develop-nginx.docker.openmicroscopy.org&apos; --remoteurl &apos;http://seleniumhub:4444/wd/hub&apos; --dc &apos;browserName:${BROWSER},javascriptEnabled:True&apos; &gt; $SRC/components/tests/ui/resources/config.txt
+$SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --protocol http --webhost &apos;SPACENAME-nginx.docker.openmicroscopy.org&apos; --remoteurl &apos;http://seleniumhub:4444/wd/hub&apos; --dc &apos;browserName:${BROWSER},javascriptEnabled:True&apos; &gt; $SRC/components/tests/ui/resources/config.txt
 
 echo Running the UI tests
 

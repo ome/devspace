@@ -33,5 +33,5 @@ if __name__ == "__main__":
     branch = name
 
   # This number will need to be updated when new changes are commited.
-  assert 24 == replace(name, branch, ns.uid)
+  assert 25 == replace(name, branch, ns.uid)
   print "Done. You may want to review and commit your changes now"
