@@ -24,8 +24,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>rm -rf openmicroscopy*
-rm -rf OMERO.server*</command>
+      <command>rm -rf src</command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
       <project>OMERO-build</project>
@@ -73,9 +72,7 @@ $SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --proto
 
 echo Running the UI tests
 
-#$SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web
-$SRC/build.py -f components/tests/ui/build.xml web-chrome -Dtest.with.fail=false
-$SRC/build.py -f components/tests/ui/build.xml web-firefox -Dtest.with.fail=false
+$SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web
 
 #aggregate the various output files.
 $SRC/build.py -f components/tests/ui/build.xml aggregate-results
