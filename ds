@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-EXTRA=${EXTRA:-"docker-compose.osx.yml"}
+EXTRA=${EXTRA:-"docker-compose.unix.yml"}
 exec docker-compose -f docker-compose.yml -f "$EXTRA" "$@"

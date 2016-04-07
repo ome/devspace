@@ -5,12 +5,29 @@ language: java
 services:
   - docker
 
+env:
+  global:
+    - DOCKER_VERSION=1.10.1-0~trusty
+    - DOCKER_COMPOSE_VERSION=1.6.0
+
 before_install:
-- ./rename.py travis
+  - sudo apt-get update
+  - sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confnew" install docker-engine=${DOCKER_VERSION}
+  - sudo gpasswd -a $USER docker
+  - export USER_ID=`id -u $USER`
+  - docker -v
+
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - docker-compose -v
+
+  - ./rename.py travis
 
 install:
-- docker-compose build
+  - docker-compose -f docker-compose.yml -f docker-compose.unix.yml build
 
 script:
-- docker-compose up -d slave
-- docker-compose stop
+  - docker-compose -f docker-compose.yml -f docker-compose.unix.yml up -d
+  - docker-compose -f docker-compose.yml -f docker-compose.unix.yml stop

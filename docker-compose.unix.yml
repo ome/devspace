@@ -1,5 +1,5 @@
-#jenkins:
-#    user: "1234"
+jenkins:
+    user: ${USER_ID}
 
 omero:
     volumes:
