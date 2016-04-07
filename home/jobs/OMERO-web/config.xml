@@ -3,25 +3,7 @@
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
-  <properties>
-    <jenkins.plugins.slack.SlackNotifier_-SlackJobProperty plugin="slack@1.8.1">
-      <teamDomain></teamDomain>
-      <token></token>
-      <room></room>
-      <startNotification>true</startNotification>
-      <notifySuccess>true</notifySuccess>
-      <notifyAborted>true</notifyAborted>
-      <notifyNotBuilt>true</notifyNotBuilt>
-      <notifyUnstable>true</notifyUnstable>
-      <notifyFailure>true</notifyFailure>
-      <notifyBackToNormal>true</notifyBackToNormal>
-      <notifyRepeatedFailure>false</notifyRepeatedFailure>
-      <includeTestSummary>false</includeTestSummary>
-      <showCommitList>false</showCommitList>
-      <includeCustomMessage>false</includeCustomMessage>
-      <customMessage></customMessage>
-    </jenkins.plugins.slack.SlackNotifier_-SlackJobProperty>
-  </properties>
+  <properties/>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>web</assignedNode>
   <canRoam>false</canRoam>

@@ -4,23 +4,6 @@
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
-    <jenkins.plugins.slack.SlackNotifier_-SlackJobProperty plugin="slack@1.8.1">
-      <teamDomain></teamDomain>
-      <token></token>
-      <room></room>
-      <startNotification>false</startNotification>
-      <notifySuccess>false</notifySuccess>
-      <notifyAborted>false</notifyAborted>
-      <notifyNotBuilt>false</notifyNotBuilt>
-      <notifyUnstable>false</notifyUnstable>
-      <notifyFailure>false</notifyFailure>
-      <notifyBackToNormal>false</notifyBackToNormal>
-      <notifyRepeatedFailure>false</notifyRepeatedFailure>
-      <includeTestSummary>false</includeTestSummary>
-      <showCommitList>false</showCommitList>
-      <includeCustomMessage>false</includeCustomMessage>
-      <customMessage></customMessage>
-    </jenkins.plugins.slack.SlackNotifier_-SlackJobProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
