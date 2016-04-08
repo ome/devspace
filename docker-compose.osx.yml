@@ -5,3 +5,21 @@ jenkins:
     user: "1000"
 slave:
     user: "1000"
+omero:
+    privileged: true
+web:
+    ports:
+        - "4080:4080"
+    privileged: true
+nginx:
+    ports:
+        - "8888:80"
+    privileged: true
+redis:
+    ports:
+        - "6379:6379"
+seleniumhub:
+    ports:
+        - "4444:4444"
+robot:
+    privileged: true

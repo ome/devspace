@@ -1,0 +1,15 @@
+[Unit]
+Description=Jenkins slave
+Documentation=https://developer.cloudbees.com/bin/view/DEV/On-Premise+Executors
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/tmp/jenkins-slave.sh -labels centos7 -labels web -executors 4
+Restart=always
+RestartSec=60
+StartLimitInterval=0
+User=omero
+
+[Install]
+WantedBy=multi-user.target

@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-EXTRA=${EXTRA:-"docker-compose.osx.yml"}
-exec docker-compose -f docker-compose.yml -f "$EXTRA" "$@"
+EXTRA=${EXTRA:-"docker-compose.unix.yml"}
+exec env USER_ID=$UID docker-compose -f docker-compose.yml -f "$EXTRA" "$@"

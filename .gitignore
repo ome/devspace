@@ -1,6 +1,7 @@
 .*un~
 home/.*
 home/*.log
+home/cache/
 home/fingerprints/
 home/identity.key.enc
 home/init.groovy.d/
@@ -35,3 +36,4 @@ slave/.matplotlib
 slave/.oracle_jre_usage
 slave/.local
 slave/.ssh
+web/.jenkins

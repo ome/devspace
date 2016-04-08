@@ -21,18 +21,84 @@ slave:
         - jenkins
     volumes:
         - ./slave:/home/slave
-    volumes_from:
-        - git
     environment:
         - JAVA_HOME=/etc/alternatives/java_sdk
-        - SERVICE_NAME=SPACENAME-omero
         - DOCKER_FIX='   '
+    command: -labels centos6 -labels slave -executors 4
+
+omero:
+    build: server
+    links:
+        - jenkins
+        - pg
+    volumes:
+        - ./server:/home/omero
+    environment:
+        - JENKINS_LABEL=/etc/alternatives/java_sdk
+        - JENKINS_MODE=exclusive
+        - SERVICE_NAME=SPACENAME-omero
+
+web:
+    build: web
+    links:
+        - jenkins
+        - redis
+        - slave
+        - omero
+    volumes:
+        - ./web:/home/omero
+        - ./nginx/conf.d:/home/omero/nginx
+    environment:
+        - JENKINS_LABEL=/etc/alternatives/java_sdk
+        - JENKINS_MODE=exclusive
 
 nginx:
-    image: nginx
+    build: nginx
     links:
-        - slave
+        - jenkins
+        - web
     volumes:
-        - ./slave:/home/jenkins-slave
+        - ./nginx/conf.d:/etc/nginx/conf.d
+        - ./web/static/web:/home/omero/static/web
     environment:
-        - SERVICE_NAME=SPACENAME-web
+        - JENKINS_LABEL=/etc/alternatives/java_sdk
+        - JENKINS_MODE=exclusive
+        - SERVICE_NAME=SPACENAME-nginx
+
+redis:
+    image: redis
+    environment:
+        - SERVICE_NAME=SPACENAME-redis
+
+seleniumhub:
+    image: selenium/hub
+    environment:
+        - "JAVA_OPTS: -d64 -Xmx512m -Djava.security.egd=file:/dev/./urandom"
+        - SERVICE_NAME=SPACENAME-seleniumhub
+        - GRID_BROWSER_TIMEOUT=5000
+        - GRID_TIMEOUT=5000
+seleniumfirefox:
+    image: selenium/node-firefox
+    links:
+        - seleniumhub:hub
+    environment:
+        - "JAVA_OPTS: -d64 -Xmx512m -Djava.security.egd=file:/dev/./urandom"
+seleniumchrome:
+    image: selenium/node-chrome
+    links:
+        - seleniumhub:hub
+    environment:
+        - "JAVA_OPTS: -d64 -Xmx512m -Djava.security.egd=file:/dev/./urandom"
+
+robot:
+    build: robot
+    links:
+        - jenkins
+        - slave
+        - omero
+        - nginx
+        - seleniumhub
+    environment:
+        - JENKINS_LABEL=/etc/alternatives/java_sdk
+        - JENKINS_MODE=exclusive
+        - SERVICE_NAME=SPACENAME-robot

@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>web</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>
+OMERO_DIST=$HOME/OMERO.server
+if [ -e $OMERO_DIST ]; then
+    if [ -e $HOME/omero-virtualenv ]; then
+        #eval $(bash /opt/multi-config.sh ice3.5)
+        sudo sudo service omero-web stop
+        sleep 5
+        sudo sudo service omero-web status || true
+    fi
+    rm -rf $OMERO_DIST
+else
+    sudo service omero-web stop
+    virtualenv $HOME/omero-virtualenv --system-site-packages
+fi
+      </command>
+    </hudson.tasks.Shell>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
+      <project>OMERO-build</project>
+      <filter>src/target/OMERO.py*zip</filter>
+      <target></target>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.tasks.Shell>
+      <command>
+OMERO_DIST=$HOME/OMERO.server
+OMERO_INSTALL=/tmp/omero-install/linux
+
+ZIP=$(ls OMERO.py*.zip)
+DIST=${ZIP%.zip}
+unzip $ZIP
+rm -f $ZIP
+mv $WORKSPACE/$DIST $OMERO_DIST
+
+source $HOME/omero-virtualenv/bin/activate
+
+source $OMERO_INSTALL/settings.env
+
+# redis IP
+pip install --upgrade --no-deps --force-reinstall -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
+
+pip install django-redis-cache&gt;=1.6.5
+
+#start-config
+$OMERO_DIST/bin/omero config set omero.web.application_server &apos;wsgi-tcp&apos;
+$OMERO_DIST/bin/omero config set omero.web.application_server.max_requests 0
+
+$OMERO_DIST/bin/omero config set omero.web.prefix &apos;/web&apos;
+$OMERO_DIST/bin/omero config set omero.web.static_url &apos;/web/static/&apos;
+$OMERO_DIST/bin/omero config set omero.web.static_root &apos;/home/omero/static/web&apos;
+
+$OMERO_DIST/bin/omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;
+$OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;redis_cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;redis:6379&quot;}}&apos;
+
+$OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;omero&quot;, 4064, &quot;omero&quot;], [&quot;slave&quot;, 4064, &quot;slave&quot;]]&apos;
+
+
+$OMERO_DIST/bin/omero config set omero.web.application_server.host web
+$OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
+
+$OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt;$OMERO_DIST/nginx.conf.tmp
+
+sudo -u root cp $OMERO_DIST/nginx.conf.tmp $HOME/nginx/omero-web.conf
+
+cat $HOME/nginx/omero-web.conf
+
+$OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
+
+#eval $(bash /opt/multi-config.sh ice3.5)
+
+deactivate
+
+sudo sudo service omero-web start
+
+      </command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

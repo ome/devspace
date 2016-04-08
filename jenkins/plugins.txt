@@ -1,4 +1,4 @@
-swarm:1.24
+swarm:2.0
 git:2.4.0
 mailer:1.15
 scm-api:0.2
@@ -38,3 +38,6 @@ workflow-job:1.11
 workflow-scm-step:1.11
 workflow-step-api:1.11
 workflow-support:1.11
+
+# Robot
+robot:1.6.4
