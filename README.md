@@ -1,5 +1,12 @@
 # Getting started
 
+## Requirements
+
+The following prerequisites are required for deploying a Jenkins devspace:
+
+*   Docker Compose 1.6.2
+*   Docker Engine 1.9.1 or later
+
 ## Deployment
 
 
