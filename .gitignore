@@ -12,6 +12,7 @@ home/jobs/*/modules/
 home/jobs/*/nextBuildNumber
 home/logs/
 home/nodeMonitors.xml
+home/org.jenkinsci.plugins.workflow.flow.FlowExecutionList.xml
 home/plugins/
 home/plugins.txt
 home/queue.xml.bak
