@@ -15,6 +15,7 @@ home/nodeMonitors.xml
 home/org.jenkinsci.plugins.workflow.flow.FlowExecutionList.xml
 home/plugins/
 home/plugins.txt
+home/queue.xml
 home/queue.xml.bak
 home/scriptApproval.xml
 home/secret.key
