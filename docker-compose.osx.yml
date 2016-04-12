@@ -3,13 +3,15 @@ jenkins:
         - "8080:8080"
     # UID that is mapped in docker-machine
     user: "1000"
-slave:
-    user: "1000"
-omero:
+test:
+    ports:
+        - "14080:4080"
     privileged: true
-web:
+omero:
     ports:
         - "4080:4080"
+    privileged: true
+web:
     privileged: true
 nginx:
     ports:

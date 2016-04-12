@@ -13,6 +13,8 @@ git:
 
 pg:
     image: postgres
+    volumes:
+        - ./database/var/lib/postgresql
 
 test:
     build: slave
@@ -22,10 +24,10 @@ test:
     volumes:
         - ./slave:/home/omero
     environment:
-        - SWARM_PARAMS=" -labels centos7 -labels slave -executors 4"
+        - SWARM_PARAMS=" -labels centos7 -labels test -executors 4"
         - ICEVER=ice35-devel
         - JENKINS_MODE=exclusive
-        - SERVICE_NAME=develop-test
+        - SERVICE_NAME=SPACENAME-test
 
 omero:
     build: server
@@ -63,7 +65,7 @@ nginx:
         - ./nginx/conf.d:/etc/nginx/conf.d
         - ./web/static/web:/home/omero/static/web
     environment:
-        - SWARM_PARAMS=" -labels centos7 -labels nginx"
+        - SWARM_PARAMS=" -labels centos7 -labels nginx  -executors 1"
         - JENKINS_MODE=exclusive
         - SERVICE_NAME=SPACENAME-nginx
 
@@ -101,6 +103,6 @@ robot:
         - nginx
         - seleniumhub
     environment:
-        - SWARM_PARAMS=" -labels centos7 -labels web -executors 4"
+        - SWARM_PARAMS=" -labels centos7 -labels robot -executors 4"
         - JENKINS_MODE=exclusive
         - SERVICE_NAME=SPACENAME-robot

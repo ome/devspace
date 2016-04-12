@@ -1,6 +1,11 @@
 jenkins:
     user: ${USER_ID}
 
+test:
+    volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+        - /run
+
 omero:
     volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
