@@ -3,9 +3,19 @@
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>HOSTNAME</name>
+          <description></description>
+          <defaultValue>omero</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>slave</assignedNode>
+  <assignedNode>test</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -14,12 +24,24 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command># PURGE
-eval $(bash /opt/multi-config.sh ice3.5)
-DEPLOY=$(find . -type d -name &quot;openmicroscopy-*&quot;)/dist
-$DEPLOY/bin/omero admin stop || echo First build
+      <command>OMERO_INSTALL=/tmp/omero-install/linux
+source $OMERO_INSTALL/settings.env
+
+SRC=$WORKSPACE/src
+
+sudo service omero stop
 sleep 5
-rm -rf openmicroscopy*</command>
+sudo service omero status || echo Not started maybe
+source $OMERO_INSTALL/settings.env
+dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo Already 
+
+if [ -e $SRC ]; then
+    rm -rf $SRC
+fi
+
+mkdir -p $OMERO_DATA_DIR
+rm -rf $OMERO_DATA_DIR/*
+</command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
       <project>OMERO-build</project>
@@ -30,68 +52,89 @@ rm -rf openmicroscopy*</command>
       <flatten>true</flatten>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
+      <project>OMERO-build</project>
+      <filter>src/target/OMERO.server*zip</filter>
+      <target></target>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command># FUTURE ENV. VARS
-OMERO_DATA_DIR=$WORKSPACE/data
-OMERO_DB_NAME=$JOB_NAME
+      <command>SRC=$WORKSPACE/src
+
+# Setup configuration for robot job
+ZIP_SRC=$(ls openmicroscopy*zip)
+unzip $ZIP_SRC
+rm -f $ZIP_SRC
+mv $WORKSPACE/${ZIP_SRC%.zip} $SRC
+
+ZIP_DIST=$(ls OMERO.server*.zip)
+unzip $ZIP_DIST
+rm -f $ZIP_DIST
+mv $WORKSPACE/${ZIP_DIST%.zip} $SRC/dist
 
 
-ZIP=$(ls openmicroscopy*zip)
-SRC=$WORKSPACE/${ZIP%.zip}
-unzip $ZIP
+source $SRC/docs/hudson/functions.sh
+$SRC/build.py test-compile
 
+source $OMERO_INSTALL/settings.env
 
-eval $(bash /opt/multi-config.sh ice3.5)
-cd $SRC
-source docs/hudson/functions.sh
-./build.py build-default test-compile
+createdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME
 
-
-# PURGE
-dist/bin/omero admin stop --force-rewrite || echo First build
-sleep 5
-
-mkdir -p $OMERO_DATA_DIR
-rm -rf $OMERO_DATA_DIR/*
-dropdb -h pg -U postgres $OMERO_DB_NAME || echo Already exists maybe
-createdb -h pg -U postgres $OMERO_DB_NAME
-
-cd dist
+# LOAD EXTRA CONFIG
+#$OMERO_DIST/bin/omero load configfile.omero
 
 # CONFIG HERE.
-bin/omero config set omero.db.name $OMERO_DB_NAME
-bin/omero config set omero.db.host pg
-bin/omero config set omero.db.user postgres
-bin/omero config set omero.data.dir $OMERO_DATA_DIR
-
-bin/omero config set omero.web.check_version false
-bin/omero config set omero.web.application_server.host 0.0.0.0
-bin/omero config set omero.web.server_list &apos;[[&quot;localhost&quot;, 4064, &quot;SPACENAME&quot;],[&quot;dogfish.openmicroscopy.org&quot;, 4064, &quot;dogfish&quot;]]&apos;
-# DONE
+$OMERO_DIST/bin/omero config set omero.db.name $OMERO_DB_NAME
+$OMERO_DIST/bin/omero config set omero.db.host $OMERO_DB_HOST
+$OMERO_DIST/bin/omero config set omero.db.user $OMERO_DB_USER
+$OMERO_DIST/bin/omero config set omero.data.dir $OMERO_DATA_DIR
 
 
 # PURGE
-bin/omero db script -f dbsetup.sql &quot;&quot; &quot;&quot; omero
-psql -h pg -U postgres -d $OMERO_DB_NAME -f dbsetup.sql
+$OMERO_DIST/bin/omero db script -f dbsetup.sql &quot;&quot; &quot;&quot; $OMERO_ROOT_PASS
+psql -h $OMERO_DB_HOST -U $OMERO_DB_USER -d $OMERO_DB_NAME -f dbsetup.sql
 rm dbsetup.sql
 
-BUILD_ID=DONT_KILL_ME bin/omero admin start
-# BUILD_ID=DONT_KILL_ME bin/omero web start
+sudo sudo service omero start
 
-bin/omero admin waitup
+# WAIT FOR OMERO TO START UP
+d=10;
+until [ -f $SRC/dist/var/log/Blitz-0.log ]
+    do
+        sleep 10
+        d=$[$d -1]
+        if [ $d -lt 0 ]; then
+            exit 1
+        fi
+    done
+echo "${SRC}/dist/var/log/Blitz-0.log found"
+
+# WAIT FOR OMERO TO ACCEPT CONNECTIONS
+d=10
+while ! grep "OMERO.blitz now accepting connections" $SRC/dist/var/log/Blitz-0.log
+    do
+        sleep 10
+        d=$[$d -1]
+        if [ $d -lt 0 ]; then
+            exit 1
+        fi
+    done
 
 export OMERO_SESSION_DIR=/tmp/$JOB_NAME/$BUILD_NUMBER
 export ICE_CONFIG=$SRC/dist/etc/ice.config
 echo Running the integration tests with -Dtestng.useDefaultListeners=true
-cd $SRC
-./build.py -f components/tools/OmeroJava/build.xml -Dtestng.useDefaultListeners=true -Dtestreports.dir=target/reports/integration integration
-./build.py -f components/tools/OmeroPy/build.xml integration  -Dtestreports.dir=target/reports/integration
-./build.py -f components/tools/OmeroFS/build.xml integration -Dtestreports.dir=target/reports/integration
-./build.py -f components/tools/OmeroWeb/build.xml integration -Dtestreports.dir=target/reports/integration
+
+$SRC/build.py -f components/tools/OmeroJava/build.xml -Dtestng.useDefaultListeners=true -Dtestreports.dir=target/reports/integration integration
+$SRC/build.py -f components/tools/OmeroPy/build.xml integration  -Dtestreports.dir=target/reports/integration
+$SRC/build.py -f components/tools/OmeroFS/build.xml integration -Dtestreports.dir=target/reports/integration
+$SRC/build.py -f components/tools/OmeroWeb/build.xml integration -Dtestreports.dir=target/reports/integration
 
 ## Broken
-./build.py -f components/tools/OmeroPy/build.xml integration -DMARK=broken -Dtestreports.dir=target/reports/broken
-./build.py -f components/tools/OmeroJava/build.xml -Dtestng.useDefaultListeners=true -Dtestreports.dir=target/reports/broken broken</command>
+$SRC/build.py -f components/tools/OmeroPy/build.xml integration -DMARK=broken -Dtestreports.dir=target/reports/broken
+$SRC/build.py -f components/tools/OmeroJava/build.xml -Dtestng.useDefaultListeners=true -Dtestreports.dir=target/reports/broken broken</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>

@@ -17,19 +17,16 @@
       <command>OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
 
+sudo service omero stop
+sleep 5
+sudo service omero status || true
+#source $OMERO_INSTALL/settings.env
+#dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo Already exists maybe
+
 OMERO_DIST=$HOME/OMERO.server
+
 if [ -e $OMERO_DIST ]; then
-    #eval $(bash /opt/multi-config.sh ice3.5)
-    sudo sudo service omero stop
-    sleep 5
-    sudo sudo service omero status || true
     rm -rf $OMERO_DIST
-    source $OMERO_INSTALL/settings.env
-    dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo Already exists maybe
-else
-    sudo service omero stop
-    source $OMERO_INSTALL/settings.env
-    dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo Already exists maybe
 fi
 
 mkdir -p $OMERO_DATA_DIR
@@ -57,8 +54,10 @@ mv $WORKSPACE/$DIST $OMERO_DIST
 
 source $OMERO_INSTALL/settings.env
 
-createdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME
+#createdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME
 
+# LOAD EXTRA CONFIG
+#$OMERO_DIST/bin/omero load configfile.omero
 
 # CONFIG HERE.
 $OMERO_DIST/bin/omero config set omero.db.name $OMERO_DB_NAME

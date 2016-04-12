@@ -9,7 +9,7 @@
         <hudson.model.StringParameterDefinition>
           <name>HOSTNAME</name>
           <description></description>
-          <defaultValue>omero</defaultValue>
+          <defaultValue>test</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
@@ -24,7 +24,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>rm -rf src</command>
+      <command>SRC=$WORKSPACE/src
+rm -rf $SRC</command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
       <project>OMERO-build</project>
@@ -76,6 +77,8 @@ $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-we
 
 #aggregate the various output files.
 $SRC/build.py -f components/tests/ui/build.xml aggregate-results
+
+deactivate
 </command>
     </hudson.tasks.Shell>
   </builders>

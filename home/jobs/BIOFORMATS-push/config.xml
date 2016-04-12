@@ -57,7 +57,7 @@
       </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
-  <assignedNode>slave</assignedNode>
+  <assignedNode>test</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>

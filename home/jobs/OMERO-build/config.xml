@@ -39,7 +39,7 @@
       <hudson.plugins.git.extensions.impl.CleanCheckout/>
     </extensions>
   </scm>
-  <assignedNode>slave</assignedNode>
+  <assignedNode>test</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -48,8 +48,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>eval $(bash /opt/multi-config.sh ice3.5)
-
+      <command>
 export PATH=/opt/texlive/bin/x86_64-linux:$PATH # for dockerfile
 cd src
 export OMERO_BRANCH=SPACEBRANCH

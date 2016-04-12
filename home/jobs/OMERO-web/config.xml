@@ -18,7 +18,6 @@
 OMERO_DIST=$HOME/OMERO.server
 if [ -e $OMERO_DIST ]; then
     if [ -e $HOME/omero-virtualenv ]; then
-        #eval $(bash /opt/multi-config.sh ice3.5)
         sudo sudo service omero-web stop
         sleep 5
         sudo sudo service omero-web status || true
@@ -83,8 +82,6 @@ sudo -u root cp $OMERO_DIST/nginx.conf.tmp $HOME/nginx/omero-web.conf
 cat $HOME/nginx/omero-web.conf
 
 $OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
-
-#eval $(bash /opt/multi-config.sh ice3.5)
 
 deactivate
 
