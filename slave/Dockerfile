@@ -34,6 +34,9 @@ WORKDIR /tmp/omero-install/linux
 
 RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh
 
+# install sphinx
+RUN pip install sphinx
+
 # install postgres tools
 RUN yum -y install http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-centos94-9.4-2.noarch.rpm \
     && yum clean all
