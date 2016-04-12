@@ -10,6 +10,7 @@ credentials:1.22
 rundeck:3.5.1
 junit:1.9
 javadoc:1.3
+script-security:1.18.1
 
 artifactory:2.4.4
 copyartifact:1.37
