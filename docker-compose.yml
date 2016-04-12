@@ -14,17 +14,18 @@ git:
 pg:
     image: postgres
 
-slave:
+test:
     build: slave
     links:
         - pg
         - jenkins
     volumes:
-        - ./slave:/home/slave
+        - ./slave:/home/omero
     environment:
-        - JAVA_HOME=/etc/alternatives/java_sdk
-        - DOCKER_FIX='   '
-    command: -labels centos6 -labels slave -executors 4
+        - SWARM_PARAMS=" -labels centos7 -labels slave -executors 4"
+        - ICEVER=ice35-devel
+        - JENKINS_MODE=exclusive
+        - SERVICE_NAME=develop-test
 
 omero:
     build: server
@@ -34,7 +35,8 @@ omero:
     volumes:
         - ./server:/home/omero
     environment:
-        - JENKINS_LABEL=/etc/alternatives/java_sdk
+        - SWARM_PARAMS=" -labels centos7 -labels omero -executors 4"
+        - ICEVER=ice35-devel
         - JENKINS_MODE=exclusive
         - SERVICE_NAME=SPACENAME-omero
 
@@ -43,13 +45,13 @@ web:
     links:
         - jenkins
         - redis
-        - slave
+        - test
         - omero
     volumes:
         - ./web:/home/omero
         - ./nginx/conf.d:/home/omero/nginx
     environment:
-        - JENKINS_LABEL=/etc/alternatives/java_sdk
+        - SWARM_PARAMS=" -labels centos7 -labels web -executors 4"
         - JENKINS_MODE=exclusive
 
 nginx:
@@ -61,7 +63,7 @@ nginx:
         - ./nginx/conf.d:/etc/nginx/conf.d
         - ./web/static/web:/home/omero/static/web
     environment:
-        - JENKINS_LABEL=/etc/alternatives/java_sdk
+        - SWARM_PARAMS=" -labels centos7 -labels nginx"
         - JENKINS_MODE=exclusive
         - SERVICE_NAME=SPACENAME-nginx
 
@@ -94,11 +96,11 @@ robot:
     build: robot
     links:
         - jenkins
-        - slave
+        - test
         - omero
         - nginx
         - seleniumhub
     environment:
-        - JENKINS_LABEL=/etc/alternatives/java_sdk
+        - SWARM_PARAMS=" -labels centos7 -labels web -executors 4"
         - JENKINS_MODE=exclusive
         - SERVICE_NAME=SPACENAME-robot

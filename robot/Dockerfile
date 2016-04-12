@@ -1,9 +1,10 @@
-FROM openmicroscopy/devslave-c7-docker:0.1.0
+FROM openmicroscopy/devslave-c7:0.1.0
 
 MAINTAINER OME
 
-# To avoid error: sudo: sorry, you must have a tty to run sudo
-RUN sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoers
+# skip some omero-install
+RUN echo 'export container=docker' > /etc/profile.d/docker.sh
+
 
 # Customize: run particular scripts from omero-install
 RUN bash $OMERO_INSTALL/step01_centos7_deps.sh

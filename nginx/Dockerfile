@@ -1,4 +1,4 @@
-FROM openmicroscopy/devslave-c7-docker:0.1.0
+FROM openmicroscopy/devslave-c7:0.1.0
 
 MAINTAINER OME
 

@@ -1,7 +1,9 @@
-FROM openmicroscopy/devslave-c7-docker:0.1.0
+FROM openmicroscopy/devslave-c7:0.1.0
 
 MAINTAINER OME
 
+# skip some omero-install
+RUN echo 'export container=docker' > /etc/profile.d/docker.sh
 
 ADD ./settings.env $OMERO_INSTALL/settings.env
 RUN chmod +x $OMERO_INSTALL/settings.env
@@ -26,10 +28,8 @@ RUN sed -i.bak -re 's/(Requires=nginx.service)/#\1/' $OMERO_INSTALL/omero-web-sy
 # custom omero-web.service that support virtualenv
 RUN rm -f $OMERO_INSTALL/omero-web-systemd.service
 ADD ./omeroweb.service $OMERO_INSTALL/omero-web-systemd.service
-#RUN chmod a $OMERO_INSTALL/omero-web-systemd.service
 
-RUN sed -i.bak -re 's/(.*omero.service.*)/#\1/' $OMERO_INSTALL/step06_centos7_daemon.sh
-RUN sed -i.bak -re 's/(systemctl daemon-reload)/#\1/' $OMERO_INSTALL/step06_centos7_daemon.sh
+RUN sed -i.bak -re 's/(systemctl enable omero.service)/#\1/' $OMERO_INSTALL/step06_centos7_daemon.sh
  
 WORKDIR /tmp/omero-install/linux
 

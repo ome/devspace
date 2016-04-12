@@ -1,8 +1,11 @@
-FROM openmicroscopy/devslave-c7-docker:0.1.0
+FROM openmicroscopy/devslave-c7:0.1.0
 
 MAINTAINER OME
 
 ENV ICEVER=ice35-devel
+
+# skip some omero-install
+RUN echo 'export container=docker' > /etc/profile.d/docker.sh
 
 ADD ./settings.env $OMERO_INSTALL/settings.env
 RUN chmod +x $OMERO_INSTALL/settings.env
@@ -24,9 +27,9 @@ RUN touch $OMERO_INSTALL/step05_centos7_nginx.sh
 
 RUN sed -i.bak -re 's/(.*postgresql-9.4.service.*)/#\1/' $OMERO_INSTALL/omero-systemd.service
 
-RUN sed -i.bak -re 's/(.*omero-web.service.*)/#\1/' $OMERO_INSTALL/step06_centos7_daemon.sh
-RUN sed -i.bak -re 's/(systemctl daemon-reload)/#\1/' $OMERO_INSTALL/step06_centos7_daemon.sh
- 
+# add omero.service manually as we skip PG
+RUN sed -i "1 a\cp omero-systemd.service /etc/systemd/system/omero.service" $OMERO_INSTALL/step06_centos7_daemon.sh
+
 WORKDIR /tmp/omero-install/linux
 
 RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh

@@ -1,16 +1,47 @@
-FROM openmicroscopy/omero-build-c6-multienv
+FROM openmicroscopy/devslave-c7:0.1.0
 
 MAINTAINER OME
 
-ENV JENKINS_SWARM_VERSION 2.0
-ENV LANG en_US.UTF-8
+ENV ICEVER=ice35-devel
 
-RUN yum install -y http://download-aws.ej-technologies.com/exe4j/exe4j_linux_5_0_1.rpm
+# skip some omero-install
+RUN echo 'export container=docker' > /etc/profile.d/docker.sh
 
-RUN adduser -u 1000 slave
-USER slave
+ADD ./settings.env $OMERO_INSTALL/settings.env
+RUN chmod +x $OMERO_INSTALL/settings.env
+
+# Customize: run particular scripts from omero-install
+RUN rm -f $OMERO_INSTALL/setup_centos_selinux.sh
+RUN touch $OMERO_INSTALL/setup_centos_selinux.sh
+# db will be managed by the job
+RUN rm -f $OMERO_INSTALL/setup_omero_db.sh
+RUN touch $OMERO_INSTALL/setup_omero_db.sh
+RUN rm -f $OMERO_INSTALL/step03_all_postgres.sh
+RUN touch $OMERO_INSTALL/step03_all_postgres.sh
+# omeroweb will be installed by the job
+RUN rm -f $OMERO_INSTALL/step04_all_omero.sh
+RUN touch $OMERO_INSTALL/step04_all_omero.sh
+# remove nginx
+RUN rm -rf $OMERO_INSTALL/step05_centos7_nginx.sh
+RUN touch $OMERO_INSTALL/step05_centos7_nginx.sh
+
+RUN sed -i.bak -re 's/(.*postgresql-9.4.service.*)/#\1/' $OMERO_INSTALL/omero-systemd.service
+
+# add omero.service manually as we skip PG
+RUN sed -i "1 a\cp omero-systemd.service /etc/systemd/system/omero.service" $OMERO_INSTALL/step06_centos7_daemon.sh
+
+WORKDIR /tmp/omero-install/linux
+
+RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh
+
+# install postgres tools
+RUN yum -y install http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-centos94-9.4-2.noarch.rpm \
+    && yum clean all
+RUN yum -y install postgresql94 \
+    && yum clean all
+
 WORKDIR /tmp
-RUN curl --create-dirs -sSLo /tmp/swarm-client-$JENKINS_SWARM_VERSION-jar-with-dependencies.jar http://maven.jenkins-ci.org/content/repositories/releases/org/jenkins-ci/plugins/swarm-client/$JENKINS_SWARM_VERSION/swarm-client-$JENKINS_SWARM_VERSION-jar-with-dependencies.jar
 
-COPY jenkins-slave.sh /tmp/jenkins-slave.sh
-ENTRYPOINT ["/tmp/jenkins-slave.sh"]
+USER root
+
+EXPOSE 4080
