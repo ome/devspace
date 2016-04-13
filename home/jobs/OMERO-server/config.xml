@@ -20,7 +20,6 @@ source $OMERO_INSTALL/settings.env
 sudo service omero stop
 sleep 5
 sudo service omero status || true
-source $OMERO_INSTALL/settings.env
 dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo First run
 
 OMERO_DIST=$HOME/OMERO.server
@@ -43,8 +42,11 @@ rm -rf $OMERO_DATA_DIR/*
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command>OMERO_DIST=$HOME/OMERO.server
-OMERO_INSTALL=/tmp/omero-install/linux
+      <command>OMERO_INSTALL=/tmp/omero-install/linux
+source $OMERO_INSTALL/settings.env
+
+# UNZIP SERVER
+OMERO_DIST=$HOME/OMERO.server
 
 ZIP=$(ls OMERO.server*.zip)
 DIST=${ZIP%.zip}
@@ -52,27 +54,57 @@ unzip $ZIP
 rm -f $ZIP
 mv $WORKSPACE/$DIST $OMERO_DIST
 
-source $OMERO_INSTALL/settings.env
 
-createdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME
+## LOAD CONFIG
 
 # LOAD EXTRA CONFIG
 #$OMERO_DIST/bin/omero load configfile.omero
 
-# CONFIG HERE.
+# DEFAULT CONFIG
 $OMERO_DIST/bin/omero config set omero.db.name $OMERO_DB_NAME
 $OMERO_DIST/bin/omero config set omero.db.host $OMERO_DB_HOST
 $OMERO_DIST/bin/omero config set omero.db.user $OMERO_DB_USER
 $OMERO_DIST/bin/omero config set omero.data.dir $OMERO_DATA_DIR
-# DONE
+
+## END LOAD CONFIG
 
 
-# PURGE
+## PURGE
+
+# CREATE DB
+createdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME
 $OMERO_DIST/bin/omero db script -f dbsetup.sql &quot;&quot; &quot;&quot; $OMERO_ROOT_PASS
 psql -h $OMERO_DB_HOST -U $OMERO_DB_USER -d $OMERO_DB_NAME -f dbsetup.sql
 rm dbsetup.sql
 
+## END PURGE
+
 sudo sudo service omero start
+
+# WAIT FOR OMERO TO START UP
+BLITZ_LOG=$OMERO_DIST/var/log/Blitz-0.log
+d=10;
+until [ -f $BLITZ_LOG ]
+    do
+        sleep 10
+        d=$[$d -1]
+        if [ $d -lt 0 ]; then
+            exit 1
+        fi
+    done
+echo &quot;$BLITZ_LOG found&quot;
+
+# WAIT FOR OMERO TO ACCEPT CONNECTIONS
+d=10
+while ! grep &quot;OMERO.blitz now accepting connections&quot; $BLITZ_LOG
+    do
+        sleep 10
+        d=$[$d -1]
+        if [ $d -lt 0 ]; then
+            exit 1
+        fi
+    done
+
       </command>
     </hudson.tasks.Shell>
   </builders>

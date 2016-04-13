@@ -22,7 +22,16 @@ SRC=$WORKSPACE/src
 sudo service omero stop
 sleep 5
 sudo service omero status || echo Not started maybe
-source $OMERO_INSTALL/settings.env
+
+# WORKAROUND
+if grep -q OMERO.server /etc/systemd/system/omero.service; then
+    sudo sed -i &apos;s/OMERO\.server/workspace\/$JOB_NAME\/src\/dist/g&apos; /etc/systemd/system/omero.service
+    sudo systemctl daemon-reload
+fi
+# if anytning goes wrong restore using
+# cp $OMERO_INSTALL/omero-systemd.service /etc/systemd/system/omero.service
+# WORKAROUND
+
 dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo Already 
 
 mkdir -p $OMERO_DATA_DIR
@@ -41,9 +50,13 @@ rm -rf $WORKSPACE/*
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command>SRC=$WORKSPACE/src
+      <command>
+OMERO_INSTALL=/tmp/omero-install/linux
+source $OMERO_INSTALL/settings.env
 
-# Setup configuration for robot job
+# BUILD FROM SOURCE
+SRC=$WORKSPACE/src
+
 ZIP_SRC=$(ls openmicroscopy*zip)
 unzip $ZIP_SRC
 rm -f $ZIP_SRC
@@ -52,30 +65,38 @@ mv $WORKSPACE/${ZIP_SRC%.zip} $SRC
 source $SRC/docs/hudson/functions.sh
 $SRC/build.py build-default test-compile
 
-source $OMERO_INSTALL/settings.env
 
-createdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME
+## LOAD CONFIG
+OMERO_DIST=$SRC/dist
 
 # LOAD EXTRA CONFIG
 #$OMERO_DIST/bin/omero load configfile.omero
 
-# CONFIG HERE.
+# DEFAULT CONFIG
 $OMERO_DIST/bin/omero config set omero.db.name $OMERO_DB_NAME
 $OMERO_DIST/bin/omero config set omero.db.host $OMERO_DB_HOST
 $OMERO_DIST/bin/omero config set omero.db.user $OMERO_DB_USER
 $OMERO_DIST/bin/omero config set omero.data.dir $OMERO_DATA_DIR
 
+## END LOAD CONFIG
 
-# PURGE
+## PURGE
+
+# CREATE DB
+createdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME
 $OMERO_DIST/bin/omero db script -f dbsetup.sql &quot;&quot; &quot;&quot; $OMERO_ROOT_PASS
 psql -h $OMERO_DB_HOST -U $OMERO_DB_USER -d $OMERO_DB_NAME -f dbsetup.sql
 rm dbsetup.sql
 
+## END PURGE
+
+# START OMERO
 sudo sudo service omero start
 
 # WAIT FOR OMERO TO START UP
+BLITZ_LOG=$SRC/dist/var/log/Blitz-0.log
 d=10;
-until [ -f $SRC/dist/var/log/Blitz-0.log ]
+until [ -f $BLITZ_LOG ]
     do
         sleep 10
         d=$[$d -1]
@@ -83,11 +104,11 @@ until [ -f $SRC/dist/var/log/Blitz-0.log ]
             exit 1
         fi
     done
-echo &quot;${SRC}/dist/var/log/Blitz-0.log found&quot;
+echo &quot;$BLITZ_LOG found&quot;
 
 # WAIT FOR OMERO TO ACCEPT CONNECTIONS
 d=10
-while ! grep &quot;OMERO.blitz now accepting connections&quot; $SRC/dist/var/log/Blitz-0.log
+while ! grep &quot;OMERO.blitz now accepting connections&quot; $BLITZ_LOG
     do
         sleep 10
         d=$[$d -1]
@@ -96,6 +117,7 @@ while ! grep &quot;OMERO.blitz now accepting connections&quot; $SRC/dist/var/log
         fi
     done
 
+# RUN TESTS
 export OMERO_SESSION_DIR=/tmp/$JOB_NAME/$BUILD_NUMBER
 export ICE_CONFIG=$SRC/dist/etc/ice.config
 echo Running the integration tests with -Dtestng.useDefaultListeners=true
