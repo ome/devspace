@@ -50,15 +50,6 @@ rm -rf $WORKSPACE/*
       <flatten>true</flatten>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
-      <project>OMERO-build</project>
-      <filter>src/target/OMERO.server*zip</filter>
-      <target></target>
-      <excludes></excludes>
-      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
-      <flatten>true</flatten>
-      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
-    </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
       <command>SRC=$WORKSPACE/src
 
@@ -68,14 +59,8 @@ unzip $ZIP_SRC
 rm -f $ZIP_SRC
 mv $WORKSPACE/${ZIP_SRC%.zip} $SRC
 
-ZIP_DIST=$(ls OMERO.server*.zip)
-unzip $ZIP_DIST
-rm -f $ZIP_DIST
-mv $WORKSPACE/${ZIP_DIST%.zip} $SRC/dist
-
-
 source $SRC/docs/hudson/functions.sh
-$SRC/build.py test-compile
+$SRC/build.py build-default test-compile
 
 source $OMERO_INSTALL/settings.env
 
