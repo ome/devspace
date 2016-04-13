@@ -5,6 +5,11 @@ MAINTAINER OME
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
 
+# update omero-install to the latest one
+ENV OMERO_INSTALL_ROOT=/tmp/omero-install
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch origin
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge origin/develop
+
 ADD ./settings.env $OMERO_INSTALL/settings.env
 RUN chmod +x $OMERO_INSTALL/settings.env
 

@@ -5,6 +5,10 @@ MAINTAINER OME
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
 
+# update omero-install to the latest one
+ENV OMERO_INSTALL_ROOT=/tmp/omero-install
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch origin
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge origin/develop
 
 # Customize: run particular scripts from omero-install
 RUN bash $OMERO_INSTALL/step01_centos7_deps.sh
