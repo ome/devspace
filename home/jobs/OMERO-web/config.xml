@@ -72,7 +72,7 @@ $OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&
 $OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;testice35&quot;, 4064, &quot;testice35&quot;], [&quot;omero&quot;, 4064, &quot;omero&quot;], [&quot;testice36&quot;, 4064, &quot;testice36&quot;]]&apos;
 
 
-$OMERO_DIST/bin/omero config set omero.web.application_server.host web
+$OMERO_DIST/bin/omero config set omero.web.application_server.host webice35
 $OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
 
 $OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt;$OMERO_DIST/nginx.conf.tmp
