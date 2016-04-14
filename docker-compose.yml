@@ -49,7 +49,6 @@ omero:
         - ./server:/home/omero
     environment:
         - SWARM_PARAMS=" -labels centos7 -labels omero -executors 4"
-        - ICEVER=ice35-devel
         - JENKINS_MODE=exclusive
         - SERVICE_NAME=SPACENAME-omero
 
