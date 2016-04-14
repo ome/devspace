@@ -15,6 +15,9 @@ RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge
 ADD ./settings.env $OMERO_INSTALL/settings.env
 RUN chmod +x $OMERO_INSTALL/settings.env
 
+ADD ./omero-systemd.service $OMERO_INSTALL/omero-systemd.service
+RUN chmod +x $OMERO_INSTALL/omero-systemd.service
+
 # Customize: run particular scripts from omero-install
 RUN rm -f $OMERO_INSTALL/setup_centos_selinux.sh
 RUN touch $OMERO_INSTALL/setup_centos_selinux.sh
@@ -29,8 +32,6 @@ RUN touch $OMERO_INSTALL/step04_all_omero.sh
 # remove nginx
 RUN rm -rf $OMERO_INSTALL/step05_centos7_nginx.sh
 RUN touch $OMERO_INSTALL/step05_centos7_nginx.sh
-
-RUN sed -i.bak -re 's/(.*postgresql-9.4.service.*)/#\1/' $OMERO_INSTALL/omero-systemd.service
 
 # add omero.service manually as we skip PG
 RUN sed -i "1 a\cp omero-systemd.service /etc/systemd/system/omero.service" $OMERO_INSTALL/step06_centos7_daemon.sh

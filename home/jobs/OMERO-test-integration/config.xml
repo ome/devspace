@@ -22,16 +22,6 @@ SRC=$WORKSPACE/src
 sudo service omero stop
 sleep 5
 sudo service omero status || echo Not started maybe
-
-# WORKAROUND
-if grep -q OMERO.server /etc/systemd/system/omero.service; then
-    sudo sed -i &apos;s/OMERO\.server/workspace\/$JOB_NAME\/src\/dist/g&apos; /etc/systemd/system/omero.service
-    sudo systemctl daemon-reload
-fi
-# if anytning goes wrong restore using
-# cp $OMERO_INSTALL/omero-systemd.service /etc/systemd/system/omero.service
-# WORKAROUND
-
 dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo Already 
 
 mkdir -p $OMERO_DATA_DIR
