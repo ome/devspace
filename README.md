@@ -52,15 +52,17 @@ The following prerequisites are required for deploying a Jenkins devspace:
 The default deployment initializes a Jenkins server with a [predefined set of
 jobs](homes/jobs). The table below lists the job names, the Jenkins node labels they are associated to and a short description of their:
 
-| Job name               | Label  | Description                              |
-| -----------------------|--------| -----------------------------------------|
-| Trigger                |        | Runs all the following jobs in order     |
-| BIOFORMATS-push        | slave  | Merges all Bio-Formats PRs               |
-| BIOFORMATS-maven       | slave  | Builds Bio-Formats and runs unit tests   |
-| OMERO-push             | slave  | Merges all OMERO PRs                     |
-| OMERO-build            | slave  | Builds OMERO artifacts (server, clients) |
-| OMERO-server           | server | Deploys an OMERO.server                  |
-| OMERO-web              | web    | Deploys an OMERO.web client              |
-| nginx                  | nginx  | Reloads the nginx server                 |
-| OMERO-robot            | robot  | Runs the Robot test                      |
-| OMERO-test-integration | slave  | Runs the OMERO integration tests         |
+| Job name                  | Label              | Description                              |
+| --------------------------|--------------------| -----------------------------------------|
+| Trigger                   |                    | Runs all the following jobs in order     |
+| BIOFORMATS-push           | test               | Merges all Bio-Formats PRs               |
+| BIOFORMATS-maven          | test               | Builds Bio-Formats and runs unit tests   |
+| OMERO-push                | test               | Merges all OMERO PRs                     |
+| OMERO-build               | test               | Builds OMERO artifacts (server, clients) |
+| OMERO-server              | omero              | Deploys an OMERO.server                  |
+| OMERO-web                 | web                | Deploys an OMERO.web client              |
+| OMERO-test-integration    | test               | Runs the OMERO integration tests         |
+| OMERO-testice-integration | testice            | Runs the OMERO integration tests ICE36   |
+| OMERO-robot               | robot against test | Runs the Robot test                      |
+| nginx                     | nginx              | Reloads the nginx server                 |
+| --------------------------|--------------------| -----------------------------------------|
