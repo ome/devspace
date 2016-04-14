@@ -14,7 +14,7 @@ git:
 pg:
     image: postgres
     volumes:
-        - ./database:/var/lib/postgresql
+        - ./pgdata:/var/lib/postgresql/data
 
 test:
     build: slave
