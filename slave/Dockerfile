@@ -2,7 +2,7 @@ FROM openmicroscopy/devslave-c7:0.1.0
 
 MAINTAINER OME
 
-ENV ICEVER=ice35-devel
+ARG ICEVER=ice35-devel
 
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
