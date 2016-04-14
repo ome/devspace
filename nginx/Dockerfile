@@ -2,6 +2,8 @@ FROM openmicroscopy/devslave-c7:0.1.0
 
 MAINTAINER OME
 
+RUN rm -f /lib/systemd/system/systemd*udev* ; \
+    rm -f /lib/systemd/system/getty.target;
 
 RUN yum -y localinstall http://nginx.org/packages/rhel/7/noarch/RPMS/nginx-release-rhel-7-0.el7.ngx.noarch.rpm \
     && yum clean all

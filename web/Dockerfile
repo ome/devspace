@@ -2,6 +2,9 @@ FROM openmicroscopy/devslave-c7:0.1.0
 
 MAINTAINER OME
 
+RUN rm -f /lib/systemd/system/systemd*udev* ; \
+    rm -f /lib/systemd/system/getty.target;
+
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
 
