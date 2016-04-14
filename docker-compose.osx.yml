@@ -7,6 +7,10 @@ test:
     ports:
         - "14080:4080"
     privileged: true
+testice:
+    ports:
+        - "24080:4080"
+    privileged: true
 omero:
     ports:
         - "4080:4080"

@@ -6,6 +6,11 @@ test:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
         - /run
 
+testice:
+    volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+        - /run
+
 omero:
     volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro

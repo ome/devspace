@@ -25,9 +25,20 @@ test:
         - ./slave:/home/omero
     environment:
         - SWARM_PARAMS=" -labels centos7 -labels test -executors 4"
-        - ICEVER=ice35-devel
         - JENKINS_MODE=exclusive
         - SERVICE_NAME=SPACENAME-test
+
+testice:
+    build: slave2
+    links:
+        - pg
+        - jenkins
+    volumes:
+        - ./slave2:/home/omero
+    environment:
+        - SWARM_PARAMS=" -labels centos7 -labels testice -executors 4"
+        - JENKINS_MODE=exclusive
+        - SERVICE_NAME=SPACENAME-testice
 
 omero:
     build: server

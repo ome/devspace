@@ -1,0 +1,12 @@
+[Unit]
+Description=OMERO.server
+
+[Service]
+User=omero
+Type=simple
+Restart=on-failure
+RestartSec=10
+ExecStart=/home/omero/workspace/OMERO-test-integration/src/dist/bin/omero admin start --foreground
+
+[Install]
+WantedBy=multi-user.target
