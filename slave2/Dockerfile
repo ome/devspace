@@ -54,6 +54,4 @@ RUN yum -y install http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-cento
 RUN yum -y install postgresql94 \
     && yum clean all
 
-WORKDIR /tmp
-
 EXPOSE 4080

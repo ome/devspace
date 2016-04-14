@@ -41,6 +41,4 @@ WORKDIR /tmp/omero-install/linux
 RUN JAVAVER=$JAVAVER PGVER=nopg bash install_centos7_nginx.sh
 RUN yum install -y python-redis && yum clean all
 
-WORKDIR /tmp
-
 EXPOSE 4080

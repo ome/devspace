@@ -24,4 +24,3 @@ RUN source /home/omero/omero-virtualenv/bin/activate; pip install robotframework
 
 USER root
 
-WORKDIR /home/omero
