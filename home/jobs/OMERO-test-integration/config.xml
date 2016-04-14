@@ -16,6 +16,7 @@
     <hudson.tasks.Shell>
       <command>OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
+OMERO_DB_NAME=$JOB_NAME
 
 SRC=$WORKSPACE/src
 
@@ -43,6 +44,7 @@ rm -rf $WORKSPACE/*
       <command>
 OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
+OMERO_DB_NAME=$JOB_NAME
 
 # BUILD FROM SOURCE
 SRC=$WORKSPACE/src

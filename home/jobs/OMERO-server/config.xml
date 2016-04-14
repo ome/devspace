@@ -16,6 +16,7 @@
     <hudson.tasks.Shell>
       <command>OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
+OMERO_DB_NAME=$JOB_NAME
 
 sudo service omero stop
 sleep 5
@@ -44,6 +45,7 @@ rm -rf $OMERO_DATA_DIR/*
     <hudson.tasks.Shell>
       <command>OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
+OMERO_DB_NAME=$JOB_NAME
 
 # UNZIP SERVER
 OMERO_DIST=$HOME/OMERO.server
