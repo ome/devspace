@@ -58,8 +58,9 @@ web:
     links:
         - jenkins
         - redis
-        - test
         - omero
+        - test
+        - testice
     volumes:
         - ./web:/home/omero
         - ./nginx/conf.d:/home/omero/nginx
@@ -109,10 +110,11 @@ robot:
     build: robot
     links:
         - jenkins
-        - test
-        - omero
         - nginx
         - seleniumhub
+        - omero
+        - test
+        - testice
     environment:
         - SWARM_PARAMS=" -labels centos7 -labels robot -executors 4"
         - JENKINS_MODE=exclusive
