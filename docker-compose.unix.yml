@@ -1,32 +1,39 @@
 jenkins:
     user: ${USER_ID}
 
-test:
+testice35:
     volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
         - /run
-
-testice:
+    environment:
+        - container=docker
+testice36:
     volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
         - /run
-
+    environment:
+        - container=docker
 omero:
     volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
         - /run
-
-web:
+    environment:
+        - container=docker
+webice35:
     volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
         - /run
-
+    environment:
+        - container=docker
 nginx:
     volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
         - /run
-
+    environment:
+        - container=docker
 robot:
     volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
         - /run
+    environment:
+        - container=docker

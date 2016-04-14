@@ -3,29 +3,36 @@ jenkins:
         - "8080:8080"
     # UID that is mapped in docker-machine
     user: "1000"
-test:
+
+testice35:
     ports:
         - "14080:4080"
     privileged: true
-testice:
+testice36:
     ports:
         - "24080:4080"
     privileged: true
+
 omero:
     ports:
         - "4080:4080"
     privileged: true
-web:
+
+webice35:
     privileged: true
+
 nginx:
     ports:
         - "8888:80"
     privileged: true
+
 redis:
     ports:
         - "6379:6379"
+
 seleniumhub:
     ports:
         - "4444:4444"
+
 robot:
     privileged: true

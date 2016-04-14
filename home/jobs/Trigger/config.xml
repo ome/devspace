@@ -19,10 +19,12 @@ build job: &apos;OMERO-web&apos;
 
 build job: &apos;nginx&apos;
 
-build job: &apos;OMERO-testice-integration&apos;, wait: false
+build job: &apos;OMERO-test-integration-ice35&apos;
 
-build job: &apos;OMERO-test-integration&apos;
 build job: &apos;OMERO-robot&apos;, wait: false
+
+build job: &apos;OMERO-test-integration-ice36&apos;
+
 </script>
     <sandbox>false</sandbox>
   </definition>

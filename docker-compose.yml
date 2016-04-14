@@ -16,7 +16,7 @@ pg:
     volumes:
         - ./pgdata:/var/lib/postgresql/data
 
-test:
+testice35:
     build: slave
     links:
         - pg
@@ -24,11 +24,11 @@ test:
     volumes:
         - ./slave:/home/omero
     environment:
-        - SWARM_PARAMS=" -labels centos7 -labels test -executors 4"
+        - SWARM_PARAMS=" -labels centos7 -labels ice35 -name testice35 -disableClientsUniqueId -executors 4"
         - JENKINS_MODE=exclusive
-        - SERVICE_NAME=SPACENAME-test
+        - SERVICE_NAME=SPACENAME-testice35
 
-testice:
+testice36:
     build: slave2
     links:
         - pg
@@ -36,9 +36,9 @@ testice:
     volumes:
         - ./slave2:/home/omero
     environment:
-        - SWARM_PARAMS=" -labels centos7 -labels testice -executors 4"
+        - SWARM_PARAMS=" -labels centos7 -labels ice36 -name testice36 -disableClientsUniqueId -executors 4"
         - JENKINS_MODE=exclusive
-        - SERVICE_NAME=SPACENAME-testice
+        - SERVICE_NAME=SPACENAME-testice36
 
 omero:
     build: server
@@ -48,35 +48,35 @@ omero:
     volumes:
         - ./server:/home/omero
     environment:
-        - SWARM_PARAMS=" -labels centos7 -labels omero -executors 4"
+        - SWARM_PARAMS=" -labels centos7 -labels ice35 -name omero -disableClientsUniqueId -executors 4"
         - JENKINS_MODE=exclusive
         - SERVICE_NAME=SPACENAME-omero
 
-web:
+webice35:
     build: web
     links:
         - jenkins
         - redis
         - omero
-        - test
-        - testice
+        - testice35
+        - testice36
     volumes:
         - ./web:/home/omero
         - ./nginx/conf.d:/home/omero/nginx
     environment:
-        - SWARM_PARAMS=" -labels centos7 -labels web -executors 4"
+        - SWARM_PARAMS=" -labels centos7 -labels ice35 -name webice35 -disableClientsUniqueId -executors 4"
         - JENKINS_MODE=exclusive
 
 nginx:
     build: nginx
     links:
         - jenkins
-        - web
+        - webice35
     volumes:
         - ./nginx/conf.d:/etc/nginx/conf.d
         - ./web/static/web:/home/omero/static/web
     environment:
-        - SWARM_PARAMS=" -labels centos7 -labels nginx  -executors 1"
+        - SWARM_PARAMS=" -labels centos7 -labels nginx -name nginx -disableClientsUniqueId -executors 1"
         - JENKINS_MODE=exclusive
         - SERVICE_NAME=SPACENAME-nginx
 
@@ -112,9 +112,9 @@ robot:
         - nginx
         - seleniumhub
         - omero
-        - test
-        - testice
+        - testice35
+        - testice36
     environment:
-        - SWARM_PARAMS=" -labels centos7 -labels robot -executors 4"
+        - SWARM_PARAMS=" -labels centos7 -labels ice35 -name robot -disableClientsUniqueId -executors 4"
         - JENKINS_MODE=exclusive
         - SERVICE_NAME=SPACENAME-robot
