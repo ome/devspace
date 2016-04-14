@@ -34,7 +34,7 @@ rm -rf $OMERO_DATA_DIR/*
 </command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
-      <project>OMERO-build</project>
+      <project>OMERO-build/label=testice35</project>
       <filter>src/target/OMERO.server*zip</filter>
       <target></target>
       <excludes></excludes>

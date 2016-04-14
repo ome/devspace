@@ -28,7 +28,7 @@
 rm -rf $SRC</command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
-      <project>OMERO-build</project>
+      <project>OMERO-build/label=testice35</project>
       <filter>src/target/openmicroscopy*zip</filter>
       <target></target>
       <excludes></excludes>
@@ -37,7 +37,7 @@ rm -rf $SRC</command>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
-      <project>OMERO-build</project>
+      <project>OMERO-build/label=testice35</project>
       <filter>src/target/OMERO.server*zip</filter>
       <target></target>
       <excludes></excludes>
