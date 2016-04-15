@@ -25,6 +25,12 @@ webice35:
         - /run
     environment:
         - container=docker
+webice36:
+    volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+        - /run
+    environment:
+        - container=docker
 nginx:
     volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro

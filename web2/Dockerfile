@@ -5,7 +5,7 @@ MAINTAINER OME
 RUN rm -f /lib/systemd/system/systemd*udev* ; \
     rm -f /lib/systemd/system/getty.target;
 
-ARG ICEVER=ice35
+ARG ICEVER=noice
 
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh

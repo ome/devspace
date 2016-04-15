@@ -20,6 +20,8 @@ omero:
 
 webice35:
     privileged: true
+webice36:
+    privileged: true
 
 nginx:
     ports:

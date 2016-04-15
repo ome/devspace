@@ -1,0 +1,16 @@
+[Unit]
+Description=OMERO.web
+
+[Service]
+User=omero
+Type=forking
+PIDFile=/home/omero/OMERO.server/var/django.pid
+Restart=on-failure
+RestartSec=10
+Environment="VENVDIR=/home/omero/omero-virtualenv" "BINDIR=/home/omero/OMERO.server/bin"
+ExecStart=/usr/bin/bash -c "source $VENVDIR/bin/activate; $BINDIR/omero web start"
+ExecStop=/usr/bin/bash -c "source $VENVDIR/bin/activate; $BINDIR/omero web stop"
+Restart=/usr/bin/bash -c "source $VENVDIR/bin/activate; $BINDIR/omero web restart"
+
+[Install]
+WantedBy=multi-user.target

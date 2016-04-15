@@ -67,6 +67,21 @@ webice35:
         - SWARM_PARAMS=" -labels centos7 -labels ice35 -name webice35 -disableClientsUniqueId -executors 4"
         - JENKINS_MODE=exclusive
 
+webice36:
+    build: web2
+    links:
+        - jenkins
+        - redis
+        - omero
+        - testice35
+        - testice36
+    volumes:
+        - ./web2:/home/omero
+        - ./nginx/conf.d:/home/omero/nginx
+    environment:
+        - SWARM_PARAMS=" -labels centos7 -labels ice36 -name webice36 -disableClientsUniqueId -executors 4"
+        - JENKINS_MODE=exclusive
+
 nginx:
     build: nginx
     links:

@@ -1,17 +1,25 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<project>
+<matrix-project plugin="matrix-project@1.6">
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties/>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>webice35</assignedNode>
-  <canRoam>false</canRoam>
+  <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
+  <axes>
+    <hudson.matrix.LabelAxis>
+      <name>label</name>
+      <values>
+        <string>webice35</string>
+        <string>webice36</string>
+      </values>
+    </hudson.matrix.LabelAxis>
+  </axes>
   <builders>
     <hudson.tasks.Shell>
       <command>
@@ -27,10 +35,10 @@ else
     sudo service omero-web stop
     virtualenv $HOME/omero-virtualenv --system-site-packages
 fi
-      </command>
+</command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
-      <project>OMERO-build/label=testice35</project>
+      <project>OMERO-build/label=$LABEL</project>
       <filter>src/target/OMERO.py*zip</filter>
       <target></target>
       <excludes></excludes>
@@ -53,9 +61,10 @@ source $HOME/omero-virtualenv/bin/activate
 
 source $OMERO_INSTALL/settings.env
 
-# redis IP
 pip install --upgrade --no-deps --force-reinstall -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
-
+if [ "$LABEL" = "webice36" ]; then
+    pip install zeroc-ice
+fi
 pip install django-redis-cache&gt;=1.6.5
 
 #start-config
@@ -72,24 +81,24 @@ $OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&
 $OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;testice35&quot;, 4064, &quot;testice35&quot;], [&quot;omero&quot;, 4064, &quot;omero&quot;], [&quot;testice36&quot;, 4064, &quot;testice36&quot;]]&apos;
 
 
-$OMERO_DIST/bin/omero config set omero.web.application_server.host webice35
+$OMERO_DIST/bin/omero config set omero.web.application_server.host $LABEL
 $OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
 
 $OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt;$OMERO_DIST/nginx.conf.tmp
 
 sudo -u root cp $OMERO_DIST/nginx.conf.tmp $HOME/nginx/$JOB_NAME.conf
 
-cat $HOME/nginx/omero-web.conf
-
 $OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
 
 deactivate
 
 sudo sudo service omero-web start
-
       </command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
   <buildWrappers/>
-</project>
+  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
+    <runSequentially>false</runSequentially>
+  </executionStrategy>
+</matrix-project>
