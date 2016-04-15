@@ -87,9 +87,11 @@ nginx:
     links:
         - jenkins
         - webice35
+        - webice36
     volumes:
         - ./nginx/conf.d:/etc/nginx/conf.d
-        - ./web/static/web:/home/omero/static/web
+        - ./web/static/webice35:/home/omero/static/webice35
+        - ./web2/static/webice36:/home/omero/static/webice36
     environment:
         - SWARM_PARAMS=" -labels centos7 -labels nginx -name nginx -disableClientsUniqueId -executors 1"
         - JENKINS_MODE=exclusive

@@ -71,9 +71,9 @@ pip install django-redis-cache&gt;=1.6.5
 $OMERO_DIST/bin/omero config set omero.web.application_server &apos;wsgi-tcp&apos;
 $OMERO_DIST/bin/omero config set omero.web.application_server.max_requests 0
 
-$OMERO_DIST/bin/omero config set omero.web.prefix &apos;/web&apos;
-$OMERO_DIST/bin/omero config set omero.web.static_url &apos;/web/static/&apos;
-$OMERO_DIST/bin/omero config set omero.web.static_root &apos;/home/omero/static/web&apos;
+$OMERO_DIST/bin/omero config set omero.web.prefix &apos;/&apos;$LABEL
+$OMERO_DIST/bin/omero config set omero.web.static_url &apos;/&apos;$LABEL&apos;/static/&apos;
+$OMERO_DIST/bin/omero config set omero.web.static_root &apos;/home/omero/static/&apos;$LABEL
 
 $OMERO_DIST/bin/omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;
 $OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;redis_cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;redis:6379&quot;}}&apos;
