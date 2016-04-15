@@ -110,6 +110,13 @@ while ! grep &quot;OMERO.blitz now accepting connections&quot; $BLITZ_LOG
     done
 
 # RUN TESTS
+
+# prepare virtualenv for tests only
+virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
+source $WORKSPACE/omero-virtualenv/bin/activate
+# install web dependences
+pip install --upgrade --no-deps --force-reinstall -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
+
 export OMERO_SESSION_DIR=/tmp/$JOB_NAME/$BUILD_NUMBER
 export ICE_CONFIG=$SRC/dist/etc/ice.config
 echo Running the integration tests with -Dtestng.useDefaultListeners=true
