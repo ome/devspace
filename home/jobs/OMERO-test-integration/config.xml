@@ -24,7 +24,7 @@
     <hudson.tasks.Shell>
       <command>OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
-OMERO_DB_NAME=$JOB_NAME
+OMERO_DB_NAME=$NODE_NAME
 
 SRC=$WORKSPACE/src
 
@@ -51,7 +51,7 @@ rm -rf $WORKSPACE/*</command>
       <command>
 OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
-OMERO_DB_NAME=$JOB_NAME
+OMERO_DB_NAME=$NODE_NAME
 
 # BUILD FROM SOURCE
 SRC=$WORKSPACE/src
@@ -124,7 +124,7 @@ source $WORKSPACE/omero-virtualenv/bin/activate
 # install web dependences
 pip install --upgrade --no-deps --force-reinstall -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
 
-export OMERO_SESSION_DIR=/tmp/$JOB_NAME/$BUILD_NUMBER
+export OMERO_SESSION_DIR=/tmp/$NODE_NAME/$BUILD_NUMBER
 export ICE_CONFIG=$SRC/dist/etc/ice.config
 echo Running the integration tests with -Dtestng.useDefaultListeners=true
 
