@@ -24,7 +24,6 @@ ADD ./settings.env $OMERO_INSTALL/settings.env
 RUN chmod +x $OMERO_INSTALL/settings.env
 
 ADD ./omero-systemd.service $OMERO_INSTALL/omero-systemd.service
-RUN chmod +x $OMERO_INSTALL/omero-systemd.service
 
 # Customize: run particular scripts from omero-install
 RUN rm -f $OMERO_INSTALL/setup_centos_selinux.sh
