@@ -51,7 +51,7 @@ rm -rf $WORKSPACE/*</command>
       <command>
 OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
-OMERO_DB_NAME=$JOB_NAME&quot;_&quot;$LABEL
+OMERO_DB_NAME=$JOB_NAME
 
 # BUILD FROM SOURCE
 SRC=$WORKSPACE/src
