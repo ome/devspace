@@ -5,11 +5,11 @@ home/cache/
 home/fingerprints/
 home/identity.key.enc
 home/init.groovy.d/
-home/jobs/*/builds/
-home/jobs/*/lastStable
-home/jobs/*/lastSuccessful
-home/jobs/*/modules/
-home/jobs/*/nextBuildNumber
+home/jobs/**/builds/
+home/jobs/**/lastStable
+home/jobs/**/lastSuccessful
+home/jobs/**/modules/
+home/jobs/**/nextBuildNumber
 home/logs/
 home/nodeMonitors.xml
 home/plugins/
