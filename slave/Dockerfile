@@ -36,6 +36,7 @@ RUN rm -rf $OMERO_INSTALL/step05_centos7_nginx.sh
 RUN touch $OMERO_INSTALL/step05_centos7_nginx.sh
 
 # add omero.service manually as we skip PG
+RUN sed -i.bak -re 's/(.*omero-web.service)/#\1/' $OMERO_INSTALL/step06_centos7_daemon.sh
 RUN sed -i "1 a\cp omero-systemd.service /etc/systemd/system/omero.service" $OMERO_INSTALL/step06_centos7_daemon.sh
 
 WORKDIR /tmp/omero-install/linux
