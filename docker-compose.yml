@@ -96,6 +96,9 @@ nginx:
         - SWARM_PARAMS=" -labels centos7 -labels nginx -name nginx -disableClientsUniqueId -executors 1"
         - JENKINS_MODE=exclusive
         - SERVICE_NAME=SPACENAME-nginx
+    extra_hosts:
+        - "webice35.nginx:127.0.0.1"
+        - "webice36.nginx:127.0.0.1"
 
 redis:
     image: redis

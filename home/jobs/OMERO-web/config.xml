@@ -19,7 +19,15 @@
         <string>webice36</string>
       </values>
     </hudson.matrix.LabelAxis>
+    <hudson.matrix.TextAxis>
+      <name>ICE</name>
+      <values>
+        <string>ice35</string>
+        <string>ice36</string>
+      </values>
+    </hudson.matrix.TextAxis>
   </axes>
+  <combinationFilter>(ICE==&quot;ice35&quot;).implies(label==&quot;webice35&quot;) &amp;&amp; (ICE==&quot;ice36&quot;).implies(label==&quot;webice36&quot;)</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command>
@@ -38,7 +46,7 @@ fi
 </command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
-      <project>OMERO-build/label=$LABEL</project>
+      <project>OMERO-build/label=test$ICE</project>
       <filter>src/target/OMERO.py*zip</filter>
       <target></target>
       <excludes></excludes>
@@ -62,7 +70,7 @@ source $HOME/omero-virtualenv/bin/activate
 source $OMERO_INSTALL/settings.env
 
 pip install --upgrade --no-deps --force-reinstall -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
-if [ "$LABEL" = "webice36" ]; then
+if [ &quot;$NODE_NAME&quot; == &quot;webice36&quot; ]; then
     pip install zeroc-ice
 fi
 pip install django-redis-cache&gt;=1.6.5
@@ -71,9 +79,9 @@ pip install django-redis-cache&gt;=1.6.5
 $OMERO_DIST/bin/omero config set omero.web.application_server &apos;wsgi-tcp&apos;
 $OMERO_DIST/bin/omero config set omero.web.application_server.max_requests 0
 
-$OMERO_DIST/bin/omero config set omero.web.prefix &apos;/&apos;$LABEL
-$OMERO_DIST/bin/omero config set omero.web.static_url &apos;/&apos;$LABEL&apos;/static/&apos;
-$OMERO_DIST/bin/omero config set omero.web.static_root &apos;/home/omero/static/&apos;$LABEL
+$OMERO_DIST/bin/omero config set omero.web.prefix &apos;/&apos;$NODE_NAME
+$OMERO_DIST/bin/omero config set omero.web.static_url &apos;/&apos;$NODE_NAME&apos;/static/&apos;
+$OMERO_DIST/bin/omero config set omero.web.static_root &apos;/home/omero/static/&apos;$NODE_NAME
 
 $OMERO_DIST/bin/omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;
 $OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;redis_cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;redis:6379&quot;}}&apos;
@@ -81,18 +89,20 @@ $OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&
 $OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;testice35&quot;, 4064, &quot;testice35&quot;], [&quot;omero&quot;, 4064, &quot;omero&quot;], [&quot;testice36&quot;, 4064, &quot;testice36&quot;]]&apos;
 
 
-$OMERO_DIST/bin/omero config set omero.web.application_server.host $LABEL
+$OMERO_DIST/bin/omero config set omero.web.application_server.host $NODE_NAME
 $OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
 
 $OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt;$OMERO_DIST/nginx.conf.tmp
 
-sudo -u root cp $OMERO_DIST/nginx.conf.tmp $HOME/nginx/$JOB_NAME.conf
+sed -i.bak -re &apos;s/\$hostname/&apos;$NODE_NAME&apos;.nginx/&apos; $OMERO_DIST/nginx.conf.tmp
+
+sudo -u root cp $OMERO_DIST/nginx.conf.tmp $HOME/nginx/$NODE_NAME.conf
 
 $OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
 
 deactivate
 
-sudo sudo service omero-web start
+sudo service omero-web start
       </command>
     </hudson.tasks.Shell>
   </builders>

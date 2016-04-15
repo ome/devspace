@@ -44,6 +44,10 @@ RUN sed -i.bak -re 's/(systemctl enable omero.service)/#\1/' $OMERO_INSTALL/step
 WORKDIR /tmp/omero-install/linux
 
 RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh
+# manually install ICEPY dependences
+RUN yum -y install gcc-c++
+RUN yum -y install openssl-devel bzip2-devel expat-devel
+
 RUN yum install -y python-redis && yum clean all
 
 EXPOSE 4080
