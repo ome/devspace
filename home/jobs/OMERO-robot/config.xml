@@ -1,34 +1,39 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<project>
+<matrix-project plugin="matrix-project@1.6">
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
-  <properties>
-    <hudson.model.ParametersDefinitionProperty>
-      <parameterDefinitions>
-        <hudson.model.StringParameterDefinition>
-          <name>HOSTNAME</name>
-          <description></description>
-          <defaultValue>testice35</defaultValue>
-        </hudson.model.StringParameterDefinition>
-      </parameterDefinitions>
-    </hudson.model.ParametersDefinitionProperty>
-  </properties>
+  <properties/>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>robot</assignedNode>
-  <canRoam>false</canRoam>
+  <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
+  <axes>
+    <hudson.matrix.LabelAxis>
+      <name>label</name>
+      <values>
+        <string>testice35</string>
+        <string>testice36</string>
+      </values>
+    </hudson.matrix.LabelAxis>
+    <hudson.matrix.TextAxis>
+      <name>WEB_PREFIX</name>
+      <values>
+        <string>webice35</string>
+        <string>webice36</string>
+      </values>
+    </hudson.matrix.TextAxis>
+  </axes>
   <builders>
     <hudson.tasks.Shell>
       <command>SRC=$WORKSPACE/src
 rm -rf $SRC</command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
-      <project>OMERO-build/label=testice35</project>
+      <project>OMERO-build/label=$LABEL</project>
       <filter>src/target/openmicroscopy*zip</filter>
       <target></target>
       <excludes></excludes>
@@ -37,7 +42,7 @@ rm -rf $SRC</command>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
-      <project>OMERO-build/label=testice35</project>
+      <project>OMERO-build/label=$LABEL</project>
       <filter>src/target/OMERO.server*zip</filter>
       <target></target>
       <excludes></excludes>
@@ -59,21 +64,36 @@ unzip $ZIP_DIST
 rm -f $ZIP_DIST
 mv $WORKSPACE/${ZIP_DIST%.zip} $SRC/dist
 
-source $HOME/omero-virtualenv/bin/activate
 
-pip install --upgrade --no-deps --force-reinstall -r $SRC/dist/share/web/requirements-py27-nginx.txt
+virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
+source $WORKSPACE/omero-virtualenv/bin/activate
+pip install -r $SRC/dist/share/web/requirements-py27-nginx.txt
+pip install robotframework robotframework-selenium2library
 
-$SRC/dist/bin/omero config set omero.web.prefix &quot;/web&quot;
+$SRC/dist/bin/omero config set omero.web.prefix &quot;/&quot;$WEB_PREFIX
 
 cd $SRC/dist
+
+export GROUP_NAME_2=`uuidgen`
+export GROUP_NAME=`uuidgen`
+export USER_NAME=$GROUP_NAME
+export HOSTNAME=$LABEL
+
 bash ../components/tests/ui/robot_setup.sh
 mv $SRC/dist/robot_ice.config $SRC/components/tests/ui/resources/
 export ICE_CONFIG=$SRC/components/tests/ui/resources/robot_ice.config
-$SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --protocol http --webhost &apos;SPACENAME-nginx.docker.openmicroscopy.org&apos; --remoteurl &apos;http://seleniumhub:4444/wd/hub&apos; --dc &apos;browserName:${BROWSER},javascriptEnabled:True&apos; &gt; $SRC/components/tests/ui/resources/config.txt
+$SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --protocol http --webhost &apos;develop-nginx.docker.openmicroscopy.org&apos; --remoteurl &apos;http://seleniumhub:4444/wd/hub&apos; --dc &apos;browserName:${BROWSER},javascriptEnabled:True&apos; &gt;$SRC/components/tests/ui/resources/config.txt
+
+if [ &quot;$NODE_NAME&quot; == &quot;testice35&quot; ]; then
+	sed -i.bak -re &apos;s/(\{SERVER_ID\}.*1)/\{SERVER_ID\}  2/&apos; $SRC/components/tests/ui/resources/config.txt
+else if [ &quot;$NODE_NAME&quot; == &quot;testice36&quot; ]; then
+	sed -i.bak -re &apos;s/(\{SERVER_ID\}.*1)/\{SERVER_ID\}  3/&apos; $SRC/components/tests/ui/resources/config.txt
+fi
 
 echo Running the UI tests
 
-$SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web
+#$SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web
+$SRC/build.py -f components/tests/ui/build.xml web-firefox -DTEST=webadmin_login.txt
 
 #aggregate the various output files.
 $SRC/build.py -f components/tests/ui/build.xml aggregate-results
@@ -99,4 +119,7 @@ deactivate
     </hudson.plugins.robot.RobotPublisher>
   </publishers>
   <buildWrappers/>
-</project>
+  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
+    <runSequentially>false</runSequentially>
+  </executionStrategy>
+</matrix-project>

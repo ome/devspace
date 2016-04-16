@@ -37,9 +37,3 @@ nginx:
         - /run
     environment:
         - container=docker
-robot:
-    volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-        - /run
-    environment:
-        - container=docker

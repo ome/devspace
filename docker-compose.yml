@@ -21,6 +21,8 @@ testice35:
     links:
         - pg
         - jenkins
+        - seleniumhub
+        - testice36
     volumes:
         - ./slave:/home/omero
     environment:
@@ -33,6 +35,8 @@ testice36:
     links:
         - pg
         - jenkins
+        - seleniumhub
+        - testice35
     volumes:
         - ./slave2:/home/omero
     environment:
@@ -124,17 +128,3 @@ seleniumchrome:
         - seleniumhub:hub
     environment:
         - "JAVA_OPTS: -d64 -Xmx512m -Djava.security.egd=file:/dev/./urandom"
-
-robot:
-    build: robot
-    links:
-        - jenkins
-        - nginx
-        - seleniumhub
-        - omero
-        - testice35
-        - testice36
-    environment:
-        - SWARM_PARAMS=" -labels centos7 -labels ice35 -name robot -disableClientsUniqueId -executors 4"
-        - JENKINS_MODE=exclusive
-        - SERVICE_NAME=SPACENAME-robot

@@ -35,6 +35,3 @@ redis:
 seleniumhub:
     ports:
         - "4444:4444"
-
-robot:
-    privileged: true

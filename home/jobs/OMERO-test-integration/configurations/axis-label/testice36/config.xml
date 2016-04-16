@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <matrix-config plugin="matrix-project@1.6">
+  <actions/>
   <keepDependencies>false</keepDependencies>
   <properties/>
   <scm class="hudson.scm.NullSCM"/>
