@@ -6,8 +6,8 @@ User=omero
 Type=simple
 Restart=on-failure
 RestartSec=10
-ExecStart=/home/omero/workspace/OMERO-test-integration/src/dist/bin/omero admin start --foreground
-ExecStop=/home/omero/workspace/OMERO-test-integration/src/dist/bin/omero admin stop
+ExecStart=/home/omero/workspace/OMERO-test-integration/label/testice36/src/dist/bin/omero admin start --foreground
+ExecStop=/home/omero/workspace/OMERO-test-integration/label/testice36/src/dist/bin/omero admin stop
 
 [Install]
 WantedBy=multi-user.target
