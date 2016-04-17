@@ -39,7 +39,7 @@ rm -rf $OMERO_DATA_DIR/*
 rm -rf $WORKSPACE/*</command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
-      <project>OMERO-build/label=$LABEL</project>
+      <project>OMERO-build/label=$label</project>
       <filter>src/target/openmicroscopy*zip</filter>
       <target></target>
       <excludes></excludes>
@@ -141,7 +141,7 @@ $SRC/build.py -f components/tools/OmeroJava/build.xml -Dtestng.useDefaultListene
   </builders>
   <publishers>
     <hudson.tasks.junit.JUnitResultArchiver plugin="junit@1.9">
-      <testResults>$WORKSPACE/src/components/tools/OmeroPy/target/reports/integration/junit-results.xml, $WORKSPACE/src/components/tools/OmeroFS/target/reports/junit-results.xml, $WORKSPACE/src/components/tools/OmeroWeb/target/reports/junit-results.xml</testResults>
+      <testResults>$WORKSPACE/src/components/tools/OmeroPy/target/reports/integration/junit-results.xml,$WORKSPACE/src/components/tools/OmeroFS/target/reports/integration/junit-results.xml,$WORKSPACE/src/components/tools/OmeroWeb/target/reports/integration/junit-results.xml</testResults>
       <keepLongStdio>false</keepLongStdio>
       <healthScaleFactor>1.0</healthScaleFactor>
     </hudson.tasks.junit.JUnitResultArchiver>

@@ -20,14 +20,14 @@
       </values>
     </hudson.matrix.LabelAxis>
     <hudson.matrix.TextAxis>
-      <name>ICE</name>
+      <name>ice</name>
       <values>
         <string>ice35</string>
         <string>ice36</string>
       </values>
     </hudson.matrix.TextAxis>
   </axes>
-  <combinationFilter>(ICE==&quot;ice35&quot;).implies(label==&quot;webice35&quot;) &amp;&amp; (ICE==&quot;ice36&quot;).implies(label==&quot;webice36&quot;)</combinationFilter>
+  <combinationFilter>(ice==&quot;ice35&quot;).implies(label==&quot;webice35&quot;) &amp;&amp; (ice==&quot;ice36&quot;).implies(label==&quot;webice36&quot;)</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command>
@@ -46,7 +46,7 @@ fi
 </command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
-      <project>OMERO-build/label=test$ICE</project>
+      <project>OMERO-build/label=test$ice</project>
       <filter>src/target/OMERO.py*zip</filter>
       <target></target>
       <excludes></excludes>
