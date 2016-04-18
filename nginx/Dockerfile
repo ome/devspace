@@ -5,6 +5,11 @@ MAINTAINER OME
 RUN rm -f /lib/systemd/system/systemd*udev* ; \
     rm -f /lib/systemd/system/getty.target;
 
+ARG USER_ID=1000
+RUN usermod -u $USER_ID omero
+
+RUN chmod a+X /home/omero
+
 RUN yum -y localinstall http://nginx.org/packages/rhel/7/noarch/RPMS/nginx-release-rhel-7-0.el7.ngx.noarch.rpm \
     && yum clean all
 RUN yum -y install nginx \
