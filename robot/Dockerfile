@@ -14,7 +14,7 @@ RUN yum install -y initscripts \
 
 # Download and run omero-install.
 ENV OMERO_INSTALL /tmp/omero-install/linux
-ARG TAG 5.2.3-m1
+ARG TAG=5.2.3-m1
 
 RUN yum install -y git \
     && git clone --bare --depth=1 -b v$TAG https://github.com/ome/omero-install.git /tmp/omero-install \
