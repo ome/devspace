@@ -17,8 +17,8 @@ ENV OMERO_INSTALL /tmp/omero-install/linux
 ARG TAG=5.2.3-m1
 
 RUN yum install -y git \
-    && git clone --bare --depth=1 -b v$TAG https://github.com/ome/omero-install.git /tmp/omero-install \
     && yum clean all
+RUN git clone -b v$TAG https://github.com/ome/omero-install.git /tmp/omero-install
 
 # Customize: run particular scripts from omero-install
 RUN bash $OMERO_INSTALL/step01_centos7_init.sh

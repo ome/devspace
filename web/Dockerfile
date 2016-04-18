@@ -18,8 +18,8 @@ ENV OMERO_INSTALL /tmp/omero-install/linux
 ARG TAG=5.2.3-m1
 
 RUN yum install -y git \
-    && git clone --bare --depth=1 -b v$TAG https://github.com/ome/omero-install.git /tmp/omero-install \
     && yum clean all
+RUN git clone -b v$TAG https://github.com/ome/omero-install.git /tmp/omero-install
 
 ADD ./settings.env $OMERO_INSTALL/settings.env
 RUN chmod +x $OMERO_INSTALL/settings.env
