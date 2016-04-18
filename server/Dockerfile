@@ -7,10 +7,6 @@ ENV LANG en_US.UTF-8
 ARG JAVAVER=openjdk18
 ARG ICEVER=ice35-devel
 
-
-# To avoid error: sudo: sorry, you must have a tty to run sudo
-RUN sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoers
-
 RUN yum install -y initscripts \
     && yum clean all
 
