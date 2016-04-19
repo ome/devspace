@@ -6,19 +6,16 @@ ENV JENKINS_SWARM_VERSION 2.0
 ENV LANG en_US.UTF-8
 ARG JAVAVER=openjdk18
 
-
-# To avoid error: sudo: sorry, you must have a tty to run sudo
-RUN sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoers
-
 RUN yum install -y initscripts \
     && yum clean all
 
 # Download and run omero-install. 
 ENV OMERO_INSTALL /tmp/omero-install/linux
+ARG TAG=5.2.3-m1
 
 RUN yum install -y git \
-    && git clone https://github.com/ome/omero-install.git /tmp/omero-install \
     && yum clean all
+RUN git clone -b v$TAG https://github.com/ome/omero-install.git /tmp/omero-install
 
 ADD ./settings.env $OMERO_INSTALL/settings.env
 RUN chmod +x $OMERO_INSTALL/settings.env
