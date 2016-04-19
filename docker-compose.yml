@@ -2,8 +2,6 @@ jenkins:
     build: jenkins
     volumes:
         - ./home:/var/jenkins_home
-    environment:
-        - SERVICE_NAME=SPACENAME-ci
 
 git:
     build: git
@@ -16,7 +14,7 @@ pg:
     volumes:
         - ./pgdata:/var/lib/postgresql/data
 
-testice35:
+testintegration:
     build: slave
     links:
         - pg
@@ -25,22 +23,9 @@ testice35:
     volumes:
         - ./slave:/home/omero
     environment:
-        - SWARM_PARAMS=" -labels centos7 -labels ice35 -name testice35 -disableClientsUniqueId -executors 4"
-        - JENKINS_MODE=exclusive
-        - SERVICE_NAME=SPACENAME-testice35
-
-testice36:
-    build: slave2
-    links:
-        - pg
-        - jenkins
-        - seleniumhub
-    volumes:
-        - ./slave2:/home/omero
-    environment:
-        - SWARM_PARAMS=" -labels centos7 -labels ice36 -name testice36 -disableClientsUniqueId -executors 4"
-        - JENKINS_MODE=exclusive
-        - SERVICE_NAME=SPACENAME-testice36
+        - SLAVE_NAME=testintegration
+        - SLAVE_EXECUTORS=4
+        - SLAVE_PARAMS=-labels centos7 -labels ice36 -disableClientsUniqueId
 
 omero:
     build: server
@@ -50,57 +35,39 @@ omero:
     volumes:
         - ./server:/home/omero
     environment:
-        - SWARM_PARAMS=" -labels centos7 -labels ice35 -name omero -disableClientsUniqueId -executors 4"
-        - JENKINS_MODE=exclusive
-        - SERVICE_NAME=SPACENAME-omero
+        - SLAVE_NAME=omero
+        - SLAVE_EXECUTORS=4
+        - SLAVE_PARAMS=-labels centos7 -labels ice35 -disableClientsUniqueId
 
-webice35:
+web:
     build: web
     links:
         - jenkins
         - redis
         - omero
-        - testice35
-        - testice36
+        - testintegration
     volumes:
         - ./web:/home/omero
         - ./nginx/conf.d:/home/omero/nginx
     environment:
-        - SWARM_PARAMS=" -labels centos7 -labels ice35 -name webice35 -disableClientsUniqueId -executors 4"
-        - JENKINS_MODE=exclusive
-
-webice36:
-    build: web2
-    links:
-        - jenkins
-        - redis
-        - omero
-        - testice35
-        - testice36
-    volumes:
-        - ./web2:/home/omero
-        - ./nginx/conf.d:/home/omero/nginx
-    environment:
-        - SWARM_PARAMS=" -labels centos7 -labels ice36 -name webice36 -disableClientsUniqueId -executors 4"
-        - JENKINS_MODE=exclusive
+        - SLAVE_NAME=web
+        - SLAVE_EXECUTORS=4
+        - SLAVE_PARAMS= -labels centos7 -labels ice36 -disableClientsUniqueId
 
 nginx:
     build: nginx
     links:
         - jenkins
-        - webice35
-        - webice36
+        - web
     volumes:
         - ./nginx/conf.d:/etc/nginx/conf.d
-        - ./web/static/webice35:/home/omero/static/webice35
-        - ./web2/static/webice36:/home/omero/static/webice36
+        - ./web/static/web:/home/omero/workspace/static/web
     environment:
-        - SWARM_PARAMS=" -labels centos7 -labels nginx -name nginx -disableClientsUniqueId -executors 1"
-        - JENKINS_MODE=exclusive
-        - SERVICE_NAME=SPACENAME-nginx
+        - SLAVE_NAME=nginx
+        - SLAVE_EXECUTORS=2
+        - SLAVE_PARAMS=-labels centos7 -disableClientsUniqueId
     extra_hosts:
-        - "webice35.nginx:127.0.0.1"
-        - "webice36.nginx:127.0.0.1"
+        - "web.nginx:127.0.0.1"
 
 redis:
     image: redis

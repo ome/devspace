@@ -25,8 +25,10 @@ before_install:
   - ./rename.py travis
 
 install:
-  - docker-compose -f docker-compose.yml -f docker-compose.unix.yml build
+  - pwd
+  - ls -al
+  - ./ds build
 
 script:
-  - docker-compose -f docker-compose.yml -f docker-compose.unix.yml up -d
-  - docker-compose -f docker-compose.yml -f docker-compose.unix.yml stop
+  - EXTRA=docker-compose.ubuntu.yml ./ds up -d
+  - EXTRA=docker-compose.ubuntu.yml ./ds stop

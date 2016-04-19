@@ -1,52 +1,38 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.6">
+<project>
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties/>
   <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
+  <assignedNode>web</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <axes>
-    <hudson.matrix.LabelAxis>
-      <name>label</name>
-      <values>
-        <string>webice35</string>
-        <string>webice36</string>
-      </values>
-    </hudson.matrix.LabelAxis>
-    <hudson.matrix.TextAxis>
-      <name>ice</name>
-      <values>
-        <string>ice35</string>
-        <string>ice36</string>
-      </values>
-    </hudson.matrix.TextAxis>
-  </axes>
-  <combinationFilter>(ice==&quot;ice35&quot;).implies(label==&quot;webice35&quot;) &amp;&amp; (ice==&quot;ice36&quot;).implies(label==&quot;webice36&quot;)</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command>
-OMERO_DIST=$HOME/OMERO.server
+OMERO_DIST=$WORKSPACE/OMERO.web
 if [ -e $OMERO_DIST ]; then
-    if [ -e $HOME/omero-virtualenv ]; then
-        sudo sudo service omero-web stop
+    if [ -e $WORKSPACE/omero-virtualenv ]; then
+        source $WORKSPACE/omero-virtualenv/bin/activate
+        $OMERO_DIST/bin/omero web stop
         sleep 5
-        sudo sudo service omero-web status || true
+        $OMERO_DIST/bin/omero web status || true
+        deactivate
     fi
     rm -rf $OMERO_DIST
 else
-    sudo service omero-web stop
-    virtualenv $HOME/omero-virtualenv --system-site-packages
+    $OMERO_DIST/bin/omero web stop || echo Not running
+    virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
 fi
-</command>
+      </command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
-      <project>OMERO-build/label=test$ice</project>
+      <project>OMERO-build</project>
       <filter>src/target/OMERO.py*zip</filter>
       <target></target>
       <excludes></excludes>
@@ -56,7 +42,7 @@ fi
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
       <command>
-OMERO_DIST=$HOME/OMERO.server
+OMERO_DIST=$WORKSPACE/OMERO.web
 OMERO_INSTALL=/tmp/omero-install/linux
 
 ZIP=$(ls OMERO.py*.zip)
@@ -65,50 +51,42 @@ unzip $ZIP
 rm -f $ZIP
 mv $WORKSPACE/$DIST $OMERO_DIST
 
-source $HOME/omero-virtualenv/bin/activate
+source $WORKSPACE/omero-virtualenv/bin/activate
 
 source $OMERO_INSTALL/settings.env
 
 pip install --upgrade --no-deps --force-reinstall -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
-if [ &quot;$NODE_NAME&quot; == &quot;webice36&quot; ]; then
-    pip install zeroc-ice
-fi
+pip install zeroc-ice
 pip install django-redis-cache&gt;=1.6.5
 
 #start-config
 $OMERO_DIST/bin/omero config set omero.web.application_server &apos;wsgi-tcp&apos;
 $OMERO_DIST/bin/omero config set omero.web.application_server.max_requests 0
 
-$OMERO_DIST/bin/omero config set omero.web.prefix &apos;/&apos;$NODE_NAME
-$OMERO_DIST/bin/omero config set omero.web.static_url &apos;/&apos;$NODE_NAME&apos;/static/&apos;
-$OMERO_DIST/bin/omero config set omero.web.static_root &apos;/home/omero/static/&apos;$NODE_NAME
+$OMERO_DIST/bin/omero config set omero.web.prefix &apos;/web&apos;
+$OMERO_DIST/bin/omero config set omero.web.static_url &apos;/web/static/&apos;
+$OMERO_DIST/bin/omero config set omero.web.static_root $WORKSPACE&apos;/static&apos;
 
 $OMERO_DIST/bin/omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;
 $OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;redis_cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;redis:6379&quot;}}&apos;
 
-$OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;omero&quot;, 4064, &quot;omero&quot;], [&quot;testice35&quot;, 4064, &quot;testice35&quot;], [&quot;testice36&quot;, 4064, &quot;testice36&quot;]]&apos;
+$OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;omero&quot;, 4064, &quot;omero&quot;], [&quot;testintegration&quot;, 14064, &quot;testintegration&quot;]]&apos;
 
-
-$OMERO_DIST/bin/omero config set omero.web.application_server.host $NODE_NAME
+$OMERO_DIST/bin/omero config set omero.web.application_server.host web
 $OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
 
-$OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt;$OMERO_DIST/nginx.conf.tmp
-
-sed -i.bak -re &apos;s/\$hostname/&apos;$NODE_NAME&apos;.nginx/&apos; $OMERO_DIST/nginx.conf.tmp
+$OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; --servername &quot;web.nginx&quot;  &gt;$OMERO_DIST/nginx.conf.tmp
 
 sudo -u root cp $OMERO_DIST/nginx.conf.tmp $HOME/nginx/$NODE_NAME.conf
 
 $OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
 
-deactivate
+$OMERO_DIST/bin/omero web start
 
-sudo service omero-web start
+deactivate
       </command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
   <buildWrappers/>
-  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
-    <runSequentially>false</runSequentially>
-  </executionStrategy>
-</matrix-project>
+</project>

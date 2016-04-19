@@ -1,11 +1,11 @@
-FROM openmicroscopy/devslave-c7:0.1.0
+FROM openmicroscopy/devslave-c7:local
 
 MAINTAINER OME
 
 RUN rm -f /lib/systemd/system/systemd*udev* ; \
     rm -f /lib/systemd/system/getty.target;
 
-ARG ICEVER=ice35-devel
+ARG ICEVER=ice36
 
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
@@ -15,10 +15,15 @@ ENV OMERO_INSTALL_ROOT=/tmp/omero-install
 RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch origin
 RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge origin/develop
 
+# TEST Ice36
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.email "you@example.com"
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.name "Your Name"
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add jburel https://github.com/jburel/omero-install.git
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch jburel
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge jburel/ice36-release
+
 ADD ./settings.env $OMERO_INSTALL/settings.env
 RUN chmod +x $OMERO_INSTALL/settings.env
-
-ADD ./omero-systemd.service $OMERO_INSTALL/omero-systemd.service
 
 # Customize: run particular scripts from omero-install
 RUN rm -f $OMERO_INSTALL/setup_centos_selinux.sh
@@ -34,10 +39,9 @@ RUN touch $OMERO_INSTALL/step04_all_omero.sh
 # remove nginx
 RUN rm -rf $OMERO_INSTALL/step05_centos7_nginx.sh
 RUN touch $OMERO_INSTALL/step05_centos7_nginx.sh
-
-# add omero.service manually as we skip PG
-RUN sed -i.bak -re 's/(.*omero-web.service)/#\1/' $OMERO_INSTALL/step06_centos7_daemon.sh
-RUN sed -i "1 a\cp omero-systemd.service /etc/systemd/system/omero.service" $OMERO_INSTALL/step06_centos7_daemon.sh
+# no systemd
+RUN rm -rf $OMERO_INSTALL/step06_centos7_daemon.sh
+RUN touch $OMERO_INSTALL/step06_centos7_daemon.sh
 
 WORKDIR /tmp/omero-install/linux
 
@@ -53,3 +57,14 @@ RUN yum -y install postgresql94 \
     && yum clean all
 
 EXPOSE 4080
+
+ADD ./run.sh /tmp/run.sh
+RUN chown omero:omero /tmp/run.sh
+RUN chmod a+x /tmp/run.sh
+
+
+# Change user id to fix permissions issues
+ARG USER_ID=1000
+RUN usermod -u $USER_ID omero
+
+CMD ["/tmp/run.sh"]

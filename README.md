@@ -127,10 +127,10 @@ they are associated to and a short description of their:
 | BIOFORMATS-push        | testice35            | Merges all Bio-Formats PRs                |
 | BIOFORMATS-maven       | testice35            | Builds Bio-Formats and runs unit tests    |
 | OMERO-push             | testice35            | Merges all OMERO PRs                      |
-| OMERO-build            | testice35, testice36 | Builds OMERO artifacts (server, clients)  |
+| OMERO-build            | testice35, testintegration | Builds OMERO artifacts (server, clients)  |
 | OMERO-server           | omero                | Deploys an OMERO.server                   |
 | OMERO-web              | webice35             | Deploys an OMERO.web client               |
-| OMERO-test-integration | testice35, testice36 | Runs the OMERO integration tests ice35/36 |
+| OMERO-test-integration | testice35, testintegration | Runs the OMERO integration tests ice35/36 |
 | OMERO-robot            | robot                | Runs the Robot test                       |
 | nginx                  | nginx                | Reloads the nginx server                  |
 | -----------------------|----------------------| ------------------------------------------|

@@ -1,40 +1,33 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.6">
+<project>
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>HOSTNAME</name>
+          <description></description>
+          <defaultValue>testintegration</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
+  <assignedNode>testintegration</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <axes>
-    <hudson.matrix.LabelAxis>
-      <name>label</name>
-      <values>
-        <string>testice35</string>
-        <string>testice36</string>
-      </values>
-    </hudson.matrix.LabelAxis>
-    <hudson.matrix.TextAxis>
-      <name>webprefix</name>
-      <values>
-        <string>webice35</string>
-        <string>webice36</string>
-      </values>
-    </hudson.matrix.TextAxis>
-  </axes>
-  <combinationFilter>(webprefix==&quot;webice35&quot;).implies(label==&quot;testice35&quot;) &amp;&amp; (webprefix==&quot;webice36&quot;).implies(label==&quot;testice36&quot;)</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
-      <command>SRC=$WORKSPACE/src
-rm -rf $SRC</command>
+      <command>rm -rf src</command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
-      <project>OMERO-build/label=$label</project>
+      <project>OMERO-build</project>
       <filter>src/target/openmicroscopy*zip</filter>
       <target></target>
       <excludes></excludes>
@@ -43,7 +36,7 @@ rm -rf $SRC</command>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
-      <project>OMERO-build/label=$label</project>
+      <project>OMERO-build</project>
       <filter>src/target/OMERO.server*zip</filter>
       <target></target>
       <excludes></excludes>
@@ -65,19 +58,14 @@ unzip $ZIP_DIST
 rm -f $ZIP_DIST
 mv $WORKSPACE/${ZIP_DIST%.zip} $SRC/dist
 
-
 virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
 source $WORKSPACE/omero-virtualenv/bin/activate
 pip install -r $SRC/dist/share/web/requirements-py27-nginx.txt
 pip install robotframework robotframework-selenium2library
 
-$SRC/dist/bin/omero config set omero.web.prefix &quot;/&quot;$webprefix
+$SRC/dist/bin/omero config set omero.web.prefix &quot;/web&quot;
 
 cd $SRC/dist
-
-export GROUP_NAME_2=`uuidgen`
-export GROUP_NAME=`uuidgen`
-export USER_NAME=$GROUP_NAME
 
 bash ../components/tests/ui/robot_setup.sh
 mv $SRC/dist/robot_ice.config $SRC/components/tests/ui/resources/
@@ -87,20 +75,19 @@ $SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --proto
 if [ &quot;$NODE_NAME&quot; == &quot;testice35&quot; ]; then
 	sed -i.bak -re &apos;s/(\{SERVER_ID\}.*1)/\{SERVER_ID\}      2/&apos; $SRC/components/tests/ui/resources/config.txt
 fi
-if [ &quot;$NODE_NAME&quot; == &quot;testice36&quot; ]; then
+if [ &quot;$NODE_NAME&quot; == &quot;testintegration&quot; ]; then
 	sed -i.bak -re &apos;s/(\{SERVER_ID\}.*1)/\{SERVER_ID\}      3/&apos; $SRC/components/tests/ui/resources/config.txt
 fi
 
 echo Running the UI tests
 
 #$SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web
-$SRC/build.py -f components/tests/ui/build.xml web-firefox -DTEST=webadmin_login.txt
 
 #aggregate the various output files.
-$SRC/build.py -f components/tests/ui/build.xml aggregate-results
-
-#$SRC/build.py -f components/tests/ui/build.xml web-firefox -DTEST=view_image.txt
 #$SRC/build.py -f components/tests/ui/build.xml aggregate-results
+
+$SRC/build.py -f components/tests/ui/build.xml web-firefox -DTEST=view_image.txt
+$SRC/build.py -f components/tests/ui/build.xml aggregate-results
 
 deactivate
 </command>
@@ -123,7 +110,4 @@ deactivate
     </hudson.plugins.robot.RobotPublisher>
   </publishers>
   <buildWrappers/>
-  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
-    <runSequentially>false</runSequentially>
-  </executionStrategy>
-</matrix-project>
+</project>

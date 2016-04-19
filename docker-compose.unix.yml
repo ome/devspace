@@ -1,39 +1,15 @@
 jenkins:
     user: ${USER_ID}
+    environment:
+        - SERVICE_NAME=SPACENAME-ci
 
-testice35:
-    volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-        - /run
+testintegration:
     environment:
-        - container=docker
-testice36:
-    volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-        - /run
-    environment:
-        - container=docker
+        - SERVICE_NAME=SPACENAME-testintegration
 omero:
-    volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-        - /run
     environment:
-        - container=docker
-webice35:
-    volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-        - /run
-    environment:
-        - container=docker
-webice36:
-    volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-        - /run
-    environment:
-        - container=docker
+        - SERVICE_NAME=SPACENAME-omero
+
 nginx:
-    volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-        - /run
     environment:
-        - container=docker
+        - SERVICE_NAME=SPACENAME-nginx

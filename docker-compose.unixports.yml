@@ -1,0 +1,20 @@
+jenkins:
+    user: ${USER_ID}
+    ports:
+        - "8080:8080"
+
+testintegration:
+    ports:
+        - "14064:4064"
+
+omero:
+    ports:
+        - "4064:4064"
+
+nginx:
+    ports:
+        - "80:80"
+
+seleniumhub:
+    ports:
+        - "4444:4444"

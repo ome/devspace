@@ -1,14 +1,6 @@
-FROM openmicroscopy/devslave-c7:0.1.0
+FROM openmicroscopy/devslave-c7:local
 
 MAINTAINER OME
-
-RUN rm -f /lib/systemd/system/systemd*udev* ; \
-    rm -f /lib/systemd/system/getty.target;
-
-ARG USER_ID=1000
-RUN usermod -u $USER_ID omero
-
-RUN chmod a+X /home/omero
 
 RUN yum -y localinstall http://nginx.org/packages/rhel/7/noarch/RPMS/nginx-release-rhel-7-0.el7.ngx.noarch.rpm \
     && yum clean all
@@ -20,6 +12,19 @@ VOLUME ["/etc/nginx/conf.d", "/var/log/nginx"]
 
 WORKDIR /etc/nginx
 
-RUN systemctl enable nginx
+# forward request and error logs to docker log collector
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log
 
 EXPOSE 80 443
+
+ADD ./run.sh /tmp/run.sh
+RUN chown omero:omero /tmp/run.sh
+RUN chmod a+x /tmp/run.sh
+
+
+# Change user id to fix permissions issues
+ARG USER_ID=1000
+RUN usermod -u $USER_ID omero
+
+CMD ["/tmp/run.sh"]

@@ -1,11 +1,9 @@
-FROM openmicroscopy/devslave-c7:0.1.0
+FROM openmicroscopy/devslave-c7:local
 
 MAINTAINER OME
 
-RUN rm -f /lib/systemd/system/systemd*udev* ; \
-    rm -f /lib/systemd/system/getty.target;
-
-ARG ICEVER=ice35
+ARG JAVAVER=${JAVAVER:-openjdk18}
+ARG ICEVER=${ICEVER:-noice}
 
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
@@ -32,18 +30,28 @@ RUN touch $OMERO_INSTALL/step04_all_omero.sh
 # remove nginx
 RUN mv $OMERO_INSTALL/step05_centos7_nginx.sh $OMERO_INSTALL/_step05_centos7_nginx.sh
 RUN touch $OMERO_INSTALL/step05_centos7_nginx.sh
+# no systemd
+RUN rm -rf $OMERO_INSTALL/step06_centos7_daemon.sh
+RUN touch $OMERO_INSTALL/step06_centos7_daemon.sh
 
-RUN sed -i.bak -re 's/(Requires=nginx.service)/#\1/' $OMERO_INSTALL/omero-web-systemd.service
-# TODO: remove when omero-install support virtualenv
-# custom omero-web.service that support virtualenv
-RUN rm -f $OMERO_INSTALL/omero-web-systemd.service
-ADD ./omeroweb.service $OMERO_INSTALL/omero-web-systemd.service
-
-RUN sed -i.bak -re 's/(systemctl enable omero.service)/#\1/' $OMERO_INSTALL/step06_centos7_daemon.sh
- 
 WORKDIR /tmp/omero-install/linux
 
 RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh
+# manually install ICEPY dependences
+RUN yum -y install gcc-c++
+RUN yum -y install openssl-devel bzip2-devel expat-devel
+
 RUN yum install -y python-redis && yum clean all
 
 EXPOSE 4080
+
+ADD ./run.sh /tmp/run.sh
+RUN chown omero:omero /tmp/run.sh
+RUN chmod a+x /tmp/run.sh
+
+
+# Change user id to fix permissions issues
+ARG USER_ID=1000
+RUN usermod -u $USER_ID omero
+
+CMD ["/tmp/run.sh"]

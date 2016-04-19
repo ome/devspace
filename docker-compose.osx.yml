@@ -4,29 +4,17 @@ jenkins:
     # UID that is mapped in docker-machine
     user: "1000"
 
-testice35:
+testintegration:
     ports:
         - "14080:4080"
-    privileged: true
-testice36:
-    ports:
-        - "24080:4080"
-    privileged: true
 
 omero:
     ports:
         - "4080:4080"
-    privileged: true
-
-webice35:
-    privileged: true
-webice36:
-    privileged: true
 
 nginx:
     ports:
         - "8888:80"
-    privileged: true
 
 redis:
     ports:
