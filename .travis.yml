@@ -13,8 +13,7 @@ env:
 before_install:
   - sudo apt-get update
   - sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confnew" install docker-engine=${DOCKER_VERSION}
-  - sudo gpasswd -a $USER docker
-  - export USER_ID=`id -u $USER`
+  - export USER_ID=`$UID`
   - docker -v
 
   - sudo rm /usr/local/bin/docker-compose
