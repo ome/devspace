@@ -4,8 +4,11 @@
 
 The following prerequisites are required for deploying a Jenkins devspace:
 
-*   Docker Compose 1.6.2
 *   Docker Engine 1.9.1 or later
+*   Docker Compose 1.6.2
+
+    If Docker Compose cannot be isntalled globally follow https://docs.docker.com/compose/install/
+    On CentOS7 use Miniconda
 
 ## Deployment
 
@@ -68,7 +71,51 @@ The following prerequisites are required for deploying a Jenkins devspace:
     - Add an artifactory user (optional)
     - Under "System Configuration" add your artifactory URL
 
+## Service script
+
+    Once successfully deployed add systemd service script to manage the devspace
+
+        /etc/systemd/system/docker-devspace.service
+        [Unit]
+        Description=Docker devspace CI
+        Requires=docker.service
+        BindsTo=docker.service
+        After=docker.service
+
+        [Service]
+        Restart=always
+        RestartSec=10
+        User=YOUR_USERNAME
+        WorkingDirectory=/path/to/devspace/MYTOPIC
+        ExecStart=/usr/bin/bash -c "./ds up"
+        ExecStop=/usr/bin/bash -c "./ds stop"
+
+        [Install]
+        WantedBy=multi-user.target
+
+    If docker compose is not installed globally and you use miniconda
+
+        /etc/systemd/system/docker-devspace.service
+        [Unit]
+        Description=Docker devspace CI
+        Requires=docker.service
+        BindsTo=docker.service
+        After=docker.service
+
+        [Service]
+        Restart=always
+        RestartSec=10
+        User=YOUR_USERNAME
+        WorkingDirectory=/path/to/devspace/MYTOPIC
+        Environment="DCPATH=/path/to/miniconda/bin"
+        ExecStart=/usr/bin/bash -c "PATH=$PATH:$DCPATH; ./ds up"
+        ExecStop=/usr/bin/bash -c "PATH=$PATH:$DCPATH; ./ds stop"
+
+        [Install]
+        WantedBy=multi-user.target
+
 ## Job workflow
+
 
 The default deployment initializes a Jenkins server with a [predefined set of
 jobs](homes/jobs). The table below lists the job names, the Jenkins node labels
