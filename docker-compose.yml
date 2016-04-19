@@ -22,7 +22,6 @@ testice35:
         - pg
         - jenkins
         - seleniumhub
-        - testice36
     volumes:
         - ./slave:/home/omero
     environment:
@@ -36,7 +35,6 @@ testice36:
         - pg
         - jenkins
         - seleniumhub
-        - testice35
     volumes:
         - ./slave2:/home/omero
     environment:
