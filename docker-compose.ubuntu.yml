@@ -1,0 +1,56 @@
+jenkins:
+    user: ${USER_ID}
+    ports:
+        - "8080:8080"
+
+testice35:
+    volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+        - /run
+    environment:
+        - container=docker
+    ports:
+        - "14064:4064"
+
+testice36:
+    volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+        - /run
+    environment:
+        - container=docker
+    ports:
+        - "24064:4064"
+
+omero:
+    volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+        - /run
+    environment:
+        - container=docker
+    ports:
+        - "4064:4064"
+webice35:
+    volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+        - /run
+    environment:
+        - container=docker
+webice36:
+    volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+        - /run
+    environment:
+        - container=docker
+nginx:
+    volumes:
+        - ./nginx:/home/omero
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+        - /run
+    environment:
+        - container=docker
+    ports:
+        - "80:80"
+
+seleniumhub:
+    ports:
+        - "4444:4444"
