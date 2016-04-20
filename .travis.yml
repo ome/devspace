@@ -46,22 +46,22 @@ script:
   - docker inspect -f {{.State.Running}} devspace_seleniumchrome_1
 
   - SLAVE_ADDR=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' devspace_slave_1`
-  - d=10; while ! docker logs devspace_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
+  - d=10; while ! docker logs devspace_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then echo "Didn't connect?"; exit 1; fi; done
 
   - SLAVE_ADDR=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' devspace_omero_1`
-  - d=10; while ! docker logs devspace_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
+  - d=10; while ! docker logs devspace_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then echo "Didn't connect?"; exit 1; fi; done
   - docker exec -it devspace_omero_1 /bin/bash -c "service jenkins status -l"
 
   - SLAVE_ADDR=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' devspace_web_1`
-  - d=10; while ! docker logs devspace_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
+  - d=10; while ! docker logs devspace_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then echo "Didn't connect?"; exit 1; fi; done
   - docker exec -it devspace_web_1 /bin/bash -c "service jenkins status -l"
 
   - SLAVE_ADDR=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' devspace_nginx_1`
-  - d=10; while ! docker logs devspace_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
+  - d=10; while ! docker logs devspace_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then echo "Didn't connect?"; exit 1; fi; done
   - docker exec -it devspace_nginx_1 /bin/bash -c "service jenkins status -l"
 
   - SLAVE_ADDR=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' devspace_robot_1`
-  - d=10; while ! docker logs devspace_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
+  - d=10; while ! docker logs devspace_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then echo "Didn't connect?"; exit 1; fi; done
   - docker exec -it devspace_robot_1 /bin/bash -c "service jenkins status -l"
 
   - docker-compose -f docker-compose.yml -f docker-compose.unix.yml stop
