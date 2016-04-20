@@ -31,37 +31,37 @@ install:
 script:
   - docker-compose -f docker-compose.yml -f docker-compose.unix.yml up -d
 
-  - docker inspect -f {{.State.Running}} travis_jenkins_1
-  - d=10; while ! docker logs travis_jenkins_1 2>&1 | grep "Jenkins is fully up and running" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
-  - docker inspect -f {{.State.Running}} travis_pg_1
-  - docker inspect -f {{.State.Running}} travis_redis_1
-  - docker inspect -f {{.State.Running}} travis_slave_1
-  - docker inspect -f {{.State.Running}} travis_omero_1
-  - docker inspect -f {{.State.Running}} travis_web_1
-  - docker inspect -f {{.State.Running}} travis_nginx_1
-  - docker inspect -f {{.State.Running}} travis_robot_1
+  - docker inspect -f {{.State.Running}} devspace_jenkins_1
+  - d=10; while ! docker logs devspace_jenkins_1 2>&1 | grep "Jenkins is fully up and running" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
+  - docker inspect -f {{.State.Running}} devspace_pg_1
+  - docker inspect -f {{.State.Running}} devspace_redis_1
+  - docker inspect -f {{.State.Running}} devspace_slave_1
+  - docker inspect -f {{.State.Running}} devspace_omero_1
+  - docker inspect -f {{.State.Running}} devspace_web_1
+  - docker inspect -f {{.State.Running}} devspace_nginx_1
+  - docker inspect -f {{.State.Running}} devspace_robot_1
 
-  - docker inspect -f {{.State.Running}} travis_seleniumhub_1
-  - docker inspect -f {{.State.Running}} travis_seleniumfirefox_1
-  - docker inspect -f {{.State.Running}} travis_seleniumchrome_1
+  - docker inspect -f {{.State.Running}} devspace_seleniumhub_1
+  - docker inspect -f {{.State.Running}} devspace_seleniumfirefox_1
+  - docker inspect -f {{.State.Running}} devspace_seleniumchrome_1
 
-  - SLAVE_ADDR=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' travis_slave_1`
-  - d=10; while ! docker logs travis_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
+  - SLAVE_ADDR=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' devspace_slave_1`
+  - d=10; while ! docker logs devspace_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
 
-  - SLAVE_ADDR=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' travis_omero_1`
-  - d=10; while ! docker logs travis_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
-  - docker exec -it travis_omero_1 /bin/bash -c "service jenkins status -l"
+  - SLAVE_ADDR=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' devspace_omero_1`
+  - d=10; while ! docker logs devspace_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
+  - docker exec -it devspace_omero_1 /bin/bash -c "service jenkins status -l"
 
-  - SLAVE_ADDR=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' travis_web_1`
-  - d=10; while ! docker logs travis_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
-  - docker exec -it travis_web_1 /bin/bash -c "service jenkins status -l"
+  - SLAVE_ADDR=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' devspace_web_1`
+  - d=10; while ! docker logs devspace_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
+  - docker exec -it devspace_web_1 /bin/bash -c "service jenkins status -l"
 
-  - SLAVE_ADDR=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' travis_nginx_1`
-  - d=10; while ! docker logs travis_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
-  - docker exec -it travis_nginx_1 /bin/bash -c "service jenkins status -l"
+  - SLAVE_ADDR=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' devspace_nginx_1`
+  - d=10; while ! docker logs devspace_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
+  - docker exec -it devspace_nginx_1 /bin/bash -c "service jenkins status -l"
 
-  - SLAVE_ADDR=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' travis_robot_1`
-  - d=10; while ! docker logs travis_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
-  - docker exec -it travis_robot_1 /bin/bash -c "service jenkins status -l"
+  - SLAVE_ADDR=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' devspace_robot_1`
+  - d=10; while ! docker logs devspace_jenkins_1 2>&1 | grep "from /${SLAVE_ADDR}" ; do sleep 10; d=$[$d -1]; if [ $d -lt 0 ]; then exit 1; fi; done
+  - docker exec -it devspace_robot_1 /bin/bash -c "service jenkins status -l"
 
   - docker-compose -f docker-compose.yml -f docker-compose.unix.yml stop
