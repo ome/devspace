@@ -17,24 +17,16 @@
       <command>OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
 OMERO_DB_NAME=$JOB_NAME
+OMERO_DIST=$WORKSPACE/OMERO.server
 
-sudo service omero stop
+$OMERO_DIST/bin/omero admin stop || echo First build
 sleep 5
-sudo service omero status || true
 dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo First run
 
-OMERO_DIST=$HOME/OMERO.server
-
-if [ -e $OMERO_DIST ]; then
-    rm -rf $OMERO_DIST
-fi
-
-mkdir -p $OMERO_DATA_DIR
-rm -rf $OMERO_DATA_DIR/*
-</command>
+rm -rf $WORKSPACE/*</command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
-      <project>OMERO-build/label=testice35</project>
+      <project>OMERO-build</project>
       <filter>src/target/OMERO.server*zip</filter>
       <target></target>
       <excludes></excludes>
@@ -46,9 +38,12 @@ rm -rf $OMERO_DATA_DIR/*
       <command>OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
 OMERO_DB_NAME=$JOB_NAME
+OMERO_DATA_DIR=$WORKSPACE/data
+
+mkdir -p $OMERO_DATA_DIR
 
 # UNZIP SERVER
-OMERO_DIST=$HOME/OMERO.server
+OMERO_DIST=$WORKSPACE/OMERO.server
 
 ZIP=$(ls OMERO.server*.zip)
 DIST=${ZIP%.zip}
@@ -81,33 +76,10 @@ rm dbsetup.sql
 
 ## END PURGE
 
-sudo sudo service omero start
+BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero admin start
 
-# WAIT FOR OMERO TO START UP
-BLITZ_LOG=$OMERO_DIST/var/log/Blitz-0.log
-d=10;
-until [ -f $BLITZ_LOG ]
-    do
-        sleep 10
-        d=$[$d -1]
-        if [ $d -lt 0 ]; then
-            exit 1
-        fi
-    done
-echo &quot;$BLITZ_LOG found&quot;
-
-# WAIT FOR OMERO TO ACCEPT CONNECTIONS
-d=10
-while ! grep &quot;OMERO.blitz now accepting connections&quot; $BLITZ_LOG
-    do
-        sleep 10
-        d=$[$d -1]
-        if [ $d -lt 0 ]; then
-            exit 1
-        fi
-    done
-
-      </command>
+# WAIT FOR OMERO TO START UP AND ACCEPT CONNECTIONS
+$OMERO_DIST/bin/omero admin waitup</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>

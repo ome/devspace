@@ -27,4 +27,5 @@ RUN chmod a+x /tmp/run.sh
 ARG USER_ID=1000
 RUN usermod -u $USER_ID omero
 
+USER omero
 CMD ["/tmp/run.sh"]

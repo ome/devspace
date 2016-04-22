@@ -1,9 +1,8 @@
 FROM openmicroscopy/devslave-c7:local
-
 MAINTAINER OME
 
 ARG JAVAVER=${JAVAVER:-openjdk18}
-ARG ICEVER=${ICEVER:-ice36}
+ARG ICEVER=${ICEVER:-ice35}
 
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
@@ -12,13 +11,6 @@ RUN echo 'export container=docker' > /etc/profile.d/docker.sh
 ENV OMERO_INSTALL_ROOT=/tmp/omero-install
 RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch origin
 RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge origin/develop
-
-# TEST Ice36
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.email "you@example.com"
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.name "Your Name"
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add jburel https://github.com/jburel/omero-install.git
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch jburel
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge jburel/ice36-release
 
 ADD ./settings.env $OMERO_INSTALL/settings.env
 RUN chmod +x $OMERO_INSTALL/settings.env
@@ -37,7 +29,6 @@ RUN touch $OMERO_INSTALL/step04_all_omero.sh
 # remove nginx
 RUN rm -rf $OMERO_INSTALL/step05_centos7_nginx.sh
 RUN touch $OMERO_INSTALL/step05_centos7_nginx.sh
-# no systemd
 RUN rm -rf $OMERO_INSTALL/step06_centos7_daemon.sh
 RUN touch $OMERO_INSTALL/step06_centos7_daemon.sh
 
@@ -62,4 +53,5 @@ RUN chmod a+x /tmp/run.sh
 ARG USER_ID=1000
 RUN usermod -u $USER_ID omero
 
+USER omero
 CMD ["/tmp/run.sh"]

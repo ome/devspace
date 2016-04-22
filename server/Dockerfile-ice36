@@ -3,7 +3,7 @@ FROM openmicroscopy/devslave-c7:local
 MAINTAINER OME
 
 ARG JAVAVER=${JAVAVER:-openjdk18}
-ARG ICEVER=${ICEVER:-ice35-devel}
+ARG ICEVER=${ICEVER:-ice36}
 
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
@@ -38,9 +38,6 @@ WORKDIR /tmp/omero-install/linux
 
 RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh
 
-# install sphinx
-RUN pip install sphinx
-
 # install postgres tools
 RUN yum -y install http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-centos94-9.4-2.noarch.rpm \
     && yum clean all
@@ -58,5 +55,4 @@ RUN chmod a+x /tmp/run.sh
 ARG USER_ID=1000
 RUN usermod -u $USER_ID omero
 
-USER omero
 CMD ["/tmp/run.sh"]
