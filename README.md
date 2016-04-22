@@ -27,31 +27,35 @@ The following prerequisites are required for deploying a Jenkins devspace:
 
         git checkout -b MYTOPIC && git commit -a -m "Start MYTOPIC branch"
 
- * Configure the .ssh and .gitconfig files in the slave directory, e.g.:
+ *  Configure the .ssh and .gitconfig files in the slave directory, e.g.:
 
         cp ~/.gitconfig slave/
         cp ~/.ssh/id_rsa slave/.ssh
         cp ~/.ssh/id_rsa.pub slave/.ssh
+        ssh-keyscan github.com >> slave/.ssh/known_hosts
 
- * **If not using docker-machine**, you will need to fix the user ID
+ *  **If not using docker-machine**, you will need to fix the user ID
     for jenkins and slave!
 
     devspace uses docker-compose V1 that do not support build arguments
     you have to add the following manually to each systemd based container,
     for example (where 1234 is your user ID):
 
-        diff --git a/slave2/Dockerfile b/slave2/Dockerfile
-        index 91a1eba..c9fb0b7 100644
-        --- a/slave2/Dockerfile
-        +++ b/slave2/Dockerfile
-        @@ -7,6 +7,8 @@ RUN rm -f /lib/systemd/system/systemd*udev* ; \
+        diff --git a/web/Dockerfile b/web/Dockerfile
+        index f86703e..11bdc04 100644
+        --- a/web/Dockerfile
+        +++ b/web/Dockerfile
+        @@ -51,7 +51,7 @@ RUN chmod a+x /tmp/run.sh
 
-         ARG ICEVER=ice36
 
-        +RUN usermod -u 1234 omero
-        +
-         # skip some omero-install
-         RUN echo 'export container=docker' > /etc/profile.d/docker.sh
+         # Change user id to fix permissions issues
+        -ARG USER_ID=1000
+        +ARG USER_ID=1234
+         RUN usermod -u $USER_ID omero
+
+ *  Build containers
+
+        EXTRA=docker-compose.unixports.yml ./ds build
 
  *  Start up the devspace (which starts up all requirements):
 
@@ -121,45 +125,53 @@ The default deployment initializes a Jenkins server with a [predefined set of
 jobs](homes/jobs). The table below lists the job names, the Jenkins node labels
 they are associated to and a short description of their:
 
-| Job name               | Name                 | Description                               |
-| -----------------------|----------------------| ------------------------------------------|
-| Trigger                |                      | Runs all the following jobs in order      |
-| BIOFORMATS-push        | testice35            | Merges all Bio-Formats PRs                |
-| BIOFORMATS-maven       | testice35            | Builds Bio-Formats and runs unit tests    |
-| OMERO-push             | testice35            | Merges all OMERO PRs                      |
-| OMERO-build            | testice35, testintegration | Builds OMERO artifacts (server, clients)  |
-| OMERO-server           | omero                | Deploys an OMERO.server                   |
-| OMERO-web              | webice35             | Deploys an OMERO.web client               |
-| OMERO-test-integration | testice35, testintegration | Runs the OMERO integration tests ice35/36 |
-| OMERO-robot            | robot                | Runs the Robot test                       |
-| nginx                  | nginx                | Reloads the nginx server                  |
-| -----------------------|----------------------| ------------------------------------------|
+| Job name               | Name            | Description                               |
+| -----------------------|-----------------| ------------------------------------------|
+| Trigger                |                 | Runs all the following jobs in order      |
+| BIOFORMATS-push        | testintegration | Merges all Bio-Formats PRs                |
+| BIOFORMATS-maven       | testintegration | Builds Bio-Formats and runs unit tests    |
+| OMERO-push             | testintegration | Merges all OMERO PRs                      |
+| OMERO-build            | testintegration | Builds OMERO artifacts (server, clients)  |
+| OMERO-server           | omero           | Deploys an OMERO.server                   |
+| OMERO-web              | web             | Deploys an OMERO.web client               |
+| OMERO-test-integration | testintegration | Runs the OMERO integration tests          |
+| OMERO-robot            | testintegration | Runs the Robot test                       |
+| nginx                  | nginx           | Reloads the nginx server                  |
+| -----------------------|-----------------| ------------------------------------------|
 
+Default packages:
+
+| Name       | Version       | Optional                           |
+| ----------------------------------------------------------------|
+| Java       | openJDK 1.8   | openJDK 1.8 devel, oracleJDK 1.8   |
+| Python     | 2.7           | -                                  |
+| Ice        | 3.6           | 3.5                                |
+| PostgreSQL | latest        | https://hub.docker.com/_/postgres/ |
+| Nginx      | 1.8           | -                                  |
+| Redis      | latest        | https://hub.docker.com/_/redis/    |
 
 ## Upgrade
 
-If you made custom adjustments to the code and commited them, it is recomanded to reset changes,
-otherwise you will have to resolve conflicts manually
+If you made custom adjustments to the code and commited them, it is recomanded to reset changes.
 
 Here are listed the most important changes:
 
  * Compose configuration was splitted into a few different files depends on the platform
 
         - docker-compose.yml mian file
-        - docker-compose.unix.yml required for running systemd container on UNIX platform
-        - docker-compose.osx.yml required for running systemd containers on OSX platform
+        - docker-compose.unixports.yml required for running container on UNIX platform
+        - docker-compose.osx.yml required for running containers on OSX platform
 
    For how to run check deployment
 
  * All nodes are now systemd nodes that requires adjusting the permissions. For what to change
    see deployment.
 
-        - jenkins node:
-          **Do not change jenkins/Dockerfile** as this will load your USERID automaticaly
+        - **Do not change Dockerfile** as this will load your USERID automaticaly
           If you did it in the past remove the change.
 
         - slave node:
-          Since slave container moved to systemd, user has changed from slave to omero.
+          Since slave container user has changed from slave to omero.
           If you want to preserve the history, once you start your new devspace, you have to
           manually chown all files that belongs to slave user.
 
@@ -167,18 +179,10 @@ Here are listed the most important changes:
           `find . -user slave -group 8000 -exec chown omero:8000`
           `usermod -u 1234 omero`
 
-        - OMERO-build and OMERO-test-integration jobs become matrix projects and history may look
-          odd. Although entire history oj these jobs should be preserved.
-
-        - 
-
  *  Run `rename.py` to match your topic name. If you do not yet have
     topic branches available on origin, use "develop" or one of the
     main branches.
 
         ./rename.py MYTOPIC
  
-    If you didn;t remove those changes, then grep
-
- * **If not using docker-machine**, you will need to fix the user ID
-    for jenkins and slave!
+    Ignore the error

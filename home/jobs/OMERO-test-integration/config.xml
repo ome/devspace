@@ -108,8 +108,8 @@ $SRC/build.py -f components/tools/OmeroWeb/build.xml integration -Dtestreports.d
 ## Broken
 $SRC/build.py -f components/tools/OmeroPy/build.xml integration -DMARK=broken -Dtestreports.dir=target/reports/broken
 $SRC/build.py -f components/tools/OmeroJava/build.xml -Dtestng.useDefaultListeners=true -Dtestreports.dir=target/reports/broken broken
-
-</hudson.tasks.Shell>
+      </command>
+    </hudson.tasks.Shell>
   </builders>
   <publishers>
     <hudson.tasks.junit.JUnitResultArchiver plugin="junit@1.9">

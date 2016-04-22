@@ -2,10 +2,8 @@ FROM openmicroscopy/devslave-c7:local
 
 MAINTAINER OME
 
-RUN rm -f /lib/systemd/system/systemd*udev* ; \
-    rm -f /lib/systemd/system/getty.target;
-
-ARG ICEVER=ice36
+ARG JAVAVER=${JAVAVER:-openjdk18}
+ARG ICEVER=${ICEVER:-ice36}
 
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
