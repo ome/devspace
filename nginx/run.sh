@@ -1,3 +1,3 @@
 #!/bin/bash
+sudo nginx &
 /tmp/jenkins-slave.sh
-nginx -g daemon off
