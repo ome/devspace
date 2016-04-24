@@ -57,7 +57,7 @@ source $WORKSPACE/omero-virtualenv/bin/activate
 source $OMERO_INSTALL/settings.env
 
 pip install --upgrade --no-deps --force-reinstall -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
-#pip install zeroc-ice
+pip install zeroc-ice
 pip install django-redis-cache&gt;=1.6.5
 
 #start-config
