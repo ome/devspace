@@ -29,7 +29,8 @@ else
     $OMERO_DIST/bin/omero web stop || echo Not running
     virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
 fi
-      </command>
+
+rm -rf $HOME/static/web/</command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
       <project>OMERO-build</project>
@@ -65,7 +66,7 @@ $OMERO_DIST/bin/omero config set omero.web.application_server.max_requests 0
 
 $OMERO_DIST/bin/omero config set omero.web.prefix &apos;/web&apos;
 $OMERO_DIST/bin/omero config set omero.web.static_url &apos;/web/static/&apos;
-$OMERO_DIST/bin/omero config set omero.web.static_root $WORKSPACE&apos;/static&apos;
+$OMERO_DIST/bin/omero config set omero.web.static_root $HOME&apos;/static/web/&apos;
 
 $OMERO_DIST/bin/omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;
 $OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;redis_cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;redis:6379&quot;}}&apos;
@@ -81,9 +82,8 @@ sudo cp $OMERO_DIST/nginx.conf.tmp $HOME/nginx/$NODE_NAME.conf
 
 $OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
 
-$OMERO_DIST/bin/omero web start
+$OMERO_DIST/bin/omero web start --foreground
 
-deactivate
       </command>
     </hudson.tasks.Shell>
   </builders>

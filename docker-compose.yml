@@ -61,7 +61,7 @@ nginx:
         - web
     volumes:
         - ./nginx/conf.d:/etc/nginx/conf.d
-        - ./web/static/web:/home/omero/static/web
+        - ./web/static:/home/omero/static
     environment:
         - SLAVE_NAME=nginx
         - SLAVE_EXECUTORS=2

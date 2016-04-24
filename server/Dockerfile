@@ -1,8 +1,9 @@
 FROM openmicroscopy/devslave-c7:local
+
 MAINTAINER OME
 
 ARG JAVAVER=${JAVAVER:-openjdk18}
-ARG ICEVER=${ICEVER:-ice35}
+ARG ICEVER=${ICEVER:-ice36}
 
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
@@ -29,6 +30,7 @@ RUN touch $OMERO_INSTALL/step04_all_omero.sh
 # remove nginx
 RUN rm -rf $OMERO_INSTALL/step05_centos7_nginx.sh
 RUN touch $OMERO_INSTALL/step05_centos7_nginx.sh
+# no systemd
 RUN rm -rf $OMERO_INSTALL/step06_centos7_daemon.sh
 RUN touch $OMERO_INSTALL/step06_centos7_daemon.sh
 
