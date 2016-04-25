@@ -24,13 +24,11 @@ if [ -e $OMERO_DIST ]; then
         $OMERO_DIST/bin/omero web status || true
         deactivate
     fi
-    rm -rf $OMERO_DIST
-else
-    $OMERO_DIST/bin/omero web stop || echo Not running
-    virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
 fi
 
-rm -rf $HOME/static/web/</command>
+rm -rf $HOME/static/web/
+rm -rf $WORKSPACE/*
+      </command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
       <project>OMERO-build</project>
@@ -56,9 +54,9 @@ source $WORKSPACE/omero-virtualenv/bin/activate
 
 source $OMERO_INSTALL/settings.env
 
-pip install --upgrade --no-deps --force-reinstall -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
-pip install zeroc-ice
-pip install django-redis-cache&gt;=1.6.5
+pip install -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
+pip install &quot;zeroc-ice&gt;3.5,&lt;3.7&quot;
+pip install &quot;django-redis-cache&gt;=1.6.5&quot;
 
 #start-config
 $OMERO_DIST/bin/omero config set omero.web.application_server &apos;wsgi-tcp&apos;
@@ -80,9 +78,11 @@ $OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; --serv
 
 sudo cp $OMERO_DIST/nginx.conf.tmp $HOME/nginx/$NODE_NAME.conf
 
+$OMERO_DIST/bin/omero config set omero.web.wsgi_args -- &apos;--log-level=DEBUG --error-logfile=/home/omero/workspace/OMERO-web/OMERO.web/var/log/gunicorn.err&apos;
+
 $OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
 
-$OMERO_DIST/bin/omero web start --foreground
+$OMERO_DIST/bin/omero web start
 
       </command>
     </hudson.tasks.Shell>
