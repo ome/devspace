@@ -22,6 +22,8 @@ ADD ./run.sh /tmp/run.sh
 RUN chown omero:omero /tmp/run.sh
 RUN chmod a+x /tmp/run.sh
 
+# workaround to avoid 403 on static files
+RUN chmod a+x /home/omero
 
 # Change user id to fix permissions issues
 ARG USER_ID=1000

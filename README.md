@@ -55,7 +55,7 @@ The following prerequisites are required for deploying a Jenkins devspace:
 
  *  Build containers
 
-        EXTRA=docker-compose.unixports.yml ./ds build
+        ./ds build
 
  *  Start up the devspace (which starts up all requirements):
 

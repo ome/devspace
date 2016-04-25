@@ -5,12 +5,12 @@ jenkins:
 
 testintegration:
     ports:
-        - "14064:4064"
-
+        - "14064:14064"
+        - "14063:14063"
 omero:
     ports:
         - "4064:4064"
-
+        - "4063:4063"
 nginx:
     ports:
         - "80:80"

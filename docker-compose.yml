@@ -26,6 +26,8 @@ testintegration:
         - SLAVE_NAME=testintegration
         - SLAVE_EXECUTORS=4
         - SLAVE_PARAMS=-labels centos7 -labels ice36 -disableClientsUniqueId
+    extra_hosts:
+        - "testintegration:127.0.0.1"
 
 omero:
     build: server

@@ -44,7 +44,8 @@ RUN yum -y install http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-cento
 RUN yum -y install postgresql94 \
     && yum clean all
 
-EXPOSE 4080
+EXPOSE 4064
+EXPOSE 4063
 
 ADD ./run.sh /tmp/run.sh
 RUN chown omero:omero /tmp/run.sh
