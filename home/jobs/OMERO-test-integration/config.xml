@@ -70,8 +70,8 @@ $OMERO_DIST/bin/omero config set omero.db.host $OMERO_DB_HOST
 $OMERO_DIST/bin/omero config set omero.db.user $OMERO_DB_USER
 $OMERO_DIST/bin/omero config set omero.data.dir $OMERO_DATA_DIR
 $OMERO_DIST/bin/omero config set omero.ports.prefix 1
-$OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;testintegration&quot;,14064,&quot;testintegration&quot;
- 
+$OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;testintegration&quot;,14064,&quot;testintegration&quot;]]&apos;
+
 ## END LOAD CONFIG
 
 
