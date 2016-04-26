@@ -50,6 +50,7 @@ unzip $ZIP
 rm -f $ZIP
 mv $WORKSPACE/$DIST $OMERO_DIST
 
+virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
 source $WORKSPACE/omero-virtualenv/bin/activate
 
 source $OMERO_INSTALL/settings.env
@@ -82,8 +83,9 @@ $OMERO_DIST/bin/omero config set omero.web.wsgi_args -- &apos;--log-level=DEBUG 
 
 $OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
 
-$OMERO_DIST/bin/omero web start
+BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero web start
 
+deactivate
       </command>
     </hudson.tasks.Shell>
   </builders>
