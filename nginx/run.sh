@@ -2,7 +2,7 @@
 sudo chmod 777 -R /home/omero/static/
 
 function shut_down() {
-    sudo nginx -c stop
+    sudo nginx -s stop
 }
 
 /tmp/jenkins-slave.sh &
