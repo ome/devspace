@@ -6,9 +6,12 @@ import fnmatch
 import os
 import re
 
+EXCLUDE = ["builds", "workspace", "fingerprints"]
+
 def replace(name, branch, uid):
   cnt = 0
-  for root, dir, files in os.walk("."):
+  for root, dirs, files in os.walk("."):
+    dirs[:] = list(filter(lambda x: not x in EXCLUDE, dirs))
     yml = list(fnmatch.filter(files, "*.yml"))
     xml = list(fnmatch.filter(files, "*.xml"))
     for f in yml + xml:
