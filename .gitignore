@@ -42,9 +42,10 @@ server/.jenkins
 server/.oracle_jre_usage
 server/OMERO.server
 server/omero
+server/workspace
 server/tools
 slave/.m2
-slave/cache
+slave/.cache
 slave/omero
 slave/tools
 slave/workspace
@@ -70,3 +71,4 @@ web/omero/
 web/static/
 web/tools/
 web/workspace/
+web/.oracle_jre_usage
