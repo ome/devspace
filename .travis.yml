@@ -25,10 +25,7 @@ before_install:
   - ./rename.py travis
 
 install:
-  - pwd
-  - ls -al
   - ./ds build
 
 script:
-  - EXTRA=docker-compose.ubuntu.yml ./ds up -d
-  - EXTRA=docker-compose.ubuntu.yml ./ds stop
+  - ./runtest.sh
