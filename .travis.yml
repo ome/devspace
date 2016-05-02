@@ -8,7 +8,7 @@ services:
 env:
   global:
     - DOCKER_VERSION=1.10.1-0~trusty
-    - DOCKER_COMPOSE_VERSION=1.6.0
+    - DOCKER_COMPOSE_VERSION=1.6.2
 
 before_install:
   - sudo apt-get update
@@ -26,8 +26,7 @@ before_install:
   - ./rename.py travis
 
 install:
-  - docker-compose -f docker-compose.yml -f docker-compose.unix.yml build
+  - ./ds build
 
 script:
-  - docker-compose -f docker-compose.yml -f docker-compose.unix.yml up -d
-  - docker-compose -f docker-compose.yml -f docker-compose.unix.yml stop
+  - ./runtest.sh
