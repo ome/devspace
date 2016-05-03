@@ -51,6 +51,15 @@ do
    done
 done
 
+
+curl -k -I https://localhost
+
+STATUS=`curl -k --write-out %{http_code} --silent --output /dev/null https://localhost`
+
+if [ ! "200" == "$STATUS" ]; then
+    exit 1
+fi
+
 # CLEANUP
 ./ds stop
 ./ds rm -f
