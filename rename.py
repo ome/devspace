@@ -14,7 +14,8 @@ def replace(name, branch, uid):
     dirs[:] = list(filter(lambda x: not x in EXCLUDE, dirs))
     yml = list(fnmatch.filter(files, "*.yml"))
     xml = list(fnmatch.filter(files, "*.xml"))
-    for f in yml + xml:
+    sh = list(fnmatch.filter(files, "sslcert.sh"))
+    for f in yml + xml + sh:
       fname = os.path.join(root, f)
       print "Setting space to '%s' in %s" % (name, fname)
       for line in fileinput.input([fname], inplace=True):
@@ -38,5 +39,5 @@ if __name__ == "__main__":
     branch = name
 
   # This number will need to be updated when new changes are commited.
-  assert 18 == replace(name, branch, ns.uid)
+  assert 16 == replace(name, branch, ns.uid)
   print "Done. You may want to review and commit your changes now"
