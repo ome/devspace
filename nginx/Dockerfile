@@ -2,6 +2,13 @@ FROM openmicroscopy/devslave-c7:local
 
 MAINTAINER OME
 
+RUN yum -y install openssl \
+    && yum clean all
+
+ADD ./sslcert.sh /tmp/sslcert.sh
+RUN chmod a+x /tmp/sslcert.sh
+RUN /tmp/sslcert.sh
+
 RUN yum -y localinstall http://nginx.org/packages/rhel/7/noarch/RPMS/nginx-release-rhel-7-0.el7.ngx.noarch.rpm \
     && yum clean all
 RUN yum -y install nginx \

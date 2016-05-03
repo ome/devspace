@@ -68,17 +68,16 @@ nginx:
         - SLAVE_NAME=nginx
         - SLAVE_EXECUTORS=2
         - SLAVE_PARAMS=-labels centos7 -disableClientsUniqueId
+    extra_hosts:
+        - "webproxy:127.0.0.1"
 
 redis:
     image: redis
-    environment:
-        - SERVICE_NAME=SPACENAME-redis
 
 seleniumhub:
     image: selenium/hub
     environment:
         - "JAVA_OPTS: -d64 -Xmx512m -Djava.security.egd=file:/dev/./urandom"
-        - SERVICE_NAME=SPACENAME-seleniumhub
         - GRID_BROWSER_TIMEOUT=5000
         - GRID_TIMEOUT=5000
 seleniumfirefox:

@@ -75,7 +75,7 @@ $OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;omero&quot;
 $OMERO_DIST/bin/omero config set omero.web.application_server.host web
 $OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
 
-$OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt;$OMERO_DIST/nginx.conf.tmp
+$OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; --servername &quot;webproxy&quot; &gt;$OMERO_DIST/nginx.conf.tmp
 
 sudo cp $OMERO_DIST/nginx.conf.tmp $HOME/nginx/$NODE_NAME.conf
 

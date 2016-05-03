@@ -1,6 +1,4 @@
 jenkins:
-    ports:
-        - "8080:8080"
     # UID that is mapped in docker-machine
     user: "1000"
 
@@ -15,11 +13,8 @@ omero:
         - "4063:4063"
 nginx:
     ports:
-        - "8888:80"
-
-redis:
-    ports:
-        - "6379:6379"
+        - "80:80"
+        - "443:443"
 
 seleniumhub:
     ports:
