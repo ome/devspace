@@ -6,7 +6,7 @@ mkdir -p "$SSL_DIR"
 
 
 # Certificate subject
-NGINX_SSL_CERTIFICATE_SUBJECT="/C=UK/ST=Scotland/L=Dundee/O=OME/CN=SPACENAME"
+NGINX_SSL_CERTIFICATE_SUBJECT="/C=UK/ST=Scotland/L=Dundee/O=OME/CN=SPACENAME-ci.openmicroscopy.org"
 
 # Certificate validity (days)
 NGINX_SSL_CERTIFICATE_DAYS=365
