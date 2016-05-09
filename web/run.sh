@@ -7,7 +7,7 @@ if [ -f $djangopid ]; then
 fi
 
 if [ -d "$workspace" ]; then
-    source $workspace/omero-virtualenv/bin/activate; $workspace/OMERO.web/bin/omero web start --foregroud &
+    source $workspace/omero-virtualenv/bin/activate; $workspace/OMERO.web/bin/omero web start --foreground &
 fi
 
 /tmp/jenkins-slave.sh
