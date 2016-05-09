@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>For more info, see the &lt;a href=&quot;https://github.com/openmicroscopy/devspace#job-workflow&quot;/&gt;Job workflow&lt;/a&gt;.</description>
   <keepDependencies>false</keepDependencies>
   <properties/>
   <scm class="hudson.scm.NullSCM"/>
