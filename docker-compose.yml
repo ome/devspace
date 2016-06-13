@@ -62,6 +62,7 @@ nginx:
         - jenkins
         - web
     volumes:
+        - ./nginx:/home/omero
         - ./nginx/conf.d:/etc/nginx/conf.d
         - ./web/static:/home/omero/static
     environment:
