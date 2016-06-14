@@ -1,16 +1,63 @@
-FROM openmicroscopy/omero-build-c6-multienv
+FROM openmicroscopy/devslave-c7:0.2.1
 
 MAINTAINER OME
 
-ENV JENKINS_SWARM_VERSION 2.0
-ENV LANG en_US.UTF-8
+ARG JAVAVER=${JAVAVER:-openjdk18}
+ARG ICEVER=${ICEVER:-ice36}
 
-RUN yum install -y http://download-aws.ej-technologies.com/exe4j/exe4j_linux_5_0_1.rpm
+# skip some omero-install
+RUN echo 'export container=docker' > /etc/profile.d/docker.sh
 
-RUN adduser -u 1000 slave
-USER slave
-WORKDIR /tmp
-RUN curl --create-dirs -sSLo /tmp/swarm-client-$JENKINS_SWARM_VERSION-jar-with-dependencies.jar http://maven.jenkins-ci.org/content/repositories/releases/org/jenkins-ci/plugins/swarm-client/$JENKINS_SWARM_VERSION/swarm-client-$JENKINS_SWARM_VERSION-jar-with-dependencies.jar
+ENV OMERO_INSTALL_ROOT=/tmp/omero-install
+## update omero-install to the latest one
+#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch origin
+#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge origin/develop
 
-COPY jenkins-slave.sh /tmp/jenkins-slave.sh
-ENTRYPOINT ["/tmp/jenkins-slave.sh"]
+ADD ./settings.env $OMERO_INSTALL/settings.env
+RUN chmod +x $OMERO_INSTALL/settings.env
+
+# Customize: run particular scripts from omero-install
+RUN rm -f $OMERO_INSTALL/setup_centos_selinux.sh
+RUN touch $OMERO_INSTALL/setup_centos_selinux.sh
+# db will be managed by the job
+RUN rm -f $OMERO_INSTALL/setup_omero_db.sh
+RUN touch $OMERO_INSTALL/setup_omero_db.sh
+RUN rm -f $OMERO_INSTALL/step03_all_postgres.sh
+RUN touch $OMERO_INSTALL/step03_all_postgres.sh
+# omeroweb will be installed by the job
+RUN rm -f $OMERO_INSTALL/step04_all_omero.sh
+RUN touch $OMERO_INSTALL/step04_all_omero.sh
+# remove nginx
+RUN rm -rf $OMERO_INSTALL/step05_centos7_nginx.sh
+RUN touch $OMERO_INSTALL/step05_centos7_nginx.sh
+# no systemd
+RUN rm -rf $OMERO_INSTALL/step06_centos7_daemon.sh
+RUN touch $OMERO_INSTALL/step06_centos7_daemon.sh
+
+WORKDIR /tmp/omero-install/linux
+
+RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh
+
+# install sphinx
+RUN pip install sphinx
+
+# install postgres tools
+RUN yum -y install http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-centos94-9.4-2.noarch.rpm \
+    && yum clean all
+RUN yum -y install postgresql94 \
+    && yum clean all
+
+EXPOSE 14064
+EXPOSE 14063
+
+ADD ./run.sh /tmp/run.sh
+RUN chown omero:omero /tmp/run.sh
+RUN chmod a+x /tmp/run.sh
+
+
+# Change user id to fix permissions issues
+ARG USER_ID=1000
+RUN usermod -u $USER_ID omero
+
+USER omero
+CMD ["/tmp/run.sh"]

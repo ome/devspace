@@ -5,7 +5,7 @@
   <keepDependencies>false</keepDependencies>
   <properties/>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>server</assignedNode>
+  <assignedNode>omero</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -16,25 +16,14 @@
     <hudson.tasks.Shell>
       <command>OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
+OMERO_DB_NAME=$JOB_NAME
+OMERO_DIST=$WORKSPACE/OMERO.server
 
-OMERO_DIST=$HOME/OMERO.server
-if [ -e $OMERO_DIST ]; then
-    #eval $(bash /opt/multi-config.sh ice3.5)
-    sudo sudo service omero stop
-    sleep 5
-    sudo sudo service omero status || true
-    rm -rf $OMERO_DIST
-    source $OMERO_INSTALL/settings.env
-    dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo Already exists maybe
-else
-    sudo service omero stop
-    source $OMERO_INSTALL/settings.env
-    dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo Already exists maybe
-fi
+$OMERO_DIST/bin/omero admin stop || echo First build
+sleep 5
+dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo First run
 
-mkdir -p $OMERO_DATA_DIR
-rm -rf $OMERO_DATA_DIR/*
-</command>
+rm -rf $WORKSPACE/*</command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
       <project>OMERO-build</project>
@@ -46,8 +35,15 @@ rm -rf $OMERO_DATA_DIR/*
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command>OMERO_DIST=$HOME/OMERO.server
-OMERO_INSTALL=/tmp/omero-install/linux
+      <command>OMERO_INSTALL=/tmp/omero-install/linux
+source $OMERO_INSTALL/settings.env
+OMERO_DB_NAME=$JOB_NAME
+OMERO_DATA_DIR=$WORKSPACE/data
+
+mkdir -p $OMERO_DATA_DIR
+
+# UNZIP SERVER
+OMERO_DIST=$WORKSPACE/OMERO.server
 
 ZIP=$(ls OMERO.server*.zip)
 DIST=${ZIP%.zip}
@@ -55,26 +51,35 @@ unzip $ZIP
 rm -f $ZIP
 mv $WORKSPACE/$DIST $OMERO_DIST
 
-source $OMERO_INSTALL/settings.env
 
-createdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME
+## LOAD CONFIG
 
+# LOAD EXTRA CONFIG
+#$OMERO_DIST/bin/omero load configfile.omero
 
-# CONFIG HERE.
+# DEFAULT CONFIG
 $OMERO_DIST/bin/omero config set omero.db.name $OMERO_DB_NAME
 $OMERO_DIST/bin/omero config set omero.db.host $OMERO_DB_HOST
 $OMERO_DIST/bin/omero config set omero.db.user $OMERO_DB_USER
 $OMERO_DIST/bin/omero config set omero.data.dir $OMERO_DATA_DIR
-# DONE
+
+## END LOAD CONFIG
 
 
-# PURGE
+## PURGE
+
+# CREATE DB
+createdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME
 $OMERO_DIST/bin/omero db script -f dbsetup.sql &quot;&quot; &quot;&quot; $OMERO_ROOT_PASS
 psql -h $OMERO_DB_HOST -U $OMERO_DB_USER -d $OMERO_DB_NAME -f dbsetup.sql
 rm dbsetup.sql
 
-sudo sudo service omero start
-      </command>
+## END PURGE
+
+BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero admin start
+
+# WAIT FOR OMERO TO START UP AND ACCEPT CONNECTIONS
+$OMERO_DIST/bin/omero admin waitup</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>

@@ -1,12 +1,10 @@
 jenkins:
-    # UID that is mapped in docker-machine
-    user: "1000"
+    user: ${USER_ID}
 
 testintegration:
     ports:
         - "14064:14064"
         - "14063:14063"
-
 omero:
     ports:
         - "4064:4064"
@@ -15,7 +13,6 @@ nginx:
     ports:
         - "80:80"
         - "443:443"
-
 seleniumhub:
     ports:
         - "4444:4444"

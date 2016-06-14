@@ -2,8 +2,6 @@ jenkins:
     build: jenkins
     volumes:
         - ./home:/var/jenkins_home
-    environment:
-        - SERVICE_NAME=SPACENAME-ci
 
 git:
     build: git
@@ -13,18 +11,23 @@ git:
 
 pg:
     image: postgres
+    volumes:
+        - ./pgdata:/var/lib/postgresql/data
 
-slave:
+testintegration:
     build: slave
     links:
         - pg
         - jenkins
+        - seleniumhub
     volumes:
-        - ./slave:/home/slave
+        - ./slave:/home/omero
     environment:
-        - JAVA_HOME=/etc/alternatives/java_sdk
-        - DOCKER_FIX='   '
-    command: -labels centos6 -labels slave -executors 4
+        - SLAVE_NAME=testintegration
+        - SLAVE_EXECUTORS=4
+        - SLAVE_PARAMS=-labels centos7 -labels ice36 -disableClientsUniqueId
+    extra_hosts:
+        - "testintegration:127.0.0.1"
 
 omero:
     build: server
@@ -34,23 +37,24 @@ omero:
     volumes:
         - ./server:/home/omero
     environment:
-        - JENKINS_LABEL=/etc/alternatives/java_sdk
-        - JENKINS_MODE=exclusive
-        - SERVICE_NAME=SPACENAME-omero
+        - SLAVE_NAME=omero
+        - SLAVE_EXECUTORS=4
+        - SLAVE_PARAMS=-labels centos7 -labels ice35 -disableClientsUniqueId
 
 web:
     build: web
     links:
         - jenkins
         - redis
-        - slave
         - omero
+        - testintegration
     volumes:
         - ./web:/home/omero
         - ./nginx/conf.d:/home/omero/nginx
     environment:
-        - JENKINS_LABEL=/etc/alternatives/java_sdk
-        - JENKINS_MODE=exclusive
+        - SLAVE_NAME=web
+        - SLAVE_EXECUTORS=4
+        - SLAVE_PARAMS= -labels centos7 -labels ice36 -disableClientsUniqueId
 
 nginx:
     build: nginx
@@ -59,22 +63,21 @@ nginx:
         - web
     volumes:
         - ./nginx/conf.d:/etc/nginx/conf.d
-        - ./web/static/web:/home/omero/static/web
+        - ./web/static:/home/omero/static
     environment:
-        - JENKINS_LABEL=/etc/alternatives/java_sdk
-        - JENKINS_MODE=exclusive
-        - SERVICE_NAME=SPACENAME-nginx
+        - SLAVE_NAME=nginx
+        - SLAVE_EXECUTORS=2
+        - SLAVE_PARAMS=-labels centos7 -disableClientsUniqueId
+    extra_hosts:
+        - "webproxy:127.0.0.1"
 
 redis:
     image: redis
-    environment:
-        - SERVICE_NAME=SPACENAME-redis
 
 seleniumhub:
     image: selenium/hub
     environment:
         - "JAVA_OPTS: -d64 -Xmx512m -Djava.security.egd=file:/dev/./urandom"
-        - SERVICE_NAME=SPACENAME-seleniumhub
         - GRID_BROWSER_TIMEOUT=5000
         - GRID_TIMEOUT=5000
 seleniumfirefox:
@@ -89,16 +92,3 @@ seleniumchrome:
         - seleniumhub:hub
     environment:
         - "JAVA_OPTS: -d64 -Xmx512m -Djava.security.egd=file:/dev/./urandom"
-
-robot:
-    build: robot
-    links:
-        - jenkins
-        - slave
-        - omero
-        - nginx
-        - seleniumhub
-    environment:
-        - JENKINS_LABEL=/etc/alternatives/java_sdk
-        - JENKINS_MODE=exclusive
-        - SERVICE_NAME=SPACENAME-robot

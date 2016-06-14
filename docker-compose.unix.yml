@@ -1,22 +1,15 @@
 jenkins:
     user: ${USER_ID}
+    environment:
+        - SERVICE_NAME=SPACENAME-ci
 
+testintegration:
+    environment:
+        - SERVICE_NAME=SPACENAME-testintegration
 omero:
-    volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-        - /run
-
-web:
-    volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-        - /run
+    environment:
+        - SERVICE_NAME=SPACENAME-omero
 
 nginx:
-    volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-        - /run
-
-robot:
-    volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-        - /run
+    environment:
+        - SERVICE_NAME=SPACENAME-nginx

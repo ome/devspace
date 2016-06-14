@@ -1,21 +1,17 @@
-FROM openmicroscopy/omero-ssh-systemd
+FROM openmicroscopy/devslave-c7:0.2.1
 
 MAINTAINER OME
 
-ENV JENKINS_SWARM_VERSION 2.0
-ENV LANG en_US.UTF-8
-ARG JAVAVER=openjdk18
+ARG JAVAVER=${JAVAVER:-openjdk18}
+ARG ICEVER=${ICEVER:-noice}
 
-RUN yum install -y initscripts \
-    && yum clean all
+# skip some omero-install
+RUN echo 'export container=docker' > /etc/profile.d/docker.sh
 
-# Download and run omero-install. 
-ENV OMERO_INSTALL /tmp/omero-install/linux
-ARG TAG=5.2.3-m1
-
-RUN yum install -y git \
-    && yum clean all
-RUN git clone -b v$TAG https://github.com/ome/omero-install.git /tmp/omero-install
+ENV OMERO_INSTALL_ROOT=/tmp/omero-install
+## update omero-install to the latest one
+#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch origin
+#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge origin/develop
 
 ADD ./settings.env $OMERO_INSTALL/settings.env
 RUN chmod +x $OMERO_INSTALL/settings.env
@@ -34,37 +30,29 @@ RUN touch $OMERO_INSTALL/step04_all_omero.sh
 # remove nginx
 RUN mv $OMERO_INSTALL/step05_centos7_nginx.sh $OMERO_INSTALL/_step05_centos7_nginx.sh
 RUN touch $OMERO_INSTALL/step05_centos7_nginx.sh
+# no systemd
+RUN rm -rf $OMERO_INSTALL/step06_centos7_daemon.sh
+RUN touch $OMERO_INSTALL/step06_centos7_daemon.sh
 
-RUN sed -i.bak -re 's/(Requires=nginx.service)/#\1/' $OMERO_INSTALL/omero-web-systemd.service
-# TODO: remove when omero-install support virtualenv
-# custom omero-web.service that support virtualenv
-RUN rm -f $OMERO_INSTALL/omero-web-systemd.service
-ADD ./omeroweb.service $OMERO_INSTALL/omero-web-systemd.service
-#RUN chmod a $OMERO_INSTALL/omero-web-systemd.service
-
-RUN sed -i.bak -re 's/(.*omero.service.*)/#\1/' $OMERO_INSTALL/step06_centos7_daemon.sh
-RUN sed -i.bak -re 's/(systemctl daemon-reload)/#\1/' $OMERO_INSTALL/step06_centos7_daemon.sh
- 
 WORKDIR /tmp/omero-install/linux
 
-RUN JAVAVER=$JAVAVER PGVER=nopg bash install_centos7_nginx.sh
+RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh
+# manually install ICEPY dependences
+RUN yum -y install gcc-c++
+RUN yum -y install openssl-devel bzip2-devel expat-devel
+
 RUN yum install -y python-redis && yum clean all
-
-RUN yum install -y http://download-aws.ej-technologies.com/exe4j/exe4j_linux_5_0_1.rpm
-
-WORKDIR /tmp
-
-USER omero
-RUN curl --create-dirs -sSLo /tmp/swarm-client-$JENKINS_SWARM_VERSION-jar-with-dependencies.jar http://maven.jenkins-ci.org/content/repositories/releases/org/jenkins-ci/plugins/swarm-client/$JENKINS_SWARM_VERSION/swarm-client-$JENKINS_SWARM_VERSION-jar-with-dependencies.jar
-
-USER root
-
-ADD ./jenkins-slave.sh /tmp/jenkins-slave.sh
-RUN chmod +x /tmp/jenkins-slave.sh
-ADD ./jenkins.service /etc/systemd/system/jenkins.service
-RUN systemctl enable jenkins.service
 
 EXPOSE 4080
 
+ADD ./run.sh /tmp/run.sh
+RUN chown omero:omero /tmp/run.sh
+RUN chmod a+x /tmp/run.sh
 
-#ENTRYPOINT ["/tmp/jenkins-slave.sh"]
+
+# Change user id to fix permissions issues
+ARG USER_ID=1000
+RUN usermod -u $USER_ID omero
+
+USER omero
+CMD ["/tmp/run.sh"]

@@ -9,13 +9,18 @@
         <hudson.model.StringParameterDefinition>
           <name>HOSTNAME</name>
           <description></description>
-          <defaultValue>omero</defaultValue>
+          <defaultValue>testintegration</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>PORT</name>
+          <description></description>
+          <defaultValue>14064</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>robot</assignedNode>
+  <assignedNode>testintegration</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -58,24 +63,32 @@ unzip $ZIP_DIST
 rm -f $ZIP_DIST
 mv $WORKSPACE/${ZIP_DIST%.zip} $SRC/dist
 
-source $HOME/omero-virtualenv/bin/activate
-
-pip install --upgrade --no-deps --force-reinstall -r $SRC/dist/share/web/requirements-py27-nginx.txt
+virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
+source $WORKSPACE/omero-virtualenv/bin/activate
+pip install -r $SRC/dist/share/web/requirements-py27-nginx.txt
+pip install robotframework robotframework-selenium2library
 
 $SRC/dist/bin/omero config set omero.web.prefix &quot;/web&quot;
 
 cd $SRC/dist
+
 bash ../components/tests/ui/robot_setup.sh
 mv $SRC/dist/robot_ice.config $SRC/components/tests/ui/resources/
 export ICE_CONFIG=$SRC/components/tests/ui/resources/robot_ice.config
-$SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --protocol http --webhost &apos;SPACENAME-nginx.docker.openmicroscopy.org&apos; --remoteurl &apos;http://seleniumhub:4444/wd/hub&apos; --dc &apos;browserName:${BROWSER},javascriptEnabled:True&apos; &gt; $SRC/components/tests/ui/resources/config.txt
+$SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --protocol https --webhost &apos;SPACENAME-ci.openmicroscopy.org&apos; --remoteurl &apos;http://seleniumhub:4444/wd/hub&apos; --dc &apos;browserName:${BROWSER},javascriptEnabled:True&apos; &gt;$SRC/components/tests/ui/resources/config.txt
+
+sed -i.bak -re &apos;s/(\{SERVER_ID\}.*1)/\{SERVER_ID\}      2/&apos; $SRC/components/tests/ui/resources/config.txt
 
 echo Running the UI tests
-
 $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web
-
 #aggregate the various output files.
 $SRC/build.py -f components/tests/ui/build.xml aggregate-results
+
+# exmaple how to run single test
+#$SRC/build.py -f components/tests/ui/build.xml web-firefox -DTEST=view_image.txt
+#$SRC/build.py -f components/tests/ui/build.xml aggregate-results
+
+deactivate
 </command>
     </hudson.tasks.Shell>
   </builders>
