@@ -68,8 +68,6 @@ nginx:
         - SLAVE_NAME=nginx
         - SLAVE_EXECUTORS=2
         - SLAVE_PARAMS=-labels centos7 -disableClientsUniqueId
-    extra_hosts:
-        - "webproxy:127.0.0.1"
 
 redis:
     image: redis
