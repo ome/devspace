@@ -10,7 +10,7 @@ baseslave:
     environment:
         - SLAVE_NAME=baseslave
         - SLAVE_EXECUTORS=2
-        - SLAVE_PARAMS=-labels centos7 -labels ice36 -disableClientsUniqueId
+        - SLAVE_PARAMS=-labels centos7 -labels ice -labels java -disableClientsUniqueId
 
 
 baseserver:
@@ -20,7 +20,7 @@ baseserver:
     environment:
         - SLAVE_NAME=baseomero
         - SLAVE_EXECUTORS=2
-        - SLAVE_PARAMS=-labels centos7 -labels ice36 -disableClientsUniqueId
+        - SLAVE_PARAMS=-labels centos7 -labels ice -labels java -disableClientsUniqueId
 
 
 baseweb:
@@ -31,7 +31,7 @@ baseweb:
     environment:
         - SLAVE_NAME=baseweb
         - SLAVE_EXECUTORS=2
-        - SLAVE_PARAMS= -labels centos7 -labels ice36 -disableClientsUniqueId
+        - SLAVE_PARAMS= -labels centos7 -labels ice -labels java -disableClientsUniqueId
 
 
 basenginx:
@@ -41,4 +41,4 @@ basenginx:
         - ./web/static:/home/omero/static
     environment:
         - SLAVE_NAME=basenginx
-        - SLAVE_PARAMS=-labels centos7 -disableClientsUniqueId
+        - SLAVE_PARAMS=-labels centos7 -labels java -disableClientsUniqueId

@@ -26,7 +26,7 @@ testintegration:
         - ./slave:/home/omero
     environment:
         - SLAVE_NAME=testintegration
-        - SLAVE_PARAMS=-labels centos7 -labels ice36 -disableClientsUniqueId
+        - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
     extra_hosts:
         - "testintegration:127.0.0.1"
 
@@ -41,7 +41,7 @@ omero:
         - ./server:/home/omero
     environment:
         - SLAVE_NAME=omero
-        - SLAVE_PARAMS=-labels centos7 -labels ice36 -disableClientsUniqueId
+        - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
 
 web:
     extends:
@@ -57,7 +57,7 @@ web:
         - ./nginx/conf.d:/home/omero/nginx
     environment:
         - SLAVE_NAME=web
-        - SLAVE_PARAMS= -labels centos7 -labels ice36 -disableClientsUniqueId
+        - SLAVE_PARAMS= -labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
 
 nginx:
     extends:
@@ -71,7 +71,7 @@ nginx:
         - ./web/static:/home/omero/static
     environment:
         - SLAVE_NAME=nginx
-        - SLAVE_PARAMS=-labels centos7 -disableClientsUniqueId
+        - SLAVE_PARAMS=-labels centos7 -labels java18 -disableClientsUniqueId
 
 nginxjenkins:
     image: nginx:1.10
