@@ -70,6 +70,7 @@ nginx:
     volumes:
         - ./nginx/conf.d:/etc/nginx/conf.d
         - ./web/static:/home/omero/static
+        - ./nginx/log:/var/log/nginx
     environment:
         - SLAVE_NAME=nginx
         - SLAVE_PARAMS=-labels centos7 -labels java18 -disableClientsUniqueId
@@ -89,8 +90,8 @@ seleniumhub:
     image: selenium/hub
     environment:
         - "JAVA_OPTS: -d64 -Xmx512m -Djava.security.egd=file:/dev/./urandom"
-        - GRID_BROWSER_TIMEOUT=5000
-        - GRID_TIMEOUT=5000
+        - GRID_BROWSER_TIMEOUT=30000
+        - GRID_TIMEOUT=30000
 seleniumfirefox:
     image: selenium/node-firefox
     links:
