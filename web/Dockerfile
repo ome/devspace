@@ -5,6 +5,9 @@ MAINTAINER OME
 ARG JAVAVER=${JAVAVER:-openjdk18}
 ARG ICEVER=${ICEVER:-noice}
 
+# make ICEVERSION environment variable to use in OMERO-web job
+ENV ICEVERSION ${ICEVER:-noice}
+
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
 

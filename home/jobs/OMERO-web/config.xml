@@ -56,8 +56,11 @@ source $WORKSPACE/omero-virtualenv/bin/activate
 source $OMERO_INSTALL/settings.env
 
 pip install -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
-pip install &quot;zeroc-ice&gt;3.5,&lt;3.7&quot;
 pip install &quot;django-redis-cache&gt;=1.6.5&quot;
+
+if [ $ICEVERSION = "noice" ]; then
+    pip install &quot;zeroc-ice&gt;3.5,&lt;3.7&quot;
+fi
 
 #start-config
 $OMERO_DIST/bin/omero config set omero.web.application_server &apos;wsgi-tcp&apos;
