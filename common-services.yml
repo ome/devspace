@@ -1,0 +1,44 @@
+# this is template for slave and server container
+# slave is a container with installed devel packages
+# omero is a plane omero server container
+
+
+baseslave:
+    build: ./slave
+    volumes:
+        - ./slave:/home/omero
+    environment:
+        - SLAVE_NAME=baseslave
+        - SLAVE_EXECUTORS=2
+        - SLAVE_PARAMS=-labels centos7 -labels ice36 -disableClientsUniqueId
+
+
+baseserver:
+    build: ./server
+    volumes:
+        - ./server:/home/omero
+    environment:
+        - SLAVE_NAME=baseomero
+        - SLAVE_EXECUTORS=2
+        - SLAVE_PARAMS=-labels centos7 -labels ice36 -disableClientsUniqueId
+
+
+baseweb:
+    build: ./web
+    volumes:
+        - ./web:/home/omero
+        - ./nginx/conf.d:/home/omero/nginx
+    environment:
+        - SLAVE_NAME=baseweb
+        - SLAVE_EXECUTORS=2
+        - SLAVE_PARAMS= -labels centos7 -labels ice36 -disableClientsUniqueId
+
+
+basenginx:
+    build: ./nginx
+    volumes:
+        - ./nginx/conf.d:/etc/nginx/conf.d
+        - ./web/static:/home/omero/static
+    environment:
+        - SLAVE_NAME=basenginx
+        - SLAVE_PARAMS=-labels centos7 -disableClientsUniqueId

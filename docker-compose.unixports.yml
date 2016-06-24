@@ -13,6 +13,11 @@ nginx:
     ports:
         - "80:80"
         - "443:443"
+
+nginxjenkins:
+    ports:
+        - "8443:443"
+
 seleniumhub:
     ports:
         - "4444:4444"

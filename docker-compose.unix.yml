@@ -13,3 +13,7 @@ omero:
 nginx:
     environment:
         - SERVICE_NAME=SPACENAME-nginx
+
+nginxjenkins:
+    environment:
+        - SERVICE_NAME=SPACENAME-nginxjenkins
