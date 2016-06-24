@@ -239,37 +239,45 @@ Default packages:
 
 ## Upgrade
 
-If you made custom adjustments to the code and commited them, it is recomanded to reset changes.
+ *  Uprade to 0.2.1:
 
-Here are listed the most important changes:
+    If you already created new containers based on existing Dockerfiles, you may wish to review
+    and extend common services
 
- * Compose configuration was splitted into a few different files depends on the platform
+ *  Uprade to 0.2.0:
 
-        - docker-compose.yml mian file
-        - docker-compose.unixports.yml required for running container on UNIX platform
-        - docker-compose.osx.yml required for running containers on OSX platform
+    If you made custom adjustments to the code and commited them, it is recomanded to reset changes.
 
-   For how to run check deployment
+    Here are listed the most important changes:
 
- * All nodes are now systemd nodes that requires adjusting the permissions. For what to change
-   see deployment.
+     * Compose configuration was splitted into a few different files depends on the platform
 
-        - **Do not change Dockerfile** as this will load your USERID automaticaly
-          If you did it in the past remove the change.
+            - docker-compose.yml mian file
+            - docker-compose.unixports.yml required for running container on UNIX platform
+            - docker-compose.osx.yml required for running containers on OSX platform
 
-        - slave node:
-          Since slave container user has changed from slave to omero.
-          If you want to preserve the history, once you start your new devspace, you have to
-          manually chown all files that belongs to slave user.
+       For how to run check deployment
 
-          `find . -user slave -group slave -exec chown omero:omero`
-          `find . -user slave -group 8000 -exec chown omero:8000`
-          `usermod -u 1234 omero`
+     * All nodes are now systemd nodes that requires adjusting the permissions. For what to change
+       see deployment.
 
- *  Run `rename.py` to match your topic name. If you do not yet have
-    topic branches available on origin, use "develop" or one of the
-    main branches.
+            - **Do not change Dockerfile** as this will load your USERID automaticaly
+              If you did it in the past remove the change.
 
-        ./rename.py MYTOPIC
+            - slave node:
+              Since slave container user has changed from slave to omero.
+              If you want to preserve the history, once you start your new devspace, you have to
+              manually chown all files that belongs to slave user.
+
+              `find . -user slave -group slave -exec chown omero:omero`
+              `find . -user slave -group 8000 -exec chown omero:8000`
+              `usermod -u 1234 omero`
+
+     *  Run `rename.py` to match your topic name. If you do not yet have
+        topic branches available on origin, use "develop" or one of the
+        main branches.
+
+            ./rename.py MYTOPIC
  
-    Ignore the error
+        Ignore the error
+
