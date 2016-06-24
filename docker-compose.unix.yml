@@ -1,5 +1,4 @@
 jenkins:
-    user: ${USER_ID}
     environment:
         - SERVICE_NAME=SPACENAME-ci
 

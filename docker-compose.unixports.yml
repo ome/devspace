@@ -1,6 +1,3 @@
-jenkins:
-    user: ${USER_ID}
-
 testintegration:
     ports:
         - "14064:14064"
