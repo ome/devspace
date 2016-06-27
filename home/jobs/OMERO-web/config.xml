@@ -66,8 +66,8 @@ fi
 $OMERO_DIST/bin/omero config set omero.web.application_server &apos;wsgi-tcp&apos;
 $OMERO_DIST/bin/omero config set omero.web.application_server.max_requests 0
 
-$OMERO_DIST/bin/omero config set omero.web.prefix &apos;/web&apos;
-$OMERO_DIST/bin/omero config set omero.web.static_url &apos;/web/static/&apos;
+$OMERO_DIST/bin/omero config set omero.web.prefix $WEB_PREFIX
+$OMERO_DIST/bin/omero config set omero.web.static_url $WEB_PREFIX&apos;/static/&apos;
 $OMERO_DIST/bin/omero config set omero.web.static_root $HOME&apos;/static/web/&apos;
 
 $OMERO_DIST/bin/omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;

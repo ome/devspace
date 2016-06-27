@@ -68,7 +68,7 @@ source $WORKSPACE/omero-virtualenv/bin/activate
 pip install -r $SRC/dist/share/web/requirements-py27-nginx.txt
 pip install robotframework robotframework-selenium2library
 
-$SRC/dist/bin/omero config set omero.web.prefix &quot;/web&quot;
+$SRC/dist/bin/omero config set omero.web.prefix $WEB_PREFIX;
 
 cd $SRC/dist
 

@@ -1,7 +1,8 @@
 # this is template for slave and server container
-# slave is a container with installed devel packages
-# omero is a plane omero server container
-
+# slave is a container with installed devel dependances
+# omero is a container with basic omero server dependances
+# web is a container with basic omero web dependances
+# nginx is a nginx container for omero web
 
 baseslave:
     build: ./slave
@@ -11,7 +12,7 @@ baseslave:
         - SLAVE_NAME=baseslave
         - SLAVE_EXECUTORS=2
         - SLAVE_PARAMS=-labels centos7 -labels ice -labels java -disableClientsUniqueId
-
+        - WEB_PREFIX=/web
 
 baseserver:
     build: ./server
@@ -32,6 +33,7 @@ baseweb:
         - SLAVE_NAME=baseweb
         - SLAVE_EXECUTORS=2
         - SLAVE_PARAMS= -labels centos7 -labels ice -labels java -disableClientsUniqueId
+        - WEB_PREFIX=/web
 
 
 basenginx:
