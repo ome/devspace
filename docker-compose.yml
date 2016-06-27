@@ -71,6 +71,7 @@ nginx:
         - ./nginx/conf.d:/etc/nginx/conf.d
         - ./web/static:/home/omero/static
         - ./nginx/log:/var/log/nginx
+        - ./nginx/sslcert:/etc/nginx/ssl
     environment:
         - SLAVE_NAME=nginx
         - SLAVE_PARAMS=-labels centos7 -labels java18 -disableClientsUniqueId
