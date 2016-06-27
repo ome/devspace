@@ -36,6 +36,10 @@ server/omero/
 server/tools/
 
 nginx/conf.d/
+nginx/log/
+nginx/sslcert/
+
+jenkins/sslcert/
 
 server/.java
 server/.jenkins
