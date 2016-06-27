@@ -2,12 +2,15 @@
 
 # SSL certificate dir
 
-SSL_DIR=$1
+SSL_DIR=${1:-"jenkins/sslcert"}
+
+HOST_OR_IP=${2:-"localhost"}
+
 mkdir -p "$SSL_DIR"
 
-
+echo "Generating certificate for $HOST_OR_IP..."
 # Certificate subject
-NGINX_SSL_CERTIFICATE_SUBJECT="/C=UK/ST=Scotland/L=Dundee/O=OME/CN=SPACENAME-ci.openmicroscopy.org"
+NGINX_SSL_CERTIFICATE_SUBJECT="/C=UK/ST=Scotland/L=Dundee/O=OME/CN=$HOST_OR_IP"
 
 # Certificate validity (days)
 NGINX_SSL_CERTIFICATE_DAYS=365
