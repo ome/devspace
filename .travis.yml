@@ -22,9 +22,10 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   - docker-compose -v
 
-  - ./rename.py travis
-
 install:
+  - ./rename.py travis
+  - ./sslcert jenkins/sslcert localhost
+  - ./sslcert nginx/sslcert localhost
   - ./ds build
 
 script:
