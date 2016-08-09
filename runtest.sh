@@ -14,7 +14,8 @@ fi
 service_containers=( devspace_pg_1 devspace_redis_1 )
 selenium_containers=( devspace_seleniumhub_1 devspace_seleniumfirefox_1 devspace_seleniumchrome_1 )
 omero_containers=( devspace_omero_1 devspace_web_1 devspace_nginx_1 devspace_testintegration_1 )
-all_containers=( "${service_containers[@]}" "${selenium_containers[@]}" "${omero_containers[@]}" )
+jenkins_containers=( devspace_jenkins_1 devspace_nginxjenkins_1 )
+all_containers=( "${service_containers[@]}" "${selenium_containers[@]}" "${omero_containers[@]}" "${jenkins_containers[@]}")
 
 for cname in "${all_containers[@]}"
 do
@@ -52,9 +53,9 @@ do
 done
 
 
-curl -k -I https://localhost
+curl -k -I https://localhost:8443
 
-STATUS=`curl -k --write-out %{http_code} --silent --output /dev/null https://localhost`
+STATUS=`curl -k --write-out %{http_code} --silent --output /dev/null https://localhost:8443`
 
 if [ ! "200" == "$STATUS" ]; then
     exit 1

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <hudson>
   <disabledAdministrativeMonitors/>
-  <version>1.651.1</version>
+  <version>1.651.3</version>
   <numExecutors>0</numExecutors>
   <mode>NORMAL</mode>
   <useSecurity>true</useSecurity>
@@ -22,7 +22,7 @@
         <hudson.tools.InstallSourceProperty>
           <installers>
             <hudson.tools.JDKInstaller>
-              <id>jdk-8u92-oth-JPR</id>
+              <id>jdk-8u102-oth-JPR</id>
               <acceptLicense>true</acceptLicense>
             </hudson.tools.JDKInstaller>
           </installers>

@@ -19,9 +19,9 @@ OMERO_DIST=$WORKSPACE/OMERO.web
 if [ -e $OMERO_DIST ]; then
     if [ -e $WORKSPACE/omero-virtualenv ]; then
         source $WORKSPACE/omero-virtualenv/bin/activate
-        $OMERO_DIST/bin/omero web stop
+        $OMERO_DIST/bin/omero web stop || echo 'not running'
         sleep 5
-        $OMERO_DIST/bin/omero web status || true
+        $OMERO_DIST/bin/omero web status || echo 'no status'
         deactivate
     fi
 fi
@@ -56,15 +56,18 @@ source $WORKSPACE/omero-virtualenv/bin/activate
 source $OMERO_INSTALL/settings.env
 
 pip install -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
-pip install &quot;zeroc-ice&gt;3.5,&lt;3.7&quot;
 pip install &quot;django-redis-cache&gt;=1.6.5&quot;
+
+if [ $ICEVERSION = "noice" ]; then
+    pip install &quot;zeroc-ice&gt;3.5,&lt;3.7&quot;
+fi
 
 #start-config
 $OMERO_DIST/bin/omero config set omero.web.application_server &apos;wsgi-tcp&apos;
 $OMERO_DIST/bin/omero config set omero.web.application_server.max_requests 0
 
-$OMERO_DIST/bin/omero config set omero.web.prefix &apos;/web&apos;
-$OMERO_DIST/bin/omero config set omero.web.static_url &apos;/web/static/&apos;
+$OMERO_DIST/bin/omero config set omero.web.prefix $WEB_PREFIX
+$OMERO_DIST/bin/omero config set omero.web.static_url $WEB_PREFIX&apos;/static/&apos;
 $OMERO_DIST/bin/omero config set omero.web.static_root $HOME&apos;/static/web/&apos;
 
 $OMERO_DIST/bin/omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;
@@ -75,7 +78,7 @@ $OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;omero&quot;
 $OMERO_DIST/bin/omero config set omero.web.application_server.host web
 $OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
 
-$OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; --servername &quot;webproxy&quot; &gt;$OMERO_DIST/nginx.conf.tmp
+$OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt;$OMERO_DIST/nginx.conf.tmp
 
 sudo cp $OMERO_DIST/nginx.conf.tmp $HOME/nginx/$NODE_NAME.conf
 

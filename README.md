@@ -27,13 +27,6 @@ The following prerequisites are required for deploying a Jenkins devspace:
 
         git checkout -b MYTOPIC && git commit -a -m "Start MYTOPIC branch"
 
- *  Configure the .ssh and .gitconfig files in the slave directory, e.g.:
-
-        cp ~/.gitconfig slave/
-        cp ~/.ssh/id_rsa slave/.ssh
-        cp ~/.ssh/id_rsa.pub slave/.ssh
-        ssh-keyscan github.com >> slave/.ssh/known_hosts
-
  *  **If not using docker-machine**, you will need to fix the user ID
     for jenkins and slave!
 
@@ -52,6 +45,23 @@ The following prerequisites are required for deploying a Jenkins devspace:
         -ARG USER_ID=1000
         +ARG USER_ID=1234
          RUN usermod -u $USER_ID omero
+
+    using sed command
+
+         sed -i 's/ARG USER_ID=1000/ARG USER_ID='"$UID"'/g' server/Dockerfile
+
+*  Configure the .ssh and .gitconfig files in the slave directory, e.g.:
+
+        cp ~/.gitconfig slave/
+        cp ~/.ssh/id_rsa slave/.ssh
+        cp ~/.ssh/id_rsa.pub slave/.ssh
+        ssh-keyscan github.com >> slave/.ssh/known_hosts
+
+    make sure files in .ssh has correct permissions
+
+ *  generate SSL certificate for Jenkins
+
+        ./sslcert jenkins/sslcert
 
  *  Build containers
 
@@ -74,6 +84,83 @@ The following prerequisites are required for deploying a Jenkins devspace:
  *  Configure artifactory:
     - Add an artifactory user (optional)
     - Under "System Configuration" add your artifactory URL
+
+## Multiply containers
+
+ *  common-services.yml contains default list of basic contaners are suitable to extend:
+    You can extend any service together with other configuration keys. For more details
+    read https://docs.docker.com/v1.6/compose/extends/
+
+ * to override the basic containers keep in mind compose copies configurations from the
+   original service over to the local one, except for links and volumes_from.
+
+   Examples of how to extend existing containers.
+
+    - baseslave: basic container starting devel environment for OMERO.server and testing
+
+            myintegration:
+                extends:
+                    file: common-services.yml
+                    service: baseslave
+                links:
+                    - jenkins
+                volumes:
+                    - ./myservices/myintegration:/home/omero
+                environment:
+                    - SLAVE_NAME=myintegration
+                    - SLAVE_PARAMS=-labels centos7 -labels ice36 -disableClientsUniqueId
+                extra_hosts:
+                    - "myintegration:127.0.0.1"
+
+    - baseomero: basic container starting OMERO.server process
+
+            myomero:
+                extends:
+                    file: common-services.yml
+                    service: baseserver
+                links:
+                    - jenkins
+                    - pg
+                volumes:
+                    - ./myservices/omero:/home/omero
+                environment:
+                    - SLAVE_NAME=myomero
+
+    - baseweb: basic container starting OMERO.web process
+
+            myweb:
+                extends:
+                    file: common-services.yml
+                    service: baseweb
+                links:
+                    - jenkins
+                    - redis
+                    - myomero
+                volumes:
+                    - ./myservices/web:/home/omero
+                    - ./myservices/nginx/conf.d:/home/omero/nginx
+                environment:
+                    - SLAVE_NAME=myweb
+
+    - basenginx: basic container starting nginx process
+
+            mynginx:
+                extends:
+                    file: common-services.yml
+                    service: basenginx
+                links:
+                    - jenkins
+                    - myweb
+                volumes:
+                    - ./myservices/nginx/conf.d:/etc/nginx/conf.d
+                    - ./myservices/web/static:/home/omero/static
+                environment:
+                    - SLAVE_NAME=mynginx
+
+    **NOTE: you have to create manually all new volume directories to avoid 
+    automatic creation as root**
+
+    Copy existing job and point to the right host
 
 ## Service script
 
@@ -152,37 +239,45 @@ Default packages:
 
 ## Upgrade
 
-If you made custom adjustments to the code and commited them, it is recomanded to reset changes.
+ *  Uprade to 0.2.1:
 
-Here are listed the most important changes:
+    If you already created new containers based on existing Dockerfiles, you may wish to review
+    and extend common services
 
- * Compose configuration was splitted into a few different files depends on the platform
+ *  Uprade to 0.2.0:
 
-        - docker-compose.yml mian file
-        - docker-compose.unixports.yml required for running container on UNIX platform
-        - docker-compose.osx.yml required for running containers on OSX platform
+    If you made custom adjustments to the code and commited them, it is recomanded to reset changes.
 
-   For how to run check deployment
+    Here are listed the most important changes:
 
- * All nodes are now systemd nodes that requires adjusting the permissions. For what to change
-   see deployment.
+     * Compose configuration was splitted into a few different files depends on the platform
 
-        - **Do not change Dockerfile** as this will load your USERID automaticaly
-          If you did it in the past remove the change.
+            - docker-compose.yml mian file
+            - docker-compose.unixports.yml required for running container on UNIX platform
+            - docker-compose.osx.yml required for running containers on OSX platform
 
-        - slave node:
-          Since slave container user has changed from slave to omero.
-          If you want to preserve the history, once you start your new devspace, you have to
-          manually chown all files that belongs to slave user.
+       For how to run check deployment
 
-          `find . -user slave -group slave -exec chown omero:omero`
-          `find . -user slave -group 8000 -exec chown omero:8000`
-          `usermod -u 1234 omero`
+     * All nodes are now systemd nodes that requires adjusting the permissions. For what to change
+       see deployment.
 
- *  Run `rename.py` to match your topic name. If you do not yet have
-    topic branches available on origin, use "develop" or one of the
-    main branches.
+            - **Do not change Dockerfile** as this will load your USERID automaticaly
+              If you did it in the past remove the change.
 
-        ./rename.py MYTOPIC
+            - slave node:
+              Since slave container user has changed from slave to omero.
+              If you want to preserve the history, once you start your new devspace, you have to
+              manually chown all files that belongs to slave user.
+
+              `find . -user slave -group slave -exec chown omero:omero`
+              `find . -user slave -group 8000 -exec chown omero:8000`
+              `usermod -u 1234 omero`
+
+     *  Run `rename.py` to match your topic name. If you do not yet have
+        topic branches available on origin, use "develop" or one of the
+        main branches.
+
+            ./rename.py MYTOPIC
  
-    Ignore the error
+        Ignore the error
+

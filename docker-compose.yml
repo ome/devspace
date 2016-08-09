@@ -1,5 +1,6 @@
 jenkins:
     build: jenkins
+    user: ${USER_ID}
     volumes:
         - ./home:/var/jenkins_home
 
@@ -15,22 +16,25 @@ pg:
         - ./pgdata:/var/lib/postgresql/data
 
 testintegration:
-    build: slave
+    extends:
+        file: common-services.yml
+        service: baseslave
     links:
-        - pg
         - jenkins
+        - pg
         - seleniumhub
     volumes:
         - ./slave:/home/omero
     environment:
         - SLAVE_NAME=testintegration
-        - SLAVE_EXECUTORS=4
-        - SLAVE_PARAMS=-labels centos7 -labels ice36 -disableClientsUniqueId
+        - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
     extra_hosts:
         - "testintegration:127.0.0.1"
 
 omero:
-    build: server
+    extends:
+        file: common-services.yml
+        service: baseserver
     links:
         - jenkins
         - pg
@@ -38,11 +42,12 @@ omero:
         - ./server:/home/omero
     environment:
         - SLAVE_NAME=omero
-        - SLAVE_EXECUTORS=4
-        - SLAVE_PARAMS=-labels centos7 -labels ice35 -disableClientsUniqueId
+        - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
 
 web:
-    build: web
+    extends:
+        file: common-services.yml
+        service: baseweb
     links:
         - jenkins
         - redis
@@ -53,23 +58,31 @@ web:
         - ./nginx/conf.d:/home/omero/nginx
     environment:
         - SLAVE_NAME=web
-        - SLAVE_EXECUTORS=4
-        - SLAVE_PARAMS= -labels centos7 -labels ice36 -disableClientsUniqueId
+        - SLAVE_PARAMS= -labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
 
 nginx:
-    build: nginx
+    extends:
+        file: common-services.yml
+        service: basenginx
     links:
         - jenkins
         - web
     volumes:
         - ./nginx/conf.d:/etc/nginx/conf.d
         - ./web/static:/home/omero/static
+        - ./nginx/log:/var/log/nginx
+        - ./nginx/sslcert:/etc/nginx/ssl
     environment:
         - SLAVE_NAME=nginx
-        - SLAVE_EXECUTORS=2
-        - SLAVE_PARAMS=-labels centos7 -disableClientsUniqueId
-    extra_hosts:
-        - "webproxy:127.0.0.1"
+        - SLAVE_PARAMS=-labels centos7 -labels java18 -disableClientsUniqueId
+
+nginxjenkins:
+    image: nginx:1.10
+    links:
+        - jenkins
+    volumes:
+        - ./jenkins/conf.d:/etc/nginx/conf.d
+        - ./jenkins/sslcert:/etc/nginx/ssl
 
 redis:
     image: redis
@@ -78,8 +91,8 @@ seleniumhub:
     image: selenium/hub
     environment:
         - "JAVA_OPTS: -d64 -Xmx512m -Djava.security.egd=file:/dev/./urandom"
-        - GRID_BROWSER_TIMEOUT=5000
-        - GRID_TIMEOUT=5000
+        - GRID_BROWSER_TIMEOUT=30000
+        - GRID_TIMEOUT=30000
 seleniumfirefox:
     image: selenium/node-firefox
     links:
