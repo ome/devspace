@@ -11,12 +11,13 @@ The following prerequisites are required for deploying a Jenkins devspace:
 Remot host:
 *   Docker Engine 1.10 or later
 *   Docker Compose 1.7.0
+*   PIP 1.8+
 
 Client:
 *   Ansible 2.1+
 *   Shade
 
-Create virtualenv
+On the client create virtualenv:
 
     virtualenv dev
     source dev/bin/activate

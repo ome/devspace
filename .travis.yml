@@ -15,6 +15,7 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - docker-compose -v
+  - export USER_ID=`$UID`
 
 install:
   - ./rename.py travis
