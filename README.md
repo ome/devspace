@@ -32,11 +32,11 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
  
  * create new vm
  
-    ansible-playbook os-devspace.yml -e vm_name=my-devspace -e vm_key_name=ola
+        ansible-playbook os-devspace.yml -e vm_name=my-devspace -e vm_key_name=ola
 
  *  create inventory
  
-    /path/to/ansible/devspace/group_vars/devspace
+        /path/to/ansible/devspace/group_vars/devspace
 
         docker_use_ipv4_nic_mtu: True
         devuser: omero
@@ -48,7 +48,7 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
         git_repo: "https://github.com/openmicroscopy/devspace.git"
         version: "master"
 
-    /path/to/ansible/devspace/devspace-hosts
+        /path/to/ansible/devspace/devspace-hosts
 
         [devspace]
         10.0.50.100
@@ -60,16 +60,16 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
 
  *  ssh keys
  
-    /path/to/ansible/devspace/snoopy/.ssh
-    /path/to/ansible/devspace/snoopy/.gitconfig
+        /path/to/ansible/devspace/snoopy/.ssh
+        /path/to/ansible/devspace/snoopy/.gitconfig
 
  *  install prerequisites as default user with sudo rights
  
-    ansible-playbook -i /path/to/ansible/devspace -u centos devspace.yml
+        ansible-playbook -i /path/to/ansible/devspace -u centos devspace.yml
 
  *  run containers (as user omero)
  
-    ansible-playbook -i /path/to/ansible/devspace -u omero devspace-runtime.yml
+        ansible-playbook -i /path/to/ansible/devspace -u omero devspace-runtime.yml
 
 
 ## Multiply containers
