@@ -157,7 +157,7 @@ they are associated to and a short description of their:
 | OMERO-test-integration | testintegration | Runs the OMERO integration tests          |
 | OMERO-robot            | testintegration | Runs the Robot test                       |
 | nginx                  | nginx           | Reloads the nginx server                  |
-| -----------------------|-----------------| ------------------------------------------|
+
 
 Default packages:
 
@@ -169,7 +169,7 @@ Default packages:
 | PostgreSQL | latest        | https://hub.docker.com/_/postgres/ |
 | Nginx      | 1.8           | -                                  |
 | Redis      | latest        | https://hub.docker.com/_/redis/    |
-| -----------|---------------| -----------------------------------|
+
 
 ## Upgrade
 
