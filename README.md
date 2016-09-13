@@ -162,13 +162,14 @@ they are associated to and a short description of their:
 Default packages:
 
 | Name       | Version       | Optional                           |
-| ----------------------------------------------------------------|
+| -----------|---------------| -----------------------------------|
 | Java       | openJDK 1.8   | openJDK 1.8 devel, oracleJDK 1.8   |
 | Python     | 2.7           | -                                  |
 | Ice        | 3.6           | 3.5                                |
 | PostgreSQL | latest        | https://hub.docker.com/_/postgres/ |
 | Nginx      | 1.8           | -                                  |
 | Redis      | latest        | https://hub.docker.com/_/redis/    |
+| -----------|---------------| -----------------------------------|
 
 ## Upgrade
 
