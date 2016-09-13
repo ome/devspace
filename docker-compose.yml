@@ -1,6 +1,6 @@
 jenkins:
     build: jenkins
-    user: ${USER_ID}
+    user: ${UID}
     volumes:
         - ./home:/var/jenkins_home
 

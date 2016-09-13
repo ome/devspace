@@ -5,9 +5,9 @@ set -e -u -x
 
 # start docker container
 if [[ "darwin" == "${OSTYPE//[0-9.]/}" ]]; then
-  EXTRA=docker-compose.osx.yml ./ds up -d
+  docker-compose -f docker-compose.yml up -d
 else
-  ./ds up -d
+  docker-compose -f docker-compose.yml up -d
 fi
 
 # inspect containers
@@ -62,5 +62,5 @@ if [ ! "200" == "$STATUS" ]; then
 fi
 
 # CLEANUP
-./ds stop
-./ds rm -f
+docker-compose -f docker-compose.yml stop
+docker-compose -f docker-compose.yml rm -f
