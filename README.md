@@ -32,7 +32,7 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
  
  * create new vm
  
-    ansible-playbook os-devspace.yml -e vm_name=my-devspace
+    ansible-playbook os-devspace.yml -e vm_name=my-devspace -e vm_key_name=ola
 
  *  create inventory
  
@@ -69,7 +69,7 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
 
  *  run containers (as user omero)
  
-    ansible-playbook -i /path/to/ansible/devspace -u omero devspace-runtime-v1.yml
+    ansible-playbook -i /path/to/ansible/devspace -u omero devspace-runtime.yml
 
 
 ## Multiply containers
@@ -82,22 +82,6 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
    original service over to the local one, except for links and volumes_from.
 
    Examples of how to extend existing containers.
-
-    - baseslave: basic container starting devel environment for OMERO.server and testing
-
-            myintegration:
-                extends:
-                    file: common-services.yml
-                    service: baseslave
-                links:
-                    - jenkins
-                volumes:
-                    - ./myservices/myintegration:/home/omero
-                environment:
-                    - SLAVE_NAME=myintegration
-                    - SLAVE_PARAMS=-labels centos7 -labels ice36 -disableClientsUniqueId
-                extra_hosts:
-                    - "myintegration:127.0.0.1"
 
     - baseomero: basic container starting OMERO.server process
 
@@ -112,12 +96,15 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
                     - ./myservices/omero:/home/omero
                 environment:
                     - SLAVE_NAME=myomero
+                ports:
+                    - "24064:24064"
+                    - "24063:24063"
 
     - baseweb: basic container starting OMERO.web process
 
             myweb:
                 extends:
-                    file: common-services.yml
+                    file: common-services-v1.yml
                     service: baseweb
                 links:
                     - jenkins
@@ -133,7 +120,7 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
 
             mynginx:
                 extends:
-                    file: common-services.yml
+                    file: common-services-v1.yml
                     service: basenginx
                 links:
                     - jenkins
@@ -143,6 +130,8 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
                     - ./myservices/web/static:/home/omero/static
                 environment:
                     - SLAVE_NAME=mynginx
+                ports:
+                    - "8080:80"
 
     **NOTE: you have to create manually all new volume directories to avoid 
     automatic creation as root**
