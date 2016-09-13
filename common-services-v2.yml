@@ -1,0 +1,68 @@
+# this is template for slave and server container
+# slave is a container with installed devel dependances
+# omero is a container with basic omero server dependances
+# web is a container with basic omero web dependances
+# nginx is a nginx container for omero web
+
+version: '2'
+services:
+
+    baseslave:
+        build:
+            context: ./slave
+            dockerfile: Dockerfile
+            args:
+                USER_ID: "${USER_ID}"
+                ICEVER: ice36
+        volumes:
+            - ./slave:/home/omero
+        environment:
+            - SLAVE_NAME=baseslave
+            - SLAVE_EXECUTORS=2
+            - SLAVE_PARAMS=-labels centos7 -labels ice -labels java -disableClientsUniqueId
+            - WEB_PREFIX=/web
+
+    baseserver:
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+            args:
+                USER_ID: "${USER_ID}"
+                ICEVER: ice36
+        volumes:
+            - ./server:/home/omero
+        environment:
+            - SLAVE_NAME=baseomero
+            - SLAVE_EXECUTORS=2
+            - SLAVE_PARAMS=-labels centos7 -labels ice -labels java -disableClientsUniqueId
+
+
+    baseweb:
+        build:
+            context: ./web
+            dockerfile: Dockerfile
+            args:
+                USER_ID: "${USER_ID}"
+                ICEVER: noice
+        volumes:
+            - ./web:/home/omero
+            - ./nginx/conf.d:/home/omero/nginx
+        environment:
+            - SLAVE_NAME=baseweb
+            - SLAVE_EXECUTORS=2
+            - SLAVE_PARAMS= -labels centos7 -labels ice -labels java -disableClientsUniqueId
+            - WEB_PREFIX=/web
+
+
+    basenginx:
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile
+            args:
+                USER_ID: "${USER_ID}"
+        volumes:
+            - ./nginx/conf.d:/etc/nginx/conf.d
+            - ./web/static:/home/omero/static
+        environment:
+            - SLAVE_NAME=basenginx
+            - SLAVE_PARAMS=-labels centos7 -labels java -disableClientsUniqueId

@@ -1,89 +1,75 @@
 # Getting started
 
+Devspace is a Continuous Integration tools managed by Jenkins CI providing
+an automation framework that runs repeated jobs. The default deployment
+initializes a Jenkins CI master with a predefined set of jobs.
+
 ## Requirements
 
 The following prerequisites are required for deploying a Jenkins devspace:
 
-*   Docker Engine 1.9.1 or later
-*   Docker Compose 1.6.2
+Remot host:
+*   Docker Engine 1.10 or later
+*   Docker Compose 1.7.0
 
-    If Docker Compose cannot be isntalled globally follow https://docs.docker.com/compose/install/
-    On CentOS7 use Miniconda
+Client:
+*   Ansible 2.1+
+*   Shade
+
+Create virtualenv
+
+    virtualenv dev
+    source dev/bin/activate
+    pip install ansible
+    pip install shade
 
 ## Deployment
 
- *  Clone devspace to a directory with a meaningful name, since this will be
-    part of your docker container names:
+Ansible playbooks are available in https://github.com/openmicroscopy/infrastructure/tree/devspace/ansible
 
-        git clone git://github.com/openmicroscopy/devspace MYTOPIC
+ * It is recomanded to use devspae playbook to install devspace on a Virtual Machine like OpenStack
+ 
+ * create new vm
+ 
+    ansible-playbook os-devspace.yml -e vm_name=my-devspace
 
- *  Run `rename.py` to match your topic name. If you do not yet have
-    topic branches available on origin, use "develop" or one of the
-    main branches.
+ *  create inventory
+ 
+    /path/to/ansible/devspace/group_vars/devspace
 
-        ./rename.py MYTOPIC
+        docker_use_ipv4_nic_mtu: True
+        devuser: omero
+        user_id: "1001"
+        devhome: /home/{{ devuser }}/devspace
+        openstack_ip: 10.0.50.100
+        omero_branch: develop
+        snoopy_dir_path: "/path/to/ssh_keys/"
+        git_repo: "https://github.com/openmicroscopy/devspace.git"
+        version: "master"
 
- *  Optionally, commit those changes to a new branch:
+    /path/to/ansible/devspace/devspace-hosts
 
-        git checkout -b MYTOPIC && git commit -a -m "Start MYTOPIC branch"
+        [devspace]
+        10.0.50.100
 
- *  **If not using docker-machine**, you will need to fix the user ID
-    for jenkins and slave!
+   NOTE:
 
-    devspace uses docker-compose V1 that do not support build arguments
-    you have to add the following manually to each systemd based container,
-    for example (where 1234 is your user ID):
+    omero_branch is a name of git branch all the jobs will be using. By default it is using git://openmicroscopy/develop.
+    If you wish to use your own fork please adjust jobs manually.
 
-        diff --git a/web/Dockerfile b/web/Dockerfile
-        index f86703e..11bdc04 100644
-        --- a/web/Dockerfile
-        +++ b/web/Dockerfile
-        @@ -51,7 +51,7 @@ RUN chmod a+x /tmp/run.sh
+ *  ssh keys
+ 
+    /path/to/ansible/devspace/snoopy/.ssh
+    /path/to/ansible/devspace/snoopy/.gitconfig
 
+ *  install prerequisites as default user with sudo rights
+ 
+    ansible-playbook -i /path/to/ansible/devspace -u centos devspace.yml
 
-         # Change user id to fix permissions issues
-        -ARG USER_ID=1000
-        +ARG USER_ID=1234
-         RUN usermod -u $USER_ID omero
+ *  run containers (as user omero)
+ 
+    ansible-playbook -i /path/to/ansible/devspace -u omero devspace-runtime-v1.yml
 
-    using sed command
-
-         sed -i 's/ARG USER_ID=1000/ARG USER_ID='"$UID"'/g' server/Dockerfile
-
-*  Configure the .ssh and .gitconfig files in the slave directory, e.g.:
-
-        cp ~/.gitconfig slave/
-        cp ~/.ssh/id_rsa slave/.ssh
-        cp ~/.ssh/id_rsa.pub slave/.ssh
-        ssh-keyscan github.com >> slave/.ssh/known_hosts
-
-    make sure files in .ssh has correct permissions
-
- *  generate SSL certificate for Jenkins
-
-        ./sslcert jenkins/sslcert
-
- *  Build containers
-
-        ./ds build
-
- *  Start up the devspace (which starts up all requirements):
-
-        ./ds up      # Ctrl-C to stop or
-        ./ds up -d   # To disconnect
-
-    On OSX
-
-        EXTRA=docker-compose.osx.yml ./ds up      # Ctrl-C to stop or
-        EXTRA=docker-compose.osx.yml ./ds up -d   # To disconnect
-
- * Check that the containers are running:
-
-        docker ps
-
- *  Configure artifactory:
-    - Add an artifactory user (optional)
-    - Under "System Configuration" add your artifactory URL
 
 ## Multiply containers
 
@@ -162,49 +148,6 @@ The following prerequisites are required for deploying a Jenkins devspace:
 
     Copy existing job and point to the right host
 
-## Service script
-
-    Once successfully deployed add systemd service script to manage the devspace
-
-        /etc/systemd/system/docker-devspace.service
-        [Unit]
-        Description=Docker devspace CI
-        Requires=docker.service
-        BindsTo=docker.service
-        After=docker.service
-
-        [Service]
-        Restart=always
-        RestartSec=10
-        User=YOUR_USERNAME
-        WorkingDirectory=/path/to/devspace/MYTOPIC
-        ExecStart=/usr/bin/bash -c "./ds up"
-        ExecStop=/usr/bin/bash -c "./ds stop"
-
-        [Install]
-        WantedBy=multi-user.target
-
-    If docker compose is not installed globally and you use miniconda
-
-        /etc/systemd/system/docker-devspace.service
-        [Unit]
-        Description=Docker devspace CI
-        Requires=docker.service
-        BindsTo=docker.service
-        After=docker.service
-
-        [Service]
-        Restart=always
-        RestartSec=10
-        User=YOUR_USERNAME
-        WorkingDirectory=/path/to/devspace/MYTOPIC
-        Environment="DCPATH=/path/to/miniconda/bin"
-        ExecStart=/usr/bin/bash -c "PATH=$PATH:$DCPATH; ./ds up"
-        ExecStop=/usr/bin/bash -c "PATH=$PATH:$DCPATH; ./ds stop"
-
-        [Install]
-        WantedBy=multi-user.target
-
 ## Job workflow
 
 
@@ -239,10 +182,12 @@ Default packages:
 
 ## Upgrade
 
- *  Uprade to 0.2.1:
+ *  Uprade to 0.3.0:
 
-    If you already created new containers based on existing Dockerfiles, you may wish to review
-    and extend common services
+    - Devspace should be run in VM.
+    - Services are managed by ansible playbook run with inline v1 compose
+
+    - It is possible to extend services using ansible playbook. If you already created new containers based on existing Dockerfiles, you may wish to review your customisation and extend common services
 
  *  Uprade to 0.2.0:
 

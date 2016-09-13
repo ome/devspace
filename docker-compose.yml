@@ -17,7 +17,7 @@ pg:
 
 testintegration:
     extends:
-        file: common-services.yml
+        file: common-services-v1.yml
         service: baseslave
     links:
         - jenkins
@@ -30,10 +30,13 @@ testintegration:
         - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
     extra_hosts:
         - "testintegration:127.0.0.1"
+    ports:
+        - "14064:14064"
+        - "14063:14063"
 
 omero:
     extends:
-        file: common-services.yml
+        file: common-services-v1.yml
         service: baseserver
     links:
         - jenkins
@@ -43,10 +46,13 @@ omero:
     environment:
         - SLAVE_NAME=omero
         - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
+    ports:
+        - "4064:4064"
+        - "4063:4063"
 
 web:
     extends:
-        file: common-services.yml
+        file: common-services-v1.yml
         service: baseweb
     links:
         - jenkins
@@ -62,7 +68,7 @@ web:
 
 nginx:
     extends:
-        file: common-services.yml
+        file: common-services-v1.yml
         service: basenginx
     links:
         - jenkins
@@ -75,6 +81,9 @@ nginx:
     environment:
         - SLAVE_NAME=nginx
         - SLAVE_PARAMS=-labels centos7 -labels java18 -disableClientsUniqueId
+    ports:
+        - "80:80"
+        - "443:443"
 
 nginxjenkins:
     image: nginx:1.10
@@ -83,7 +92,8 @@ nginxjenkins:
     volumes:
         - ./jenkins/conf.d:/etc/nginx/conf.d
         - ./jenkins/sslcert:/etc/nginx/ssl
-
+    ports:
+        - "8443:443"
 redis:
     image: redis
 
@@ -93,6 +103,8 @@ seleniumhub:
         - "JAVA_OPTS: -d64 -Xmx512m -Djava.security.egd=file:/dev/./urandom"
         - GRID_BROWSER_TIMEOUT=30000
         - GRID_TIMEOUT=30000
+    ports:
+        - "4444:4444"
 seleniumfirefox:
     image: selenium/node-firefox
     links:
