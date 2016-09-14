@@ -28,7 +28,7 @@ On the client create virtualenv:
 
 Ansible playbooks are available in https://github.com/openmicroscopy/infrastructure/tree/devspace/ansible
 
- * It is recomanded to use devspae playbook to install devspace on a Virtual Machine like OpenStack
+ * It is recommended to use devspace playbook to install devspace on a Virtual Machine like OpenStack
  
  * create new vm
  
@@ -74,7 +74,7 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
 
 ## Multiply containers
 
- *  common-services.yml contains default list of basic contaners are suitable to extend:
+ *  common-services.yml contains default list of basic containers that are suitable to extend:
     You can extend any service together with other configuration keys. For more details
     read https://docs.docker.com/v1.6/compose/extends/
 
@@ -143,7 +143,7 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
 
 The default deployment initializes a Jenkins server with a [predefined set of
 jobs](homes/jobs). The table below lists the job names, the Jenkins node labels
-they are associated to and a short description of their:
+they are associated with and a short description of the job:
 
 | Job name               | Name            | Description                               |
 | -----------------------|-----------------| ------------------------------------------|
@@ -173,20 +173,20 @@ Default packages:
 
 ## Upgrade
 
- *  Uprade to 0.3.0:
+ *  Upgrade to 0.3.0:
 
     - Devspace should be run in VM.
     - Services are managed by ansible playbook run with inline v1 compose
 
     - It is possible to extend services using ansible playbook. If you already created new containers based on existing Dockerfiles, you may wish to review your customisation and extend common services
 
- *  Uprade to 0.2.0:
+ *  Upgrade to 0.2.0:
 
-    If you made custom adjustments to the code and commited them, it is recomanded to reset changes.
+    If you made custom adjustments to the code and commited them, it is recommended to reset changes.
 
     Here are listed the most important changes:
 
-     * Compose configuration was splitted into a few different files depends on the platform
+     * Compose configuration was split into a few different files depending on the platform
 
             - docker-compose.yml mian file
             - docker-compose.unixports.yml required for running container on UNIX platform
