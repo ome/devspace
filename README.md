@@ -210,7 +210,7 @@ The following prerequisites are required for deploying a Jenkins devspace:
 
 The default deployment initializes a Jenkins server with a [predefined set of
 jobs](homes/jobs). The table below lists the job names, the Jenkins node labels
-they are associated to and a short description of the job:
+they are associated with and a short description of the job:
 
 | Job name               | Name            | Description                               |
 | -----------------------|-----------------| ------------------------------------------|
@@ -250,7 +250,7 @@ Default packages:
 
     Here are listed the most important changes:
 
-     * Compose configuration was splitted into a few different files depending on the platform
+     * Compose configuration was split into a few different files depending on the platform
 
             - docker-compose.yml main file
             - docker-compose.unixports.yml required for running container on UNIX platform
