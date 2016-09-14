@@ -7,8 +7,8 @@ The following prerequisites are required for deploying a Jenkins devspace:
 *   Docker Engine 1.9.1 or later
 *   Docker Compose 1.6.2
 
-    If Docker Compose cannot be isntalled globally follow https://docs.docker.com/compose/install/
-    On CentOS7 use Miniconda
+    If Docker Compose cannot be installed globally follow https://docs.docker.com/compose/install/
+    On CentOS 7 use Miniconda
 
 ## Deployment
 
@@ -57,7 +57,7 @@ The following prerequisites are required for deploying a Jenkins devspace:
         cp ~/.ssh/id_rsa.pub slave/.ssh
         ssh-keyscan github.com >> slave/.ssh/known_hosts
 
-    make sure files in .ssh has correct permissions
+    make sure files in .ssh have correct permissions
 
  *  generate SSL certificate for Jenkins
 
@@ -87,7 +87,7 @@ The following prerequisites are required for deploying a Jenkins devspace:
 
 ## Multiply containers
 
- *  common-services.yml contains default list of basic contaners are suitable to extend:
+ *  common-services.yml contains default list of basic containers that are suitable to extend:
     You can extend any service together with other configuration keys. For more details
     read https://docs.docker.com/v1.6/compose/extends/
 
@@ -210,7 +210,7 @@ The following prerequisites are required for deploying a Jenkins devspace:
 
 The default deployment initializes a Jenkins server with a [predefined set of
 jobs](homes/jobs). The table below lists the job names, the Jenkins node labels
-they are associated to and a short description of their:
+they are associated with and a short description of the job:
 
 | Job name               | Name            | Description                               |
 | -----------------------|-----------------| ------------------------------------------|
@@ -239,30 +239,30 @@ Default packages:
 
 ## Upgrade
 
- *  Uprade to 0.2.1:
+ *  Upgrade to 0.2.1:
 
     If you already created new containers based on existing Dockerfiles, you may wish to review
     and extend common services
 
- *  Uprade to 0.2.0:
+ *  Upgrade to 0.2.0:
 
-    If you made custom adjustments to the code and commited them, it is recomanded to reset changes.
+    If you made custom adjustments to the code and commited them, it is recommended to reset changes.
 
     Here are listed the most important changes:
 
-     * Compose configuration was splitted into a few different files depends on the platform
+     * Compose configuration was split into a few different files depending on the platform
 
-            - docker-compose.yml mian file
+            - docker-compose.yml main file
             - docker-compose.unixports.yml required for running container on UNIX platform
             - docker-compose.osx.yml required for running containers on OSX platform
 
        For how to run check deployment
 
-     * All nodes are now systemd nodes that requires adjusting the permissions. For what to change
+     * All nodes are now systemd nodes that require adjusting the permissions. For what to change
        see deployment.
 
-            - **Do not change Dockerfile** as this will load your USERID automaticaly
-              If you did it in the past remove the change.
+            - **Do not change Dockerfile** as this will load your USERID automatically
+              If you previously did it, remove the change.
 
             - slave node:
               Since slave container user has changed from slave to omero.
