@@ -48,6 +48,8 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
         # vm_size (default 50GB) is a size of the volume vm boot from. You no longer have to attach additional volumes!
         (dev) $ ansible-playbook os-devspace.yml -e vm_name=my-devspace -e vm_key_name=mysshkey
 
+    NOTE: VM will boot from volume, you no longer have to attach additional volumes. Size of the volume can be set by `-e vm_size=100`
+
  *  create inventory
  
         $ tree /path/to/inventory
