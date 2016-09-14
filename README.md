@@ -59,11 +59,13 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
               ├── .gitconfig
               └── .ssh
 
+
         /path/to/inventory/devspace/group_vars/devspace
 
         openstack_ip: 10.0.50.100
         omero_branch: develop
         snoopy_dir_path: "/path/to/ssh_keys/"
+
 
         /path/to/inventory/devspace/devspace-hosts
 
@@ -72,10 +74,10 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
 
    NOTE:
 
-    `omero_branch` is a name of git branch all the jobs will be using. By default it is using git://openmicroscopy/develop.
+    `omero_branch` is a name of git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
     If you wish to use your own fork please adjust jobs manually.
 
- *  ssh keys in /path/to/inventory/devspace/snoopy/.ssh that includes:
+ *  ssh keys in ``/path/to/inventory/devspace/snoopy/.ssh`` that includes:
 
         -rwx------.  1    74 Sep 13 15:25 config
         -rwx------.  1  1674 Sep 13 15:25 snoopycrimecop_github
