@@ -197,21 +197,22 @@ Default packages:
 In order to install additional components it is required to first adjust omero-install repository https://github.com/ome/omero-install
 Then fetch custom omero-install branch by updating each Dockerfile
 
-        ├── nginx
-        │   ├── Dockerfile
-        ├── server
-        │   ├── Dockerfile
-        ├── slave
-        │   ├── Dockerfile
-        └── web
-            ├── Dockerfile
+    ├── nginx
+    │   ├── Dockerfile
+    ├── server
+    │   ├── Dockerfile
+    ├── slave
+    │   ├── Dockerfile
+    └── web
+        ├── Dockerfile
 
-        ## update omero-install to use custom fork
-        RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.email "you@example.com"
-        RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.name "Your Name"
-        RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add username https://github.com/username/omero-install.git
-        RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch username
-        RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge username/yourbranch
+
+    ## update omero-install to use custom fork
+    RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.email "you@example.com"
+    RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.name "Your Name"
+    RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add username https://github.com/username/omero-install.git
+    RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch username
+    RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge username/yourbranch
 
 ## Limitations:
 
