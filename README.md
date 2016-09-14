@@ -188,6 +188,35 @@ Default packages:
 | Redis      | latest        | https://hub.docker.com/_/redis/    |
 
 
+## Customization:
+
+* Updating omero-install scripts:
+
+In order to install additional components it is required to first adjust omero-install repository https://github.com/ome/omero-install
+Then fetch custom omero-install branch by updating each Dockerfile
+
+        ├── nginx
+        │   ├── Dockerfile
+        ├── server
+        │   ├── Dockerfile
+        ├── slave
+        │   ├── Dockerfile
+        └── web
+            ├── Dockerfile
+
+        ## update omero-install to use custom fork
+        RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.email "you@example.com"
+        RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.name "Your Name"
+        RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add username https://github.com/username/omero-install.git
+        RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch username
+        RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge username/yourbranch
+
+## Limitations:
+
+* Robot job is still under investigation as it fails due to webbrowser crash. Robot job requires manual changes of the domain. Make sure webhost is set to the correct VM IP
+
+        --webhost "10.0.50.100"
+
 ## Upgrade
 
  *  Upgrade to 0.3.0:
