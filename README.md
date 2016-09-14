@@ -4,25 +4,36 @@ Devspace is a Continuous Integration tools managed by Jenkins CI providing
 an automation framework that runs repeated jobs. The default deployment
 initializes a Jenkins CI master with a predefined set of jobs.
 
+
+Running and maintaining Devspace require:
+*   brief understanding of ansible http://docs.ansible.com/ansible/intro_getting_started.html
+    *   inventory http://docs.ansible.com/ansible/intro_inventory.html
+    *   playbook http://docs.ansible.com/ansible/playbooks.html
+*   access to openstack tenancy
+*   own ssh key set in openstack tenancy, that name will be used as `vm_key_name`
+*   openrc.sh http://docs.openstack.org/user-guide/common/cli-set-environment-variables-using-openstack-rc.html
+*   snoopy ssh key and gitconfig
+
+
 ## Requirements
 
 The following prerequisites are required for deploying a Jenkins devspace:
 
-Remot host:
-*   Docker Engine 1.10 or later
-*   Docker Compose 1.7.0
-*   PIP 1.8+
-
-Client:
+Client machine:
 *   Ansible 2.1+
 *   Shade
 
-On the client create virtualenv:
+Create virtualenv:
 
-    virtualenv dev
-    source dev/bin/activate
-    pip install ansible
-    pip install shade
+    $ virtualenv dev
+    $ source dev/bin/activate
+    (dev) $ pip install ansible
+    (dev) $ pip install shade
+
+Clone infrastrucutre repository where all ansible playbooks and roles are
+
+    (dev) $ git clone https://github.com/openmicroscopy/infrastructure.git
+    (dev) $ cd infrastracture/ansible
 
 ## Deployment
 
@@ -32,45 +43,51 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
  
  * create new vm
  
-        ansible-playbook os-devspace.yml -e vm_name=my-devspace -e vm_key_name=ola
+        (dev) $ source path/to/openrc.sh
+        # vm_key_name is a name of ssh key in openstack
+        # vm_size (default 50GB) is a size of the volume vm boot from. You no longer have to attach additional volumes!
+        (dev) $ ansible-playbook os-devspace.yml -e vm_name=my-devspace -e vm_key_name=mysshkey
 
  *  create inventory
  
-        /path/to/ansible/devspace/group_vars/devspace
+        $ tree /path/to/inventory
+        devspace
+          ├── devspace-hosts
+          ├── group_vars
+          │   └── devspace
+          └── snoopy
+              ├── .gitconfig
+              └── .ssh
 
-        docker_use_ipv4_nic_mtu: True
-        devuser: omero
-        user_id: "1001"
-        devhome: /home/{{ devuser }}/devspace
+        /path/to/inventory/devspace/group_vars/devspace
+
         openstack_ip: 10.0.50.100
         omero_branch: develop
         snoopy_dir_path: "/path/to/ssh_keys/"
-        git_repo: "https://github.com/openmicroscopy/devspace.git"
-        version: "master"
 
-        /path/to/ansible/devspace/devspace-hosts
+        /path/to/inventory/devspace/devspace-hosts
 
         [devspace]
         10.0.50.100
 
    NOTE:
 
-    omero_branch is a name of git branch all the jobs will be using. By default it is using git://openmicroscopy/develop.
+    `omero_branch` is a name of git branch all the jobs will be using. By default it is using git://openmicroscopy/develop.
     If you wish to use your own fork please adjust jobs manually.
 
- *  ssh keys
- 
-        /path/to/ansible/devspace/snoopy/.ssh
-        /path/to/ansible/devspace/snoopy/.gitconfig
+ *  ssh keys in /path/to/inventory/devspace/snoopy/.ssh that includes:
 
- *  install prerequisites as default user with sudo rights
- 
-        ansible-playbook -i /path/to/ansible/devspace -u centos devspace.yml
+        -rwx------.  1    74 Sep 13 15:25 config
+        -rwx------.  1  1674 Sep 13 15:25 snoopycrimecop_github
+        -rwx------.  1   405 Sep 13 15:25 snoopycrimecop_github.pub
 
- *  run containers (as user omero)
+ *  install prerequisites as default user with sudo privileges (as user `centos`)
  
-        ansible-playbook -i /path/to/ansible/devspace -u omero devspace-runtime.yml
+        ansible-playbook -i /path/to/inventory/devspace -u centos devspace.yml
 
+ *  run containers (as user `omero`)
+ 
+        ansible-playbook -i /path/to/inventory/devspace -u omero devspace-runtime.yml
 
 ## Multiply containers
 
