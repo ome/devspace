@@ -75,14 +75,14 @@ $OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&
 
 $OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;omero&quot;, 4064, &quot;omero&quot;], [&quot;testintegration&quot;, 14064, &quot;testintegration&quot;]]&apos;
 
-$OMERO_DIST/bin/omero config set omero.web.application_server.host web
+$OMERO_DIST/bin/omero config set omero.web.application_server.host $NODE_NAME
 $OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
 
 $OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt;$OMERO_DIST/nginx.conf.tmp
 
 sudo cp $OMERO_DIST/nginx.conf.tmp $HOME/nginx/$NODE_NAME.conf
 
-$OMERO_DIST/bin/omero config set omero.web.wsgi_args -- &apos;--log-level=DEBUG --error-logfile=/home/omero/workspace/OMERO-web/OMERO.web/var/log/gunicorn.err&apos;
+$OMERO_DIST/bin/omero config set omero.web.wsgi_args -- &apos;--log-level=DEBUG --error-logfile=&quot;$OMERO_DIST&quot;/var/log/gunicorn.err&apos;
 
 $OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
 
