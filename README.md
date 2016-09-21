@@ -1,93 +1,101 @@
 # Getting started
 
+Devspace is a Continuous Integration tools managed by Jenkins CI providing
+an automation framework that runs repeated jobs. The default deployment
+initializes a Jenkins CI master with a predefined set of jobs.
+
+
+Running and maintaining Devspace require:
+*   brief understanding of ansible http://docs.ansible.com/ansible/intro_getting_started.html
+    *   inventory http://docs.ansible.com/ansible/intro_inventory.html
+    *   playbook http://docs.ansible.com/ansible/playbooks.html
+*   access to openstack tenancy
+*   own ssh key set in openstack tenancy, that name will be used as `vm_key_name`
+*   openrc.sh http://docs.openstack.org/user-guide/common/cli-set-environment-variables-using-openstack-rc.html
+*   snoopy ssh key and gitconfig
+
+
 ## Requirements
 
 The following prerequisites are required for deploying a Jenkins devspace:
 
-*   Docker Engine 1.9.1 or later
-*   Docker Compose 1.6.2
+Client machine:
+*   Ansible 2.1+
+*   Shade
 
-    If Docker Compose cannot be isntalled globally follow https://docs.docker.com/compose/install/
-    On CentOS7 use Miniconda
+Create virtualenv:
+
+    $ virtualenv dev
+    $ source dev/bin/activate
+    (dev) $ pip install ansible
+    (dev) $ pip install shade
+
+Clone infrastrucutre repository where all ansible playbooks and roles are
+
+    (dev) $ git clone https://github.com/openmicroscopy/infrastructure.git
+    (dev) $ cd infrastracture/ansible
 
 ## Deployment
 
- *  Clone devspace to a directory with a meaningful name, since this will be
-    part of your docker container names:
+Ansible playbooks are available in https://github.com/openmicroscopy/infrastructure/tree/devspace/ansible
 
-        git clone git://github.com/openmicroscopy/devspace MYTOPIC
+ * It is recommended to use devspace playbook to install devspace on a Virtual Machine like OpenStack
+ 
+ * create new vm
+ 
+        (dev) $ source path/to/openrc.sh
+        # vm_key_name is a name of ssh key in openstack
+        # vm_size (default 50GB) is a size of the volume vm boot from. You no longer have to attach additional volumes!
+        (dev) $ ansible-playbook os-devspace.yml -e vm_name=my-devspace -e vm_key_name=mysshkey
 
- *  Run `rename.py` to match your topic name. If you do not yet have
-    topic branches available on origin, use "develop" or one of the
-    main branches.
+    NOTE: VM will boot from volume, you no longer have to attach additional volumes. Size of the volume can be set by `-e vm_size=100`
 
-        ./rename.py MYTOPIC
-
- *  Optionally, commit those changes to a new branch:
-
-        git checkout -b MYTOPIC && git commit -a -m "Start MYTOPIC branch"
-
- *  **If not using docker-machine**, you will need to fix the user ID
-    for jenkins and slave!
-
-    devspace uses docker-compose V1 that do not support build arguments
-    you have to add the following manually to each systemd based container,
-    for example (where 1234 is your user ID):
-
-        diff --git a/web/Dockerfile b/web/Dockerfile
-        index f86703e..11bdc04 100644
-        --- a/web/Dockerfile
-        +++ b/web/Dockerfile
-        @@ -51,7 +51,7 @@ RUN chmod a+x /tmp/run.sh
+ *  create inventory
+ 
+        $ tree /path/to/inventory
+        devspace
+          ├── devspace-hosts
+          ├── group_vars
+          │   └── devspace
+          └── snoopy
+              ├── .gitconfig
+              └── .ssh
 
 
-         # Change user id to fix permissions issues
-        -ARG USER_ID=1000
-        +ARG USER_ID=1234
-         RUN usermod -u $USER_ID omero
+        /path/to/inventory/devspace/group_vars/devspace
 
-    using sed command
+        openstack_ip: 10.0.50.100
+        omero_branch: develop
+        snoopy_dir_path: "/path/to/ssh_keys/"
 
-         sed -i 's/ARG USER_ID=1000/ARG USER_ID='"$UID"'/g' server/Dockerfile
 
-*  Configure the .ssh and .gitconfig files in the slave directory, e.g.:
+        /path/to/inventory/devspace/devspace-hosts
 
-        cp ~/.gitconfig slave/
-        cp ~/.ssh/id_rsa slave/.ssh
-        cp ~/.ssh/id_rsa.pub slave/.ssh
-        ssh-keyscan github.com >> slave/.ssh/known_hosts
+        [devspace]
+        10.0.50.100
 
-    make sure files in .ssh has correct permissions
+   NOTE:
 
- *  generate SSL certificate for Jenkins
+    `omero_branch` is a name of git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
+    If you wish to use your own fork please adjust jobs manually.
 
-        ./sslcert jenkins/sslcert
+ *  ssh keys in ``/path/to/inventory/devspace/snoopy/.ssh`` that includes:
 
- *  Build containers
+        -rwx------.  1    74 Sep 13 15:25 config
+        -rwx------.  1  1674 Sep 13 15:25 snoopycrimecop_github
+        -rwx------.  1   405 Sep 13 15:25 snoopycrimecop_github.pub
 
-        ./ds build
+ *  install prerequisites as default user with sudo privileges (as user `centos`)
+ 
+        ansible-playbook -i /path/to/inventory/devspace -u centos devspace.yml
 
- *  Start up the devspace (which starts up all requirements):
-
-        ./ds up      # Ctrl-C to stop or
-        ./ds up -d   # To disconnect
-
-    On OSX
-
-        EXTRA=docker-compose.osx.yml ./ds up      # Ctrl-C to stop or
-        EXTRA=docker-compose.osx.yml ./ds up -d   # To disconnect
-
- * Check that the containers are running:
-
-        docker ps
-
- *  Configure artifactory:
-    - Add an artifactory user (optional)
-    - Under "System Configuration" add your artifactory URL
+ *  run containers (as user `omero`)
+ 
+        ansible-playbook -i /path/to/inventory/devspace -u omero devspace-runtime.yml
 
 ## Multiply containers
 
- *  common-services.yml contains default list of basic contaners are suitable to extend:
+ *  common-services.yml contains default list of basic containers that are suitable to extend:
     You can extend any service together with other configuration keys. For more details
     read https://docs.docker.com/v1.6/compose/extends/
 
@@ -95,22 +103,6 @@ The following prerequisites are required for deploying a Jenkins devspace:
    original service over to the local one, except for links and volumes_from.
 
    Examples of how to extend existing containers.
-
-    - baseslave: basic container starting devel environment for OMERO.server and testing
-
-            myintegration:
-                extends:
-                    file: common-services.yml
-                    service: baseslave
-                links:
-                    - jenkins
-                volumes:
-                    - ./myservices/myintegration:/home/omero
-                environment:
-                    - SLAVE_NAME=myintegration
-                    - SLAVE_PARAMS=-labels centos7 -labels ice36 -disableClientsUniqueId
-                extra_hosts:
-                    - "myintegration:127.0.0.1"
 
     - baseomero: basic container starting OMERO.server process
 
@@ -125,12 +117,15 @@ The following prerequisites are required for deploying a Jenkins devspace:
                     - ./myservices/omero:/home/omero
                 environment:
                     - SLAVE_NAME=myomero
+                ports:
+                    - "24064:24064"
+                    - "24063:24063"
 
     - baseweb: basic container starting OMERO.web process
 
             myweb:
                 extends:
-                    file: common-services.yml
+                    file: common-services-v1.yml
                     service: baseweb
                 links:
                     - jenkins
@@ -146,7 +141,7 @@ The following prerequisites are required for deploying a Jenkins devspace:
 
             mynginx:
                 extends:
-                    file: common-services.yml
+                    file: common-services-v1.yml
                     service: basenginx
                 links:
                     - jenkins
@@ -156,61 +151,20 @@ The following prerequisites are required for deploying a Jenkins devspace:
                     - ./myservices/web/static:/home/omero/static
                 environment:
                     - SLAVE_NAME=mynginx
+                ports:
+                    - "8080:80"
 
     **NOTE: you have to create manually all new volume directories to avoid 
     automatic creation as root**
 
     Copy existing job and point to the right host
 
-## Service script
-
-    Once successfully deployed add systemd service script to manage the devspace
-
-        /etc/systemd/system/docker-devspace.service
-        [Unit]
-        Description=Docker devspace CI
-        Requires=docker.service
-        BindsTo=docker.service
-        After=docker.service
-
-        [Service]
-        Restart=always
-        RestartSec=10
-        User=YOUR_USERNAME
-        WorkingDirectory=/path/to/devspace/MYTOPIC
-        ExecStart=/usr/bin/bash -c "./ds up"
-        ExecStop=/usr/bin/bash -c "./ds stop"
-
-        [Install]
-        WantedBy=multi-user.target
-
-    If docker compose is not installed globally and you use miniconda
-
-        /etc/systemd/system/docker-devspace.service
-        [Unit]
-        Description=Docker devspace CI
-        Requires=docker.service
-        BindsTo=docker.service
-        After=docker.service
-
-        [Service]
-        Restart=always
-        RestartSec=10
-        User=YOUR_USERNAME
-        WorkingDirectory=/path/to/devspace/MYTOPIC
-        Environment="DCPATH=/path/to/miniconda/bin"
-        ExecStart=/usr/bin/bash -c "PATH=$PATH:$DCPATH; ./ds up"
-        ExecStop=/usr/bin/bash -c "PATH=$PATH:$DCPATH; ./ds stop"
-
-        [Install]
-        WantedBy=multi-user.target
-
 ## Job workflow
 
 
 The default deployment initializes a Jenkins server with a [predefined set of
 jobs](homes/jobs). The table below lists the job names, the Jenkins node labels
-they are associated to and a short description of their:
+they are associated with and a short description of the job:
 
 | Job name               | Name            | Description                               |
 | -----------------------|-----------------| ------------------------------------------|
@@ -224,12 +178,12 @@ they are associated to and a short description of their:
 | OMERO-test-integration | testintegration | Runs the OMERO integration tests          |
 | OMERO-robot            | testintegration | Runs the Robot test                       |
 | nginx                  | nginx           | Reloads the nginx server                  |
-| -----------------------|-----------------| ------------------------------------------|
+
 
 Default packages:
 
 | Name       | Version       | Optional                           |
-| ----------------------------------------------------------------|
+| -----------|---------------| -----------------------------------|
 | Java       | openJDK 1.8   | openJDK 1.8 devel, oracleJDK 1.8   |
 | Python     | 2.7           | -                                  |
 | Ice        | 3.6           | 3.5                                |
@@ -237,20 +191,53 @@ Default packages:
 | Nginx      | 1.8           | -                                  |
 | Redis      | latest        | https://hub.docker.com/_/redis/    |
 
+
+## Customization:
+
+* Updating omero-install scripts:
+
+In order to install additional components it is required to first adjust omero-install repository https://github.com/ome/omero-install
+Then fetch custom omero-install branch by updating each Dockerfile
+
+    ├── nginx
+    │   ├── Dockerfile
+    ├── server
+    │   ├── Dockerfile
+    ├── slave
+    │   ├── Dockerfile
+    └── web
+        ├── Dockerfile
+
+
+    ## update omero-install to use custom fork
+    RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.email "you@example.com"
+    RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.name "Your Name"
+    RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add username https://github.com/username/omero-install.git
+    RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch username
+    RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge username/yourbranch
+
+## Limitations:
+
+* Robot job is still under investigation as it fails due to webbrowser crash. Robot job requires manual changes of the domain. Make sure webhost is set to the correct VM IP
+
+        --webhost "10.0.50.100"
+
 ## Upgrade
 
- *  Uprade to 0.2.1:
+ *  Upgrade to 0.3.0:
 
-    If you already created new containers based on existing Dockerfiles, you may wish to review
-    and extend common services
+    - Devspace should be run in VM.
+    - Services are managed by ansible playbook run with inline v1 compose
 
- *  Uprade to 0.2.0:
+    - It is possible to extend services using ansible playbook. If you already created new containers based on existing Dockerfiles, you may wish to review your customisation and extend common services
 
-    If you made custom adjustments to the code and commited them, it is recomanded to reset changes.
+ *  Upgrade to 0.2.0:
+
+    If you made custom adjustments to the code and commited them, it is recommended to reset changes.
 
     Here are listed the most important changes:
 
-     * Compose configuration was splitted into a few different files depends on the platform
+     * Compose configuration was split into a few different files depending on the platform
 
             - docker-compose.yml mian file
             - docker-compose.unixports.yml required for running container on UNIX platform
