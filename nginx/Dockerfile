@@ -29,5 +29,11 @@ RUN chmod a+x /home/omero
 ARG USER_ID=1000
 RUN usermod -u $USER_ID omero
 
+# make sure mounted volumes has correct permissions
+RUN mkdir -p /home/omero/static
+RUN chown -R omero:omero /home/omero/static
+
+VOLUME ['/etc/nginx/conf.d', '/home/omero/static', '/var/log/nginx', '/etc/nginx/ssl']
+
 USER omero
 CMD ["/tmp/run.sh"]
