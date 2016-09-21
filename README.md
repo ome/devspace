@@ -68,6 +68,11 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
         omero_branch: develop
         snoopy_dir_path: "/path/to/ssh_keys/"
 
+        # this are only needed for runtime
+        devuser: omero
+        user_id: "1001"
+        devhome: /home/{{ devuser }}/devspace
+
 
         /path/to/inventory/devspace/devspace-hosts
 
@@ -92,6 +97,12 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
  *  run containers (as user `omero`)
  
         ansible-playbook -i /path/to/inventory/devspace -u omero devspace-runtime.yml
+
+   NOTE:
+
+    `devspace-runtime.yml` is a basic playbook to start containers.
+    If you wish to have a full control on which containers are run write your own playbook and managed containers directly from palybook.
+    For more complex deployment follow https://docs.ansible.com/ansible/docker_service_module.html
 
 ## Multiply containers
 
