@@ -17,6 +17,7 @@ baseslave:
     build: ./slave
     volumes:
         - ./slave:/home/omero
+        - /ome:/ome
     environment:
         - SLAVE_NAME=baseslave
         - SLAVE_EXECUTORS=2
