@@ -170,6 +170,7 @@ they are associated with and a short description of the job:
 | -----------------------|-----------------| ------------------------------------------|
 | Trigger                |                 | Runs all the following jobs in order      |
 | BIOFORMATS-push        | testintegration | Merges all Bio-Formats PRs                |
+| BIOFORMATS-ant         | bf              | Builds Bio-Formats and runs unit tests    |
 | BIOFORMATS-maven       | testintegration | Builds Bio-Formats and runs unit tests    |
 | OMERO-push             | testintegration | Merges all OMERO PRs                      |
 | OMERO-build            | testintegration | Builds OMERO artifacts (server, clients)  |
