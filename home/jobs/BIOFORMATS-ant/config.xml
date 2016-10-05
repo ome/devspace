@@ -54,10 +54,23 @@
     </hudson.tasks.Ant>
     <hudson.tasks.Ant plugin="ant@1.2">
       <targets>test-tiff-compress test-minimal-convert</targets>
-      <antName>(Default)</antName>
+      <antName>Ant 1.9</antName>
       <buildFile>components/test-suite/build.xml</buildFile>
     </hudson.tasks.Ant>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>artifacts/*.jar, artifacts/*.zip</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+      <caseSensitive>true</caseSensitive>
+    </hudson.tasks.ArtifactArchiver>
+    <hudson.tasks.JavadocArchiver plugin="javadoc@1.3">
+      <javadocDir>build/docs/api</javadocDir>
+      <keepAll>false</keepAll>
+    </hudson.tasks.JavadocArchiver>
+  </publishers>
   <buildWrappers/>
 </project>
