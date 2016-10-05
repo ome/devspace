@@ -49,7 +49,6 @@
       <antName>(Default)</antName>
       <buildFile>components/test-suite/build.xml</buildFile>
     </hudson.tasks.Ant>
-    </hudson.tasks.Ant>
   </builders>
   <publishers/>
   <buildWrappers/>
