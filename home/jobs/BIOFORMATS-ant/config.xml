@@ -36,7 +36,6 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <jdk>JDK8</jdk>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
