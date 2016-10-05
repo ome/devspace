@@ -17,7 +17,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>https://github.com/openmicroscopy/bioformats</url>
+        <url>https://github.com/snoopycrimecop/bioformats</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -27,19 +27,28 @@
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
-    <extensions/>
+    <extensions>
+      <hudson.plugins.git.extensions.impl.CleanCheckout/>
+    </extensions>
   </scm>
   <assignedNode>bf</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <jdk>JDK8</jdk>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Ant plugin="ant@1.2">
-      <targets>jars</targets>
+      <targets>clean release jars tools tools-ome utils dist-bftools docs test findbugs dist-matlab</targets>
       <antName>Ant 1.9</antName>
+    </hudson.tasks.Ant>
+    <hudson.tasks.Ant plugin="ant@1.2">
+      <targets>test-tiff-compress test-minimal-convert</targets>
+      <antName>(Default)</antName>
+      <buildFile>components/test-suite/build.xml</buildFile>
+    </hudson.tasks.Ant>
     </hudson.tasks.Ant>
   </builders>
   <publishers/>
