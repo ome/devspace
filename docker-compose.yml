@@ -23,7 +23,6 @@ bf:
         - jenkins
     volumes:
         - ./bf:/home/omero
-        - /ome:/ome
     environment:
         - SLAVE_NAME=bf
         - SLAVE_PARAMS=-labels centos7 -labels java18 -disableClientsUniqueId
