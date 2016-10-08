@@ -12,3 +12,5 @@ RUN curl -fSLO http://downloads.sourceforge.net/project/findbugs/findbugs/$FINDB
 # Change user id to fix permissions issues
 ARG USER_ID=1000
 RUN usermod -u $USER_ID omero
+
+USER omero
