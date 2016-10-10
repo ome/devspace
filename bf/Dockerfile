@@ -9,6 +9,9 @@ RUN curl -fSLO http://downloads.sourceforge.net/project/findbugs/findbugs/$FINDB
     tar xzf findbugs-$FINDBUGS_VERSION.tar.gz --strip-components 1 -C $FINDBUGS_HOME && \
     rm findbugs-$FINDBUGS_VERSION.tar.gz
 
+# Install Sphinx
+RUN pip install Sphinx
+
 # Change user id to fix permissions issues
 ARG USER_ID=1000
 RUN usermod -u $USER_ID omero
