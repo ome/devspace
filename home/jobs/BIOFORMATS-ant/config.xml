@@ -52,11 +52,6 @@
       <targets>clean release jars tools utils dist-bftools docs test findbugs dist-matlab</targets>
       <antName>Ant 1.9</antName>
     </hudson.tasks.Ant>
-    <hudson.tasks.Ant plugin="ant@1.2">
-      <targets>test-tiff-compress</targets>
-      <antName>Ant 1.9</antName>
-      <buildFile>components/test-suite/build.xml</buildFile>
-    </hudson.tasks.Ant>
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
