@@ -10,6 +10,7 @@ RUN curl -fSLO http://downloads.sourceforge.net/project/findbugs/findbugs/$FINDB
     rm findbugs-$FINDBUGS_VERSION.tar.gz
 
 # Install Sphinx
+RUN yum -y install python-pip
 RUN pip install Sphinx
 
 # Change user id to fix permissions issues
