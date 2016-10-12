@@ -15,6 +15,18 @@ pg:
     volumes:
         - ./pgdata:/var/lib/postgresql/data
 
+bf:
+    extends:
+        file: common-services-v1.yml
+        service: basebf
+    links:
+        - jenkins
+    volumes:
+        - ./bf:/home/omero
+    environment:
+        - SLAVE_NAME=bf
+        - SLAVE_PARAMS=-labels centos7 -labels java18 -disableClientsUniqueId
+        
 testintegration:
     extends:
         file: common-services-v1.yml

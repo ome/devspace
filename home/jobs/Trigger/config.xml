@@ -7,7 +7,9 @@
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@1.11">
     <script>build job: &apos;BIOFORMATS-push&apos;
 
-build &apos;BIOFORMATS-maven&apos;
+build job: &apos;BIOFORMATS-maven&apos;
+
+build job: &apos;BIOFORMATS-ant&apos;
 
 build job: &apos;OMERO-push&apos;
 
