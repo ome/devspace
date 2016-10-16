@@ -68,12 +68,6 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
         omero_branch: develop
         snoopy_dir_path: "/path/to/ssh_keys/"
 
-        # this are only needed for runtime
-        devuser: omero
-        user_id: "1001"
-        devhome: /home/{{ devuser }}/devspace
-
-
         /path/to/inventory/devspace/devspace-hosts
 
         [devspace]
