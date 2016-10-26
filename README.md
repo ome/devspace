@@ -88,19 +88,14 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
  
         ansible-playbook -i /path/to/inventory/devspace -u centos devspace.yml
 
- *  run containers (as user `omero`)
- 
-        ansible-playbook -i /path/to/inventory/devspace -u omero devspace-runtime.yml
+   devspace should be already started go to https://10.0.50.100:8443
 
-   NOTE:
+## ADVANCE: Multiply containers
 
-    `devspace-runtime.yml` is a basic playbook to start containers.
-    If you wish to have a full control on which containers are run write your own playbook and managed containers directly from palybook.
-    For more complex deployment follow https://docs.ansible.com/ansible/docker_service_module.html
+ * List of devspace containers can be controlled by custom runtime handler in `devspace_handler_tasks`.
+   For more complex deployment see https://githuub.com/openmicroscopy/infrastructure/ansible/roles/devspace/tasks/devspace-runtime-advance.yml that uses https://docs.ansible.com/ansible/docker_service_module.html
 
-## Multiply containers
-
- *  common-services.yml contains default list of basic containers that are suitable to extend:
+ * common-services.yml contains default list of basic containers that are suitable to extend:
     You can extend any service together with other configuration keys. For more details
     read https://docs.docker.com/v1.6/compose/extends/
 
@@ -160,9 +155,9 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
                     - "8080:80"
 
     **NOTE: you have to create manually all new volume directories to avoid 
-    automatic creation as root**
+    permission issues**
 
-    Copy existing job and point to the right host
+    Copy from apprppriate existing jobs and point to the new node
 
 ## Job workflow
 
@@ -227,6 +222,9 @@ Then fetch custom omero-install branch by updating each Dockerfile
 * Robot job is still under investigation as it fails due to webbrowser crash. Robot job requires manual changes of the domain. Make sure webhost is set to the correct VM IP
 
         --webhost "10.0.50.100"
+
+ * TestNG requires setting correct jenkins hostname in Jenkins Configuration / Jenkins Location / Jenkins URL.
+
 
 ## Upgrade
 
