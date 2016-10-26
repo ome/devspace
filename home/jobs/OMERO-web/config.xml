@@ -82,7 +82,7 @@ $OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt;$O
 
 sudo cp $OMERO_DIST/nginx.conf.tmp $HOME/nginx/$NODE_NAME.conf
 
-$OMERO_DIST/bin/omero config set omero.web.wsgi_args -- &apos;--log-level=DEBUG --error-logfile=&quot;$OMERO_DIST&quot;/var/log/gunicorn.err&apos;
+$OMERO_DIST/bin/omero config set omero.web.wsgi_args -- &apos;--log-level=DEBUG --error-logfile=&apos;$OMERO_DIST&apos;/var/log/gunicorn.err&apos;
 
 $OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
 
