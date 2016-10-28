@@ -157,7 +157,7 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
     **NOTE: you have to create manually all new volume directories to avoid 
     permission issues**
 
-    Copy from apprppriate existing jobs and point to the new node
+    Copy from appropriate existing jobs and point to the new node
 
 ## Job workflow
 
