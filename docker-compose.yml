@@ -110,22 +110,25 @@ redis:
     image: redis
 
 seleniumhub:
-    image: selenium/hub
+    image: selenium/hub:3.0.0-dubnium
     environment:
-        - "JAVA_OPTS: -d64 -Xmx512m -Djava.security.egd=file:/dev/./urandom"
-        - GRID_BROWSER_TIMEOUT=30000
-        - GRID_TIMEOUT=30000
+        - GRID_BROWSER_TIMEOUT=60
+        - GRID_TIMEOUT=60
+        - GRID_MAX_SESSION=2
+        #- SE_OPTS=-browserTimeout 60 -timeout 60 maxSession 2
+#    volumes:
+#        - /dev/urandom:/dev/random
     ports:
         - "4444:4444"
 seleniumfirefox:
-    image: selenium/node-firefox
+    image: selenium/node-firefox:3.0.0-dubnium
     links:
         - seleniumhub:hub
-    environment:
-        - "JAVA_OPTS: -d64 -Xmx512m -Djava.security.egd=file:/dev/./urandom"
+#    volumes:
+#        - /dev/shm:/dev/shm
 seleniumchrome:
-    image: selenium/node-chrome
+    image: selenium/node-chrome:3.0.0-dubnium
     links:
         - seleniumhub:hub
-    environment:
-        - "JAVA_OPTS: -d64 -Xmx512m -Djava.security.egd=file:/dev/./urandom"
+#    volumes:
+#        - /dev/shm:/dev/shm

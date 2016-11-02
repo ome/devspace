@@ -13,8 +13,12 @@ RUN echo 'export container=docker' > /etc/profile.d/docker.sh
 
 ENV OMERO_INSTALL_ROOT=/tmp/omero-install
 ## update omero-install to the latest one
-#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch origin
-#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge origin/develop
+#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.email "you@example.com"
+#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.name "Your Name"
+#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add username https://github.com/username/omero-install.git
+#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch username
+#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge username/yourbranch
+
 
 ADD ./settings.env $OMERO_INSTALL/settings.env
 RUN chmod +x $OMERO_INSTALL/settings.env
@@ -56,6 +60,12 @@ RUN chmod a+x /tmp/run.sh
 # Change user id to fix permissions issues
 ARG USER_ID=1000
 RUN usermod -u $USER_ID omero
+
+# make sure mounted volumes has correct permissions
+RUN mkdir -p /home/omero/nginx
+RUN chown -R omero:omero /home/omero/nginx
+
+VOLUME ['/home/omero', '/home/omero/nginx']
 
 USER omero
 CMD ["/tmp/run.sh"]

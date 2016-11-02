@@ -56,7 +56,7 @@ source $WORKSPACE/omero-virtualenv/bin/activate
 source $OMERO_INSTALL/settings.env
 
 pip install -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
-pip install &quot;django-redis-cache&gt;=1.6.5&quot;
+pip install &quot;django-redis&gt;=4.4&quot;
 
 if [ $ICEVERSION = "noice" ]; then
     pip install &quot;zeroc-ice&gt;3.5,&lt;3.7&quot;
@@ -71,18 +71,18 @@ $OMERO_DIST/bin/omero config set omero.web.static_url $WEB_PREFIX&apos;/static/&
 $OMERO_DIST/bin/omero config set omero.web.static_root $HOME&apos;/static/web/&apos;
 
 $OMERO_DIST/bin/omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;
-$OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;redis_cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;redis:6379&quot;}}&apos;
+$OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;django_redis.cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;redis://redis:6379/0&quot;}}&apos;
 
 $OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;omero&quot;, 4064, &quot;omero&quot;], [&quot;testintegration&quot;, 14064, &quot;testintegration&quot;]]&apos;
 
-$OMERO_DIST/bin/omero config set omero.web.application_server.host web
+$OMERO_DIST/bin/omero config set omero.web.application_server.host $NODE_NAME
 $OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
 
 $OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt;$OMERO_DIST/nginx.conf.tmp
 
 sudo cp $OMERO_DIST/nginx.conf.tmp $HOME/nginx/$NODE_NAME.conf
 
-$OMERO_DIST/bin/omero config set omero.web.wsgi_args -- &apos;--log-level=DEBUG --error-logfile=/home/omero/workspace/OMERO-web/OMERO.web/var/log/gunicorn.err&apos;
+$OMERO_DIST/bin/omero config set omero.web.wsgi_args -- &apos;--log-level=DEBUG --error-logfile=&apos;$OMERO_DIST&apos;/var/log/gunicorn.err&apos;
 
 $OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
 
