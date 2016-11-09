@@ -9,7 +9,7 @@
         <hudson.model.StringParameterDefinition>
           <name>MERGE_COMMAND</name>
           <description></description>
-          <defaultValue>merge SPACENAME --no-ask --reset</defaultValue>
+          <defaultValue>merge SPACENAME --no-ask --reset --update-gitmodules</defaultValue>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>STATUS</name>
