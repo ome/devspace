@@ -99,6 +99,10 @@ source $WORKSPACE/omero-virtualenv/bin/activate
 # install web dependences
 pip install -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
 
+# TODO: use RPM
+pip install --upgrade &quot;Pillow&lt;3&quot;
+
+
 export OMERO_SESSION_DIR=/tmp/$JOB_NAME/$BUILD_NUMBER
 export ICE_CONFIG=$SRC/dist/etc/ice.config
 echo Running the integration tests with -Dtestng.useDefaultListeners=true
