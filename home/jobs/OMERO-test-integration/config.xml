@@ -111,7 +111,8 @@ $SRC/build.py -f components/tools/OmeroWeb/build.xml integration -Dtestreports.d
 ## Broken
 $SRC/build.py -f components/tools/OmeroPy/build.xml integration -DMARK=broken -Dtestreports.dir=target/reports/broken
 $SRC/build.py -f components/tools/OmeroJava/build.xml -Dtestng.useDefaultListeners=true -Dtestreports.dir=target/reports/broken broken
-      </command>
+
+deactivate</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
