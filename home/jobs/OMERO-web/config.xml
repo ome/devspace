@@ -19,9 +19,12 @@ OMERO_DIST=$WORKSPACE/OMERO.web
 if [ -e $OMERO_DIST ]; then
     if [ -e $WORKSPACE/omero-virtualenv ]; then
         source $WORKSPACE/omero-virtualenv/bin/activate
-        $OMERO_DIST/bin/omero web stop || echo 'not running'
-        sleep 5
-        $OMERO_DIST/bin/omero web status || echo 'no status'
+    fi
+
+    $OMERO_DIST/bin/omero web stop || echo 'not running'
+    sleep 5
+    $OMERO_DIST/bin/omero web status || echo 'no status'
+    if [ -e $WORKSPACE/omero-virtualenv ]; then
         deactivate
     fi
 fi
