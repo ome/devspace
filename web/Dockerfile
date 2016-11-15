@@ -40,10 +40,17 @@ RUN touch $OMERO_INSTALL/step05_centos7_nginx.sh
 # no systemd
 RUN rm -rf $OMERO_INSTALL/step06_centos7_daemon.sh
 RUN touch $OMERO_INSTALL/step06_centos7_daemon.sh
+# no Pillow
+RUN rm -rf $OMERO_INSTALL/requirements.txt
+RUN touch $OMERO_INSTALL/requirements.txt
 
 WORKDIR /tmp/omero-install/linux
 
 RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh
+
+RUN yum -y install python-pillow \
+    && yum clean all
+
 # manually install ICEPY dependences
 RUN yum -y install gcc-c++
 RUN yum -y install openssl-devel bzip2-devel expat-devel
