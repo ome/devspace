@@ -21,8 +21,17 @@ OMERO_DB_NAME=$JOB_NAME
 SRC=$WORKSPACE/src
 OMERO_DIST=$SRC/dist
 
-$OMERO_DIST/bin/omero admin stop || echo First build
-sleep 5
+if [ -e $OMERO_DIST ]; then
+    if [ -e $WORKSPACE/omero-virtualenv ]; then
+        source $WORKSPACE/omero-virtualenv/bin/activate
+    fi
+    $OMERO_DIST/bin/omero admin stop || echo First build
+    sleep 5
+    if [ -e $WORKSPACE/omero-virtualenv ]; then
+        deactivate
+    fi
+fi
+
 dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo Already exists maybe
 
 rm -rf $WORKSPACE/*
