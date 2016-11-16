@@ -85,14 +85,6 @@ rm dbsetup.sql
 
 ## END PURGE
 
-
-# START OMERO
-BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero admin start
-$OMERO_DIST/bin/omero admin waitup
-
-
-# RUN TESTS
-
 # prepare virtualenv for tests only
 virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
 source $WORKSPACE/omero-virtualenv/bin/activate
@@ -103,6 +95,12 @@ pip install -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
 pip install --upgrade &quot;Pillow&lt;3&quot;
 
 
+# START OMERO
+BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero admin start
+$OMERO_DIST/bin/omero admin waitup
+
+
+# RUN TESTS
 export OMERO_SESSION_DIR=/tmp/$JOB_NAME/$BUILD_NUMBER
 export ICE_CONFIG=$SRC/dist/etc/ice.config
 echo Running the integration tests with -Dtestng.useDefaultListeners=true
