@@ -169,6 +169,8 @@ they are associated with and a short description of the job:
 | Job name               | Name            | Description                               |
 | -----------------------|-----------------| ------------------------------------------|
 | Trigger                |                 | Runs all the following jobs in order      |
+| OME-MODEL-push         | testintegration | Merges all Model PRs                      |
+| OME-MODEL-maven        | testintegration | Builds the OME Model using Mave            |
 | BIOFORMATS-push        | testintegration | Merges all Bio-Formats PRs                |
 | BIOFORMATS-ant         | bf              | Builds Bio-Formats and runs unit tests    |
 | BIOFORMATS-maven       | testintegration | Builds Bio-Formats and runs unit tests    |

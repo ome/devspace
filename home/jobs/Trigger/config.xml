@@ -5,7 +5,11 @@
   <keepDependencies>false</keepDependencies>
   <properties/>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@1.11">
-    <script>build job: &apos;BIOFORMATS-push&apos;
+    <script>build job: &apos;OME-MODEL-push&apos;
+
+build job: &apos;OME-MODEL-maven&apos;
+
+build job: &apos;BIOFORMATS-push&apos;
 
 build job: &apos;BIOFORMATS-maven&apos;
 
