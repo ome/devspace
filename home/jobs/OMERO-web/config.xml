@@ -19,9 +19,12 @@ OMERO_DIST=$WORKSPACE/OMERO.web
 if [ -e $OMERO_DIST ]; then
     if [ -e $WORKSPACE/omero-virtualenv ]; then
         source $WORKSPACE/omero-virtualenv/bin/activate
-        $OMERO_DIST/bin/omero web stop || echo 'not running'
-        sleep 5
-        $OMERO_DIST/bin/omero web status || echo 'no status'
+    fi
+
+    $OMERO_DIST/bin/omero web stop || echo 'not running'
+    sleep 5
+    $OMERO_DIST/bin/omero web status || echo 'no status'
+    if [ -e $WORKSPACE/omero-virtualenv ]; then
         deactivate
     fi
 fi
@@ -61,6 +64,9 @@ pip install &quot;django-redis&gt;=4.4&quot;
 if [ $ICEVERSION = "noice" ]; then
     pip install &quot;zeroc-ice&gt;3.5,&lt;3.7&quot;
 fi
+
+# TODO: use RPM
+pip install --upgrade &quot;Pillow&lt;3&quot;
 
 #start-config
 $OMERO_DIST/bin/omero config set omero.web.application_server &apos;wsgi-tcp&apos;

@@ -21,8 +21,17 @@ OMERO_DB_NAME=$JOB_NAME
 SRC=$WORKSPACE/src
 OMERO_DIST=$SRC/dist
 
-$OMERO_DIST/bin/omero admin stop || echo First build
-sleep 5
+if [ -e $OMERO_DIST ]; then
+    if [ -e $WORKSPACE/omero-virtualenv ]; then
+        source $WORKSPACE/omero-virtualenv/bin/activate
+    fi
+    $OMERO_DIST/bin/omero admin stop || echo First build
+    sleep 5
+    if [ -e $WORKSPACE/omero-virtualenv ]; then
+        deactivate
+    fi
+fi
+
 dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo Already exists maybe
 
 rm -rf $WORKSPACE/*
@@ -85,6 +94,15 @@ rm dbsetup.sql
 
 ## END PURGE
 
+# prepare virtualenv for tests only
+virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
+source $WORKSPACE/omero-virtualenv/bin/activate
+# install web dependences
+pip install -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
+
+# TODO: use RPM
+pip install --upgrade &quot;Pillow&lt;3&quot;
+
 
 # START OMERO
 BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero admin start
@@ -92,13 +110,6 @@ $OMERO_DIST/bin/omero admin waitup
 
 
 # RUN TESTS
-
-# prepare virtualenv for tests only
-virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
-source $WORKSPACE/omero-virtualenv/bin/activate
-# install web dependences
-pip install -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
-
 export OMERO_SESSION_DIR=/tmp/$JOB_NAME/$BUILD_NUMBER
 export ICE_CONFIG=$SRC/dist/etc/ice.config
 echo Running the integration tests with -Dtestng.useDefaultListeners=true
@@ -111,7 +122,8 @@ $SRC/build.py -f components/tools/OmeroWeb/build.xml integration -Dtestreports.d
 ## Broken
 $SRC/build.py -f components/tools/OmeroPy/build.xml integration -DMARK=broken -Dtestreports.dir=target/reports/broken
 $SRC/build.py -f components/tools/OmeroJava/build.xml -Dtestng.useDefaultListeners=true -Dtestreports.dir=target/reports/broken broken
-      </command>
+
+deactivate</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
