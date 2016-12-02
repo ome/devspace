@@ -45,6 +45,14 @@ RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh
 # install sphinx
 RUN pip install sphinx
 
+# Install FindBugs
+ENV FINDBUGS_VERSION 3.0.0
+ENV FINDBUGS_HOME /opt/findbugs
+RUN mkdir -p $FINDBUGS_HOME
+RUN curl -fSLO http://downloads.sourceforge.net/project/findbugs/findbugs/$FINDBUGS_VERSION/findbugs-$FINDBUGS_VERSION.tar.gz && \
+    tar xzf findbugs-$FINDBUGS_VERSION.tar.gz --strip-components 1 -C $FINDBUGS_HOME && \
+    rm findbugs-$FINDBUGS_VERSION.tar.gz
+
 # install postgres tools
 RUN yum -y install http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-centos94-9.4-2.noarch.rpm \
     && yum clean all
