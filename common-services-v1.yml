@@ -4,15 +4,6 @@
 # web is a container with basic omero web dependances
 # nginx is a nginx container for omero web
 
-basebf:
-    build: ./bf
-    volumes:
-        - ./bf:/home/omero
-    environment:
-        - SLAVE_NAME=basebf
-        - SLAVE_EXECUTORS=2
-        - SLAVE_PARAMS=-labels centos7 -labels java -disableClientsUniqueId
-
 baseslave:
     build: ./slave
     volumes:
