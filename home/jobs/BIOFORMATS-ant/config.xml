@@ -49,7 +49,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Ant plugin="ant@1.2">
-      <targets>clean release jars tools utils dist-bftools dist-matlab docs docs-sphinx test findbugs</targets>
+      <targets>clean release tools utils docs docs-sphinx dist-bftools dist-matlab dist-octave test findbugs</targets>
       <antName>Ant 1.9</antName>
     </hudson.tasks.Ant>
   </builders>
