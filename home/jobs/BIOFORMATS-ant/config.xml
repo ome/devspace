@@ -55,7 +55,7 @@
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>artifacts/*.jar, artifacts/*.zip</artifacts>
+      <artifacts>artifacts/*.jar, artifacts/*.zip, artifacts/*.tar.*</artifacts>
       <allowEmptyArchive>false</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
