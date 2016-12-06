@@ -30,14 +30,14 @@ Create virtualenv:
     (dev) $ pip install ansible
     (dev) $ pip install shade
 
-Clone infrastrucutre repository where all ansible playbooks and roles are
+Clone infrastructure repository where all ansible playbooks and roles are
 
     (dev) $ git clone https://github.com/openmicroscopy/infrastructure.git
-    (dev) $ cd infrastracture/ansible
+    (dev) $ cd infrastructure/ansible
 
 ## Deployment
 
-Ansible playbooks are available in https://github.com/openmicroscopy/infrastructure/tree/devspace/ansible
+Ansible playbooks are available in https://github.com/openmicroscopy/infrastructure/tree/master/ansible
 
  * It is recommended to use devspace playbook to install devspace on a Virtual Machine like OpenStack
  
@@ -75,10 +75,10 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
 
    NOTE:
 
-    `omero_branch` is a name of git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
-    If you wish to use your own fork please adjust jobs manually.
+    `omero_branch` is a name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
+    If you wish to use your own fork please adjust the jobs manually.
 
- *  ssh keys in ``/path/to/inventory/devspace/snoopy/.ssh`` that includes:
+ *  ssh keys in ``/path/to/inventory/devspace/snoopy/.ssh`` that include:
 
         -rwx------.  1    74 Sep 13 15:25 config
         -rwx------.  1  1674 Sep 13 15:25 snoopycrimecop_github
@@ -88,14 +88,14 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
  
         ansible-playbook -i /path/to/inventory/devspace -u centos devspace.yml
 
-   devspace should be already started go to https://10.0.50.100:8443
+   devspace should be already started at https://10.0.50.100:8443
 
 ## ADVANCE: Multiply containers
 
  * List of devspace containers can be controlled by custom runtime handler in `devspace_handler_tasks`.
-   For more complex deployment see https://githuub.com/openmicroscopy/infrastructure/ansible/roles/devspace/tasks/devspace-runtime-advance.yml that uses https://docs.ansible.com/ansible/docker_service_module.html
+   For more complex deployment see https://github.com/openmicroscopy/infrastructure/blob/master/ansible/roles/devspace/tasks/devspace-runtime.yml that uses https://docs.ansible.com/ansible/docker_service_module.html
 
- * common-services.yml contains default list of basic containers that are suitable to extend:
+ * common-services.yml contains a default list of basic containers that are suitable to extend:
     You can extend any service together with other configuration keys. For more details
     read https://docs.docker.com/v1.6/compose/extends/
 
@@ -177,7 +177,7 @@ they are associated with and a short description of the job:
 | OMERO-server           | omero           | Deploys an OMERO.server                   |
 | OMERO-web              | web             | Deploys an OMERO.web client               |
 | OMERO-test-integration | testintegration | Runs the OMERO integration tests          |
-| OMERO-robot            | testintegration | Runs the Robot test                       |
+| OMERO-robot            | testintegration | Runs the Robot tests                      |
 | nginx                  | nginx           | Reloads the nginx server                  |
 
 
@@ -219,7 +219,7 @@ Then fetch custom omero-install branch by updating each Dockerfile
 
 ## Limitations:
 
-* Robot job is still under investigation as it fails due to webbrowser crash. Robot job requires manual changes of the domain. Make sure webhost is set to the correct VM IP
+* Robot job is still under investigation as it fails due to webbrowser crash. Robot job requires manual changes of the domain. Make sure webhost is set to the correct VM IP e.g.
 
         --webhost "10.0.50.100"
 
@@ -233,26 +233,26 @@ Then fetch custom omero-install branch by updating each Dockerfile
     - Devspace should be run in VM.
     - Services are managed by ansible playbook run with inline v1 compose
 
-    - It is possible to extend services using ansible playbook. If you already created new containers based on existing Dockerfiles, you may wish to review your customisation and extend common services
+    - It is possible to extend services using ansible playbook. If you already created new containers based on existing Dockerfiles, you may wish to review your customization and extend common services
 
  *  Upgrade to 0.2.0:
 
-    If you made custom adjustments to the code and commited them, it is recommended to reset changes.
+    If you made custom adjustments to the code and committed them, it is recommended to reset changes.
 
     Here are listed the most important changes:
 
      * Compose configuration was split into a few different files depending on the platform
 
-            - docker-compose.yml mian file
+            - docker-compose.yml main file
             - docker-compose.unixports.yml required for running container on UNIX platform
             - docker-compose.osx.yml required for running containers on OSX platform
 
        For how to run check deployment
 
-     * All nodes are now systemd nodes that requires adjusting the permissions. For what to change
+     * All nodes are now systemd nodes that require adjusting the permissions. For what to change
        see deployment.
 
-            - **Do not change Dockerfile** as this will load your USERID automaticaly
+            - **Do not change Dockerfile** as this will load your USERID automatically
               If you did it in the past remove the change.
 
             - slave node:
