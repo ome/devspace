@@ -8,6 +8,7 @@ basebf:
     build: ./bf
     volumes:
         - ./bf:/home/omero
+        - /ome:/ome
     environment:
         - SLAVE_NAME=basebf
         - SLAVE_EXECUTORS=2
