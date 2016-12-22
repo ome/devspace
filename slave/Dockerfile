@@ -66,6 +66,8 @@ RUN yum -y install http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-cento
 RUN yum -y install postgresql94 \
     && yum clean all
 
+RUN localedef -v -c -i en_US -f UTF-8 en_US.UTF-8 || echo "fail"
+
 EXPOSE 14064
 EXPOSE 14063
 
