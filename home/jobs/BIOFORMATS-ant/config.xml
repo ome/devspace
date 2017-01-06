@@ -19,6 +19,16 @@
           <description></description>
           <defaultValue>/opt/findbugs</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>testng.runWriterSaveBytesTests</name>
+          <description></description>
+          <defaultValue>100</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>testng.runWriterTilingTests</name>
+          <description></description>
+          <defaultValue>100</defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -40,7 +50,7 @@
       <hudson.plugins.git.extensions.impl.CleanCheckout/>
     </extensions>
   </scm>
-  <assignedNode>bf</assignedNode>
+  <assignedNode>testintegration</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -49,13 +59,13 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Ant plugin="ant@1.2">
-      <targets>clean release jars tools utils dist-bftools dist-matlab docs docs-sphinx test findbugs</targets>
+      <targets>clean release tools utils docs docs-sphinx dist-bftools dist-matlab dist-octave test findbugs</targets>
       <antName>Ant 1.9</antName>
     </hudson.tasks.Ant>
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>artifacts/*.jar, artifacts/*.zip</artifacts>
+      <artifacts>artifacts/*.jar, artifacts/*.zip, artifacts/*.tar.*</artifacts>
       <allowEmptyArchive>false</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
