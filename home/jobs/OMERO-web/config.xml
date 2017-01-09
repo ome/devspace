@@ -65,9 +65,6 @@ if [ $ICEVERSION = "noice" ]; then
     pip install &quot;zeroc-ice&gt;3.5,&lt;3.7&quot;
 fi
 
-# TODO: use RPM
-pip install --upgrade &quot;Pillow&lt;3&quot;
-
 #start-config
 $OMERO_DIST/bin/omero config set omero.web.application_server &apos;wsgi-tcp&apos;
 $OMERO_DIST/bin/omero config set omero.web.application_server.max_requests 0

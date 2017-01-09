@@ -80,9 +80,6 @@ virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
 source $WORKSPACE/omero-virtualenv/bin/activate
 
 pip install omego
-# TODO: use RPM
-pip install --upgrade &quot;Pillow&lt;3&quot;
-
 
 ## LOAD CONFIG
 

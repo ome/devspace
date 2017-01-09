@@ -48,10 +48,6 @@ WORKDIR /tmp/omero-install/linux
 
 RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh
 
-# TODO: use RPM
-#RUN yum -y install python-pillow \
-#    && yum clean all
-
 # manually install ICEPY dependences
 RUN yum -y install gcc-c++
 RUN yum -y install openssl-devel bzip2-devel expat-devel

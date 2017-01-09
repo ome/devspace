@@ -45,10 +45,6 @@ WORKDIR /tmp/omero-install/linux
 
 RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh
 
-# TODO: use RPM
-#RUN yum -y install python-pillow \
-#    && yum clean all
-
 # install sphinx
 RUN pip install sphinx
 
