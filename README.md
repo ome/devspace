@@ -5,75 +5,75 @@ an automation framework that runs repeated jobs. The default deployment
 initializes a Jenkins CI master with a predefined set of jobs.
 
 
-Running and maintaining Devspace require:
-*   brief understanding of ansible http://docs.ansible.com/ansible/intro_getting_started.html
+Running and maintaining Devspace requires brief understanding of:
+
+*   Docker engine https://docs.docker.com/
+*   Docker compose
+
+Running and maintaining Devspace in OpenStack requires brief understanding of:
+
+*   Docker engine https://docs.docker.com/ and Docker compose
+*   ansible http://docs.ansible.com/ansible/intro_getting_started.html
     *   inventory http://docs.ansible.com/ansible/intro_inventory.html
     *   playbook http://docs.ansible.com/ansible/playbooks.html
-*   access to openstack tenancy
+*    access to openstack tenancy
 *   own ssh key set in openstack tenancy, that name will be used as `vm_key_name`
 *   openrc.sh http://docs.openstack.org/user-guide/common/cli-set-environment-variables-using-openstack-rc.html
-*   snoopy ssh key and gitconfig
+*   snoopy ssh key and gitconfig (optional)
 
 
-## Requirements
+## Installation
 
-The following prerequisites are required for deploying a Jenkins devspace:
+#### Manual
 
-Client machine:
-*   Ansible 2.1+
-*   Shade
+Install following prerequesits:
 
-Create virtualenv:
+*   Docker engine https://docs.docker.com/engine/installation/
+*   Docker compose
 
+        $ pip install docker-compose
+
+Clone devspace repository and start devspace
+
+    $ docker-compose -f docker-compose.yml up --build
+
+#### OpenStack
+
+Clone infrastructure repository:
+
+    $ git clone https://github.com/openmicroscopy/infrastructure.git
     $ virtualenv dev
     $ source dev/bin/activate
-    (dev) $ pip install ansible
-    (dev) $ pip install shade
+    (dev) $ pip install -r requirements.txt
 
-Clone infrastructure repository where all ansible playbooks and roles are
-
-    (dev) $ git clone https://github.com/openmicroscopy/infrastructure.git
+    (dev) $ source tenancy.rc
     (dev) $ cd infrastructure/ansible
 
-## Deployment
+NOTE: VM will boot from volume, you no longer have to attach additional volumes. Size of the volume can be set by `-e vm_size=100`
 
-Ansible playbooks are available in https://github.com/openmicroscopy/infrastructure/tree/master/ansible
-
- * It is recommended to use devspace playbook to install devspace on a Virtual Machine like OpenStack
- 
- * create new vm
- 
-        (dev) $ source path/to/openrc.sh
-        # vm_key_name is a name of ssh key in openstack
-        # vm_size (default 50GB) is a size of the volume vm boot from. You no longer have to attach additional volumes!
-        (dev) $ ansible-playbook os-devspace.yml -e vm_name=my-devspace -e vm_key_name=mysshkey
-
-    NOTE: VM will boot from volume, you no longer have to attach additional volumes. Size of the volume can be set by `-e vm_size=100`
-
- *  create inventory
- 
-        $ tree /path/to/inventory
-        devspace
-          ├── devspace-hosts
-          ├── group_vars
-          │   └── devspace
-          └── snoopy
-              ├── .gitconfig
-              └── .ssh
+    (dev) $ ansible-playbook os-devspace.yml -e vm_name=devspace-test -e vm_key_name=your_key
+    (dev) $ ansible-playbook -l devspace-test -u centos devspace.yml
 
 
-        /path/to/inventory/devspace/group_vars/devspace
+To deploy devspace from custom branch, first set up inventory:
 
-        openstack_ip: 10.0.50.100
-        omero_branch: develop
-        snoopy_dir_path: "/path/to/ssh_keys/"
+    $ tree /path/to/inventory
+    inventory
+      ├── group_vars
+      │   └── devspace
+      └── snoopy
+          ├── .gitconfig
+          └── .ssh
 
-        /path/to/inventory/devspace/devspace-hosts
+ *  add variables to group_vars/devspace:
 
-        [devspace]
-        10.0.50.100
+    omero_branch: develop
+    snoopy_dir_path: "/path/to/snoopy"
 
-   NOTE:
+    git_repo: "https://github.com/user_name/devspace.git"
+    version: "your_branch"
+
+    NOTE:
 
     `omero_branch` is a name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
     If you wish to use your own fork please adjust the jobs manually.
@@ -84,11 +84,9 @@ Ansible playbooks are available in https://github.com/openmicroscopy/infrastruct
         -rwx------.  1  1674 Sep 13 15:25 snoopycrimecop_github
         -rwx------.  1   405 Sep 13 15:25 snoopycrimecop_github.pub
 
- *  install prerequisites as default user with sudo privileges (as user `centos`)
- 
-        ansible-playbook -i /path/to/inventory/devspace -u centos devspace.yml
 
-   devspace should be already started at https://10.0.50.100:8443
+
+Devspace should be already started at https://your_host:8443
 
 ## ADVANCE: Multiply containers
 
@@ -222,8 +220,6 @@ Then fetch custom omero-install branch by updating each Dockerfile
 * Robot job is still under investigation as it fails due to webbrowser crash. Robot job requires manual changes of the domain. Make sure webhost is set to the correct VM IP e.g.
 
         --webhost "10.0.50.100"
-
- * TestNG requires setting correct jenkins hostname in Jenkins Configuration / Jenkins Location / Jenkins URL.
 
 
 ## Upgrade
