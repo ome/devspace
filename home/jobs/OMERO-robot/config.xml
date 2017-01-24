@@ -19,7 +19,7 @@
         <hudson.model.StringParameterDefinition>
           <name>WEBHOST</name>
           <description></description>
-          <defaultValue>&apos;SPACENAME-ci.openmicroscopy.org&apos;</defaultValue>
+          <defaultValue>SPACENAME-ci.openmicroscopy.org</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
