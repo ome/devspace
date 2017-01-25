@@ -22,12 +22,12 @@
         <hudson.model.StringParameterDefinition>
           <name>testng.runWriterSaveBytesTests</name>
           <description></description>
-          <defaultValue>100</defaultValue>
+          <defaultValue>50</defaultValue>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>testng.runWriterTilingTests</name>
           <description></description>
-          <defaultValue>100</defaultValue>
+          <defaultValue>2</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
