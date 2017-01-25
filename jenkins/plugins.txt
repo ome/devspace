@@ -55,6 +55,16 @@ workflow-scm-step:2.2
 workflow-step-api:2.4
 workflow-support:2.6
 
+pipeline-rest-api:2.0
+pipeline-stage-view:2.0
+pipeline-stage-step:2.2
+pipeline-build-step:2.3
+pipeline-input-step:2.1
+pipeline-milestone-step:1.0
+pipeline-graph-analysis:1.1
+
+handlebars:1.1.1
+momentjs:1.1.1
 
 # Robot
 robot:1.6.4
