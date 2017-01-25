@@ -16,6 +16,11 @@
           <description></description>
           <defaultValue>14064</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>WEBHOST</name>
+          <description></description>
+          <defaultValue>SPACENAME-ci.openmicroscopy.org</defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -75,7 +80,7 @@ cd $SRC/dist
 bash ../components/tests/ui/robot_setup.sh
 mv $SRC/dist/robot_ice.config $SRC/components/tests/ui/resources/
 export ICE_CONFIG=$SRC/components/tests/ui/resources/robot_ice.config
-$SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --protocol http --webhost &apos;SPACENAME-ci.openmicroscopy.org&apos; --remoteurl &apos;http://seleniumhub:4444/wd/hub&apos; --dc &apos;browserName:${BROWSER},javascriptEnabled:True&apos; &gt;$SRC/components/tests/ui/resources/config.txt
+$SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --protocol http --webhost $WEBHOST --remoteurl &apos;http://seleniumhub:4444/wd/hub&apos; --dc &apos;browserName:${BROWSER},javascriptEnabled:True&apos; &gt;$SRC/components/tests/ui/resources/config.txt
 
 sed -i.bak -re &apos;s/(\{SERVER_ID\}.*1)/\{SERVER_ID\}      2/&apos; $SRC/components/tests/ui/resources/config.txt
 
