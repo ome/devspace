@@ -14,7 +14,12 @@ testng-plugin:1.14
 
 javadoc:1.4
 
-artifactory:2.4.4
+artifactory:2.9.0
+ant:1.4
+gradle:1.25
+ivy:1.27.1
+config-file-provider:2.15.5
+
 copyartifact:1.38.1
 
 branch-api:1.11.1
@@ -70,6 +75,7 @@ momentjs:1.1.1
 robot:1.6.4
 
 # Utils
+greenballs:1.15
 timestamper:1.8.8
 jobConfigHistory:2.15
 rundeck:3.5.4
