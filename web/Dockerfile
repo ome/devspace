@@ -2,8 +2,8 @@ FROM openmicroscopy/devslave-c7:0.3.0
 
 MAINTAINER OME
 
-ARG JAVAVER=${JAVAVER:-openjdk18}
-ARG ICEVER=${ICEVER:-noice}
+ARG JAVAVER=openjdk18
+ARG ICEVER=noice
 
 # make ICEVERSION environment variable to use in OMERO-web job
 ENV ICEVERSION ${ICEVER:-noice}
