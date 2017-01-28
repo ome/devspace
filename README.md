@@ -33,9 +33,36 @@ Install following prerequesits:
 
         $ pip install docker-compose
 
-Clone devspace repository and start devspace
+*   Clone devspace repository
 
-    $ docker-compose -f docker-compose.yml up --build
+        git clone https://github.com/openmicroscopy/devspace.git
+
+*   Generated ssl certificates:
+
+        ./sslcert jenkins/sslcert YOUR_IP
+        ./sslcert nginx/sslcert YOUR_IP
+
+    alternatively put your own certificate `.crt and .key` in the above locations
+
+*   Set enviroment variables in `.env`
+
+        USER_ID=1234
+        JENKINS_USERNAME=devspace
+        JENKINS_PASSWORD=secret
+
+*   Start devspace
+
+        $ docker-compose -f docker-compose.yml up --build
+
+*   [Optional] Turn on Basic HTTP authentication for Jenkins
+
+        sudo htpasswd -c jenkins/conf.d/passwdfile nginx 
+
+    and update `jenkins/conf.d/jenkins.conf`:
+
+        auth_basic "Restricted";
+        auth_basic_user_file /etc/nginx/conf.d/passwdfile;
+
 
 #### OpenStack
 
@@ -46,7 +73,7 @@ Clone infrastructure repository:
     $ source dev/bin/activate
     (dev) $ pip install -r requirements.txt
 
-    (dev) $ source tenancy.rc
+    (dev) $ source OpenStackRC.rc
     (dev) $ cd infrastructure/ansible
 
 NOTE: VM will boot from volume, you no longer have to attach additional volumes. Size of the volume can be set by `-e vm_size=100`
@@ -67,18 +94,18 @@ To deploy devspace from custom branch, first set up inventory:
 
  *  add variables to group_vars/devspace:
 
-    omero_branch: develop
-    snoopy_dir_path: "/path/to/snoopy"
+        omero_branch: develop
+        snoopy_dir_path: "/path/to/snoopy"
 
-    git_repo: "https://github.com/user_name/devspace.git"
-    version: "your_branch"
+        git_repo: "https://github.com/user_name/devspace.git"
+        version: "your_branch"
 
     NOTE:
 
     `omero_branch` is a name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
     If you wish to use your own fork please adjust the jobs manually.
 
- *  ssh keys in ``/path/to/inventory/devspace/snoopy/.ssh`` that include:
+ *  ssh keys in `/path/to/inventory/devspace/snoopy/.ssh` that include:
 
         -rwx------.  1    74 Sep 13 15:25 config
         -rwx------.  1  1674 Sep 13 15:25 snoopycrimecop_github
