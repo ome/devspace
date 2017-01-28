@@ -57,7 +57,12 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <builders/>
+  <builders>
+    <hudson.tasks.Ant plugin="ant@1.4">
+      <targets>clean release tools utils docs docs-sphinx dist-bftools dist-matlab dist-octave test findbugs</targets>
+      <antName>Ant 1.9</antName>
+    </hudson.tasks.Ant>
+  </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
       <artifacts>artifacts/*.jar, artifacts/*.zip, artifacts/*.tar.*</artifacts>
