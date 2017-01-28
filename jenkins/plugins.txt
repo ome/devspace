@@ -8,6 +8,9 @@ matrix-project:1.8
 ssh-credentials:1.12
 credentials:2.1.10
 script-security:1.25
+role-strategy:2.3.2
+matrix-auth:1.4
+icon-shim:2.0.3
 
 junit:1.19
 testng-plugin:1.14

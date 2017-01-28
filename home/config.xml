@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <hudson>
   <disabledAdministrativeMonitors/>
-  <version>1.651.3</version>
+  <version>2.32.1</version>
   <numExecutors>0</numExecutors>
   <mode>NORMAL</mode>
   <useSecurity>true</useSecurity>
@@ -36,7 +36,7 @@
     <hudson.model.AllView>
       <owner class="hudson" reference="../../.."/>
       <name>All</name>
-      <description>See &lt;a href=&quot;https://github.com/openmicroscopy/devspace#job-workflow&quot;&gt;Job workflow&lt;/a&gt; for more information</description>
+      <description>See Job workflow https://github.com/openmicroscopy/devspace#job-workflow for more information</description>
       <filterExecutors>false</filterExecutors>
       <filterQueue>false</filterQueue>
       <properties class="hudson.model.View$PropertyList"/>
@@ -44,7 +44,7 @@
   </views>
   <primaryView>All</primaryView>
   <slaveAgentPort>50000</slaveAgentPort>
-  <label>FOO</label>
+  <label></label>
   <nodeProperties/>
   <globalNodeProperties/>
 </hudson>
