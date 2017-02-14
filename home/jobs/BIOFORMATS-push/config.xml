@@ -30,7 +30,7 @@
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.0.1">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -53,7 +53,10 @@
       </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
       <hudson.plugins.git.extensions.impl.CloneOption>
         <shallow>false</shallow>
+        <noTags>false</noTags>
         <reference>/src/bio-formats.git</reference>
+        <depth>0</depth>
+        <honorRefspec>false</honorRefspec>
       </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
