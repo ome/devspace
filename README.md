@@ -57,6 +57,8 @@ NOTE: VM will boot from volume, you no longer have to attach additional volumes.
     (dev) $ ansible-playbook os-devspace.yml -e vm_name=devspace-test -e vm_key_name=your_key
     (dev) $ ansible-playbook -l devspace-test -u centos devspace.yml
 
+Access is password protected, you will have to enter a value when you run the command above.
+
 
 To deploy devspace from custom branch, first set up inventory:
 
@@ -79,7 +81,7 @@ To deploy devspace from custom branch, first set up inventory:
     NOTE:
 
     `devspace_omero_branch` is a name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
-    `git_repo` indicate the devspace repository to use. If you do not need to use a specific repository or
+    `git_repo` indicates the devspace repository to use. If you do not need to use a specific repository or
     branch, you should use `https://github.com/openmicroscopy/devspace.git`.
 
  *  ssh keys in ``/path/to/inventory/devspace/snoopy/.ssh`` that include:
@@ -90,7 +92,8 @@ To deploy devspace from custom branch, first set up inventory:
 
 
 
-Devspace should be already started at https://your_host:8443
+Devspace should be already started at https://your_host:8443.
+You will need to use the password set earlier.
 
 ## ADVANCE: Multiply containers
 
