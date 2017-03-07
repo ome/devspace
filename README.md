@@ -51,8 +51,13 @@ Clone infrastructure repository:
 
 NOTE: VM will boot from volume, you no longer have to attach additional volumes. Size of the volume can be set by `-e vm_size=100`
 
+    Install the various ansible roles
+    (dev) $ ansible-galaxy install -r requirements.yml
+    Run the playbook to create and provision the devpace
     (dev) $ ansible-playbook os-devspace.yml -e vm_name=devspace-test -e vm_key_name=your_key
     (dev) $ ansible-playbook -l devspace-test -u centos devspace.yml
+
+Access is password protected, you will have to enter a value when you run the command above.
 
 
 To deploy devspace from custom branch, first set up inventory:
@@ -67,7 +72,7 @@ To deploy devspace from custom branch, first set up inventory:
 
  *  add variables to group_vars/devspace:
 
-    omero_branch: develop
+    devspace_omero_branch: develop
     snoopy_dir_path: "/path/to/snoopy"
 
     git_repo: "https://github.com/user_name/devspace.git"
@@ -75,8 +80,9 @@ To deploy devspace from custom branch, first set up inventory:
 
     NOTE:
 
-    `omero_branch` is a name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
-    If you wish to use your own fork please adjust the jobs manually.
+    `devspace_omero_branch` is the name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
+    `git_repo` indicates the devspace repository to use. If you do not need to use a specific repository or
+    branch, you should use `https://github.com/openmicroscopy/devspace.git`.
 
  *  ssh keys in ``/path/to/inventory/devspace/snoopy/.ssh`` that include:
 
@@ -86,7 +92,8 @@ To deploy devspace from custom branch, first set up inventory:
 
 
 
-Devspace should be already started at https://your_host:8443
+Devspace should be already started at https://your_host:8443.
+You will need to use the password set earlier.
 
 ## ADVANCE: Multiply containers
 
