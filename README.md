@@ -97,16 +97,18 @@ To deploy devspace from custom branch, first set up inventory:
 
  *  add variables to group_vars/devspace:
 
-        omero_branch: develop
+        devspace_omero_branch: develop
         snoopy_dir_path: "/path/to/snoopy"
 
-        git_repo: "https://github.com/user_name/devspace.git"
-        version: "your_branch"
+        devspace_git_repo: "https://github.com/user_name/devspace.git"
+        devspace_git_version: "your_branch"
 
     NOTE:
 
-    `omero_branch` is a name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
-    If you wish to use your own fork please adjust the jobs manually.
+    `devspace_omero_branch` is the name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
+    `devspace_git_repo` indicates the devspace repository to use. If you do not need to use a specific repository, `https://github.com/openmicroscopy/devspace.git` is used
+    `devspace_git_version` indicates the branch or tag to use. `https://github.com/openmicroscopy/devspace/tree/master` is used by default.
+    See `https://github.com/openmicroscopy/ansible-role-devspace` for a full list of supported parameters.
 
  *  ssh keys in `/path/to/inventory/devspace/snoopy/.ssh` that include:
 
@@ -116,7 +118,7 @@ To deploy devspace from custom branch, first set up inventory:
 
 
 
-Devspace should be already started at https://your_host:8443
+Devspace should be already started at https://your_host:8443.
 
 ## ADVANCE: Multiply containers
 
