@@ -80,7 +80,7 @@ To deploy devspace from custom branch, first set up inventory:
 
     NOTE:
 
-    `devspace_omero_branch` is a name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
+    `devspace_omero_branch` is the name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
     `git_repo` indicates the devspace repository to use. If you do not need to use a specific repository or
     branch, you should use `https://github.com/openmicroscopy/devspace.git`.
 
