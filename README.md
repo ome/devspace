@@ -70,7 +70,7 @@ To deploy devspace from custom branch, first set up inventory:
 
  *  add variables to group_vars/devspace:
 
-    omero_branch: develop
+    devspace_omero_branch: develop
     snoopy_dir_path: "/path/to/snoopy"
 
     git_repo: "https://github.com/user_name/devspace.git"
@@ -78,8 +78,9 @@ To deploy devspace from custom branch, first set up inventory:
 
     NOTE:
 
-    `omero_branch` is a name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
-    If you wish to use your own fork please adjust the jobs manually.
+    `devspace_omero_branch` is a name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
+    `git_repo` indicate the devspace repository to use. If you do not need to use a specific repository or
+    branch, you should use `https://github.com/openmicroscopy/devspace.git`.
 
  *  ssh keys in ``/path/to/inventory/devspace/snoopy/.ssh`` that include:
 
