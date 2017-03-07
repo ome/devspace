@@ -53,6 +53,7 @@ NOTE: VM will boot from volume, you no longer have to attach additional volumes.
 
     Install the various ansibles roles
     (dev) $ ansible-galaxy install -r requirements.yml
+    Run the playbook to create and provision the devpace
     (dev) $ ansible-playbook os-devspace.yml -e vm_name=devspace-test -e vm_key_name=your_key
     (dev) $ ansible-playbook -l devspace-test -u centos devspace.yml
 
