@@ -51,7 +51,7 @@ Clone infrastructure repository:
 
 NOTE: VM will boot from volume, you no longer have to attach additional volumes. Size of the volume can be set by `-e vm_size=100`
 
-    Install the various ansibles roles
+    Install the various ansible roles
     (dev) $ ansible-galaxy install -r requirements.yml
     Run the playbook to create and provision the devpace
     (dev) $ ansible-playbook os-devspace.yml -e vm_name=devspace-test -e vm_key_name=your_key
