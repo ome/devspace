@@ -118,7 +118,7 @@ To deploy devspace from custom branch, first set up inventory:
 
 
 
-Devspace should be already started at https://your_host:8443. Access is password protected.
+Devspace should be already started at https://your_host:8443.
 
 ## ADVANCE: Multiply containers
 
