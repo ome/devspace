@@ -123,9 +123,9 @@ Devspace should be already started at https://your_host:8443. Access is password
 ## ADVANCE: Multiply containers
 
  * List of devspace containers can be controlled by custom runtime handler in `devspace_handler_tasks`.
-   For more complex deployment see https://github.com/openmicroscopy/infrastructure/blob/master/ansible/roles/devspace/tasks/devspace-runtime.yml that uses https://docs.ansible.com/ansible/docker_service_module.html
+   For more complex deployment see https://github.com/openmicroscopy/ansible-role-devspace/blob/master/tasks/devspace-runtime.yml that uses https://docs.ansible.com/ansible/docker_service_module.html
 
- * common-services.yml contains a default list of basic containers that are suitable to extend:
+ * common-services-v2.yml contains a default list of basic containers that are suitable to extend:
     You can extend any service together with other configuration keys. For more details
     read https://docs.docker.com/v1.6/compose/extends/
 
@@ -138,7 +138,7 @@ Devspace should be already started at https://your_host:8443. Access is password
 
             myomero:
                 extends:
-                    file: common-services.yml
+                    file: common-services-v2.yml
                     service: baseserver
                 links:
                     - jenkins
@@ -155,7 +155,7 @@ Devspace should be already started at https://your_host:8443. Access is password
 
             myweb:
                 extends:
-                    file: common-services-v1.yml
+                    file: common-services-v2.yml
                     service: baseweb
                 links:
                     - jenkins
@@ -171,7 +171,7 @@ Devspace should be already started at https://your_host:8443. Access is password
 
             mynginx:
                 extends:
-                    file: common-services-v1.yml
+                    file: common-services-v2.yml
                     service: basenginx
                 links:
                     - jenkins
