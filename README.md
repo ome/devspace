@@ -97,7 +97,7 @@ To deploy devspace from custom branch, first set up inventory:
 
  *  add variables to group_vars/devspace:
 
-        devspace_omero_branch: develop
+        devspace_omero_branch: roles
         snoopy_dir_path: "/path/to/snoopy"
 
         devspace_git_repo: "https://github.com/user_name/devspace.git"
@@ -118,7 +118,7 @@ To deploy devspace from custom branch, first set up inventory:
 
 
 
-Devspace should be already started at https://your_host:8443.
+Devspace should be already started at https://your_host:8443. Access is password protected.
 
 ## ADVANCE: Multiply containers
 
