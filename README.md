@@ -33,9 +33,36 @@ Install following prerequesits:
 
         $ pip install docker-compose
 
-Clone devspace repository and start devspace
+*   Clone devspace repository
 
-    $ docker-compose -f docker-compose.yml up --build
+        git clone https://github.com/openmicroscopy/devspace.git
+
+*   Generated ssl certificates:
+
+        ./sslcert jenkins/sslcert YOUR_IP
+        ./sslcert nginx/sslcert YOUR_IP
+
+    alternatively put your own certificate `.crt and .key` in the above locations
+
+*   Set enviroment variables in `.env`
+
+        USER_ID=1234
+        JENKINS_USERNAME=devspace
+        JENKINS_PASSWORD=secret
+
+*   Start devspace
+
+        $ docker-compose -f docker-compose.yml up --build
+
+*   [Optional] Turn on Basic HTTP authentication for Jenkins
+
+        sudo htpasswd -c jenkins/conf.d/passwdfile nginx 
+
+    and update `jenkins/conf.d/jenkins.conf`:
+
+        auth_basic "Restricted";
+        auth_basic_user_file /etc/nginx/conf.d/passwdfile;
+
 
 #### OpenStack
 
@@ -46,11 +73,14 @@ Clone infrastructure repository:
     $ source dev/bin/activate
     (dev) $ pip install -r requirements.txt
 
-    (dev) $ source tenancy.rc
+    (dev) $ source OpenStackRC.rc
     (dev) $ cd infrastructure/ansible
 
 NOTE: VM will boot from volume, you no longer have to attach additional volumes. Size of the volume can be set by `-e vm_size=100`
 
+    Install the various ansible roles
+    (dev) $ ansible-galaxy install -r requirements.yml
+    Run the playbook to create and provision the devpace
     (dev) $ ansible-playbook os-devspace.yml -e vm_name=devspace-test -e vm_key_name=your_key
     (dev) $ ansible-playbook -l devspace-test -u centos devspace.yml
 
@@ -67,18 +97,20 @@ To deploy devspace from custom branch, first set up inventory:
 
  *  add variables to group_vars/devspace:
 
-    omero_branch: develop
-    snoopy_dir_path: "/path/to/snoopy"
+        devspace_omero_branch: roles
+        snoopy_dir_path: "/path/to/snoopy"
 
-    git_repo: "https://github.com/user_name/devspace.git"
-    version: "your_branch"
+        devspace_git_repo: "https://github.com/user_name/devspace.git"
+        devspace_git_version: "your_branch"
 
     NOTE:
 
-    `omero_branch` is a name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
-    If you wish to use your own fork please adjust the jobs manually.
+    `devspace_omero_branch` is the name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
+    `devspace_git_repo` indicates the devspace repository to use. If you do not need to use a specific repository, `https://github.com/openmicroscopy/devspace.git` is used
+    `devspace_git_version` indicates the branch or tag to use. `https://github.com/openmicroscopy/devspace/tree/master` is used by default.
+    See `https://github.com/openmicroscopy/ansible-role-devspace` for a full list of supported parameters.
 
- *  ssh keys in ``/path/to/inventory/devspace/snoopy/.ssh`` that include:
+ *  ssh keys in `/path/to/inventory/devspace/snoopy/.ssh` that include:
 
         -rwx------.  1    74 Sep 13 15:25 config
         -rwx------.  1  1674 Sep 13 15:25 snoopycrimecop_github
@@ -86,14 +118,14 @@ To deploy devspace from custom branch, first set up inventory:
 
 
 
-Devspace should be already started at https://your_host:8443
+Devspace should be already started at https://your_host:8443.
 
 ## ADVANCE: Multiply containers
 
  * List of devspace containers can be controlled by custom runtime handler in `devspace_handler_tasks`.
-   For more complex deployment see https://github.com/openmicroscopy/infrastructure/blob/master/ansible/roles/devspace/tasks/devspace-runtime.yml that uses https://docs.ansible.com/ansible/docker_service_module.html
+   For more complex deployment see https://github.com/openmicroscopy/ansible-role-devspace/blob/master/tasks/devspace-runtime.yml that uses https://docs.ansible.com/ansible/docker_service_module.html
 
- * common-services.yml contains a default list of basic containers that are suitable to extend:
+ * common-services-v1.yml contains a default list of basic containers that are suitable to extend:
     You can extend any service together with other configuration keys. For more details
     read https://docs.docker.com/v1.6/compose/extends/
 
@@ -106,7 +138,7 @@ Devspace should be already started at https://your_host:8443
 
             myomero:
                 extends:
-                    file: common-services.yml
+                    file: common-services-v1.yml
                     service: baseserver
                 links:
                     - jenkins

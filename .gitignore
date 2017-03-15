@@ -2,6 +2,7 @@
 home/.*
 home/*.log
 home/cache/
+home/config-history/
 home/fingerprints/
 home/identity.key.enc
 home/init.groovy.d/
@@ -13,6 +14,10 @@ home/jobs/**/nextBuildNumber
 home/logs/
 home/nodeMonitors.xml
 home/org.jenkinsci.plugins.workflow.flow.FlowExecutionList.xml
+home/jenkins.install.InstallUtil.lastExecVersion
+home/jenkins.install.UpgradeWizard.state
+home/jenkins.model.DownloadSettings.xml
+home/jenkins.security.QueueItemAuthenticatorConfiguration.xml
 home/plugins/
 home/plugins.txt
 home/queue.xml
@@ -27,6 +32,9 @@ home/userContent/
 home/war/
 home/scriptApproval.xml
 home/users/
+home/repositoryPlugin/
+
+pgdata/
 
 server/.java/
 server/.jenkins/

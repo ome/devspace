@@ -3,6 +3,8 @@ jenkins:
     user: ${USER_ID}
     volumes:
         - ./home:/var/jenkins_home
+    environment:
+        - JENKINS_OPTS= --argumentsRealm.passwd.${JENKINS_USERNAME}=${JENKINS_PASSWORD} --argumentsRealm.roles.${JENKINS_USERNAME}=admin
 
 git:
     build: git
@@ -28,6 +30,9 @@ testintegration:
     environment:
         - SLAVE_NAME=testintegration
         - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
+        - JENKINS_MASTER=http://jenkins:8080
+        # - JENKINS_USERNAME=${JENKINS_USERNAME}
+        # - JENKINS_PASSWORD=${JENKINS_PASSWORD}
     extra_hosts:
         - "testintegration:127.0.0.1"
     ports:
@@ -46,6 +51,9 @@ omero:
     environment:
         - SLAVE_NAME=omero
         - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
+        - JENKINS_MASTER=http://jenkins:8080
+        # - JENKINS_USERNAME=${JENKINS_USERNAME}
+        # - JENKINS_PASSWORD=${JENKINS_PASSWORD}
     ports:
         - "4064:4064"
         - "4063:4063"
@@ -65,6 +73,9 @@ web:
     environment:
         - SLAVE_NAME=web
         - SLAVE_PARAMS= -labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
+        - JENKINS_MASTER=http://jenkins:8080
+        # - JENKINS_USERNAME=${JENKINS_USERNAME}
+        # - JENKINS_PASSWORD=${JENKINS_PASSWORD}
 
 nginx:
     extends:
@@ -81,6 +92,9 @@ nginx:
     environment:
         - SLAVE_NAME=nginx
         - SLAVE_PARAMS=-labels centos7 -labels java18 -disableClientsUniqueId
+        - JENKINS_MASTER=http://jenkins:8080
+        # - JENKINS_USERNAME=${JENKINS_USERNAME}
+        # - JENKINS_PASSWORD=${JENKINS_PASSWORD}
     ports:
         - "80:80"
         - "443:443"

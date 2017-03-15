@@ -10,6 +10,7 @@ before_install:
   - pip install docker-compose
   - docker-compose -v
   - export USER_ID=`$UID`
+  - export JENKINS_PASSWORD=*****
 
 install:
   - ./rename.py travis
