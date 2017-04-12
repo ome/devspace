@@ -1,6 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <hudson>
-  <disabledAdministrativeMonitors/>
+  <disabledAdministrativeMonitors>
+    <string>jenkins.security.s2m.MasterKillSwitchWarning</string>
+  </disabledAdministrativeMonitors>
   <version>2.32.2</version>
   <numExecutors>0</numExecutors>
   <mode>NORMAL</mode>
