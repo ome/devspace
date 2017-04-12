@@ -11,6 +11,16 @@
           <description>Drops and creates the DB, cleans the binary repository</description>
           <defaultValue>true</defaultValue>
         </hudson.model.BooleanParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DB_NAME</name>
+          <description>Default is $JOB_NAME</description>
+          <defaultValue>$JOB_NAME</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DATA_DIR</name>
+          <description>Default is $WORKSPACE/data</description>
+          <defaultValue>$WORKSPACE/data</defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -26,8 +36,9 @@
     <hudson.tasks.Shell>
       <command>OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
-OMERO_DB_NAME=$JOB_NAME
+OMERO_DB_NAME=$DB_NAME
 OMERO_DIST=$WORKSPACE/OMERO.server
+OMERO_DATA_DIR=$DATA_DIR
 
 if [ -e $OMERO_DIST ]; then
     if [ -e $WORKSPACE/omero-virtualenv ]; then
@@ -49,7 +60,7 @@ fi
 
 rm -rf $WORKSPACE/*</command>
     </hudson.tasks.Shell>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.38.1">
       <project>OMERO-build</project>
       <filter>src/target/OMERO.server*zip</filter>
       <target></target>
@@ -61,8 +72,8 @@ rm -rf $WORKSPACE/*</command>
     <hudson.tasks.Shell>
       <command>OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
-OMERO_DB_NAME=$JOB_NAME
-OMERO_DATA_DIR=$WORKSPACE/data
+OMERO_DB_NAME=$DB_NAME
+OMERO_DATA_DIR=$DATA_DIR
 
 mkdir -p $OMERO_DATA_DIR
 
@@ -116,5 +127,7 @@ deactivate</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
-  <buildWrappers/>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.8.8"/>
+  </buildWrappers>
 </project>

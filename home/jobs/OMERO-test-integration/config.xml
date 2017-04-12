@@ -37,7 +37,7 @@ dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo Already exists
 rm -rf $WORKSPACE/*
       </command>
     </hudson.tasks.Shell>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.38.1">
       <project>OMERO-build</project>
       <filter>src/target/openmicroscopy*zip</filter>
       <target></target>
@@ -123,19 +123,26 @@ deactivate</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.junit.JUnitResultArchiver plugin="junit@1.9">
+    <hudson.tasks.junit.JUnitResultArchiver plugin="junit@1.20">
       <testResults>**/OmeroPy/target/reports/integration/*.xml,**/OmeroFS/target/reports/integration/*.xml,**/OmeroWeb/target/reports/integration/*.xml</testResults>
       <keepLongStdio>false</keepLongStdio>
       <healthScaleFactor>1.0</healthScaleFactor>
+      <allowEmptyResults>false</allowEmptyResults>
     </hudson.tasks.junit.JUnitResultArchiver>
-    <hudson.plugins.testng.Publisher plugin="testng-plugin@1.10">
+    <hudson.plugins.testng.Publisher plugin="testng-plugin@1.14">
       <reportFilenamePattern>**/OmeroJava/target/reports/integration/*.xml</reportFilenamePattern>
       <escapeTestDescp>true</escapeTestDescp>
       <escapeExceptionMsg>true</escapeExceptionMsg>
-      <showFailedBuilds>false</showFailedBuilds>
-      <unstableOnSkippedTests>false</unstableOnSkippedTests>
       <failureOnFailedTestConfig>false</failureOnFailedTestConfig>
+      <showFailedBuilds>false</showFailedBuilds>
+      <unstableSkips>100</unstableSkips>
+      <unstableFails>0</unstableFails>
+      <failedSkips>100</failedSkips>
+      <failedFails>100</failedFails>
+      <thresholdMode>2</thresholdMode>
     </hudson.plugins.testng.Publisher>
   </publishers>
-  <buildWrappers/>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.8.8"/>
+  </buildWrappers>
 </project>
