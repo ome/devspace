@@ -1,21 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<flow-definition plugin="workflow-job@2.7">
+<flow-definition plugin="workflow-job@2.9">
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
-      <triggers class="java.util.Collections$UnmodifiableRandomAccessList" resolves-to="java.util.Collections$UnmodifiableList">
-        <c class="list">
-          <hudson.triggers.TimerTrigger>
-            <spec>H H(2-6) * * 1-5</spec>
-          </hudson.triggers.TimerTrigger>
-        </c>
-        <list reference="../c"/>
+      <triggers>
+        <hudson.triggers.TimerTrigger>
+          <spec>H H(3-4) * * 1-5</spec>
+        </hudson.triggers.TimerTrigger>
       </triggers>
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
   </properties>
-  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.18">
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.29">
     <script>build job: &apos;BIOFORMATS-push&apos;
 
 build job: &apos;BIOFORMATS-maven&apos;

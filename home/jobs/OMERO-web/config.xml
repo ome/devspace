@@ -21,9 +21,9 @@ if [ -e $OMERO_DIST ]; then
         source $WORKSPACE/omero-virtualenv/bin/activate
     fi
 
-    $OMERO_DIST/bin/omero web stop || echo 'not running'
+    $OMERO_DIST/bin/omero web stop || echo &apos;not running&apos;
     sleep 5
-    $OMERO_DIST/bin/omero web status || echo 'no status'
+    $OMERO_DIST/bin/omero web status || echo &apos;no status&apos;
     if [ -e $WORKSPACE/omero-virtualenv ]; then
         deactivate
     fi
@@ -33,7 +33,7 @@ rm -rf $HOME/static/web/
 rm -rf $WORKSPACE/*
       </command>
     </hudson.tasks.Shell>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.37">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.38.1">
       <project>OMERO-build</project>
       <filter>src/target/OMERO.py*zip</filter>
       <target></target>
@@ -58,12 +58,9 @@ source $WORKSPACE/omero-virtualenv/bin/activate
 
 source $OMERO_INSTALL/settings.env
 
-pip install -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
+pip install -r $OMERO_DIST/share/web/requirements-py27.txt
+pip install -r $OMERO_DIST/share/web/requirements-redis.txt
 pip install &quot;django-redis&gt;=4.4&quot;
-
-if [ $ICEVERSION = "noice" ]; then
-    pip install &quot;zeroc-ice&gt;3.5,&lt;3.7&quot;
-fi
 
 #start-config
 $OMERO_DIST/bin/omero config set omero.web.application_server &apos;wsgi-tcp&apos;
@@ -96,5 +93,7 @@ deactivate
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
-  <buildWrappers/>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.8.8"/>
+  </buildWrappers>
 </project>
