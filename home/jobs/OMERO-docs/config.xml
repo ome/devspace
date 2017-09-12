@@ -55,9 +55,7 @@
     <hudson.tasks.Shell>
       <command>pip install --user scc
 test -e src &amp;&amp; cd src
-$HOME/.local/bin/scc $MERGE_COMMAND
-
-pip install --user docutils==0.12</command>
+$HOME/.local/bin/scc $MERGE_COMMAND</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Ant plugin="ant@1.4">
       <targets>clean html</targets>
