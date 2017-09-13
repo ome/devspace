@@ -36,8 +36,8 @@ testintegration:
     extra_hosts:
         - "testintegration:127.0.0.1"
     ports:
-        - "14064:14064"
-        - "14063:14063"
+        - "14064"
+        - "14063"
 
 omero:
     extends:
@@ -55,8 +55,8 @@ omero:
         # - JENKINS_USERNAME=${JENKINS_USERNAME}
         # - JENKINS_PASSWORD=${JENKINS_PASSWORD}
     ports:
-        - "4064:4064"
-        - "4063:4063"
+        - "4064"
+        - "4063"
 
 web:
     extends:
@@ -96,8 +96,8 @@ nginx:
         # - JENKINS_USERNAME=${JENKINS_USERNAME}
         # - JENKINS_PASSWORD=${JENKINS_PASSWORD}
     ports:
-        - "80:80"
-        - "443:443"
+        - "80"
+        - "443"
 
 nginxjenkins:
     image: nginx:1.10
@@ -107,7 +107,7 @@ nginxjenkins:
         - ./jenkins/conf.d:/etc/nginx/conf.d
         - ./jenkins/sslcert:/etc/nginx/ssl
     ports:
-        - "8443:443"
+        - "443"
 redis:
     image: redis
 
@@ -121,7 +121,7 @@ seleniumhub:
 #    volumes:
 #        - /dev/urandom:/dev/random
     ports:
-        - "4444:4444"
+        - "4444"
 seleniumfirefox:
     image: selenium/node-firefox:3.0.0-dubnium
     links:
