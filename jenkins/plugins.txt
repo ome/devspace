@@ -1,15 +1,15 @@
 swarm:3.4
-git:3.2.0
-git-client:2.4.1
+git:3.3.2
+git-client:2.4.6
 git-server:1.7
 mailer:1.20
 scm-api:2.1.1
-matrix-project:1.9
+matrix-project:1.11
 ssh-credentials:1.13
-credentials:2.1.12
-script-security:1.27
-role-strategy:2.4.0
-matrix-auth:1.5
+credentials:2.1.14
+script-security:1.31
+role-strategy:2.5.1
+matrix-auth:1.7
 icon-shim:2.0.3
 authentication-tokens:1.3
 
@@ -18,67 +18,66 @@ testng-plugin:1.14
 
 javadoc:1.4
 
-artifactory:2.10.3
-ant:1.4
-gradle:1.26
+artifactory:2.12.1
+ant:1.5
+gradle:1.27.1
 ivy:1.27.1
-config-file-provider:2.15.7
+config-file-provider:2.16.2
 
 copyartifact:1.38.1
 
-branch-api:2.0.8
+branch-api:2.0.10
 mapdb-api:1.0.9.0
-display-url-api:1.1.1
-durable-task:1.12
-structs:1.6
-conditional-buildstep:1.3.5
+display-url-api:2.0
+structs:1.9
+conditional-buildstep:1.3.6
 run-condition:1.0
 
 
 # As a repository
 repository:1.3
-maven-plugin:2.15.1
+maven-plugin:2.17
 
 # Optional
-parameterized-trigger:2.33
-subversion:2.7.1
+parameterized-trigger:2.35.1
+subversion:2.9
 token-macro:2.1
-promoted-builds:2.28.1
-cloudbees-folder:6.0.3
+promoted-builds:2.29
+cloudbees-folder:6.0.4
 
 # Workflow
 # See: https://github.com/jenkinsci/workflow-plugin/blob/master/demo/plugins.txt
-durable-task:1.13
+durable-task:1.14
 ace-editor:1.1
 jquery-detached:1.2.1
 workflow-aggregator:2.5
-workflow-api:2.12
-workflow-basic-steps:2.4
-workflow-cps:2.29
-workflow-cps-global-lib:2.7
-workflow-durable-task-step:2.10
-workflow-job:2.9
-workflow-multibranch:2.10
+workflow-api:2.18
+workflow-basic-steps:2.6
+workflow-cps:2.36.1
+workflow-cps-global-lib:2.8
+workflow-durable-task-step:2.12
+workflow-job:2.11.1
+workflow-multibranch:2.16
 workflow-remote-loader:1.4
-workflow-scm-step:2.4
-workflow-step-api:2.9
+workflow-scm-step:2.5
+workflow-step-api:2.12
 workflow-support:2.14
 
-pipeline-rest-api:2.6
-pipeline-stage-view:2.6
+pipeline-rest-api:2.8
+pipeline-stage-view:2.8
 pipeline-stage-step:2.2
-pipeline-build-step:2.5
-pipeline-input-step:2.5
+pipeline-build-step:2.5.1
+pipeline-input-step:2.8
 pipeline-milestone-step:1.3.1
-pipeline-graph-analysis:1.3
+pipeline-graph-analysis:1.4
 pipeline-model-definition:1.1.2
-pipeline-model-api:1.1.2
+pipeline-model-api:1.1.8
 pipeline-model-declarative-agent:1.1.1
-pipeline-model-extensions:1.1.2
-pipeline-stage-tags-metadata:1.1.2
+pipeline-model-extensions:1.1.8
+pipeline-stage-tags-metadata:1.1.8
 
-docker-workflow:1.10
-docker-commons:1.6
+docker-workflow:1.12
+docker-commons:1.8
 
 credentials-binding:1.11
 plain-credentials:1.4
@@ -91,8 +90,8 @@ robot:1.6.4
 # Utils
 greenballs:1.15
 timestamper:1.8.8
-jobConfigHistory:2.15
+jobConfigHistory:2.16
 rundeck:3.6.1
 
 # ldap
-ldap:1.14
+ldap:1.16
