@@ -53,9 +53,10 @@ do
 done
 
 
-curl -k -I https://localhost:8443
+JENKINS_PORT=$(docker-compose port nginxjenkins 443 | cut -d: -f2)
+curl -k -I https://localhost:$JENKINS_PORT
 
-STATUS=`curl -k --write-out %{http_code} --silent --output /dev/null https://localhost:8443`
+STATUS=$(curl -k --write-out %{http_code} --silent --output /dev/null https://localhost:$JENKINS_PORT)
 
 if [ ! "200" == "$STATUS" ]; then
     exit 1
