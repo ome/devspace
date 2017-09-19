@@ -34,13 +34,9 @@
         <name>SPACEBRANCH</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
-        <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-     <submoduleCfg class="list"/>
-     <extensions>
-      </hudson.plugins.git.extensions.impl.SubmoduleOption>
-      <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
-        <relativeTargetDir>src</relativeTargetDir>
-      </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions>
       <hudson.plugins.git.extensions.impl.CleanCheckout/>
     </extensions>
   </scm>
@@ -60,12 +56,12 @@ $HOME/.local/bin/scc $MERGE_COMMAND</command>
     <hudson.tasks.Ant plugin="ant@1.4">
       <targets>clean html</targets>
       <antName>Ant 1.9</antName>
-      <buildFile>src/omero/build.xml</buildFile>
+      <buildFile>omero/build.xml</buildFile>
     </hudson.tasks.Ant>
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>src/omero/_build/html/**</artifacts>
+      <artifacts>omero/_build/html/**</artifacts>
       <allowEmptyArchive>false</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
