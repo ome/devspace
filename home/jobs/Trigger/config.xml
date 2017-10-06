@@ -33,6 +33,8 @@ build job: &apos;OMERO-test-integration&apos;, propagate: false
 
 build job: &apos;OMERO-robot&apos;, wait: false
 
+build job: &apos;OMERO-docs&apos;, wait: false
+
 </script>
     <sandbox>false</sandbox>
   </definition>

@@ -209,6 +209,7 @@ they are associated with and a short description of the job:
 | OMERO-test-integration | testintegration | Runs the OMERO integration tests          |
 | OMERO-robot            | testintegration | Runs the Robot tests                      |
 | nginx                  | nginx           | Reloads the nginx server                  |
+| OMERO-docs             | testintegration | Builds the OMERO documentation            |
 
 
 Default packages:
