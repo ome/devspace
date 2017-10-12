@@ -7,35 +7,39 @@ initializes a Jenkins CI master with a predefined set of jobs.
 
 Running and maintaining Devspace requires brief understanding of:
 
-*   Docker engine https://docs.docker.com/
-*   Docker compose
+*  [Docker engine](https://docs.docker.com/)
+*  [Docker compose](https://docs.docker.com/compose/)
 
 Running and maintaining Devspace in OpenStack requires brief understanding of:
 
-*   Docker engine https://docs.docker.com/ and Docker compose
-*   ansible http://docs.ansible.com/ansible/intro_getting_started.html
-    *   inventory http://docs.ansible.com/ansible/intro_inventory.html
-    *   playbook http://docs.ansible.com/ansible/playbooks.html
-*    access to openstack tenancy
-*   own ssh key set in openstack tenancy, that name will be used as `vm_key_name`
-*   openrc.sh http://docs.openstack.org/user-guide/common/cli-set-environment-variables-using-openstack-rc.html
-*   snoopy ssh key and gitconfig (optional)
+* [Docker engine](https://docs.docker.com/)
+* [Docker compose](https://docs.docker.com/compose/)
+* [ansible](http://docs.ansible.com/ansible/intro_getting_started.html)
+    *  [inventory](http://docs.ansible.com/ansible/intro_inventory.html)
+    *  [playbook](http://docs.ansible.com/ansible/playbooks.html)
+*  access to openstack tenancy
+*  own ssh key set in openstack tenancy, that name will be used as `vm_key_name`
+*  [openrc.sh](https://docs.openstack.org/zh_CN/user-guide/common/cli-set-environment-variables-using-openstack-rc.html)
+*  snoopy ssh key, see [internal]()
+*  gitconfig see [internal]()
 
 
 ## Installation
 
 #### Manual
 
-Install following prerequesits:
+Install following prerequisites:
 
-*   Docker engine https://docs.docker.com/engine/installation/
-*   Docker compose
+*  [Docker engine](https://docs.docker.com/)
+*  [Docker compose](https://docs.docker.com/compose/)
 
         $ pip install docker-compose
 
-*   Clone devspace repository
+*   Clone the ``devspace`` repository
 
         git clone https://github.com/openmicroscopy/devspace.git
+
+Generate certificates and set variables:
 
 *   Generated ssl certificates:
 
@@ -49,6 +53,8 @@ Install following prerequesits:
         USER_ID=1234
         JENKINS_USERNAME=devspace
         JENKINS_PASSWORD=secret
+
+Start and configure:
 
 *   Start devspace
 
@@ -66,40 +72,33 @@ Install following prerequesits:
 
 #### OpenStack
 
-Clone infrastructure repository:
+Create a [OpenStack RC file](https://docs.openstack.org/zh_CN/user-guide/common/cli-set-environment-variables-using-openstack-rc.html). Download the OpenStack RC File v2, the file is name ``omedev-openrc.sh``.
+
+Clone the ``infrastructure`` repository:
 
     $ git clone https://github.com/openmicroscopy/infrastructure.git
-    $ virtualenv dev
-    $ source dev/bin/activate
-    (dev) $ pip install -r requirements.txt
 
-    (dev) $ source OpenStackRC.rc
-    (dev) $ cd infrastructure/ansible
+Set up a directory `snoopy``:
 
-NOTE: VM will boot from volume, you no longer have to attach additional volumes. Size of the volume can be set by `-e vm_size=100`
+    $ tree /path/to/snoopy
+    snoopy
+        ├── .gitconfig
+        └── .ssh
 
-    Install the various ansible roles
-    (dev) $ ansible-galaxy install -r requirements.yml
-    Run the playbook to create and provision the devpace
-    (dev) $ ansible-playbook os-devspace.yml -e vm_name=devspace-test -e vm_key_name=your_key
-    (dev) $ ansible-playbook -l devspace-test -u centos devspace.yml
+Add the ssh keys to `snoopy/.ssh`:
 
+        -rwx------.  1    74 Sep 13 15:25 config
+        -rwx------.  1  1674 Sep 13 15:25 snoopycrimecop_github
+        -rwx------.  1   405 Sep 13 15:25 snoopycrimecop_github.pub
 
-To deploy devspace from custom branch, first set up inventory:
+To obtain ssh key and token for snoopy, please go to [internal]()
 
-    $ tree /path/to/inventory
-    inventory
-      ├── group_vars
-      │   └── devspace
-      └── snoopy
-          ├── .gitconfig
-          └── .ssh
+Add variables to path/to/inventory/group_vars/devspace:
 
- *  add variables to group_vars/devspace:
-
-        devspace_omero_branch: roles
+        devspace_omero_branch: develop
         snoopy_dir_path: "/path/to/snoopy"
 
+ To use a specific repository or branch of devspace:
         devspace_git_repo: "https://github.com/user_name/devspace.git"
         devspace_git_version: "your_branch"
 
@@ -110,11 +109,27 @@ To deploy devspace from custom branch, first set up inventory:
     `devspace_git_version` indicates the branch or tag to use. `https://github.com/openmicroscopy/devspace/tree/master` is used by default.
     See `https://github.com/openmicroscopy/ansible-role-devspace` for a full list of supported parameters.
 
- *  ssh keys in `/path/to/inventory/devspace/snoopy/.ssh` that include:
+Create a virtual environment and install the dependencies:
 
-        -rwx------.  1    74 Sep 13 15:25 config
-        -rwx------.  1  1674 Sep 13 15:25 snoopycrimecop_github
-        -rwx------.  1   405 Sep 13 15:25 snoopycrimecop_github.pub
+    $ virtualenv dev
+    $ source dev/bin/activate
+    (dev) $ pip install -r infrastructure/requirements.txt
+    Source the OpenStack RC File, Adjust to your local configuration
+    (dev) $ source omedev-openrc.sh
+    Enter your password
+
+
+NOTE: VM will boot from volume, you no longer have to attach additional volumes. The size of the volume can be set by `-e vm_size=100`
+
+    Install the various ansible roles
+    (dev) $ cd infrastructure/ansible
+    (dev) $ ansible-galaxy install -r requirements.yml
+    Run the playbook to create and provision the devpace
+    (dev) $ ansible-playbook os-devspace.yml -e vm_name=devspace-test -e vm_key_name=your_key
+    (dev) $ ansible-playbook -l devspace-test -u centos devspace.yml
+
+
+ 
 
 
 
