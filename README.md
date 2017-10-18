@@ -78,8 +78,8 @@ Please use the sysadmin slack channel to request an account.
 Generate an ``openrc``file:
 
 * Log into [OpenStack](https://pony.openmicroscopy.org)
-* Create a [OpenStack RC file](https://docs.openstack.org/zh_CN/user-guide/common/cli-set-environment-variables-using-openstack-rc.html). 
-* Download the OpenStack RC File v2, the file should be named ``omedev-openrc.sh``.
+* Create a [OpenStack RC file](https://docs.openstack.org/zh_CN/user-guide/common/cli-set-environment-variables-using-openstack-rc.html)
+* Download the OpenStack RC File v2, the file should be named ``omedev-openrc.sh``
 
 Clone the ``infrastructure`` repository:
 
@@ -92,15 +92,13 @@ Set up a directory ``snoopy``:
         ├── .gitconfig
         └── .ssh
 
-Add the ssh keys to `snoopy/.ssh`:
+Add the ssh keys to `snoopy/.ssh`, to obtain ssh key and token for snoopy, please go to [internal]():
 
         -rwx------.  1    74 Sep 13 15:25 config
         -rwx------.  1  1674 Sep 13 15:25 snoopycrimecop_github
         -rwx------.  1   405 Sep 13 15:25 snoopycrimecop_github.pub
 
-To obtain ssh key and token for snoopy, please go to [internal]()
-
-Add variables to path/to/inventory/group_vars/devspace:
+Add variables to ``path/to/inventory/group_vars/devspace``:
 
         devspace_omero_branch: develop
         snoopy_dir_path: "/path/to/snoopy"
@@ -111,9 +109,9 @@ Add variables to path/to/inventory/group_vars/devspace:
 
     NOTE:
 
-    `devspace_omero_branch` is the name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
-    `devspace_git_repo` indicates the devspace repository to use. If you do not need to use a specific repository, `https://github.com/openmicroscopy/devspace.git` is used
-    `devspace_git_version` indicates the branch or tag to use. `https://github.com/openmicroscopy/devspace/tree/master` is used by default.
+    **devspace_omero_branch** is the name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
+    **devspace_git_repo** indicates the devspace repository to use. If you do not need to use a specific repository, `https://github.com/openmicroscopy/devspace.git` is used
+    **devspace_git_version** indicates the branch or tag to use. By default it is `https://github.com/openmicroscopy/devspace/tree/master`.
     See `https://github.com/openmicroscopy/ansible-role-devspace` for a full list of supported parameters.
 
 Create a virtual environment and install the dependencies:
@@ -126,9 +124,14 @@ Create a virtual environment and install the dependencies:
     Enter your password
 
 
-NOTE: VM will boot from volume, you no longer have to attach additional volumes. The size of the volume can be set by `-e vm_size=100`
 
-    Install the various ansible roles
+    NOTE: 
+
+    VM will boot from volume, you no longer have to attach additional volumes. The size of the volume can be set by `-e vm_size=100`
+
+
+Install the various ansible roles and run the playbook:
+
     (dev) $ cd infrastructure/ansible
     (dev) $ ansible-galaxy install -r requirements.yml
     Run the playbook to create and provision the devpace
@@ -136,20 +139,16 @@ NOTE: VM will boot from volume, you no longer have to attach additional volumes.
     (dev) $ ansible-playbook -l devspace-test -u centos devspace.yml
 
 
- 
-
-
-
 Devspace should be already started at https://your_host:8443.
 
 ## ADVANCE: Multiply containers
 
  * List of devspace containers can be controlled by custom runtime handler in `devspace_handler_tasks`.
-   For more complex deployment see https://github.com/openmicroscopy/ansible-role-devspace/blob/master/tasks/devspace-runtime.yml that uses https://docs.ansible.com/ansible/docker_service_module.html
+   For more complex deployment see [devspace-runtime.yml](https://github.com/openmicroscopy/ansible-role-devspace/blob/master/tasks/devspace-runtime.yml) that uses [docker service module](https://docs.ansible.com/ansible/docker_service_module.html).
 
- * common-services-v1.yml contains a default list of basic containers that are suitable to extend:
+ * [common-services-v1.yml](common-services-v1.yml) contains a default list of basic containers that are suitable to extend:
     You can extend any service together with other configuration keys. For more details
-    read https://docs.docker.com/v1.6/compose/extends/
+    read [extends](https://docs.docker.com/v1.6/compose/extends/).
 
  * to override the basic containers keep in mind compose copies configurations from the
    original service over to the local one, except for links and volumes_from.
@@ -206,10 +205,11 @@ Devspace should be already started at https://your_host:8443.
                 ports:
                     - "8080:80"
 
-    **NOTE: you have to create manually all new volume directories to avoid 
-    permission issues**
+    NOTE:
 
-    Copy from appropriate existing jobs and point to the new node
+    **You have to create manually all new volume directories to avoid 
+    permission issues. Copy from appropriate existing jobs and point to the new node.**
+
 
 ## Job workflow
 
@@ -250,7 +250,7 @@ Default packages:
 
 * Updating omero-install scripts:
 
-In order to install additional components it is required to first adjust omero-install repository https://github.com/ome/omero-install
+In order to install additional components it is required to first adjust update files in [omero-install](https://github.com/ome/omero-install).
 Then fetch custom omero-install branch by updating each Dockerfile
 
     ├── nginx
