@@ -72,13 +72,20 @@ Start and configure:
 
 #### OpenStack
 
-Create a [OpenStack RC file](https://docs.openstack.org/zh_CN/user-guide/common/cli-set-environment-variables-using-openstack-rc.html). Download the OpenStack RC File v2, the file is name ``omedev-openrc.sh``.
+For that section, you will need to have an account on [OpenStack](https://pony.openmicroscopy.org).
+Please use the sysadmin slack channel to request an account.
+
+Generate an ``openrc``file:
+
+* Log into [OpenStack](https://pony.openmicroscopy.org)
+* Create a [OpenStack RC file](https://docs.openstack.org/zh_CN/user-guide/common/cli-set-environment-variables-using-openstack-rc.html). 
+* Download the OpenStack RC File v2, the file should be named ``omedev-openrc.sh``.
 
 Clone the ``infrastructure`` repository:
 
     $ git clone https://github.com/openmicroscopy/infrastructure.git
 
-Set up a directory `snoopy``:
+Set up a directory ``snoopy``:
 
     $ tree /path/to/snoopy
     snoopy
@@ -112,10 +119,10 @@ Add variables to path/to/inventory/group_vars/devspace:
 Create a virtual environment and install the dependencies:
 
     $ virtualenv dev
-    $ source dev/bin/activate
+    $ . dev/bin/activate
     (dev) $ pip install -r infrastructure/requirements.txt
     Source the OpenStack RC File, Adjust to your local configuration
-    (dev) $ source omedev-openrc.sh
+    (dev) $ . omedev-openrc.sh
     Enter your password
 
 
