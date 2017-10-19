@@ -84,7 +84,7 @@ Generate an ``openrc``file:
 * Create a [OpenStack RC file](https://docs.openstack.org/zh_CN/user-guide/common/cli-set-environment-variables-using-openstack-rc.html)
 * Download the OpenStack RC File v2, the file should be named ``omedev-openrc.sh``
 
-Clone the ``infrastructure`` repository:
+Clone the ``infrastructure``  Git repository:
 
     $ git clone https://github.com/openmicroscopy/infrastructure.git
 
@@ -120,10 +120,12 @@ NOTE:
 
 Create a virtual environment and install the Ansible requirements (including ``shade`` for using with OpenStack):
 
-    $ virtualenv `~/dev
+    $ virtualenv ~/dev
     $ . ~/dev/bin/activate
     (dev) $ pip install -r infrastructure/requirements.txt
-    Source the OpenStack RC File, Adjust to your local configuration
+
+Source the OpenStack RC File, Adjust to your local configuration:
+
     (dev) $ . omedev-openrc.sh
     Enter your password
 
@@ -134,7 +136,7 @@ NOTE:
     VM will boot from volume, you no longer have to attach additional volumes. The size of the volume can be set by `-e vm_size=100`
 
 
-Install the various ansible roles and run the playbook:
+Install the various ansible roles and run the playbook. The following commands need to be executed from the ``ansible`` subdirectory:
 
     (dev) $ cd infrastructure/ansible
     (dev) $ ansible-galaxy install -r requirements.yml
