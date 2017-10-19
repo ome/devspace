@@ -10,23 +10,26 @@ Running and maintaining Devspace requires brief understanding of:
 *  [Docker engine](https://docs.docker.com/)
 *  [Docker compose](https://docs.docker.com/compose/)
 
-Running and maintaining Devspace in OpenStack requires brief understanding of:
+Running and maintaining Devspace in OpenStack requires, in addition, brief understanding of:
 
-* [Docker engine](https://docs.docker.com/)
-* [Docker compose](https://docs.docker.com/compose/)
-* [ansible](http://docs.ansible.com/ansible/intro_getting_started.html)
+* [Ansible](http://docs.ansible.com/ansible/intro_getting_started.html)
     *  [inventory](http://docs.ansible.com/ansible/intro_inventory.html)
     *  [playbook](http://docs.ansible.com/ansible/playbooks.html)
 *  access to openstack tenancy
 *  own ssh key set in openstack tenancy, that name will be used as `vm_key_name`
 *  [openrc.sh](https://docs.openstack.org/zh_CN/user-guide/common/cli-set-environment-variables-using-openstack-rc.html)
+
+Running Devspace requires access to:
+
 *  snoopy ssh key, see [internal]()
 *  gitconfig see [internal]()
 
 
 ## Installation
 
-#### Manual
+You can either deploy manually a devspace on a Docker host or you can use the [Ansible playbooks]((http://docs.ansible.com/ansible/playbooks.html)) a devspace in OpenStack.
+
+#### Deploy on a Docker host
 
 Install following prerequisites:
 
@@ -70,9 +73,9 @@ Start and configure:
         auth_basic_user_file /etc/nginx/conf.d/passwdfile;
 
 
-#### OpenStack
+#### Deploy on OpenStack
 
-For that section, you will need to have an account on [OpenStack](https://pony.openmicroscopy.org).
+For that section, you will need to have an account on [OME OpenStack](https://pony.openmicroscopy.org).
 Please use the sysadmin slack channel to request an account.
 
 Generate an ``openrc``file:
@@ -104,20 +107,21 @@ Add variables to ``path/to/inventory/group_vars/devspace``:
         snoopy_dir_path: "/path/to/snoopy"
 
  To use a specific repository or branch of devspace:
+
         devspace_git_repo: "https://github.com/user_name/devspace.git"
         devspace_git_version: "your_branch"
 
-    NOTE:
+NOTE:
 
     **devspace_omero_branch** is the name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
     **devspace_git_repo** indicates the devspace repository to use. If you do not need to use a specific repository, `https://github.com/openmicroscopy/devspace.git` is used
     **devspace_git_version** indicates the branch or tag to use. By default it is `https://github.com/openmicroscopy/devspace/tree/master`.
     See `https://github.com/openmicroscopy/ansible-role-devspace` for a full list of supported parameters.
 
-Create a virtual environment and install the dependencies:
+Create a virtual environment and install the Ansible requirements (including ``shade`` for using with OpenStack):
 
-    $ virtualenv dev
-    $ . dev/bin/activate
+    $ virtualenv `~/dev
+    $ . ~/dev/bin/activate
     (dev) $ pip install -r infrastructure/requirements.txt
     Source the OpenStack RC File, Adjust to your local configuration
     (dev) $ . omedev-openrc.sh
@@ -125,7 +129,7 @@ Create a virtual environment and install the dependencies:
 
 
 
-    NOTE: 
+NOTE: 
 
     VM will boot from volume, you no longer have to attach additional volumes. The size of the volume can be set by `-e vm_size=100`
 
@@ -146,8 +150,7 @@ Devspace should be already started at https://your_host:8443.
  * List of devspace containers can be controlled by custom runtime handler in `devspace_handler_tasks`.
    For more complex deployment see [devspace-runtime.yml](https://github.com/openmicroscopy/ansible-role-devspace/blob/master/tasks/devspace-runtime.yml) that uses [docker service module](https://docs.ansible.com/ansible/docker_service_module.html).
 
- * [common-services-v1.yml](common-services-v1.yml) contains a default list of basic containers that are suitable to extend:
-    You can extend any service together with other configuration keys. For more details
+ * [common-services-v1.yml](common-services-v1.yml) contains a default list of basic containers that are suitable to extend. You can extend any service together with other configuration keys. For more details
     read [extends](https://docs.docker.com/v1.6/compose/extends/).
 
  * to override the basic containers keep in mind compose copies configurations from the
