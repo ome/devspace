@@ -19,11 +19,7 @@ Running and maintaining Devspace in OpenStack requires, in addition, brief under
 *  own ssh key set in openstack tenancy, that name will be used as `vm_key_name`
 *  [openrc.sh](https://docs.openstack.org/zh_CN/user-guide/common/cli-set-environment-variables-using-openstack-rc.html)
 
-Running Devspace requires access to:
-
-*  snoopy ssh key, see [internal]()
-*  gitconfig see [internal]()
-
+Running Devspace requires access to SSH and Git configuration files used for fetching and pushing the Git repositories see [internal]().
 
 # Installation
 
@@ -39,18 +35,18 @@ The following instructions explain how to deploy a devspace on a Docker host.
 
         $ pip install docker-compose
 
-*   Clone the ``devspace`` repository
+*   Clone the ``devspace`` Git repository:
 
         $ git clone https://github.com/openmicroscopy/devspace.git
         $ cd devspace
 
-*   Generated self-signed SSL certificates for the Jenkins and Nginx
+*   Generated self-signed SSL certificates for the Jenkins and NGINX
     containers:
 
         $ ./sslcert jenkins/sslcert HOST_IP
         $ ./sslcert nginx/sslcert HOST_IP
 
-    alternatively put your own certificate `.crt and .key` in the above locations
+    alternatively put your own certificate `.crt and .key` in the above locations.
 
 *   Copy the SSH and Git configuration files used for fetching and pushing the
     Git repositories under `slave/.ssh` and `slave/.gitconfig`.
@@ -61,7 +57,7 @@ The following instructions explain how to deploy a devspace on a Docker host.
 
         $ ./rename.py MYTOPIC
 
-*   Replace the USER_ID of the various Dockerfile with the ID of the user who
+*   Replace the `USER_ID` of the various Dockerfile with the ID of the user who
     will run the devspace:
 
         $ find . -iname Dockerfile -type f -exec sed -i -e 's/1000/<USER_ID>/g' {} \;
@@ -80,7 +76,7 @@ Start and configure:
 
         $ docker-compose up -d
 
-    By default, this will use the name of the directory as the project name. In the case of a shared Docker host, it is possible to override the project name using th
+    By default, this will use the name of the directory as the project name. In the case of a shared Docker host, it is possible to override the project name using
 
         $ docker-compose up -p my_project -d
 
@@ -102,8 +98,8 @@ Start and configure:
 
 ## Deploy on OpenStack
 
-For that section, you will need to have an account on [OME OpenStack](https://pony.openmicroscopy.org).
-Please use the sysadmin slack channel to request an account.
+The following instructions explain how to deploy a devspace on OpenStack.
+First, you will need to have an account on [OME OpenStack](https://pony.openmicroscopy.org).
 
 Generate an ``openrc``file:
 
@@ -115,18 +111,13 @@ Clone the ``infrastructure``  Git repository:
 
     $ git clone https://github.com/openmicroscopy/infrastructure.git
 
-Set up a directory ``snoopy``:
+Set up a directory ``snoopy`` containing the SSH and Git configuration files used for fetching and pushing the
+Git repositories, see [internal]():
 
     $ tree /path/to/snoopy
     snoopy
         ├── .gitconfig
         └── .ssh
-
-Add the ssh keys to `snoopy/.ssh`, to obtain ssh key and token for snoopy, please go to [internal]():
-
-        -rwx------.  1    74 Sep 13 15:25 config
-        -rwx------.  1  1674 Sep 13 15:25 snoopycrimecop_github
-        -rwx------.  1   405 Sep 13 15:25 snoopycrimecop_github.pub
 
 Add variables to ``path/to/inventory/group_vars/devspace``:
 
@@ -138,7 +129,7 @@ Add variables to ``path/to/inventory/group_vars/devspace``:
         devspace_git_repo: "https://github.com/user_name/devspace.git"
         devspace_git_version: "your_branch"
 
-NOTE:
+NOTE
 
     **devspace_omero_branch** is the name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
     **devspace_git_repo** indicates the devspace repository to use. If you do not need to use a specific repository, `https://github.com/openmicroscopy/devspace.git` is used
@@ -151,14 +142,12 @@ Create a virtual environment and install the Ansible requirements (including ``s
     $ . ~/dev/bin/activate
     (dev) $ pip install -r infrastructure/requirements.txt
 
-Source the OpenStack RC File, Adjust to your local configuration:
+Source the OpenStack RC File, adjust to your local configuration:
 
     (dev) $ . omedev-openrc.sh
     Enter your password
 
-
-
-NOTE: 
+NOTE 
 
     VM will boot from volume, you no longer have to attach additional volumes. The size of the volume can be set by `-e vm_size=100`
 
