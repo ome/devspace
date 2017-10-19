@@ -28,37 +28,64 @@ Running and maintaining Devspace in OpenStack requires brief understanding of:
 
 #### Manual
 
-Install following prerequisites:
+The following instructions explain how to deploy a devspace on a Docker host.
 
-*  [Docker engine](https://docs.docker.com/)
-*  [Docker compose](https://docs.docker.com/compose/)
+*   Install the prerequisites [Docker engine](https://docs.docker.com/) and
+    [Docker compose](https://docs.docker.com/compose/) either globally or in
+    a virtual environment:
 
         $ pip install docker-compose
 
 *   Clone the ``devspace`` repository
 
-        git clone https://github.com/openmicroscopy/devspace.git
+        $ git clone https://github.com/openmicroscopy/devspace.git
+        $ cd devspace
 
-Generate certificates and set variables:
+*   Generated self-signed SSL certificates for the Jenkins and Nginx
+    containers:
 
-*   Generated ssl certificates:
-
-        ./sslcert jenkins/sslcert YOUR_IP
-        ./sslcert nginx/sslcert YOUR_IP
+        $ ./sslcert jenkins/sslcert HOST_IP
+        $ ./sslcert nginx/sslcert HOST_IP
 
     alternatively put your own certificate `.crt and .key` in the above locations
 
-*   Set enviroment variables in `.env`
+*   Copy the SSH and Git configuration files used for fetching and pushing the
+    Git repositories under `slave/.ssh` and `slave/.gitconfig`.
 
-        USER_ID=1234
+ *  Run `rename.py` to match your topic name. If you do not yet have
+    topic branches available on origin, use "develop" or one of the
+    main branches:
+
+        $ ./rename.py MYTOPIC
+
+*   Replace the USER_ID of the various Dockerfile with the ID of the user who
+    will run the devspace:
+
+        $ find . -iname Dockerfile -type f -exec sed -i -e 's/1000/<USER_ID>/g' {} \;
+
+*   Set the environment variables in `.env`:
+
+        USER_ID=<USER_ID>
         JENKINS_USERNAME=devspace
-        JENKINS_PASSWORD=secret
+        JENKINS_PASSWORD=<password>
+
+*   Optionally, commit all the deployment changes above on the local clone of the devspace repository.
 
 Start and configure:
 
-*   Start devspace
+*   Start devspace using `docker-compose`:
 
-        $ docker-compose -f docker-compose.yml up --build
+        $ docker-compose up -d
+
+    By default, this will use the name of the directory as the project name. In the case of a shared Docker host, it is possible to override the project name using th
+
+        $ docker-compose up -p my_project -d
+
+*   Retrieve the dynamic port of the Jenkins NGINX container. You can access
+    the Jenkins UI from https://HOST_IP:PORT after accepting the self-signed
+    certificate:
+
+        $ docker-compose -p my_project port nginxjenkins 443
 
 *   [Optional] Turn on Basic HTTP authentication for Jenkins
 
