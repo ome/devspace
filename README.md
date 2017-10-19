@@ -25,11 +25,11 @@ Running Devspace requires access to:
 *  gitconfig see [internal]()
 
 
-## Installation
+# Installation
 
-You can either deploy manually a devspace on a Docker host or you can use the [Ansible playbooks]((http://docs.ansible.com/ansible/playbooks.html)) a devspace in OpenStack.
+You can either deploy manually a devspace on a Docker host or you can use the [Ansible playbooks]((http://docs.ansible.com/ansible/playbooks.html)) to deploy a devspace on OpenStack.
 
-#### Deploy on a Docker host
+## Deploy on a Docker host
 
 The following instructions explain how to deploy a devspace on a Docker host.
 
@@ -100,7 +100,7 @@ Start and configure:
         auth_basic_user_file /etc/nginx/conf.d/passwdfile;
 
 
-#### Deploy on OpenStack
+## Deploy on OpenStack
 
 For that section, you will need to have an account on [OME OpenStack](https://pony.openmicroscopy.org).
 Please use the sysadmin slack channel to request an account.
@@ -174,7 +174,7 @@ Install the various ansible roles and run the playbook. The following commands n
 
 Devspace should be already started at https://your_host:8443.
 
-## ADVANCE: Multiply containers
+# ADVANCE: Multiply containers
 
  * List of devspace containers can be controlled by custom runtime handler in `devspace_handler_tasks`.
    For more complex deployment see [devspace-runtime.yml](https://github.com/openmicroscopy/ansible-role-devspace/blob/master/tasks/devspace-runtime.yml) that uses [docker service module](https://docs.ansible.com/ansible/docker_service_module.html).
@@ -243,7 +243,7 @@ Devspace should be already started at https://your_host:8443.
     permission issues. Copy from appropriate existing jobs and point to the new node.**
 
 
-## Job workflow
+# Job workflow
 
 
 The default deployment initializes a Jenkins server with a [predefined set of
@@ -278,7 +278,7 @@ Default packages:
 | Redis      | latest        | https://hub.docker.com/_/redis/    |
 
 
-## Customization:
+# Customization:
 
 * Updating omero-install scripts:
 
@@ -309,7 +309,7 @@ Then fetch custom omero-install branch by updating each Dockerfile
         --webhost "10.0.50.100"
 
 
-## Upgrade
+# Upgrade
 
  *  Upgrade to 0.3.0:
 
