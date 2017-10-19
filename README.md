@@ -29,11 +29,19 @@ You can either deploy manually a devspace on a Docker host or you can use the [A
 
 The following instructions explain how to deploy a devspace on a Docker host.
 
+*   Log into the Docker host using ssh
+
 *   Install the prerequisites [Docker engine](https://docs.docker.com/) and
     [Docker compose](https://docs.docker.com/compose/) either globally or in
     a virtual environment:
 
         $ pip install docker-compose
+
+*   Create a directory ``/data/username`` and change ownership:
+    
+        $ sudo mkdir /data/username
+        $ sudo chown username /data/username
+
 
 *   Clone the ``devspace`` Git repository:
 
@@ -61,6 +69,8 @@ The following instructions explain how to deploy a devspace on a Docker host.
     will run the devspace:
 
         $ find . -iname Dockerfile -type f -exec sed -i -e 's/1000/<USER_ID>/g' {} \;
+
+    To find the `USER_ID`, use the id command i.e. ``id -u username``
 
 *   Set the environment variables in `.env`:
 
