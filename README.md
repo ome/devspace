@@ -166,7 +166,9 @@ Install the various ansible roles and run the playbook. The following commands n
 
     (dev) $ cd infrastructure/ansible
     (dev) $ ansible-galaxy install -r requirements.yml
-    Run the playbook to create and provision the devpace
+
+Run the playbook to create and provision the devpace:
+
     (dev) $ ansible-playbook os-devspace.yml -e vm_name=devspace-test -e vm_key_name=your_key
     (dev) $ ansible-playbook -l devspace-test -u centos devspace.yml
 
@@ -246,7 +248,7 @@ Devspace should be already started at https://your_host:8443.
 
 
 The default deployment initializes a Jenkins server with a [predefined set of
-jobs](homes/jobs). The table below lists the job names, the Jenkins node labels
+jobs](home/jobs). The table below lists the job names, the Jenkins node labels
 they are associated with and a short description of the job:
 
 | Job name               | Name            | Description                               |
