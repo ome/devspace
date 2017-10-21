@@ -138,51 +138,51 @@ Set up a directory ``inventory`` containing a directory ``group_vars`` and a ``d
 
 * The content of the ``devspace-host`` file is a follow, the variable devspace_IP will be modified later on:
 
-    [devspace]
-    devspace_IP
+        [devspace]
+        devspace_IP
 
-* Under ``inventory/group_vars`` add a ``devspace``, minimally the file should content the path to the ``snoopy``
-director, the other parameters can be commented out if the default values are used. See `https://github.com/openmicroscopy/ansible-role-devspace` for a full list of supported parameters: 
+* Under ``inventory/group_vars`` add a ``devspace`` file, minimally the file should content the path to the ``snoopy``
+director, the other parameters can be commented out if the default values are used. See [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devspace) for a full list of supported parameters: 
 
-    # path to SSH and Git configuration files
-    snoopy_dir_path: "/path/to/snoopy"
-    # The name of the git branch all the jobs will be using. The default is develop
-    devspace_omero_branch: develop
-    # The devspace repository to use. The default is https://github.com/openmicroscopy/devspace.git
-    devspace_git_repo: "https://github.com/user_name/devspace.git"
-    # The devspace of branch to use. The default is master
-    devspace_git_repo_version: "your_branch"
-    # force a clean
-    devspace_git_update: yes
-    devspace_git_force: yes
+        # path to SSH and Git configuration files
+        snoopy_dir_path: "/path/to/snoopy"
+        # The name of the git branch all the jobs will be using. The default is develop
+        devspace_omero_branch: develop
+        # The devspace repository to use. The default is https://github.com/openmicroscopy/devspace.git
+        devspace_git_repo: "https://github.com/user_name/devspace.git"
+        # The devspace of branch to use. The default is master
+        devspace_git_repo_version: "your_branch"
+        # force a clean
+        devspace_git_update: yes
+        devspace_git_force: yes
 
-#### Create an provision the devspace:
+#### Create an provision the devspace
 
 * Clone the ``infrastructure`` Git repository:
 
-    $ git clone https://github.com/openmicroscopy/infrastructure.git
+        $ git clone https://github.com/openmicroscopy/infrastructure.git
 
 * Create a virtual environment and install the Ansible requirements (including ``shade`` for using with OpenStack):
 
-    $ virtualenv ~/dev
-    $ . ~/dev/bin/activate
-    (dev) $ pip install -r infrastructure/requirements.txt
+        $ virtualenv ~/dev
+        $ . ~/dev/bin/activate
+        (dev) $ pip install -r infrastructure/requirements.txt
 
 * Source the OpenStack RC File created ealier, adjust to your local configuration:
 
-    (dev) $ . omedev-openrc.sh
-    Enter your password
+        (dev) $ . omedev-openrc.sh
+        Enter your password
 
 The following commands need to be executed from the ``ansible`` subdirectory.
 
 * Install the various ansible roles:
 
-    (dev) $ cd infrastructure/ansible
-    (dev) $ ansible-galaxy install -r requirements.yml
+        (dev) $ cd infrastructure/ansible
+        (dev) $ ansible-galaxy install -r requirements.yml
 
 * Create the devpace:
 
-    (dev) $ ansible-playbook os-devspace.yml -e vm_name=devspace-test -e vm_key_name=your_key
+        (dev) $ ansible-playbook os-devspace.yml -e vm_name=devspace-test -e vm_key_name=your_key
 
 By default the size of the volume is ``50``, if you required a larger size, it can be set passing `-e vm_size=100` for example.
 
@@ -190,7 +190,7 @@ By default the size of the volume is ``50``, if you required a larger size, it c
 
 * Provision the devpace:
 
-    (dev) $ ansible-playbook -u centos -i /path/to/inventory/ devspace.yml
+        (dev) $ ansible-playbook -u centos -i /path/to/inventory/ devspace.yml
 
 If you have already used the devspace IP, the above command might fail with the message ``Host key verification failed``. To fix the issue, remove the entry from ``~/.ssh/known_hosts`` and run the command again.
 
