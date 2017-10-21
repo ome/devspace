@@ -111,15 +111,13 @@ Start and configure:
 The following instructions explain how to deploy a devspace on OpenStack.
 First, you will need to have an account on [OME OpenStack](https://pony.openmicroscopy.org).
 
-Generate an ``openrc``file:
+#### Generate an ``openrc``file
 
 * Log into [OpenStack](https://pony.openmicroscopy.org)
 * Create a [OpenStack RC file](https://docs.openstack.org/zh_CN/user-guide/common/cli-set-environment-variables-using-openstack-rc.html)
-* Download the OpenStack RC File v2, the file should be named ``omedev-openrc.sh``
+* Download the OpenStack RC File v2, the file will be named by default ``omedev-openrc.sh``
 
-Clone the ``infrastructure``  Git repository:
-
-    $ git clone https://github.com/openmicroscopy/infrastructure.git
+#### Set up a ``snoopy`` directory
 
 Set up a directory ``snoopy`` containing the SSH and Git configuration files used for fetching and pushing the
 Git repositories, see [internal]():
@@ -129,51 +127,74 @@ Git repositories, see [internal]():
         ├── .gitconfig
         └── .ssh
 
-Add variables to ``path/to/inventory/group_vars/devspace``:
+#### Set up an ``inventory`` directory
 
-        devspace_omero_branch: develop
-        snoopy_dir_path: "/path/to/snoopy"
+Set up a directory ``inventory`` containing a directory ``group_vars`` and a ``devspace-host`` file required to provision the devspace:
 
- To use a specific repository or branch of devspace:
+    $ tree /path/to/inventory
+    inventory
+        ├── group_vars
+        └── devspace-host
 
-        devspace_git_repo: "https://github.com/user_name/devspace.git"
-        devspace_git_version: "your_branch"
+* The content of the ``devspace-host`` file is a follow, the variable devspace_IP will be modified later on:
 
-NOTE
+    [devspace]
+    devspace_IP
 
-    **devspace_omero_branch** is the name of the git branch all the jobs will be using. By default it is using `https://github.com/openmicroscopy/openmicroscopy/tree/develop`.
-    **devspace_git_repo** indicates the devspace repository to use. If you do not need to use a specific repository, `https://github.com/openmicroscopy/devspace.git` is used
-    **devspace_git_version** indicates the branch or tag to use. By default it is `https://github.com/openmicroscopy/devspace/tree/master`.
-    See `https://github.com/openmicroscopy/ansible-role-devspace` for a full list of supported parameters.
+* Under ``inventory/group_vars`` add a ``devspace``, minimally the file should content the path to the ``snoopy``
+director, the other parameters can be commented out if the default values are used. See `https://github.com/openmicroscopy/ansible-role-devspace` for a full list of supported parameters: 
 
-Create a virtual environment and install the Ansible requirements (including ``shade`` for using with OpenStack):
+    # path to SSH and Git configuration files
+    snoopy_dir_path: "/path/to/snoopy"
+    # The name of the git branch all the jobs will be using. The default is develop
+    devspace_omero_branch: develop
+    # The devspace repository to use. The default is https://github.com/openmicroscopy/devspace.git
+    devspace_git_repo: "https://github.com/user_name/devspace.git"
+    # The devspace of branch to use. The default is master
+    devspace_git_repo_version: "your_branch"
+    # force a clean
+    devspace_git_update: yes
+    devspace_git_force: yes
+
+#### Create an provision the devspace:
+
+* Clone the ``infrastructure`` Git repository:
+
+    $ git clone https://github.com/openmicroscopy/infrastructure.git
+
+* Create a virtual environment and install the Ansible requirements (including ``shade`` for using with OpenStack):
 
     $ virtualenv ~/dev
     $ . ~/dev/bin/activate
     (dev) $ pip install -r infrastructure/requirements.txt
 
-Source the OpenStack RC File, adjust to your local configuration:
+* Source the OpenStack RC File created ealier, adjust to your local configuration:
 
     (dev) $ . omedev-openrc.sh
     Enter your password
 
-NOTE 
+The following commands need to be executed from the ``ansible`` subdirectory.
 
-    VM will boot from volume, you no longer have to attach additional volumes. The size of the volume can be set by `-e vm_size=100`
-
-
-Install the various ansible roles and run the playbook. The following commands need to be executed from the ``ansible`` subdirectory:
+* Install the various ansible roles:
 
     (dev) $ cd infrastructure/ansible
     (dev) $ ansible-galaxy install -r requirements.yml
 
-Run the playbook to create and provision the devpace:
+* Create the devpace:
 
     (dev) $ ansible-playbook os-devspace.yml -e vm_name=devspace-test -e vm_key_name=your_key
-    (dev) $ ansible-playbook -l devspace-test -u centos devspace.yml
 
+By default the size of the volume is ``50``, if you required a larger size, it can be set passing `-e vm_size=100` for example.
 
-Devspace should be already started at https://your_host:8443.
+* Replace ``devspace_IP`` in ``devspace-host`` by the IP of the newly created devspace e.g. ``10.0.51.135``
+
+* Provision the devpace:
+
+    (dev) $ ansible-playbook -u centos -i /path/to/inventory/ devspace.yml
+
+If you have already used the devspace IP, the above command might fail with the message ``Host key verification failed``. To fix the issue, remove the entry from ``~/.ssh/known_hosts`` and run the command again.
+
+The devspace will be available at https://devspace_IP:8443.
 
 # ADVANCE: Multiply containers
 
