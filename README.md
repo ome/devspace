@@ -182,9 +182,9 @@ The following commands need to be executed from the ``ansible`` subdirectory.
 
 * Create the devpace:
 
-        (dev) $ ansible-playbook os-devspace.yml -e vm_name=devspace-test -e vm_key_name=your_key
+        (dev) $ ansible-playbook os-devspace.yml -e vm_name=your_name-devspace-name -e vm_key_name=your_key
 
-By default the size of the volume is ``50``, if you required a larger size, it can be set passing `-e vm_size=100` for example.
+By default the size of the volume is ``50``, if you required a larger size, it can be set passing `-e vm_size=100` for example. It is also recommended to add your name or your initals to the name of the devspace
 
 * Replace ``devspace_IP`` in ``devspace-host`` by the IP of the newly created devspace e.g. ``10.0.51.135``
 
