@@ -46,6 +46,5 @@ if __name__ == "__main__":
     branch = name
   if not user:
     user = "snoopycrimecop"
-  print user
   replace(name, branch, ns.uid, user)
   print "Done. You may want to review and commit your changes now"
