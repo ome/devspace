@@ -1,7 +1,7 @@
 # this is template for slave and server container
-# slave is a container with installed devel dependances
-# omero is a container with basic omero server dependances
-# web is a container with basic omero web dependances
+# slave is a container with installed devel dependencies
+# omero is a container with basic omero server dependencies
+# web is a container with basic omero web dependencies
 # nginx is a nginx container for omero web
 
 version: '2'
