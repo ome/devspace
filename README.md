@@ -111,21 +111,14 @@ Start and configure:
 The following instructions explain how to deploy a devspace on OpenStack.
 First, you will need to have an account on [OME OpenStack](https://pony.openmicroscopy.org).
 
+By default, your SSH and Git configuration files will be used for fetching and pushing the
+Git repositories. If you need to use alternative configuration files you can
+
 #### Generate an ``openrc``file
 
 * Log into [OpenStack](https://pony.openmicroscopy.org)
 * Create a [OpenStack RC file](https://docs.openstack.org/zh_CN/user-guide/common/cli-set-environment-variables-using-openstack-rc.html)
 * Download the OpenStack RC File v2, the file will be named by default ``omedev-openrc.sh``
-
-#### Set up a ``snoopy`` directory
-
-Set up a directory ``snoopy`` containing the SSH and Git configuration files used for fetching and pushing the
-Git repositories, see [internal]():
-
-    $ tree /path/to/snoopy
-    snoopy
-        ├── .gitconfig
-        └── .ssh
 
 #### Set up an ``inventory`` directory
 
@@ -144,8 +137,8 @@ Set up a directory ``inventory`` containing a directory ``group_vars`` and a ``d
 * Under ``inventory/group_vars`` add a ``devspace`` file, minimally the file should content the path to the ``snoopy``
 director, the other parameters can be commented out if the default values are used. See [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devspace) for a full list of supported parameters: 
 
-        # path to SSH and Git configuration files
-        snoopy_dir_path: "/path/to/snoopy"
+        # path to SSH and Git configuration files. By default "~"" is used
+        configuration_dir_path: "/path/to/configuration"
         # The name of the git branch all the jobs will be using. The default is develop
         devspace_omero_branch: develop
         # The devspace repository to use. The default is https://github.com/openmicroscopy/devspace.git
