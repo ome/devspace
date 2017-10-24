@@ -120,34 +120,13 @@ Git repositories. If you need to use alternative configuration files you can
 * Create a [OpenStack RC file](https://docs.openstack.org/zh_CN/user-guide/common/cli-set-environment-variables-using-openstack-rc.html)
 * Download the OpenStack RC File v2, the file will be named by default ``omedev-openrc.sh``
 
-#### Set up an ``inventory`` directory
+#### Set up an ``hosts`` directory
 
-Set up a directory ``inventory`` containing a directory ``group_vars`` and a ``devspace-host`` file required to provision the devspace:
-
-    $ tree /path/to/inventory
-    inventory
-        ├── group_vars
-        └── devspace-host
-
-* The content of the ``devspace-host`` file is a follow, the variable devspace_IP will be modified later on:
+Set up a directory ``hosts`` containing a ``devspace-host`` file required to provision the devspace.
+The content of the ``devspace-host`` file is a follow, the variable devspace_IP will be modified later on:
 
         [devspace]
         devspace_IP
-
-* Under ``inventory/group_vars`` add a ``devspace`` file, minimally the file should content the path to the ``snoopy``
-director, the other parameters can be commented out if the default values are used. See [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devspace) for a full list of supported parameters: 
-
-        # path to SSH and Git configuration files. By default "~"" is used
-        configuration_dir_path: "/path/to/configuration"
-        # The name of the git branch all the jobs will be using. The default is develop
-        devspace_omero_branch: develop
-        # The devspace repository to use. The default is https://github.com/openmicroscopy/devspace.git
-        devspace_git_repo: "https://github.com/user_name/devspace.git"
-        # The devspace of branch to use. The default is master
-        devspace_git_repo_version: "your_branch"
-        # force a clean
-        devspace_git_update: yes
-        devspace_git_force: yes
 
 #### Create an provision the devspace
 
@@ -181,9 +160,13 @@ By default the size of the volume is ``50``, if you required a larger size, it c
 
 * Replace ``devspace_IP`` in ``devspace-host`` by the IP of the newly created devspace e.g. ``10.0.51.135``
 
-* Provision the devpace:
 
-        (dev) $ ansible-playbook -u centos -i /path/to/inventory/ devspace.yml
+* To provision the devpace, you can use an example playbook under vendor/openmicroscopy.devspace. Before running
+the playbook you will minimally need to set the value of ``configuration_dir_path`` and ``github_user``.
+The ``configuration_dir_path`` should be the path to ``.ssh`` usually ``~``. 
+See [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devspace) for a full list of supported parameters. Provision the devspace by running:
+
+        (dev) $ ansible-playbook -u centos -i /path/to/hosts/ vendor/openmicroscopy.devspace/playbook.yml
 
 If you have already used the devspace IP, the above command might fail with the message ``Host key verification failed``. To fix the issue, remove the entry from ``~/.ssh/known_hosts`` and run the command again.
 
