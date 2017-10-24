@@ -57,13 +57,15 @@ The following instructions explain how to deploy a devspace on a Docker host.
     alternatively put your own certificate `.crt and .key` in the above locations.
 
 *   Copy the SSH and Git configuration files used for fetching and pushing the
-    Git repositories under `slave/.ssh` and `slave/.gitconfig`.
+    Git repositories under `slave/.ssh` and `slave/.gitconfig`. This is usually
+    your own SSH and Git configuration files
 
- *  Run `rename.py` to match your topic name. If you do not yet have
+ *  Run `rename.py` to match your topic name. Specify the Git user corresponding to
+    the confguration files used above. If you do not yet have
     topic branches available on origin, use "develop" or one of the
     main branches:
 
-        $ ./rename.py MYTOPIC
+        $ ./rename.py MYTOPIC --user git_user
 
 *   Replace the `USER_ID` of the various Dockerfile with the ID of the user who
     will run the devspace:
@@ -156,15 +158,15 @@ The following commands need to be executed from the ``ansible`` subdirectory.
 
         (dev) $ ansible-playbook os-devspace.yml -e vm_name=your_name-devspace-name -e vm_key_name=your_key
 
-By default the size of the volume is ``50``, if you required a larger size, it can be set passing `-e vm_size=100` for example.
+By default the size of the volume is ``50``, if you required a larger size, it can be set by passing `-e vm_size=100` for example.
 
 * Replace ``devspace_IP`` in ``devspace-host`` by the IP of the newly created devspace e.g. ``10.0.51.135``
 
-
 * To provision the devpace, you can use an example playbook under vendor/openmicroscopy.devspace. Before running
-the playbook you will minimally need to set the value of ``configuration_dir_path`` and ``github_user``.
+the playbook you will minimally need to set the value of the parameters ``configuration_dir_path`` and ``github_user``.
 The ``configuration_dir_path`` should be the path to ``.ssh`` usually ``~``. 
-See [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devspace) for a full list of supported parameters. Provision the devspace by running:
+See [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devspace) for a full list of supported
+parameters. Provision the devspace by running:
 
         (dev) $ ansible-playbook -u centos -i /path/to/hosts/ vendor/openmicroscopy.devspace/playbook.yml
 
