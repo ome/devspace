@@ -125,12 +125,30 @@ Git repositories. If you need to use alternative configuration files you can
 #### Set up an ``hosts`` directory
 
 Set up a directory ``hosts`` containing a ``devspace-host`` file required to provision the devspace.
-The content of the ``devspace-host`` file is a follow, the variable devspace_IP will be modified later on:
+The content of the ``devspace-host`` file is a follow, the variable devspace_openstack_ip will be modified later on:
 
         [devspace]
-        devspace_IP
+        devspace_openstack_ip
 
-#### Create an provision the devspace
+#### SSH and Git configuration files
+
+In order to be able to push result of the build job, you will need a SSH key without passphrase. 
+The key needs to be named ``id_gh_rsa``.
+
+* Generate such key and place it in your ``.ssh`` directory
+* Upload the public i.e. ``id_gh_rsa.pub`` to your GitHub account.
+* Open ``.ssh/config`` and add the following:
+
+        Host github.com
+            User git
+            IdentityFile ~/.ssh/id_gh_rsa
+
+* generate a token on GitHub and add to ``~/.gitconfig``:
+
+        [github]
+                token = your_token
+
+#### Create and provision the devspace
 
 * Clone the ``infrastructure`` Git repository:
 
@@ -154,13 +172,13 @@ The following commands need to be executed from the ``ansible`` subdirectory.
         (dev) $ cd infrastructure/ansible
         (dev) $ ansible-galaxy install -r requirements.yml
 
-* Create the devpace. It is also recommended to prefix the name of the devspace by your name or your initals:
+* Create the devpace. It is recommended to prefix the name of the devspace by your name or your initals:
 
         (dev) $ ansible-playbook os-devspace.yml -e vm_name=your_name-devspace-name -e vm_key_name=your_key
 
 By default the size of the volume is ``50``, if you required a larger size, it can be set by passing `-e vm_size=100` for example.
 
-* Replace ``devspace_IP`` in ``devspace-host`` by the IP of the newly created devspace e.g. ``10.0.51.135``
+* Replace ``devspace_openstack_ip`` in ``devspace-host`` by the IP of the newly created devspace e.g. ``10.0.51.135``
 
 * To provision the devpace, you can use an example playbook under vendor/openmicroscopy.devspace. Before running
 the playbook you will minimally need to set the value of the parameters ``configuration_dir_path`` and ``github_user``.
@@ -172,7 +190,27 @@ parameters. Provision the devspace by running:
 
 If you have already used the devspace IP, the above command might fail with the message ``Host key verification failed``. To fix the issue, remove the entry from ``~/.ssh/known_hosts`` and run the command again.
 
-The devspace will be available at https://devspace_IP:8443.
+### Access the devspace
+
+Port to access the various services are dynamically assigned. You will have to log in to the devspace as the ``omero`` user:
+
+        ssh omero@devspace_openstack_ip
+        cd devspace
+
+The port for each service is obtained by running:
+
+       docker-compose port $SERVICE $PRIVATE_PORT
+
+where $SERVICE $PRIVATE_PORT are described in the table below
+
+Service | Private port |  Test | Result
+--------| ------|------------|----
+nginxjenkins | 443 | https://$DOCKERHOST:$PORT | Access to Jenkins UI
+nginx | 80 | http://$DOCKERHOST:$PORT/web  | Login via OMERO.web
+omero | 4064 | bin/omero login root@$DOCKERHOST:$PORT | Login via OMERO.cli
+omero | 4064 | Add `$DOCKERHOST $PORT` as server  | Login via OMERO.insight
+
+
 
 # ADVANCE: Multiply containers
 
