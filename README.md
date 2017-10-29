@@ -125,7 +125,7 @@ Git repositories. If you need to use alternative configuration files you can
 #### Set up an ``hosts`` directory
 
 Set up a directory ``hosts`` containing a ``devspace-host`` file required to provision the devspace.
-The content of the ``devspace-host`` file is a follow, the variable devspace_openstack_ip will be modified later on:
+The content of the ``devspace-host`` file is a follow, the variable ``devspace_openstack_ip`` will be modified later on:
 
         [devspace]
         devspace_openstack_ip
@@ -136,14 +136,14 @@ In order to be able to push result of the build job, you will need a SSH key wit
 The key needs to be named ``id_gh_rsa``.
 
 * Generate such key and place it in your ``.ssh`` directory
-* Upload the public i.e. ``id_gh_rsa.pub`` to your GitHub account.
+* Upload the public key i.e. ``id_gh_rsa.pub`` to your GitHub account.
 * Open ``.ssh/config`` and add the following:
 
         Host github.com
             User git
             IdentityFile ~/.ssh/id_gh_rsa
 
-* generate a token on GitHub and add to ``~/.gitconfig``:
+* generate a token on GitHub and add it to ``~/.gitconfig``:
 
         [github]
                 token = your_token
@@ -176,11 +176,11 @@ The following commands need to be executed from the ``ansible`` subdirectory.
 
         (dev) $ ansible-playbook os-devspace.yml -e vm_name=your_name-devspace-name -e vm_key_name=your_key
 
-By default the size of the volume is ``50``, if you required a larger size, it can be set by passing `-e vm_size=100` for example.
+By default the size of the volume is ``50``, if you required a larger size, it can be set by passing for example`-e vm_size=100`.
 
 * Replace ``devspace_openstack_ip`` in ``devspace-host`` by the IP of the newly created devspace e.g. ``10.0.51.135``
 
-* To provision the devpace, you can use an example playbook under vendor/openmicroscopy.devspace. Before running
+* To provision the devpace, you can use an example playbook under ``vendor/openmicroscopy.devspace``. Before running
 the playbook you will minimally need to set the value of the parameters ``configuration_dir_path`` and ``github_user``.
 The ``configuration_dir_path`` should be the path to ``.ssh`` usually ``~``. 
 See [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devspace) for a full list of supported
@@ -188,7 +188,7 @@ parameters. Provision the devspace by running:
 
         (dev) $ ansible-playbook -u centos -i /path/to/hosts/ vendor/openmicroscopy.devspace/playbook.yml
 
-If you have already used the devspace IP, the above command might fail with the message ``Host key verification failed``. To fix the issue, remove the entry from ``~/.ssh/known_hosts`` and run the command again.
+If you have previously used the ``devspace_openstack_ip``, the above command might fail with the message ``Host key verification failed``. To fix the issue, remove the entry from ``~/.ssh/known_hosts`` and run the command again.
 
 ### Access the devspace
 
@@ -203,7 +203,7 @@ The port for each service is obtained by running:
 
 where $SERVICE $PRIVATE_PORT are described in the table below
 
-Service | Private port |  Test | Result
+Service | Private port |  Command | Result
 --------| ------|------------|----
 nginxjenkins | 443 | https://$DOCKERHOST:$PORT | Access to Jenkins UI
 nginx | 80 | http://$DOCKERHOST:$PORT/web  | Login via OMERO.web
