@@ -1,0 +1,38 @@
+---
+# Exampe Playbook for provisioning Devspace
+# Minimally modify the following two parameters under roles:
+# configuration_dir_path should be the path to your .ssh directory usually ~
+# github_user should be the path to your .ssh directory usually ~
+
+- hosts: devspace
+
+  vars:
+    # Overrides the default value in the docker role
+    docker_use_ipv4_nic_mtu: True
+
+  vars_prompt:
+    - name: "devspace_jenkins_password"
+      prompt: "Secure Jenkins with admin password (username: devspace)"
+      private: yes
+
+  pre_tasks:
+
+    - fail:
+        msg: "Jenkins admin password is required"
+      when: devspace_jenkins_password is undefined or not devspace_jenkins_password
+
+  roles:
+    - role: openmicroscopy.devspace
+      # Path to SSH and Git configuration files. 
+      configuration_dir_path: "path/to/.ssh"
+      # user account on git. SSH and Git configuration files should match
+      github_user: "your_gh_account"
+      # The name of the git branch all the jobs will be using. The default is develop
+      # devspace_omero_branch: develop
+      # The devspace repository to use. The default is https://github.com/openmicroscopy/devspace.git
+      # devspace_git_repo: https://github.com/openmicroscopy/devspace.git
+      # The devspace branch to use. The default is the latest released version
+      # devspace_git_repo_version: "0.5.2"
+      # force a clean
+      devspace_git_update: yes
+      devspace_git_force: yes
