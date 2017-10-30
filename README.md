@@ -113,8 +113,8 @@ Start and configure:
 The following instructions explain how to deploy a devspace on OpenStack.
 First, you will need to have an account on [OME OpenStack](https://pony.openmicroscopy.org).
 
-By default, your SSH and Git configuration files will be used for fetching and pushing the
-Git repositories. If you need to use alternative configuration files you can
+Your SSH and Git configuration files should be used for fetching from and pushing to the
+Git repositories.
 
 #### Generate an ``openrc``file
 
@@ -124,11 +124,11 @@ Git repositories. If you need to use alternative configuration files you can
 
 #### SSH and Git configuration files
 
-In order to be able to push result of the build job, you will need a SSH key without passphrase. 
-The key needs to be named ``id_gh_rsa``.
+In order to be able to push result of the build job, you will need a SSH key **without passphrase**. 
+The key must be named ``id_gh_rsa``.
 
 * Generate such key and place it in your ``.ssh`` directory
-* Upload the public key i.e. ``id_gh_rsa.pub`` to your GitHub account.
+* Upload the public key i.e. ``id_gh_rsa.pub`` to your GitHub account
 * Open ``.ssh/config`` and add the following:
 
         Host github.com
@@ -170,11 +170,12 @@ The following commands need to be executed from the ``ansible`` subdirectory.
 
 By default the size of the volume is ``50``, if you required a larger size, it can be set by passing for example `-e vm_size=100`.
 
-* Open ``ansible/inventory/hosts`` and replace ``devspace_openstack_ip`` by the IP of the newly created devspace e.g. ``10.0.51.135``
+* Open ``inventory/hosts`` and replace ``devspace_openstack_ip`` by the IP of the newly created devspace e.g. ``10.0.51.135``.
 
-* To provision the devpace, you can use the example playbook ``ansible/provision-devspace.yml``. Before running
+* To provision the devpace, you can use the example playbook ``provision-devspace.yml``. Before running
 the playbook you will minimally need to set the value of the parameters ``configuration_dir_path`` and ``github_user``.
-The ``configuration_dir_path`` should be the path to the ``.ssh`` directory usually ``~``. 
+The ``configuration_dir_path`` should be the path to your ``.ssh`` directory usually ``~`` and ``github_user`` should be
+your username on GitHub. 
 See [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devspace) for a full list of supported
 parameters. Provision the devspace by running:
 
@@ -184,7 +185,7 @@ If you have previously used the ``devspace_openstack_ip``, the above command mig
 
 ### Access the devspace
 
-Port to access the various services are dynamically assigned. You will have to log in to the devspace as the ``omero`` user:
+Ports to access the various services are dynamically assigned. You will have to log in to the devspace as the ``omero`` user to determine the port used by a given service:
 
         ssh omero@devspace_openstack_ip
         cd devspace
@@ -193,7 +194,7 @@ The port for each service is obtained by running:
 
        docker-compose port $SERVICE $PRIVATE_PORT
 
-where $SERVICE $PRIVATE_PORT are described in the table below
+where $SERVICE $PRIVATE_PORT are described in the table below:
 
 Service | Private port |  Command | Result
 --------| ------|------------|----

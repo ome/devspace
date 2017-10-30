@@ -4,7 +4,7 @@
 
 ## Run:
 # $ source openrc.sh
-# $ ansible-playbook create-devspace.yml -e vm_name=your_name-test-devspace -e vm_key_name=your_key
+# $ ansible-playbook create-devspace.yml -e vm_name=your_name-devspace-name -e vm_key_name=your_key
 
 - hosts: localhost
   connection: local
