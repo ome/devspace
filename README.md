@@ -122,14 +122,6 @@ Git repositories. If you need to use alternative configuration files you can
 * Create a [OpenStack RC file](https://docs.openstack.org/zh_CN/user-guide/common/cli-set-environment-variables-using-openstack-rc.html)
 * Download the OpenStack RC File v2, the file will be named by default ``omedev-openrc.sh``
 
-#### Set up an ``hosts`` directory
-
-Set up a directory ``hosts`` containing a ``devspace-host`` file required to provision the devspace.
-The content of the ``devspace-host`` file is a follow, the variable ``devspace_openstack_ip`` will be modified later on:
-
-        [devspace]
-        devspace_openstack_ip
-
 #### SSH and Git configuration files
 
 In order to be able to push result of the build job, you will need a SSH key without passphrase. 
@@ -143,22 +135,22 @@ The key needs to be named ``id_gh_rsa``.
             User git
             IdentityFile ~/.ssh/id_gh_rsa
 
-* generate a token on GitHub and add it to ``~/.gitconfig``:
+* Generate a token on GitHub and add it to ``~/.gitconfig``:
 
         [github]
                 token = your_token
 
 #### Create and provision the devspace
 
-* Clone the ``infrastructure`` Git repository:
+* Clone the ``devspace`` Git repository:
 
-        $ git clone https://github.com/openmicroscopy/infrastructure.git
+        $ git clone https://github.com/openmicroscopy/devspace.git
 
 * Create a virtual environment and install the Ansible requirements (including ``shade`` for using with OpenStack):
 
         $ virtualenv ~/dev
         $ . ~/dev/bin/activate
-        (dev) $ pip install -r infrastructure/requirements.txt
+        (dev) $ pip install -r requirements.txt
 
 * Source the OpenStack RC File created ealier, adjust to your local configuration:
 
@@ -169,24 +161,24 @@ The following commands need to be executed from the ``ansible`` subdirectory.
 
 * Install the various ansible roles:
 
-        (dev) $ cd infrastructure/ansible
+        (dev) $ cd ansible
         (dev) $ ansible-galaxy install -r requirements.yml
 
 * Create the devpace. It is recommended to prefix the name of the devspace by your name or your initals:
 
-        (dev) $ ansible-playbook os-devspace.yml -e vm_name=your_name-devspace-name -e vm_key_name=your_key
+        (dev) $ ansible-playbook create-devspace.yml -e vm_name=your_name-devspace-name -e vm_key_name=your_key
 
-By default the size of the volume is ``50``, if you required a larger size, it can be set by passing for example`-e vm_size=100`.
+By default the size of the volume is ``50``, if you required a larger size, it can be set by passing for example `-e vm_size=100`.
 
-* Replace ``devspace_openstack_ip`` in ``devspace-host`` by the IP of the newly created devspace e.g. ``10.0.51.135``
+* Open ``ansible/inventory/hosts`` and replace ``devspace_openstack_ip`` by the IP of the newly created devspace e.g. ``10.0.51.135``
 
-* To provision the devpace, you can use an example playbook under ``vendor/openmicroscopy.devspace``. Before running
+* To provision the devpace, you can use the example playbook ``ansible/provision-devspace.yml``. Before running
 the playbook you will minimally need to set the value of the parameters ``configuration_dir_path`` and ``github_user``.
-The ``configuration_dir_path`` should be the path to ``.ssh`` usually ``~``. 
+The ``configuration_dir_path`` should be the path to the ``.ssh`` directory usually ``~``. 
 See [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devspace) for a full list of supported
 parameters. Provision the devspace by running:
 
-        (dev) $ ansible-playbook -u centos -i /path/to/hosts/ vendor/openmicroscopy.devspace/playbook.yml
+        (dev) $ ansible-playbook -u centos provision-devspace.yml
 
 If you have previously used the ``devspace_openstack_ip``, the above command might fail with the message ``Host key verification failed``. To fix the issue, remove the entry from ``~/.ssh/known_hosts`` and run the command again.
 
