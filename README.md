@@ -205,10 +205,9 @@ where $SERVICE $PRIVATE_PORT are described in the table below
 
 Service | Private port |  Command | Result
 --------| ------|------------|----
-nginxjenkins | 443 | https://$DOCKERHOST:$PORT | Access to Jenkins UI
-nginx | 80 | http://$DOCKERHOST:$PORT/web  | Login via OMERO.web
-omero | 4064 | bin/omero login root@$DOCKERHOST:$PORT | Login via OMERO.cli
-omero | 4064 | Add `$DOCKERHOST $PORT` as server  | Login via OMERO.insight
+nginxjenkins | 443 | https://devspace_openstack_ip:$PORT | Access to Jenkins UI
+nginx | 80 | http://devspace_openstack_ip:$PORT/web  | Login via OMERO.web
+omero | 4064 | Add `devspace_openstack_ip $PORT` as server  | Login via OMERO.insight
 
 
 
