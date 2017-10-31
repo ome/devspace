@@ -170,7 +170,7 @@ The following commands need to be executed from the ``ansible`` subdirectory.
 
 By default the size of the volume is ``50``, if you required a larger size, it can be set by passing for example `-e vm_size=100`.
 
-* Open ``inventory/hosts`` and replace ``devspace_openstack_ip`` by the IP of the newly created devspace e.g. ``10.0.51.135``.
+* Note the Floating IP of the generated instance, this is referred as ``devspace_openstack_ip`` below.
 
 * To provision the devpace, you can use the example playbook ``provision-devspace.yml``. Before running
 the playbook you will minimally need to set the value of the parameters ``configuration_dir_path`` and ``github_user``.
@@ -179,7 +179,7 @@ your username on GitHub.
 See [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devspace) for a full list of supported
 parameters. Provision the devspace by running:
 
-        (dev) $ ansible-playbook -u centos provision-devspace.yml
+        (dev) $ ansible-playbook -u centos -i devspace_openstack_ip, provision-devspace.yml
 
 If you have previously used the ``devspace_openstack_ip``, the above command might fail with the message ``Host key verification failed``. To fix the issue, remove the entry from ``~/.ssh/known_hosts`` and run the command again.
 
