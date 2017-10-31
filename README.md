@@ -13,13 +13,12 @@ Running and maintaining Devspace requires brief understanding of:
 Running and maintaining Devspace in OpenStack requires, in addition, brief understanding of:
 
 * [Ansible](http://docs.ansible.com/ansible/intro_getting_started.html)
-    *  [inventory](http://docs.ansible.com/ansible/intro_inventory.html)
     *  [playbook](http://docs.ansible.com/ansible/playbooks.html)
 *  access to openstack tenancy
 *  own ssh key set in openstack tenancy, that name will be used as `vm_key_name`
 *  [openrc.sh](https://docs.openstack.org/zh_CN/user-guide/common/cli-set-environment-variables-using-openstack-rc.html)
 
-Running Devspace requires access to SSH and Git configuration files used for fetching and pushing the Git repositories see [internal]().
+Running Devspace requires access to SSH and Git configuration files used for fetching and pushing the Git repositories.
 
 # Installation
 
@@ -113,8 +112,7 @@ Start and configure:
 The following instructions explain how to deploy a devspace on OpenStack.
 First, you will need to have an account on [OME OpenStack](https://pony.openmicroscopy.org).
 
-Your SSH and Git configuration files should be used for fetching from and pushing to the
-Git repositories.
+Your SSH and Git configuration files should be used for for fetching and pushing the Git repositories.
 
 #### Generate an ``openrc``file
 
