@@ -4,7 +4,7 @@
 # configuration_dir_path should be the path to your .ssh directory usually ~
 # github_user should be the path to your .ssh directory usually ~
 
-- hosts: devspace
+- hosts: all
 
   vars:
     # Overrides the default value in the docker role
@@ -23,7 +23,7 @@
 
   roles:
     - role: openmicroscopy.devspace
-      # Path to SSH and Git configuration files. 
+      # Path to SSH and Git configuration files
       configuration_dir_path: "path/to/.ssh"
       # user account on git. SSH and Git configuration files should match
       github_user: "your_gh_account"
