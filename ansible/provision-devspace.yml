@@ -2,7 +2,7 @@
 # Exampe Playbook for provisioning Devspace
 # Minimally modify the following two parameters under roles:
 # configuration_dir_path should be the path to your .ssh directory usually ~
-# github_user should be the path to your .ssh directory usually ~
+# github_user is the GitHub username associated to the .ssh and configuration file
 
 - hosts: all
 
