@@ -1,6 +1,6 @@
 # Getting started
 
-Devspace is a Continuous Integration tools managed by Jenkins CI providing
+Devspace is a Continuous Integration tool managed by Jenkins CI providing
 an automation framework that runs repeated jobs. The default deployment
 initializes a Jenkins CI master with a predefined set of jobs.
 
@@ -22,7 +22,7 @@ Running Devspace requires access to SSH and Git configuration files used for fet
 
 # Installation
 
-You can either deploy manually a devspace on a Docker host or you can use the [Ansible playbooks]((http://docs.ansible.com/ansible/playbooks.html)) to deploy a devspace on OpenStack.
+You can either deploy manually a devspace on a Docker host or you can use the [Ansible playbooks](http://docs.ansible.com/ansible/playbooks.html) to deploy a devspace on [OpenStack](https://www.openstack.org/).
 
 ## Deploy on a Docker host
 
@@ -114,26 +114,32 @@ First, you will need to have an account on [OME OpenStack](https://pony.openmicr
 
 Your SSH and Git configuration files should be used for for fetching and pushing the Git repositories.
 
-#### Generate an ``openrc``file
+#### OpenStack configuration
+
+The following steps only need to be done the first time you want to generate instances.
 
 * Log into [OpenStack](https://pony.openmicroscopy.org)
-* Create a [OpenStack RC file](https://docs.openstack.org/zh_CN/user-guide/common/cli-set-environment-variables-using-openstack-rc.html)
-* Download the OpenStack RC File v2, the file will be named by default ``omedev-openrc.sh``
+* Register a key. Go to ``Access & Security > Key Pairs``
+* Under ``Access & Security > API Access``, download your configuration by clicking on ``Download OpenStack RC File v2.0``. The file will be named by default ``omedev-openrc.sh``
 
 #### SSH and Git configuration files
 
 In order to be able to push result of the build job, you will need a SSH key **without passphrase**. 
 The key must be named ``id_gh_rsa``.
 
-* Generate such key and place it in your ``.ssh`` directory
+* Generate a SSH key **without passphrase** in your ``.ssh`` directory:
+
+        $ ssh-keygen -t rsa -b 4096 -C "your_email_address" -f ~/.ssh/id_gh_rsa -q -P ""
+
 * Upload the public key i.e. ``id_gh_rsa.pub`` to your GitHub account
+
 * Open ``.ssh/config`` and add the following:
 
         Host github.com
             User git
             IdentityFile ~/.ssh/id_gh_rsa
 
-* Generate a token on GitHub and add it to ``~/.gitconfig``:
+* Generate a [GitHub token](https://github.com/settings/tokens) and add it to ``~/.gitconfig``:
 
         [github]
                 token = your_token
@@ -150,7 +156,7 @@ The key must be named ``id_gh_rsa``.
         $ . ~/dev/bin/activate
         (dev) $ pip install -r requirements.txt
 
-* Source the OpenStack RC File created ealier, adjust to your local configuration:
+* Source the OpenStack configuration file, adjust to your local configuration:
 
         (dev) $ . omedev-openrc.sh
         Enter your password
@@ -167,8 +173,7 @@ The following commands need to be executed from the ``ansible`` subdirectory.
         (dev) $ ansible-playbook create-devspace.yml -e vm_name=your_name-devspace-name -e vm_key_name=your_key
 
 By default the size of the volume is ``50``, if you required a larger size, it can be set by passing for example `-e vm_size=100`.
-
-* Note the Floating IP of the generated instance, this is referred as ``devspace_openstack_ip`` below.
+The Floating IP of the generated instance is referred as ``devspace_openstack_ip`` below.
 
 * To provision the devpace, you can use the example playbook ``provision-devspace.yml``. Before running
 the playbook you will minimally need to set the value of the parameters ``configuration_dir_path`` and ``github_user``.
@@ -197,7 +202,7 @@ where $SERVICE $PRIVATE_PORT are described in the table below:
 Service | Private port |  Command | Result
 --------| ------|------------|----
 nginxjenkins | 443 | https://devspace_openstack_ip:$PORT | Access to Jenkins UI
-nginx | 80 | http://devspace_openstack_ip:$PORT/web  | Login via OMERO.web
+nginx | 80 | https://devspace_openstack_ip:$PORT/web  | Login via OMERO.web
 omero | 4064 | Add `devspace_openstack_ip $PORT` as server  | Login via OMERO.insight
 
 
