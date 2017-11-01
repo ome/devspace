@@ -202,7 +202,7 @@ where $SERVICE $PRIVATE_PORT are described in the table below:
 Service | Private port |  Command | Result
 --------| ------|------------|----
 nginxjenkins | 443 | https://devspace_openstack_ip:$PORT | Access to Jenkins UI
-nginx | 80 | https://devspace_openstack_ip:$PORT/web  | Login via OMERO.web
+nginx | 80 | http://devspace_openstack_ip:$PORT/web  | Login via OMERO.web
 omero | 4064 | Add `devspace_openstack_ip $PORT` as server  | Login via OMERO.insight
 
 
