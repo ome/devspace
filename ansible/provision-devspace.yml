@@ -6,10 +6,6 @@
 
 - hosts: all
 
-  vars:
-    # Overrides the default value in the docker role
-    docker_use_ipv4_nic_mtu: True
-
   vars_prompt:
     - name: "devspace_jenkins_password"
       prompt: "Secure Jenkins with admin password (username: devspace)"
@@ -22,6 +18,8 @@
       when: devspace_jenkins_password is undefined or not devspace_jenkins_password
 
   roles:
+    - role: openmicroscopy.docker
+      docker_use_ipv4_nic_mtu: True
     - role: openmicroscopy.devspace
       # Path to SSH and Git configuration files
       configuration_dir_path: "path/to/.ssh"
