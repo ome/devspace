@@ -1,3 +1,4 @@
+ansible/vendor
 .*un~
 home/.*
 home/*.log
