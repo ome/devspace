@@ -59,8 +59,6 @@ source $WORKSPACE/omero-virtualenv/bin/activate
 source $OMERO_INSTALL/settings.env
 
 pip install -r $OMERO_DIST/share/web/requirements-py27.txt
-pip install -r $OMERO_DIST/share/web/requirements-redis.txt
-pip install &quot;django-redis&gt;=4.4&quot;
 
 #start-config
 $OMERO_DIST/bin/omero config set omero.web.application_server &apos;wsgi-tcp&apos;
