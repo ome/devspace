@@ -172,7 +172,7 @@ The following commands need to be executed from the ``ansible`` subdirectory.
 
         (dev) $ ansible-playbook create-devspace.yml -e vm_name=your_name-devspace-name -e vm_key_name=your_key
 
-By default the size of the volume is ``50``, if you required a larger size, it can be set by passing for example `-e vm_size=100`.
+By default the size of the volume is ``50``GiB, if you required a larger size, it can be set by passing for example `-e vm_size=100`.
 The Floating IP of the generated instance is referred as ``devspace_openstack_ip`` below.
 
 * To provision the devpace, you can use the example playbook ``provision-devspace.yml``. Before running
