@@ -154,6 +154,7 @@ The key must be named ``id_gh_rsa``.
 
         $ virtualenv ~/dev
         $ . ~/dev/bin/activate
+        $ cd devspace
         (dev) $ pip install -r requirements.txt
 
 * Source the OpenStack configuration file, adjust to your local configuration:
