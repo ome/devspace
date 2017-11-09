@@ -119,7 +119,7 @@ Your SSH and Git configuration files should be used for fetching from and pushin
 The following steps only need to be done the first time you want to generate instances.
 
 * Log into [OpenStack](https://pony.openmicroscopy.org)
-* Register a key. Go to ``Access & Security > Key Pairs``
+* Register a key. Go to ``Access & Security > Key Pairs`` and click on ``Import Key Pair``. Copy the content of the public key you use to access our resources e.g. ``id_rsa.pub``
 * Under ``Access & Security > API Access``, download your configuration by clicking on ``Download OpenStack RC File v2.0``. The file will be named by default ``omedev-openrc.sh``. This file will be used to set environment variables so it is possible to connect to OpenStack via the command line.
 
 #### SSH and Git configuration files
