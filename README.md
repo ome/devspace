@@ -112,7 +112,7 @@ Start and configure:
 The following instructions explain how to deploy a devspace on OpenStack.
 First, you will need to have an account on [OME OpenStack](https://pony.openmicroscopy.org).
 
-Your SSH and Git configuration files should be used for for fetching and pushing the Git repositories.
+Your SSH and Git configuration files should be used for fetching from and pushing to the Git repositories. They will be copied to the devspace.
 
 #### OpenStack configuration
 
@@ -120,18 +120,18 @@ The following steps only need to be done the first time you want to generate ins
 
 * Log into [OpenStack](https://pony.openmicroscopy.org)
 * Register a key. Go to ``Access & Security > Key Pairs``
-* Under ``Access & Security > API Access``, download your configuration by clicking on ``Download OpenStack RC File v2.0``. The file will be named by default ``omedev-openrc.sh``
+* Under ``Access & Security > API Access``, download your configuration by clicking on ``Download OpenStack RC File v2.0``. The file will be named by default ``omedev-openrc.sh``. This file will be used to set environment variables so it is possible to connect to OpenStack via the command line.
 
 #### SSH and Git configuration files
 
-In order to be able to push result of the build job, you will need a SSH key **without passphrase**. 
-The key must be named ``id_gh_rsa``.
+In order to be able to push result of the build job to your GitHub account, you will need a SSH key **without passphrase**. The key must be named ``id_gh_rsa``.
+The key and the configuration files will be copied to the devspace.
 
 * Generate a SSH key **without passphrase** in your ``.ssh`` directory:
 
         $ ssh-keygen -t rsa -b 4096 -C "your_email_address" -f ~/.ssh/id_gh_rsa -q -P ""
 
-* Upload the public key i.e. ``id_gh_rsa.pub`` to your GitHub account
+* Upload the corresponding public key i.e. ``id_gh_rsa.pub`` to your GitHub account
 
 * Open ``.ssh/config`` and add the following:
 
@@ -150,38 +150,38 @@ The key must be named ``id_gh_rsa``.
 
         $ git clone https://github.com/openmicroscopy/devspace.git
 
-* Create a virtual environment and install the Ansible requirements (including ``shade`` for using with OpenStack):
+* Create a virtual environment and from the ``devspace`` directory, install Ansible and ``shade`` to access OpenStack via the command line:
 
         $ virtualenv ~/dev
         $ . ~/dev/bin/activate
         $ cd devspace
         (dev) $ pip install -r requirements.txt
 
-* Source the OpenStack configuration file, adjust to your local configuration:
+* Source the OpenStack configuration file to set the environments variables allowing connecting to OpenStack via the command line, adjust to your local configuration:
 
         (dev) $ . omedev-openrc.sh
         Enter your password
 
 The following commands need to be executed from the ``ansible`` subdirectory.
 
-* Install the various ansible roles:
+* Install the various ansible roles from the [Galaxy website](https://galaxy.ansible.com/):
 
         (dev) $ cd ansible
         (dev) $ ansible-galaxy install -r requirements.yml
 
-* Create the devpace. It is recommended to prefix the name of the devspace by your name or your initals:
+To "upgrade" roles, you may want to specify ``--force`` when installing the roles.
+
+* Create an instance on [OpenStack](https://pony.openmicroscopy.org) using the playbook ``create-devspace.yml``. It is recommended to prefix the name of the devspace by your name or your initals:
 
         (dev) $ ansible-playbook create-devspace.yml -e vm_name=your_name-devspace-name -e vm_key_name=your_key
 
 By default the size of the volume is ``50``GiB, if you required a larger size, it can be set by passing for example `-e vm_size=100`.
 The Floating IP of the generated instance is referred as ``devspace_openstack_ip`` below.
 
-* To provision the devpace, you can use the example playbook ``provision-devspace.yml``. Before running
-the playbook you will minimally need to set the value of the parameters ``configuration_dir_path`` and ``github_user``.
-The ``configuration_dir_path`` should be the path to your ``.ssh`` directory usually ``~`` and ``github_user`` should be
-your username on GitHub. 
-See [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devspace) for a full list of supported
-parameters. Provision the devspace by running:
+* To provision the devpace, use the playbook ``provision-devspace.yml``. Before running
+the playbook you will minimally need to edit the value of the parameters ``configuration_dir_path`` and ``github_user``.
+The ``configuration_dir_path`` should be the path to your ``.ssh`` directory usually ``~`` and ``github_user`` should be your username on GitHub. 
+See [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devspace) for a full list of supported parameters. Provision the devspace by running:
 
         (dev) $ ansible-playbook -u centos -i devspace_openstack_ip, provision-devspace.yml
 
@@ -189,7 +189,7 @@ If you have previously used the ``devspace_openstack_ip``, the above command mig
 
 ### Access the devspace
 
-Ports to access the various services are dynamically assigned. You will have to log in to the devspace as the ``omero`` user to determine the port used by a given service:
+Ports to access the various services are dynamically assigned. You will have to log in to the devspace as the ``omero`` user to determine the port used by a given service using your usual ssh key and not the ``id_gh_rsa`` key:
 
         ssh omero@devspace_openstack_ip
         cd devspace
