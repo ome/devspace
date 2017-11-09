@@ -127,22 +127,29 @@ The following steps only need to be done the first time you want to generate ins
 In order to be able to push result of the build job to your GitHub account, you will need a SSH key **without passphrase**. The key must be named ``id_gh_rsa``.
 The key and the configuration files will be copied to the devspace.
 
-* Generate a SSH key **without passphrase** in your ``.ssh`` directory:
+* Create a directory ``devspace_config/.ssh`` where you wish
 
-        $ ssh-keygen -t rsa -b 4096 -C "your_email_address" -f ~/.ssh/id_gh_rsa -q -P ""
+* Generate a SSH key **without passphrase** in ``devspace_config/.ssh`` directory:
+
+        $ ssh-keygen -t rsa -b 4096 -C "your_email_address" -f ~/devspace_config/.ssh/id_gh_rsa -q -P ""
 
 * Upload the corresponding public key i.e. ``id_gh_rsa.pub`` to your GitHub account
 
-* Open ``.ssh/config`` and add the following:
+* Create a file ``devspace_config/.ssh/config`` and add the following:
 
         Host github.com
             User git
             IdentityFile ~/.ssh/id_gh_rsa
 
-* Generate a [GitHub token](https://github.com/settings/tokens) and add it to ``~/.gitconfig``:
+* Create a ``devspace_config/.gitconfig`` file
+
+* Generate a [GitHub token](https://github.com/settings/tokens) and add it to ``devspace_config/.gitconfig``. Minimally the file should contain:
 
         [github]
                 token = your_token
+        [user]
+                email = your_email_address
+                name = your_name
 
 #### Create and provision the devspace
 
