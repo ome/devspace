@@ -5,10 +5,10 @@ This file contains a collection of tips
 If you have previously used the ``devspace_openstack_ip``, the above command might fail with the message
 ```
 ...
-host key for 10.0.51.146 has changed and you have requested strict checking.\r\nHost key verification failed.\r\n", "unreachable": true}
+host key for 10.0.51.xxx has changed and you have requested strict checking.\r\nHost key verification failed.\r\n", "unreachable": true}
 ```
 
-To fix the issue, remove the entry from ``~/.ssh/known_hosts`` and run the command again.
+To fix the issue, remove the entry from ``~/.ssh/known_hosts`` and run the playbook again.
 
 ## Trigger failure: script not approved
 
@@ -23,7 +23,7 @@ To fix the issue, go to ``Trigger > Configure`` and select ``Use Groovy Sandbox`
 
 ## Bio-Formats or OMERO-push failure
 
-When the latest Java 8 is not used, the following error will occur:
+When the latest Java 8 version is not used, the following error will occur:
 
 ```
 Installing JDK jdk-8u121-oth-JPR
@@ -39,13 +39,13 @@ To fix the issue:
  * Click on ``JDK installations...``
  * Select the latest JDK 8 using the selection box
 
- ## Access the OMERO.server log
+ ## Access the OMERO.server logs
 
  * Log in:``ssh omero@devspace_openstack_ip``
  * Access the docker container ``docker exec -ti devspace_omero_1 bash``
  * Logs are under ``/home/omero/workspace/OMERO-server/OMERO.server/var/log``
 
- ## Copy the OMERO.server log to your local machine
+ ## Copy the OMERO.server logs to your local machine
 
   * Log in:``ssh omero@devspace_openstack_ip``
   * Copy the logs from the container

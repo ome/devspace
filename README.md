@@ -123,7 +123,7 @@ The SSH and Git configuration files are used for fetching from and pushing to th
 
 #### OpenStack configuration
 
-The following steps only need to be done the first time you want to generate instances.
+The following steps are only need to be done the first time you want to generate instances.
 
 * Log into [OpenStack](https://pony.openmicroscopy.org)
 * Register a key: Go to ``Access & Security > Key Pairs`` and click on ``Import Key Pair``. Copy the content of the public key you use to access our resources e.g. ``id_rsa.pub``
@@ -131,7 +131,7 @@ The following steps only need to be done the first time you want to generate ins
 
 #### SSH and Git configuration files
 
-The following steps only need to be done the first time you want to generate instances.
+The following steps are only need to be done the first time you want to generate instances.
 
 In order to be able to push result of the build job to your GitHub account, you will need a SSH key **without passphrase**. The key must be named ``id_gh_rsa``.
 The key and the configuration files will be copied to the devspace.
@@ -160,7 +160,7 @@ The key and the configuration files will be copied to the devspace.
                 email = your_email_address
                 name = your_name
 
-* The ``devspace_config`` should look like:
+* The ``devspace_config`` directory should look like:
 
 ```
 /path/to/devspace_config/
@@ -177,7 +177,7 @@ The key and the configuration files will be copied to the devspace.
 
         $ git clone https://github.com/openmicroscopy/devspace.git
 
-* Create a virtual environment and from the ``devspace`` directory, install ``Ansible`` and ``shade`` to access OpenStack via the command line:
+* Create a virtual environment and from the ``devspace`` directory, install ``shade`` to access OpenStack via the command line and ``Ansible``:
 
         $ virtualenv ~/dev
         $ . ~/dev/bin/activate
@@ -260,7 +260,7 @@ they are associated with and a short description of the jobs.
 
 
 This means that by default the following repositories need to be
-fork to your GitHub account:
+forked to your GitHub account:
 
 * [openmiscrocopy/openmiscrocopy](https://github.com/openmicroscopy/openmicroscopy)
 * [openmiscrocopy/ome-documentation](https://github.com/openmicroscopy/ome-documentation)
@@ -352,16 +352,11 @@ or directly from the Jenkins UI i.e. ``Trigger > Configure``.
 
 In order to install additional components or new version of packages e.g. PostgreSQL 10, it is required to:
 
-* Adjust update files in [omero-install](https://github.com/ome/omero-install)
-* Create a new image of [devslave-c7-docker](https://github.com/openmicroscopy/devslave-c7-docker) using the updates omero-install files
-* Push the new image to [Docker Hub](https://hub.docker.com/)
-* Modify each Dockerfile to use the new image
+* Modify the files in [omero-install](https://github.com/ome/omero-install)
+* Create a new image of [devslave-c7-docker](https://github.com/openmicroscopy/devslave-c7-docker) using the updated omero-install files
+* Push the new image to [Docker Hub](https://hub.docker.com/). You will need to your own account
+* Modify each Dockerfile of this repository to use the new image
 
-## Limitations
-
-* Robot job is still under investigation as it fails due to webbrowser crash. Robot job requires manual changes of the domain. Make sure webhost is set to the correct VM IP e.g.
-
-        --webhost "10.0.50.100"
 
 # Upgrade
 
@@ -370,3 +365,9 @@ See [Changelog](CHANGELOG.md)
 # Troubleshooting
 
 See [Troubleshooting](Troubleshooting.md)
+
+# Limitations
+
+* Robot job is still under investigation as it fails due to webbrowser crash. Robot job requires manual changes of the domain. Make sure webhost is set to the correct VM IP e.g.
+
+        --webhost "10.0.50.100"
