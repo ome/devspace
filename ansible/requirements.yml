@@ -125,8 +125,9 @@
 - src: openmicroscopy.reboot-server
   version: 0.1.0
 
-- src: openmicroscopy.devspace
-  version: 0.1.1
+- src: git+https://github.com/jburel/ansible-role-devspace.git
+  version: change-key-folder-ansible22
+  name: openmicroscopy.devspace
 
 - src: openmicroscopy.system-monitor-agent
   version: 0.1.0
