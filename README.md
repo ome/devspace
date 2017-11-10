@@ -156,6 +156,7 @@ The key and the configuration files will be copied to the devspace.
 
         [github]
                 token = your_token
+                user = your_gh_username
         [user]
                 email = your_email_address
                 name = your_name
@@ -206,9 +207,8 @@ By default the size of the volume is ``50``GiB, if you required a larger size, i
 The Floating IP of the generated instance is referred as ``devspace_openstack_ip`` below.
 
 * To provision the devpace, use the playbook ``provision-devspace.yml``. Before running
-the playbook you will minimally **need to edit** the value of the parameters:
+the playbook you will minimally **need to edit** the value of the parameter:
    * ``configuration_dir_path``: set it to ``path/to/devspace_config``
-   * ``github_user``: should be your username on GitHub
 
 See [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devspace) for a full list of supported parameters. Provision the devspace by running:
 
