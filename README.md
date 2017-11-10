@@ -119,14 +119,14 @@ Start and configure:
 The following instructions explain how to deploy a devspace on OpenStack.
 First, you will need to have an account on [OME OpenStack](https://pony.openmicroscopy.org).
 
-Your SSH and Git configuration files should be used for fetching from and pushing to the Git repositories. They will be copied to the devspace.
+The SSH and Git configuration files are used for fetching from and pushing to the Git repositories. They will be copied to the devspace.
 
 #### OpenStack configuration
 
 The following steps only need to be done the first time you want to generate instances.
 
 * Log into [OpenStack](https://pony.openmicroscopy.org)
-* Register a key. Go to ``Access & Security > Key Pairs`` and click on ``Import Key Pair``. Copy the content of the public key you use to access our resources e.g. ``id_rsa.pub``
+* Register a key: Go to ``Access & Security > Key Pairs`` and click on ``Import Key Pair``. Copy the content of the public key you use to access our resources e.g. ``id_rsa.pub``
 * Under ``Access & Security > API Access``, download your configuration by clicking on ``Download OpenStack RC File v2.0``. The file will be named by default ``omedev-openrc.sh``. It will be used to set environment variables needed to connect to OpenStack via the command line.
 
 #### SSH and Git configuration files
@@ -136,7 +136,7 @@ The following steps only need to be done the first time you want to generate ins
 In order to be able to push result of the build job to your GitHub account, you will need a SSH key **without passphrase**. The key must be named ``id_gh_rsa``.
 The key and the configuration files will be copied to the devspace.
 
-* Create a directory ``devspace_config/.ssh`` where you wish
+* Create a directory ``devspace_config`` where you wish and a directory ``devspace_config/.ssh``
 
 * Generate a SSH key **without passphrase** in ``devspace_config/.ssh`` directory:
 
@@ -177,16 +177,16 @@ The key and the configuration files will be copied to the devspace.
 
         $ git clone https://github.com/openmicroscopy/devspace.git
 
-* Create a virtual environment and from the ``devspace`` directory, install Ansible and ``shade`` to access OpenStack via the command line:
+* Create a virtual environment and from the ``devspace`` directory, install ``Ansible`` and ``shade`` to access OpenStack via the command line:
 
         $ virtualenv ~/dev
         $ . ~/dev/bin/activate
         $ cd devspace
         (dev) $ pip install -r requirements.txt
 
-* Source the OpenStack configuration file to set the environments variables allowing connecting to OpenStack via the command line, adjust to your local configuration:
+* Source the OpenStack configuration file to set the environments variables allowing connection to OpenStack via the command line, adjust to your local configuration:
 
-        (dev) $ . omedev-openrc.sh
+        (dev) $ . path/to/omedev-openrc.sh
         Enter your password
 
 The following commands need to be executed from the ``ansible`` subdirectory.
@@ -206,13 +206,13 @@ By default the size of the volume is ``50``GiB, if you required a larger size, i
 The Floating IP of the generated instance is referred as ``devspace_openstack_ip`` below.
 
 * To provision the devpace, use the playbook ``provision-devspace.yml``. Before running
-the playbook you will minimally need to edit the value of the parameters ``configuration_dir_path`` and ``github_user``.
-The ``configuration_dir_path`` should be the path to your ``.ssh`` directory usually ``~`` and ``github_user`` should be your username on GitHub. 
+the playbook you will minimally **need to edit** the value of the parameters:
+   * ``configuration_dir_path``: set it to ``path/to/devspace_config``
+   * ``github_user``: should be your username on GitHub
+
 See [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devspace) for a full list of supported parameters. Provision the devspace by running:
 
         (dev) $ ansible-playbook -u centos -i devspace_openstack_ip, provision-devspace.yml
-
-If you have previously used the ``devspace_openstack_ip``, the above command might fail with the message ``Host key verification failed``. To fix the issue, remove the entry from ``~/.ssh/known_hosts`` and run the command again.
 
 ### Access the devspace
 
@@ -280,7 +280,6 @@ or directly from the Jenkins UI i.e. ``Trigger > Configure``.
 | PostgreSQL | 9.4           | https://hub.docker.com/_/postgres/ |
 | Nginx      | 1.8           | -                                  |
 | Redis      | latest        | https://hub.docker.com/_/redis/    |
-
 
 # ADVANCE: Multiple containers
 
@@ -364,7 +363,10 @@ In order to install additional components or new version of packages e.g. Postgr
 
         --webhost "10.0.50.100"
 
-
 # Upgrade
 
 See [Changelog](CHANGELOG.md)
+
+# Troubleshooting
+
+See [Troubleshooting](Troubleshooting.md)
