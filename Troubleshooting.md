@@ -61,5 +61,11 @@ To fix the issue:
    * Follow the same steps as above using the container ``devspace_testintegration_1``
    * Logs are under ``/home/omero/workspace/OMERO-test-integration/src/dist/var/log``    
 
+## Update scripts
 
+By default the OMERO-push job does not merge the open PRs of [ome/scripts](https://github.com/ome/scripts).
+If you need to use non-released version of the scripts you will need to:
+
+ * Fork the [ome/scripts](https://github.com/ome/scripts) repository
+ * Edit the merge command of the OMERO-push job and replace ``--shallow`` by ``--update-gitmodules``
 
