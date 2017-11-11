@@ -69,3 +69,7 @@ If you need to use non-released version of the scripts you will need to:
  * Fork the [ome/scripts](https://github.com/ome/scripts) repository
  * Edit the merge command of the OMERO-push job and replace ``--shallow`` by ``--update-gitmodules``
 
+## Give others acces to the devspace
+
+* Log in ``ssh omero@devspace_openstack_ip``
+* Open ``.ssh/authorized_keys`` and add the key(s)
