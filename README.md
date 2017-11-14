@@ -121,17 +121,23 @@ First, you will need to have an account on [OME OpenStack](https://pony.openmicr
 
 The SSH and Git configuration files are used for fetching from and pushing to the Git repositories. They will be copied to the devspace.
 
+The OpenStack and SSH and Git following steps are only need to be done the first time you generate instances.
+
 #### OpenStack configuration
 
-The following steps are only need to be done the first time you want to generate instances.
-
 * Log into [OpenStack](https://pony.openmicroscopy.org)
-* Register a key: Go to ``Access & Security > Key Pairs`` and click on ``Import Key Pair``. Copy the content of the public key you use to access our resources e.g. ``id_rsa.pub``
-* Under ``Access & Security > API Access``, download your configuration by clicking on ``Download OpenStack RC File v2.0``. The file will be named by default ``omedev-openrc.sh``. It will be used to set environment variables needed to connect to OpenStack via the command line.
+* Register a key: 
+   * Go to the ``Access & Security`` tab 
+   * Click on ``Key Pairs`` and then on ``Import Key Pair``
+   * Copy the content of the public key you use to access our resources e.g. ``id_rsa.pub``
+   * The name you used is referred below as ``your_openstack_key``
+* Download your configuration:
+   * Go to the ``Access & Security`` tab
+   * Then ``API Access``
+   * Click on ``Download OpenStack RC File v2.0``
+   * The file will be named by default ``omedev-openrc.sh``. It will be used to set environment variables needed to connect to OpenStack via the command line.
 
 #### SSH and Git configuration files
-
-The following steps are only need to be done the first time you want to generate instances.
 
 In order to be able to push result of the build job to your GitHub account, you will need a SSH key **without passphrase**. The key must be named ``id_gh_rsa``.
 The key and the configuration files will be copied to the devspace.
@@ -156,10 +162,10 @@ The key and the configuration files will be copied to the devspace.
 
         [github]
                 token = your_token
-                user = your_gh_username
+                user = your_github_username
         [user]
                 email = your_email_address
-                name = your_name
+                name = your_real_name
 
 * The ``devspace_config`` directory should look like:
 
@@ -201,7 +207,7 @@ To "upgrade" roles, you may want to specify ``--force`` when installing the role
 
 * Create an instance on [OpenStack](https://pony.openmicroscopy.org) using the playbook ``create-devspace.yml``. It is recommended to prefix the name of the devspace by your name or your initals:
 
-        (dev) $ ansible-playbook create-devspace.yml -e vm_name=your_name-devspace-name -e vm_key_name=your_key
+        (dev) $ ansible-playbook create-devspace.yml -e vm_name=your_name-devspace-name -e vm_key_name=your_openstack_key
 
 By default the size of the volume is ``50``GiB, if you required a larger size, it can be set by passing for example `-e vm_size=100`.
 The Floating IP of the generated instance is referred as ``devspace_openstack_ip`` below.
