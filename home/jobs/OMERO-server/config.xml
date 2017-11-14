@@ -122,6 +122,7 @@ BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero admin start
 
 # WAIT FOR OMERO TO START UP AND ACCEPT CONNECTIONS
 $OMERO_DIST/bin/omero admin waitup
+$OMERO_DIST/bin/omero admin diagnostics
 
 deactivate</command>
     </hudson.tasks.Shell>
