@@ -220,7 +220,7 @@ See [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devsp
 
         (dev) $ ansible-playbook -u centos -i devspace_openstack_ip, provision-devspace.yml
 
-### Access the devspace
+### Access the devspace and determine ports
 
 Ports to access the various services are dynamically assigned. You will have to log in to the devspace as the ``omero`` user to determine the port used by a given service using your usual ssh key and not the ``id_gh_rsa`` key:
 
