@@ -227,17 +227,55 @@ Ports to access the various services are dynamically assigned. You will have to 
         ssh omero@devspace_openstack_ip
         cd devspace
 
-The port for each service is obtained by running:
+* The port to access the Jenkins UI is obtained by running:
 
-       docker-compose port $SERVICE $PRIVATE_PORT
+        docker-compose port nginxjenkins 443
 
-where $SERVICE $PRIVATE_PORT are described in the table below:
+    * The output of the command looks like:
 
-Service | Private port |  Command | Result
---------| ------|------------|----
-nginxjenkins | 443 | https://devspace_openstack_ip:$PORT | Access to Jenkins UI
-nginx | 80 | http://devspace_openstack_ip:$PORT/web  | Login via OMERO.web
-omero | 4064 | Add `devspace_openstack_ip $PORT` as server  | Login via OMERO.insight
+            WARNING: The JENKINS_PASSWORD variable is not set. Defaulting to a blank string.
+            WARNING: The USER_ID variable is not set. Defaulting to a blank string.
+            0.0.0.0:xxxx
+
+        where ``xxxx`` is the assigned port ``$JENKINS_PORT``
+
+    * The Jenkins UI will be available at:
+
+            https://devspace_openstack_ip:$JENKINS_PORT
+
+
+* The port to access OMERO.web is obtained by running:
+
+       docker-compose port nginx 80 
+
+    * The command will generate a similar output that the one above
+
+            WARNING: The JENKINS_PASSWORD variable is not set. Defaulting to a blank string.
+            WARNING: The USER_ID variable is not set. Defaulting to a blank string.
+            0.0.0.0:xxxx
+
+        where ``xxxx`` is the assigned port ``$WEB_PORT`` 
+
+    * OMERO.web will be available at
+
+            http://devspace_openstack_ip:$WEB_PORT/web 
+
+
+* The port to access OMERO.insight or OMERO.cli is obtained by running:
+
+       docker-compose port omero 4064 
+
+    * The command will generate a similar output that the one above
+
+            WARNING: The JENKINS_PASSWORD variable is not set. Defaulting to a blank string.
+            WARNING: The USER_ID variable is not set. Defaulting to a blank string.
+            0.0.0.0:xxxx
+
+        where ``xxxx`` is the assigned port ``$SERVER_PORT`` 
+
+    * To login either via OMERO.insight or OMERO.cli use ``$SERVER_PORT`` as the port value
+and ``devspace_openstack_ip`` as the server value
+
 
 # Job configurations
 
