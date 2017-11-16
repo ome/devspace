@@ -103,7 +103,7 @@ pip install -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
 # START OMERO
 BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero admin start
 $OMERO_DIST/bin/omero admin waitup
-
+$OMERO_DIST/bin/omero admin diagnostics
 
 # RUN TESTS
 export OMERO_SESSION_DIR=/tmp/$JOB_NAME/$BUILD_NUMBER

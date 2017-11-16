@@ -87,6 +87,7 @@ $OMERO_DIST/bin/omero config set omero.web.wsgi_args -- &apos;--log-level=DEBUG 
 $OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
 
 BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero web start
+$OMERO_DIST/bin/omero web diagnostics
 
 deactivate
       </command>

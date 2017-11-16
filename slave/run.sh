@@ -6,6 +6,7 @@ function shut_down() {
 
 /tmp/jenkins-slave.sh &
 /home/omero/workspace/OMERO-test-integration/src/dist/bin/omero admin start
+/home/omero/workspace/OMERO-test-integration/src/dist/bin/omero admin diagnostics
 
 trap "shut_down" SIGKILL SIGTERM SIGHUP SIGINT EXIT
 
