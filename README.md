@@ -274,7 +274,7 @@ Ports to access the various services are dynamically assigned. You will have to 
         where ``xxxx`` is the assigned port ``$SERVER_PORT`` 
 
     * To login either via OMERO.insight or OMERO.cli use ``$SERVER_PORT`` as the port value
-and ``devspace_openstack_ip`` as the server value
+and ``devspace_openstack_ip`` as the server value. You **must** use the secure connection.
 
 
 # Job configurations
@@ -284,23 +284,23 @@ and ``devspace_openstack_ip`` as the server value
 The default deployment initializes a Jenkins server with a [predefined set of
 jobs](home/jobs).
 
-The table below lists the job names, the Jenkins node labels
+The table below lists the job names, the Jenkins node labels and the associated docker
 they are associated with and a short description of the jobs.
 
-| Job name               | Name            | Description                               |
-| -----------------------|-----------------| ------------------------------------------|
-| Trigger                |                 | Runs all the following jobs in order      |
-| BIOFORMATS-push        | testintegration | Merges all Bio-Formats PRs                |
-| BIOFORMATS-ant         | testintegration | Builds Bio-Formats and runs unit tests    |
-| BIOFORMATS-maven       | testintegration | Builds Bio-Formats and runs unit tests    |
-| OMERO-push             | testintegration | Merges all OMERO PRs                      |
-| OMERO-build            | testintegration | Builds OMERO artifacts (server, clients)  |
-| OMERO-server           | omero           | Deploys an OMERO.server                   |
-| OMERO-web              | web             | Deploys an OMERO.web client               |
-| OMERO-test-integration | testintegration | Runs the OMERO integration tests          |
-| OMERO-robot            | testintegration | Runs the Robot tests                      |
-| nginx                  | nginx           | Reloads the nginx server                  |
-| OMERO-docs             | testintegration | Builds the OMERO documentation            |
+| Job name               | Name            | Description                               |     docker name            |
+| -----------------------|-----------------| ------------------------------------------|----------------------------|
+| Trigger                |                 | Runs all the following jobs in order      |                            |
+| BIOFORMATS-push        | testintegration | Merges all Bio-Formats PRs                | devspace_testintegration_1 |
+| BIOFORMATS-ant         | testintegration | Builds Bio-Formats and runs unit tests    | devspace_testintegration_1 |
+| BIOFORMATS-maven       | testintegration | Builds Bio-Formats and runs unit tests    | devspace_testintegration_1 |
+| OMERO-push             | testintegration | Merges all OMERO PRs                      | devspace_testintegration_1 |
+| OMERO-build            | testintegration | Builds OMERO artifacts (server, clients)  | devspace_testintegration_1 |
+| OMERO-server           | omero           | Deploys an OMERO.server                   | devspace_omero_1           |
+| OMERO-web              | web             | Deploys an OMERO.web client               | devspace_web_1             |
+| OMERO-test-integration | testintegration | Runs the OMERO integration tests          | devspace_testintegration_1 |
+| OMERO-robot            | testintegration | Runs the Robot tests                      | devspace_testintegration_1 |
+| nginx                  | nginx           | Reloads the nginx server                  | devspace_nginx_1           |
+| OMERO-docs             | testintegration | Builds the OMERO documentation            | devspace_testintegration_1 |
 
 
 This means that by default the following repositories need to be
