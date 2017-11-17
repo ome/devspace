@@ -325,6 +325,10 @@ or directly from the Jenkins UI i.e. ``Trigger > Configure``.
 | Nginx      | 1.8           | -                                  |
 | Redis      | latest        | https://hub.docker.com/_/redis/    |
 
+# Troubleshooting
+
+See [Troubleshooting](Troubleshooting.md)
+
 # ADVANCE: Multiple containers
 
  * For more complex deployment see [devspace-runtime.yml](https://github.com/openmicroscopy/ansible-role-devspace/blob/master/tasks/devspace-runtime.yml) that uses [docker service module](https://docs.ansible.com/ansible/docker_service_module.html).
@@ -405,10 +409,6 @@ In order to install additional components or new version of packages e.g. Postgr
 # Upgrade
 
 See [Changelog](CHANGELOG.md)
-
-# Troubleshooting
-
-See [Troubleshooting](Troubleshooting.md)
 
 # Limitations
 
