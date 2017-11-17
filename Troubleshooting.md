@@ -73,3 +73,13 @@ If you need to use non-released version of the scripts you will need to:
 
 * Log in ``ssh omero@devspace_openstack_ip``
 * Open ``.ssh/authorized_keys`` and add the key(s)
+
+## Configure Push jobs
+
+Both BioFormats-push and OMERO-push can be modified to only merge the desired PR
+Below is an example on how to only include PRs opened against [openmicroscopy/openmicroscopy](https://github.com/openmicroscopy/openmicroscopy) with ``--training`` in their description
+
+ * Click on ``OMERO-push > Configure``
+ * Go to ``MERGE_COMMAND`` and enter
+
+	merge develop -Dnone -Itraining --no-ask --reset --shallow
