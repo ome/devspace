@@ -39,13 +39,13 @@ To fix the issue:
  * Click on ``JDK installations...``
  * Select the latest JDK 8 using the selection box
 
- ## Access the OMERO.server logs
+## Access the OMERO.server logs
 
  * Log in:``ssh omero@devspace_openstack_ip``
  * Access the docker container ``docker exec -ti devspace_omero_1 bash``
  * Logs are under ``/home/omero/workspace/OMERO-server/OMERO.server/var/log``
 
- ## Copy the OMERO.server logs to your local machine
+## Copy the OMERO.server logs to your local machine
 
   * Log in:``ssh omero@devspace_openstack_ip``
   * Copy the logs from the container
@@ -56,7 +56,7 @@ To fix the issue:
 
       scp -Cr omero@devspace_openstack_ip:/home/omero/log /local/path/for/log
  
- ## Access test-integration logs
+## Access test-integration logs
 
    * Follow the same steps as above using the container ``devspace_testintegration_1``
    * Logs are under ``/home/omero/workspace/OMERO-test-integration/src/dist/var/log``    
