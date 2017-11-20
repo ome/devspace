@@ -63,6 +63,10 @@ unzip $ZIP_SRC
 rm -f $ZIP_SRC
 mv $WORKSPACE/${ZIP_SRC%.zip} $SRC
 
+# prepare virtualenv
+virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
+source $WORKSPACE/omero-virtualenv/bin/activate
+pip install -U setuptools
 source $SRC/docs/hudson/functions.sh
 $SRC/build.py build-default test-compile
 
@@ -94,10 +98,7 @@ rm dbsetup.sql
 
 ## END PURGE
 
-# prepare virtualenv for tests only
-virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
-source $WORKSPACE/omero-virtualenv/bin/activate
-# install web dependences
+# install web dependencies
 pip install -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
 
 # START OMERO

@@ -1,0 +1,76 @@
+---
+# Playbook for starting a docker instance in the
+# openstack cloud.
+
+## Run:
+# $ source openrc.sh
+# $ ansible-playbook create-devspace.yml -e vm_name=your_name-devspace-name -e vm_key_name=your_key
+
+- hosts: localhost
+  connection: local
+
+  vars:
+
+    vm_image: "CentOS 7"
+    vm_flavour_ram: 32000
+    vm_size: 50
+    vm_groups: "ansible-managed,os-image-centos,docker-hosts,devspace"
+
+  pre_tasks:
+
+    - fail:
+        msg: "vm_key_name is required"
+      when: vm_key_name is undefined or not vm_key_name
+
+    - fail:
+        msg: "vm_name is required"
+      when: vm_name is undefined or not vm_name
+
+
+  tasks:
+
+    - name: Docker external access security group
+      os_security_group:
+        description: External access to Docker servers (managed by Ansible)
+        name: docker-devspace-external
+        state: present
+
+    - name: Docker external access security group rules
+      os_security_group_rule:
+        direction: ingress
+        port_range_max: "{{ item }}"
+        port_range_min: "{{ item }}"
+        protocol: tcp
+        remote_ip_prefix: 0.0.0.0/0
+        security_group: docker-devspace-external
+        state: present
+      with_items:
+        - 22
+        - 80
+        - 443
+        - 8443
+        - 4444
+        - 4063
+        - 4064
+        - 14063
+        - 14064
+
+    - name: Docker VM
+      os_server:
+        name: "{{ vm_name }}"
+        state: present
+        image: "{{ vm_image }}"
+        boot_from_volume: True
+        volume_size: "{{ vm_size }}"
+        terminate_volume: true
+        key_name: "{{ vm_key_name }}"
+        flavor_ram: "{{ vm_flavour_ram }}"
+        auto_ip: yes
+        meta:
+          hostname: "{{ vm_name }}"
+          groups: "{{ vm_groups }}"
+        security_groups: [default, docker-devspace-external, all]
+      register: vmdocker
+
+    - debug:
+        msg: "IPs (Docker) private:{{ vmdocker.openstack.private_v4 }} floating:{{ vmdocker.openstack.public_v4 | default('') }}"

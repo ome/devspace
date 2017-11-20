@@ -1,3 +1,4 @@
+ansible/vendor
 .*un~
 home/.*
 home/*.log
@@ -84,3 +85,5 @@ web/static/
 web/tools/
 web/workspace/
 web/.oracle_jre_usage
+
+.DS_Store

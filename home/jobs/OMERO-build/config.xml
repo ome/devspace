@@ -17,12 +17,12 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>git://github.com/snoopycrimecop/openmicroscopy.git</url>
+        <url>git://github.com/SPACEUSER/openmicroscopy.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>SPACEBRANCH/merge/trigger</name>
+        <name>SPACEBRANCH_merge_trigger</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -55,6 +55,9 @@
 export PATH=/opt/texlive/bin/x86_64-linux:$PATH # for dockerfile
 cd src
 export OMERO_BRANCH=SPACEBRANCH
+virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
+source $WORKSPACE/omero-virtualenv/bin/activate
+pip install -U setuptools
 source docs/hudson/OMERO.sh
 </command>
     </hudson.tasks.Shell>
