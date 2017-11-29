@@ -147,6 +147,18 @@ services:
         networks:
             - omero-network
 
+    docker:
+        build: docker
+        links:
+            - jenkins
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /uod/idr:/uod/idr:ro
+        environment:
+            - SLAVE_NAME=docker
+            - SLAVE_PARAMS=-labels docker -disableClientsUniqueId
+            - JENKINS_MASTER
+
 networks:
     omero-network:
         # If devspace fails and your network has a non-standard MTU this may
