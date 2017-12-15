@@ -3,17 +3,6 @@
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
-  <properties>
-    <hudson.model.ParametersDefinitionProperty>
-      <parameterDefinitions>
-        <hudson.model.StringParameterDefinition>
-          <name>WEBHOST</name>
-          <description></description>
-          <defaultValue>http://devspace_openstack_ip:$WEB_PORT/web</defaultValue>
-        </hudson.model.StringParameterDefinition>
-      </parameterDefinitions>
-    </hudson.model.ParametersDefinitionProperty>
-  </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>omero</assignedNode>
   <canRoam>false</canRoam>
@@ -39,6 +28,9 @@ rm -rf $WORKSPACE/*</command>
     <hudson.tasks.Shell>
       <command>OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
+
+# Variable set to access OMERO.web
+WEBHOST=http://nginx/web
 
 # UNZIP OMERO.py
 OMERO_PY_DIST=$WORKSPACE/OMERO.py
@@ -67,7 +59,7 @@ unzip $ZIP
 rm -f $ZIP
 mv $WORKSPACE/$DIST $OMERO_SERVER_DIST
 
-# CREATE virtual env
+# CREATE a virtual environment
 virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
 source $WORKSPACE/omero-virtualenv/bin/activate
 
@@ -78,7 +70,7 @@ mv training_ice.config $OMERO_EXAMPLE_DIST/examples/Training
 $OMERO_SERVER_DIST/bin/omero sessions clear
 
 
-# Run the examples
+# Run the Python and Java examples
 
 export ICE_CONFIG=$OMERO_EXAMPLE_DIST/examples/Training/training_ice.config
 
@@ -90,7 +82,7 @@ deactivate
 
 # OMERO.java examples
 cd $OMERO_EXAMPLE_DIST/examples/Training/java/src
-javac -cp .:$OMERO_SERVER_DIST/lib/client/* training/util/*.java
+javac -cp .:$OMERO_SERVER_DIST/lib/client/* training/*.java training/util/*.java
 java -cp .:$OMERO_SERVER_DIST/lib/client/* training/Setup</command>
     </hudson.tasks.Shell>
   </builders>
