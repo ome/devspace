@@ -4,11 +4,7 @@ set -e -u -x
 
 
 # start docker container
-if [[ "darwin" == "${OSTYPE//[0-9.]/}" ]]; then
-  docker-compose -f docker-compose.yml up -d
-else
-  docker-compose -f docker-compose.yml up -d
-fi
+docker-compose -f docker-compose.yml up -d
 
 # inspect containers
 service_containers=( devspace_pg_1 devspace_redis_1 )
@@ -34,7 +30,7 @@ do sleep 10
   fi
 done
 
-# check if devspace_slaves_1 is running and conected to jenkins
+# check if devspace_slaves_1 is running and connected to jenkins
 for cname in "${omero_containers[@]}"
 do
    :
