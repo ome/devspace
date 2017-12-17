@@ -113,7 +113,7 @@ services:
             - omero-network
 
     seleniumhub:
-        image: selenium/hub:3.0.0-dubnium
+        image: selenium/hub
         environment:
             - GRID_BROWSER_TIMEOUT=60
             - GRID_TIMEOUT=60
@@ -124,7 +124,7 @@ services:
             - omero-network
 
     seleniumfirefox:
-        image: selenium/node-firefox:3.0.0-dubnium
+        image: selenium/node-firefox
         environment:
             - HUB_PORT_4444_TCP_ADDR=hub
             - HUB_PORT_4444_TCP_PORT=4444
@@ -134,7 +134,7 @@ services:
             - omero-network
 
     seleniumchrome:
-        image: selenium/node-chrome:3.0.0-dubnium
+        image: selenium/node-chrome
         environment:
             - HUB_PORT_4444_TCP_ADDR=hub
             - HUB_PORT_4444_TCP_PORT=4444
