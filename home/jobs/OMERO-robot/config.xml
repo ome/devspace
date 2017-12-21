@@ -16,11 +16,6 @@
           <description></description>
           <defaultValue>14064</defaultValue>
         </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>WEBHOST</name>
-          <description></description>
-          <defaultValue>SPACENAME-ci.openmicroscopy.org</defaultValue>
-        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -56,7 +51,7 @@
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
       <command>SRC=$WORKSPACE/src
-
+WEBHOST=nginx
 # Setup configuration for robot job
 ZIP_SRC=$(ls openmicroscopy*zip)
 unzip $ZIP_SRC
@@ -70,10 +65,10 @@ mv $WORKSPACE/${ZIP_DIST%.zip} $SRC/dist
 
 virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
 source $WORKSPACE/omero-virtualenv/bin/activate
-pip install -r $SRC/dist/share/web/requirements-py27-nginx.txt
-pip install &quot;robotframework==3.0&quot; &quot;robotframework-selenium2library==1.8.0&quot;
+pip install -r $SRC/dist/share/web/requirements-py27.txt
+pip install &quot;robotframework==3.0.2&quot; &quot;robotframework-selenium2library&quot;
 
-$SRC/dist/bin/omero config set omero.web.prefix $WEB_PREFIX;
+$SRC/dist/bin/omero config set omero.web.prefix $WEB_PREFIX
 
 cd $SRC/dist
 
@@ -86,10 +81,10 @@ sed -i.bak -re &apos;s/(\{SERVER_ID\}.*1)/\{SERVER_ID\}      2/&apos; $SRC/compo
 
 echo Running the UI tests
 $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web
-#aggregate the various output files.
+# aggregate the various output files
 $SRC/build.py -f components/tests/ui/build.xml aggregate-results
 
-# exmaple how to run single test
+# example on how to run a single test
 #$SRC/build.py -f components/tests/ui/build.xml web-firefox -DTEST=view_image.txt
 #$SRC/build.py -f components/tests/ui/build.xml aggregate-results
 
