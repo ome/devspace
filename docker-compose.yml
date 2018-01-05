@@ -115,9 +115,7 @@ services:
     seleniumhub:
         image: selenium/hub
         environment:
-            - GRID_BROWSER_TIMEOUT=60
-            - GRID_TIMEOUT=60
-            - GRID_MAX_SESSION=2
+            - GRID_TIMEOUT=0
         ports:
             - "4444"
         networks:
@@ -128,6 +126,10 @@ services:
         environment:
             - HUB_PORT_4444_TCP_ADDR=devspace_seleniumhub_1
             - HUB_PORT_4444_TCP_PORT=4444
+            - SCREEN_WIDTH=1920
+            - SCREEN_HEIGHT=1080
+            - SCREEN_DEPTH=24
+        shm_size: 1536m
         depends_on:
             - seleniumhub
         networks:
@@ -138,6 +140,10 @@ services:
         environment:
             - HUB_PORT_4444_TCP_ADDR=devspace_seleniumhub_1
             - HUB_PORT_4444_TCP_PORT=4444
+            - SCREEN_WIDTH=1920
+            - SCREEN_HEIGHT=1080
+            - SCREEN_DEPTH=24
+        shm_size: 1536m
         depends_on:
             - seleniumhub
         networks:
