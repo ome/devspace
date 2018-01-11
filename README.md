@@ -342,9 +342,3 @@ In order to install additional components or new version of packages e.g. Postgr
 # Upgrade
 
 See [Changelog](CHANGELOG.md)
-
-# Limitations
-
-* Robot job is still under investigation as it fails due to webbrowser crash. Robot job requires manual changes of the domain. Make sure webhost is set to the correct VM IP e.g.
-
-        --webhost "10.0.50.100"
