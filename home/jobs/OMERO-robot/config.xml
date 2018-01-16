@@ -16,6 +16,12 @@
           <description></description>
           <defaultValue>14064</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>RUN_IN_PARALLEL</name>
+          <description>Run the tests in parallel using pabot</description>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -68,6 +74,10 @@ source $WORKSPACE/omero-virtualenv/bin/activate
 pip install -r $SRC/dist/share/web/requirements-py27.txt
 pip install &quot;robotframework==3.0.2&quot; &quot;robotframework-selenium2library&quot;
 
+if [ &quot;$RUN_IN_PARALLEL&quot; = &quot;true&quot; ]; then
+    pip install "robotframework-pabot"
+fi
+
 $SRC/dist/bin/omero config set omero.web.prefix $WEB_PREFIX
 
 cd $SRC/dist
@@ -80,13 +90,22 @@ $SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --proto
 sed -i.bak -re &apos;s/(\{SERVER_ID\}.*1)/\{SERVER_ID\}      2/&apos; $SRC/components/tests/ui/resources/config.txt
 
 echo Running the UI tests
-$SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web
+# Run the tests on both Firefox and Chrome
+if [ &quot;$RUN_IN_PARALLEL&quot; = &quot;true&quot; ]; then
+    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web-pabot
+else
+    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web
+fi
+
+
+# Run only on Firefox
+# $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-firefox
+
+# Run a single test
+# $SRC/build.py -f components/tests/ui/build.xml web-firefox -DTEST=view_image.txt
+
 # aggregate the various output files
 $SRC/build.py -f components/tests/ui/build.xml aggregate-results
-
-# example on how to run a single test
-#$SRC/build.py -f components/tests/ui/build.xml web-firefox -DTEST=view_image.txt
-#$SRC/build.py -f components/tests/ui/build.xml aggregate-results
 
 deactivate
 </command>
