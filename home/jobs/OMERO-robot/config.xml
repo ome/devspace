@@ -104,8 +104,8 @@ fi
 # Run a single test
 # $SRC/build.py -f components/tests/ui/build.xml web-firefox -DTEST=view_image.txt
 
-# aggregate the various output files
-$SRC/build.py -f components/tests/ui/build.xml aggregate-results
+# merge the various output files
+$SRC/build.py -f components/tests/ui/build.xml merge-results
 
 deactivate
 </command>
