@@ -90,22 +90,27 @@ $SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --proto
 sed -i.bak -re &apos;s/(\{SERVER_ID\}.*1)/\{SERVER_ID\}      2/&apos; $SRC/components/tests/ui/resources/config.txt
 
 echo Running the UI tests
-# Run the tests on both Firefox and Chrome
+
 if [ &quot;$RUN_IN_PARALLEL&quot; = &quot;true&quot; ]; then
-    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web-pabot
+    # Run the tests on both Chrome and Firefox
+    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-firefox-pabot
+    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-firefox-rerun-chrome-pabot
 else
-    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web
+    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-firefox
+    # re-run the failures in Chrome
+    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-firefox-rerun-chrome
 fi
 
-
+# Combines the outputs
+$SRC/build.py -f components/tests/ui/build.xml merge-results-rerun-firefox
 # Run only on Firefox
 # $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-firefox
 
 # Run a single test
 # $SRC/build.py -f components/tests/ui/build.xml web-firefox -DTEST=view_image.txt
+# $SRC/build.py -f components/tests/ui/build.xml aggregate-results
 
-# merge the various output files
-$SRC/build.py -f components/tests/ui/build.xml merge-results
+
 
 deactivate
 </command>
