@@ -72,7 +72,7 @@ mv $WORKSPACE/${ZIP_DIST%.zip} $SRC/dist
 virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
 source $WORKSPACE/omero-virtualenv/bin/activate
 pip install -r $SRC/dist/share/web/requirements-py27.txt
-pip install &quot;robotframework==3.0.2&quot; &quot;robotframework-selenium2library==3.0.1&quot;
+pip install &quot;robotframework==3.0.2&quot; &quot;robotframework-selenium2library==3.0.0&quot;
 
 if [ &quot;$RUN_IN_PARALLEL&quot; = &quot;true&quot; ]; then
     pip install &quot;robotframework-pabot==0.43&quot;
