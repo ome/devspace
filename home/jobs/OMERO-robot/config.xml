@@ -93,6 +93,7 @@ echo Running the UI tests
 
 # Run the tests on Firefox then rerun failed tests in Chrome
 if [ &quot;$RUN_IN_PARALLEL&quot; = &quot;true&quot; ]; then
+    # Experimental see https://github.com/mkorpela/pabot/issues/93
     $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-firefox-pabot
     $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-firefox-rerun-chrome-pabot
 else
