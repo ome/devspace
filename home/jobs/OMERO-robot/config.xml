@@ -94,21 +94,21 @@ echo Running the UI tests
 # Run the tests on Firefox then rerun failed tests in Chrome
 if [ &quot;$RUN_IN_PARALLEL&quot; = &quot;true&quot; ]; then
     # Experimental see https://github.com/mkorpela/pabot/issues/93
-    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-firefox-pabot
-    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-firefox-rerun-chrome-pabot
+    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-pabot
+    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-rerun-pabot
 else
-    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-firefox
-    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-firefox-rerun-chrome
+    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser
+    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-rerun
 fi
 
 # Combines the outputs of the 2 runs
-$SRC/build.py -f components/tests/ui/build.xml merge-results-rerun-firefox
+$SRC/build.py -f components/tests/ui/build.xml merge-results-rerun
 
 # Run only on Firefox
-# $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-firefox
+# $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser
 
 # Run a single test
-# $SRC/build.py -f components/tests/ui/build.xml web-firefox -DTEST=view_image.txt
+# $SRC/build.py -f components/tests/ui/build.xml web-browser -DTEST=view_image.txt
 # Aggregate results
 # $SRC/build.py -f components/tests/ui/build.xml aggregate-results
 
