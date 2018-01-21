@@ -18,7 +18,7 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
           <name>RUN_IN_PARALLEL</name>
-          <description>Run the tests in parallel using pabot</description>
+          <description>Experimental: Run the tests in parallel using pabot</description>
           <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
         
