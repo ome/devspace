@@ -21,7 +21,11 @@
           <description>Experimental: Run the tests in parallel using pabot</description>
           <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
-        
+        <hudson.model.BooleanParameterDefinition>
+          <name>RERUN_FAILED_TESTS</name>
+          <description>Rerun the failed tests in Chrome</description>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -95,14 +99,22 @@ echo Running the UI tests
 if [ &quot;$RUN_IN_PARALLEL&quot; = &quot;true&quot; ]; then
     # Experimental see https://github.com/mkorpela/pabot/issues/93
     $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-pabot
-    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-rerun-pabot
+    if [ &quot;RERUN_FAILED_TESTS&quot; = &quot;true&quot; ] then
+        $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-rerun-pabot
+        # Combines the outputs of the 2 runs
+        $SRC/build.py -f components/tests/ui/build.xml merge-results-rerun
+    else
+        $SRC/build.py -f components/tests/ui/build.xml aggregate-results
+    fi
 else
     $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser
-    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-rerun
+    if [ &quot;RERUN_FAILED_TESTS&quot; = &quot;true&quot; ] then
+        $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-rerun
+        SRC/build.py -f components/tests/ui/build.xml merge-results-rerun
+    else
+        $SRC/build.py -f components/tests/ui/build.xml aggregate-results
+    fi
 fi
-
-# Combines the outputs of the 2 runs
-$SRC/build.py -f components/tests/ui/build.xml merge-results-rerun
 
 # Run only on Firefox
 # $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser
