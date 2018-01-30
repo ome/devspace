@@ -146,6 +146,8 @@ services:
         shm_size: 1536m
         depends_on:
             - seleniumhub
+        volumes:
+            - /dev/shm:/dev/shm
         networks:
             - omero-network
 
