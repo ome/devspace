@@ -110,7 +110,7 @@ else
     $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser
     if [ &quot;$RERUN_FAILED_TESTS&quot; = &quot;true&quot; ]; then
         $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-rerun
-        SRC/build.py -f components/tests/ui/build.xml merge-results-rerun
+        $SRC/build.py -f components/tests/ui/build.xml merge-results-rerun
     else
         $SRC/build.py -f components/tests/ui/build.xml aggregate-results
     fi
