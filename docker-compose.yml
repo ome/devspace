@@ -129,7 +129,7 @@ services:
             - SCREEN_WIDTH=1920
             - SCREEN_HEIGHT=1080
             - SCREEN_DEPTH=24
-        shm_size: 1536m
+        shm_size: 2g
         depends_on:
             - seleniumhub
         networks:
@@ -143,7 +143,7 @@ services:
             - SCREEN_WIDTH=1920
             - SCREEN_HEIGHT=1080
             - SCREEN_DEPTH=24
-        shm_size: 1536m
+        shm_size: 2g
         depends_on:
             - seleniumhub
         volumes:
