@@ -99,7 +99,7 @@ echo Running the UI tests
 if [ &quot;$RUN_IN_PARALLEL&quot; = &quot;true&quot; ]; then
     # Experimental see https://github.com/mkorpela/pabot/issues/93
     $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-pabot
-    if [ &quot;RERUN_FAILED_TESTS&quot; = &quot;true&quot; ]; then
+    if [ &quot;$RERUN_FAILED_TESTS&quot; = &quot;true&quot; ]; then
         $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-rerun-pabot
         # Combines the outputs of the 2 runs
         $SRC/build.py -f components/tests/ui/build.xml merge-results-rerun
@@ -108,7 +108,7 @@ if [ &quot;$RUN_IN_PARALLEL&quot; = &quot;true&quot; ]; then
     fi
 else
     $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser
-    if [ &quot;RERUN_FAILED_TESTS&quot; = &quot;true&quot; ]; then
+    if [ &quot;$RERUN_FAILED_TESTS&quot; = &quot;true&quot; ]; then
         $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-rerun
         SRC/build.py -f components/tests/ui/build.xml merge-results-rerun
     else
