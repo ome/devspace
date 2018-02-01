@@ -124,7 +124,7 @@ services:
     seleniumfirefox:
         image: selenium/node-firefox
         environment:
-            - HUB_PORT_4444_TCP_ADDR=devspace_seleniumhub_1
+            - HUB_PORT_4444_TCP_ADDR=seleniumhub
             - HUB_PORT_4444_TCP_PORT=4444
             - SCREEN_WIDTH=1920
             - SCREEN_HEIGHT=1080
@@ -137,7 +137,7 @@ services:
     seleniumchrome:
         image: selenium/node-chrome
         environment:
-            - HUB_PORT_4444_TCP_ADDR=devspace_seleniumhub_1
+            - HUB_PORT_4444_TCP_ADDR=seleniumhub
             - HUB_PORT_4444_TCP_PORT=4444
             - SCREEN_WIDTH=1920
             - SCREEN_HEIGHT=1080
