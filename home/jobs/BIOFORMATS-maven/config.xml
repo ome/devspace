@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<maven2-moduleset plugin="maven-plugin@2.15.1">
+<maven2-moduleset plugin="maven-plugin@2.17">
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
@@ -12,6 +12,15 @@
         <artifactNumToKeep>5</artifactNumToKeep>
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>PUSH_BRANCH</name>
+          <description></description>
+          <defaultValue>east_merge_trigger</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.3.2">
     <configVersion>2</configVersion>
