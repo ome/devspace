@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>FORMAT_NAME</name>
+          <description></description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DATA_PATH</name>
+          <description></description>
+          <defaultValue>/uod/idr/backups/from-squig/data_repo/curated/$FORMAT_NAME</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CONFIG_PATH</name>
+          <description></description>
+          <defaultValue>/uod/idr/backups/from-squig/data_repo/config/merge/curated/$FORMAT_NAME</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DOCKER_ARGS</name>
+          <description></description>
+          <defaultValue>-Dtestng.memory=15g -Dtestng.threadCount=12</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>docker</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>true</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>if [ &quot;$FORMAT_NAME&quot; = &quot;slidebook&quot; ]; then
+    echo &quot;EARLY EXIT&quot;
+    exit 0
+fi
+sudo docker run --rm --name ${JOB_NAME}_${BUILD_NUMBER} -v $DATA_PATH:/opt/data -v $CONFIG_PATH:/opt/config openmicroscopy/bioformats:east $DOCKER_ARGS</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

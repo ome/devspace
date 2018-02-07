@@ -15,9 +15,11 @@
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.36.1">
     <script>build job: &apos;BIOFORMATS-push&apos;
 
-build job: &apos;BIOFORMATS-maven&apos;
+build job: &apos;BIOFORMATS-merge&apos;
 
-build job: &apos;BIOFORMATS-ant&apos;
+build job: &apos;BIOFORMATS-image&apos;
+
+build job: &apos;BIOFORMATS-test-repo&apos;, wait: false
 
 build job: &apos;OMERO-push&apos;
 
