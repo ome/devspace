@@ -4,13 +4,13 @@ services:
 
     jenkins:
         build: jenkins
+        networks:
+            - omero-network
         user: ${USER_ID}
         volumes:
             - ./home:/var/jenkins_home
         environment:
             - JENKINS_OPTS= --argumentsRealm.passwd.${JENKINS_USERNAME}=${JENKINS_PASSWORD} --argumentsRealm.roles.${JENKINS_USERNAME}=admin
-        networks:
-            - omero-network
 
     git:
         build: git
@@ -20,10 +20,10 @@ services:
 
     pg:
         image: postgres
-        volumes:
-            - ./pgdata:/var/lib/postgresql/data
         networks:
             - omero-network
+        volumes:
+            - ./pgdata:/var/lib/postgresql/data
 
     testintegration:
         build:
@@ -53,6 +53,7 @@ services:
             - omero-network
         volumes:
             - ./server:/home/omero
+            - /uod/idr:/uod/idr:ro
         environment:
             - SLAVE_NAME=omero
             - SLAVE_EXECUTORS=2
@@ -99,13 +100,19 @@ services:
 
     nginxjenkins:
         image: nginx:1.10
+        networks:
+            - omero-network
         volumes:
             - ./jenkins/conf.d:/etc/nginx/conf.d
             - ./jenkins/sslcert:/etc/nginx/ssl
         ports:
+<<<<<<< HEAD
             - "443"
         networks:
             - omero-network
+=======
+            - "58443:443"
+>>>>>>> Saving before new SCC repo-config
 
     redis:
         image: redis
@@ -114,15 +121,17 @@ services:
 
     seleniumhub:
         image: selenium/hub
+        networks:
+            - omero-network
         environment:
             - GRID_TIMEOUT=0
         ports:
             - "4444"
-        networks:
-            - omero-network
 
     seleniumfirefox:
         image: selenium/node-firefox
+        networks:
+            - omero-network
         environment:
             - HUB_PORT_4444_TCP_ADDR=seleniumhub
             - HUB_PORT_4444_TCP_PORT=4444
@@ -131,11 +140,11 @@ services:
             - SCREEN_DEPTH=24
         depends_on:
             - seleniumhub
-        networks:
-            - omero-network
 
     seleniumchrome:
         image: selenium/node-chrome
+        networks:
+            - omero-network
         environment:
             - HUB_PORT_4444_TCP_ADDR=seleniumhub
             - HUB_PORT_4444_TCP_PORT=4444
@@ -144,13 +153,11 @@ services:
             - SCREEN_DEPTH=24
         depends_on:
             - seleniumhub
-        networks:
-            - omero-network
 
     docker:
         build: docker
-        links:
-            - jenkins
+        networks:
+            - omero-network
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
             - /uod/idr:/uod/idr:ro
