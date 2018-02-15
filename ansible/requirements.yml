@@ -125,8 +125,8 @@
 - src: openmicroscopy.reboot-server
   version: 0.1.0
 
-- src: git+https://github.com/jburel/ansible-role-devspace.git
-  version: scale-selenium
+- src: git+https://github.com/openmicroscopy/ansible-role-devspace.git
+  version: master
   name: openmicroscopy.devspace
 
 - src: openmicroscopy.system-monitor-agent
