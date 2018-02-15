@@ -16,11 +16,16 @@
           <description></description>
           <defaultValue>14064</defaultValue>
         </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>WEBHOST</name>
-          <description></description>
-          <defaultValue>SPACENAME-ci.openmicroscopy.org</defaultValue>
-        </hudson.model.StringParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>RUN_IN_PARALLEL</name>
+          <description>Experimental: Run the tests in parallel using pabot</description>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>RERUN_FAILED_TESTS</name>
+          <description>Rerun the failed tests in Chrome</description>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -56,7 +61,7 @@
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
       <command>SRC=$WORKSPACE/src
-
+WEBHOST=nginx
 # Setup configuration for robot job
 ZIP_SRC=$(ls openmicroscopy*zip)
 unzip $ZIP_SRC
@@ -70,10 +75,14 @@ mv $WORKSPACE/${ZIP_DIST%.zip} $SRC/dist
 
 virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
 source $WORKSPACE/omero-virtualenv/bin/activate
-pip install -r $SRC/dist/share/web/requirements-py27-nginx.txt
-pip install &quot;robotframework==3.0&quot; &quot;robotframework-selenium2library==1.8.0&quot;
+pip install -r $SRC/dist/share/web/requirements-py27.txt
+pip install &quot;robotframework==3.0.2&quot; &quot;robotframework-selenium2library==3.0.0&quot;
 
-$SRC/dist/bin/omero config set omero.web.prefix $WEB_PREFIX;
+if [ &quot;$RUN_IN_PARALLEL&quot; = &quot;true&quot; ]; then
+    pip install &quot;robotframework-pabot==0.43&quot;
+fi
+
+$SRC/dist/bin/omero config set omero.web.prefix $WEB_PREFIX
 
 cd $SRC/dist
 
@@ -85,13 +94,37 @@ $SRC/dist/bin/omero --path $SRC/components/tests/ui/plugins robot config --proto
 sed -i.bak -re &apos;s/(\{SERVER_ID\}.*1)/\{SERVER_ID\}      2/&apos; $SRC/components/tests/ui/resources/config.txt
 
 echo Running the UI tests
-$SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false ui-test-web
-#aggregate the various output files.
-$SRC/build.py -f components/tests/ui/build.xml aggregate-results
 
-# exmaple how to run single test
-#$SRC/build.py -f components/tests/ui/build.xml web-firefox -DTEST=view_image.txt
-#$SRC/build.py -f components/tests/ui/build.xml aggregate-results
+# Run the tests on Firefox then rerun failed tests in Chrome
+if [ &quot;$RUN_IN_PARALLEL&quot; = &quot;true&quot; ]; then
+    # Experimental see https://github.com/mkorpela/pabot/issues/93
+    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-pabot
+    if [ &quot;$RERUN_FAILED_TESTS&quot; = &quot;true&quot; ]; then
+        $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-rerun-pabot
+        # Combines the outputs of the 2 runs
+        $SRC/build.py -f components/tests/ui/build.xml merge-results-rerun
+    else
+        $SRC/build.py -f components/tests/ui/build.xml aggregate-results
+    fi
+else
+    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser
+    if [ &quot;$RERUN_FAILED_TESTS&quot; = &quot;true&quot; ]; then
+        $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-rerun
+        $SRC/build.py -f components/tests/ui/build.xml merge-results-rerun
+    else
+        $SRC/build.py -f components/tests/ui/build.xml aggregate-results
+    fi
+fi
+
+# Run only on Firefox
+# $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser
+
+# Run a single test
+# $SRC/build.py -f components/tests/ui/build.xml web-browser -DTEST=view_image.txt
+# Aggregate results
+# $SRC/build.py -f components/tests/ui/build.xml aggregate-results
+
+
 
 deactivate
 </command>

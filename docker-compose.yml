@@ -1,136 +1,155 @@
-jenkins:
-    build: jenkins
-    user: ${USER_ID}
-    volumes:
-        - ./home:/var/jenkins_home
-    environment:
-        - JENKINS_OPTS= --argumentsRealm.passwd.${JENKINS_USERNAME}=${JENKINS_PASSWORD} --argumentsRealm.roles.${JENKINS_USERNAME}=admin
+version: "3"
 
-git:
-    build: git
-    volumes:
-        - /src
-    command: 'true'
+services:
 
-pg:
-    image: postgres
-    volumes:
-        - ./pgdata:/var/lib/postgresql/data
+    jenkins:
+        build: jenkins
+        user: ${USER_ID}
+        volumes:
+            - ./home:/var/jenkins_home
+        environment:
+            - JENKINS_OPTS= --argumentsRealm.passwd.${JENKINS_USERNAME}=${JENKINS_PASSWORD} --argumentsRealm.roles.${JENKINS_USERNAME}=admin
+        networks:
+            - omero-network
 
-testintegration:
-    extends:
-        file: common-services-v1.yml
-        service: baseslave
-    links:
-        - jenkins
-        - pg
-        - seleniumhub
-    volumes:
-        - ./slave:/home/omero
-    environment:
-        - SLAVE_NAME=testintegration
-        - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
-        - JENKINS_MASTER=http://jenkins:8080
-        # - JENKINS_USERNAME=${JENKINS_USERNAME}
-        # - JENKINS_PASSWORD=${JENKINS_PASSWORD}
-    extra_hosts:
-        - "testintegration:127.0.0.1"
-    ports:
-        - "14064"
-        - "14063"
+    git:
+        build: git
+        volumes:
+            - /src
+        command: 'true'
 
-omero:
-    extends:
-        file: common-services-v1.yml
-        service: baseserver
-    links:
-        - jenkins
-        - pg
-    volumes:
-        - ./server:/home/omero
-    environment:
-        - SLAVE_NAME=omero
-        - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
-        - JENKINS_MASTER=http://jenkins:8080
-        # - JENKINS_USERNAME=${JENKINS_USERNAME}
-        # - JENKINS_PASSWORD=${JENKINS_PASSWORD}
-    ports:
-        - "4064"
-        - "4063"
+    pg:
+        image: postgres
+        volumes:
+            - ./pgdata:/var/lib/postgresql/data
+        networks:
+            - omero-network
 
-web:
-    extends:
-        file: common-services-v1.yml
-        service: baseweb
-    links:
-        - jenkins
-        - redis
-        - omero
-        - testintegration
-    volumes:
-        - ./web:/home/omero
-        - ./nginx/conf.d:/home/omero/nginx
-    environment:
-        - SLAVE_NAME=web
-        - SLAVE_PARAMS= -labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
-        - JENKINS_MASTER=http://jenkins:8080
-        # - JENKINS_USERNAME=${JENKINS_USERNAME}
-        # - JENKINS_PASSWORD=${JENKINS_PASSWORD}
+    testintegration:
+        build:
+            context: ./slave
+            dockerfile: Dockerfile
+        networks:
+            - omero-network
+        volumes:
+            - ./slave:/home/omero
+        environment:
+            - SLAVE_NAME=testintegration
+            - SLAVE_EXECUTORS=2
+            - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
+            - JENKINS_MASTER=http://jenkins:8080
+            - WEB_PREFIX=/web
+        extra_hosts:
+            - "testintegration:127.0.0.1"
+        ports:
+            - "14064"
+            - "14063"
 
-nginx:
-    extends:
-        file: common-services-v1.yml
-        service: basenginx
-    links:
-        - jenkins
-        - web
-    volumes:
-        - ./nginx/conf.d:/etc/nginx/conf.d
-        - ./web/static:/home/omero/static
-        - ./nginx/log:/var/log/nginx
-        - ./nginx/sslcert:/etc/nginx/ssl
-    environment:
-        - SLAVE_NAME=nginx
-        - SLAVE_PARAMS=-labels centos7 -labels java18 -disableClientsUniqueId
-        - JENKINS_MASTER=http://jenkins:8080
-        # - JENKINS_USERNAME=${JENKINS_USERNAME}
-        # - JENKINS_PASSWORD=${JENKINS_PASSWORD}
-    ports:
-        - "80"
-        - "443"
+    omero:
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        networks:
+            - omero-network
+        volumes:
+            - ./server:/home/omero
+        environment:
+            - SLAVE_NAME=omero
+            - SLAVE_EXECUTORS=2
+            - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
+            - JENKINS_MASTER=http://jenkins:8080
+        ports:
+            - "4064"
+            - "4063"
 
-nginxjenkins:
-    image: nginx:1.10
-    links:
-        - jenkins
-    volumes:
-        - ./jenkins/conf.d:/etc/nginx/conf.d
-        - ./jenkins/sslcert:/etc/nginx/ssl
-    ports:
-        - "443"
-redis:
-    image: redis
+    web:
+        build:
+            context: ./web
+            dockerfile: Dockerfile
+        networks:
+            - omero-network
+        volumes:
+            - ./web:/home/omero
+            - ./nginx/conf.d:/home/omero/nginx
+        environment:
+            - SLAVE_NAME=web
+            - SLAVE_EXECUTORS=2
+            - SLAVE_PARAMS= -labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
+            - JENKINS_MASTER=http://jenkins:8080
+            - WEB_PREFIX=/web
 
-seleniumhub:
-    image: selenium/hub:3.0.0-dubnium
-    environment:
-        - GRID_BROWSER_TIMEOUT=60
-        - GRID_TIMEOUT=60
-        - GRID_MAX_SESSION=2
-        #- SE_OPTS=-browserTimeout 60 -timeout 60 maxSession 2
-#    volumes:
-#        - /dev/urandom:/dev/random
-    ports:
-        - "4444"
-seleniumfirefox:
-    image: selenium/node-firefox:3.0.0-dubnium
-    links:
-        - seleniumhub:hub
-#    volumes:
-#        - /dev/shm:/dev/shm
-seleniumchrome:
-    image: selenium/node-chrome:3.0.0-dubnium
-    links:
-        - seleniumhub:hub
-#    volumes:
-#        - /dev/shm:/dev/shm
+    nginx:
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile
+        networks:
+            - omero-network
+        volumes:
+            - ./nginx/conf.d:/etc/nginx/conf.d
+            - ./web/static:/home/omero/static
+            - ./nginx/log:/var/log/nginx
+            - ./nginx/sslcert:/etc/nginx/ssl
+        environment:
+            - SLAVE_NAME=nginx
+            - SLAVE_PARAMS=-labels centos7 -labels java18 -disableClientsUniqueId
+            - JENKINS_MASTER=http://jenkins:8080
+        ports:
+            - "80"
+            - "443"
+
+    nginxjenkins:
+        image: nginx:1.10
+        volumes:
+            - ./jenkins/conf.d:/etc/nginx/conf.d
+            - ./jenkins/sslcert:/etc/nginx/ssl
+        ports:
+            - "443"
+        networks:
+            - omero-network
+
+    redis:
+        image: redis
+        networks:
+            - omero-network
+
+    seleniumhub:
+        image: selenium/hub
+        environment:
+            - GRID_TIMEOUT=0
+        ports:
+            - "4444"
+        networks:
+            - omero-network
+
+    seleniumfirefox:
+        image: selenium/node-firefox
+        environment:
+            - HUB_PORT_4444_TCP_ADDR=seleniumhub
+            - HUB_PORT_4444_TCP_PORT=4444
+            - SCREEN_WIDTH=1920
+            - SCREEN_HEIGHT=1080
+            - SCREEN_DEPTH=24
+        depends_on:
+            - seleniumhub
+        networks:
+            - omero-network
+
+    seleniumchrome:
+        image: selenium/node-chrome
+        environment:
+            - HUB_PORT_4444_TCP_ADDR=seleniumhub
+            - HUB_PORT_4444_TCP_PORT=4444
+            - SCREEN_WIDTH=1920
+            - SCREEN_HEIGHT=1080
+            - SCREEN_DEPTH=24
+        depends_on:
+            - seleniumhub
+        networks:
+            - omero-network
+
+networks:
+    omero-network:
+        # If devspace fails and your network has a non-standard MTU this may
+        # need to be set if auto-detection fails
+        driver_opts:
+            com.docker.network.driver.mtu: 1450

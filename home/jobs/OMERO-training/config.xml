@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>omero</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>
+rm -rf $WORKSPACE/*</command>
+    </hudson.tasks.Shell>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.38.1">
+      <project>OMERO-build</project>
+      <filter>src/target/OMERO.server*zip, src/target/OMERO.py*zip, src/target/openmicroscopy*zip</filter>
+      <target></target>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.tasks.Shell>
+      <command>OMERO_INSTALL=/tmp/omero-install/linux
+source $OMERO_INSTALL/settings.env
+
+# Variable set to access OMERO.web
+export WEBHOST=http://nginx/web
+
+# UNZIP OMERO.py
+OMERO_PY_DIST=$WORKSPACE/OMERO.py
+
+ZIP=$(ls OMERO.py*.zip)
+DIST=${ZIP%.zip}
+unzip $ZIP
+rm -f $ZIP
+mv $WORKSPACE/$DIST $OMERO_PY_DIST
+
+# UNZIP openmicroscopy
+OMERO_EXAMPLE_DIST=$WORKSPACE/openmicroscopy
+
+ZIP=$(ls openmicroscopy*.zip)
+DIST=${ZIP%.zip}
+unzip $ZIP
+rm -f $ZIP
+mv $WORKSPACE/$DIST $OMERO_EXAMPLE_DIST
+
+# UNZIP SERVER
+OMERO_SERVER_DIST=$WORKSPACE/OMERO.server
+
+ZIP=$(ls OMERO.server*.zip)
+DIST=${ZIP%.zip}
+unzip $ZIP
+rm -f $ZIP
+mv $WORKSPACE/$DIST $OMERO_SERVER_DIST
+
+# CREATE a virtual environment
+virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
+source $WORKSPACE/omero-virtualenv/bin/activate
+
+cd $OMERO_SERVER_DIST
+bash $OMERO_EXAMPLE_DIST/examples/Training/training_setup.sh
+mv training_ice.config $OMERO_EXAMPLE_DIST/examples/Training
+
+$OMERO_SERVER_DIST/bin/omero sessions clear
+
+
+# Run the Python and Java examples
+
+export ICE_CONFIG=$OMERO_EXAMPLE_DIST/examples/Training/training_ice.config
+
+# OMERO.py examples
+pip install --upgrade requests
+export PYTHONPATH=$OMERO_PY_DIST/lib/python:$PYTHONPATH
+python $OMERO_EXAMPLE_DIST/examples/Training/python
+deactivate
+
+# OMERO.java examples
+cd $OMERO_EXAMPLE_DIST/examples/Training/java/src
+javac -cp .:$OMERO_SERVER_DIST/lib/client/* training/*.java training/util/*.java
+java -cp .:$OMERO_SERVER_DIST/lib/client/* training/Setup</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.8.8"/>
+  </buildWrappers>
+</project>

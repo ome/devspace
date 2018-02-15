@@ -55,6 +55,9 @@ RUN curl -fSLO http://downloads.sourceforge.net/project/findbugs/findbugs/$FINDB
     tar xzf findbugs-$FINDBUGS_VERSION.tar.gz --strip-components 1 -C $FINDBUGS_HOME && \
     rm findbugs-$FINDBUGS_VERSION.tar.gz
 
+# Install build tools from EPEL
+RUN yum -y install maven ant && yum clean all
+
 # install postgres tools
 RUN yum -y install http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-centos94-9.4-2.noarch.rpm \
     && yum clean all

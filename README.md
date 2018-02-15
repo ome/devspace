@@ -329,73 +329,6 @@ or directly from the Jenkins UI i.e. ``Trigger > Configure``.
 
 See [Troubleshooting](Troubleshooting.md)
 
-# ADVANCE: Multiple containers
-
- * For more complex deployment see [devspace-runtime.yml](https://github.com/openmicroscopy/ansible-role-devspace/blob/master/tasks/devspace-runtime.yml) that uses [docker service module](https://docs.ansible.com/ansible/docker_service_module.html).
-
- * [common-services-v1.yml](common-services-v1.yml) contains a default list of basic containers that are suitable to extend. You can extend any service together with other configuration keys. For more details
-    read [extends](https://docs.docker.com/v1.6/compose/extends/).
-
- * to override the basic containers keep in mind compose copies configurations from the
-   original service over to the local one, except for links and volumes_from.
-
-   Examples of how to extend existing containers in [docker-compose.yml](docker-compose.yml).
-
-    - baseomero: basic container starting OMERO.server process
-
-            myomero:
-                extends:
-                    file: common-services-v1.yml
-                    service: baseserver
-                links:
-                    - jenkins
-                    - pg
-                volumes:
-                    - ./myservices/omero:/home/omero
-                environment:
-                    - SLAVE_NAME=myomero
-                ports:
-                    - "24064"
-                    - "24063"
-
-    - baseweb: basic container starting OMERO.web process
-
-            myweb:
-                extends:
-                    file: common-services-v1.yml
-                    service: baseweb
-                links:
-                    - jenkins
-                    - redis
-                    - myomero
-                volumes:
-                    - ./myservices/web:/home/omero
-                    - ./myservices/nginx/conf.d:/home/omero/nginx
-                environment:
-                    - SLAVE_NAME=myweb
-
-    - basenginx: basic container starting nginx process
-
-            mynginx:
-                extends:
-                    file: common-services-v1.yml
-                    service: basenginx
-                links:
-                    - jenkins
-                    - myweb
-                volumes:
-                    - ./myservices/nginx/conf.d:/etc/nginx/conf.d
-                    - ./myservices/web/static:/home/omero/static
-                environment:
-                    - SLAVE_NAME=mynginx
-                ports:
-                    - "80"
-
-    NOTE:
-
-    **You have to create manually all new volume directories to avoid 
-    permission issues. Copy from appropriate existing jobs and point to the new node.**
-
 # ADVANCE: extend omero-install
 
 In order to install additional components or new version of packages e.g. PostgreSQL 10, it is required to:
@@ -409,9 +342,3 @@ In order to install additional components or new version of packages e.g. Postgr
 # Upgrade
 
 See [Changelog](CHANGELOG.md)
-
-# Limitations
-
-* Robot job is still under investigation as it fails due to webbrowser crash. Robot job requires manual changes of the domain. Make sure webhost is set to the correct VM IP e.g.
-
-        --webhost "10.0.50.100"
