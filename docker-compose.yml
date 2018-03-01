@@ -37,8 +37,8 @@ services:
             - SLAVE_NAME=testintegration
             - SLAVE_EXECUTORS=2
             - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
-            - JENKINS_MASTER=http://jenkins:8080
-            - WEB_PREFIX=/web
+            - JENKINS_MASTER
+            - WEB_PREFIX
         extra_hosts:
             - "testintegration:127.0.0.1"
         ports:
@@ -57,7 +57,7 @@ services:
             - SLAVE_NAME=omero
             - SLAVE_EXECUTORS=2
             - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
-            - JENKINS_MASTER=http://jenkins:8080
+            - JENKINS_MASTER
         ports:
             - "4064"
             - "4063"
@@ -75,8 +75,8 @@ services:
             - SLAVE_NAME=web
             - SLAVE_EXECUTORS=2
             - SLAVE_PARAMS= -labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
-            - JENKINS_MASTER=http://jenkins:8080
-            - WEB_PREFIX=/web
+            - JENKINS_MASTER
+            - WEB_PREFIX
 
     nginx:
         build:
@@ -92,7 +92,7 @@ services:
         environment:
             - SLAVE_NAME=nginx
             - SLAVE_PARAMS=-labels centos7 -labels java18 -disableClientsUniqueId
-            - JENKINS_MASTER=http://jenkins:8080
+            - JENKINS_MASTER
         ports:
             - "80"
             - "443"
@@ -157,7 +157,7 @@ services:
             - ${REPO_CONFIG}:/repo/config:ro
         environment:
             - SLAVE_NAME=docker
-            - SLAVE_PARAMS=-labels docker -disableClientsUniqueId
+            - SLAVE_PARAMS=-labels docker -disableClientsUniqueId -executors ${DOCKER_EXECUTORS}
             - JENKINS_MASTER
 
 networks:
