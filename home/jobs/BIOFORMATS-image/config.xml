@@ -8,7 +8,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>git://github.com/snoopycrimecop/bioformats</url>
+        <url>git://github.com/SPACEUSER/bioformats</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -31,7 +31,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>TAG=openmicroscopy/bioformats:east
+      <command>TAG=openmicroscopy/bioformats:SPACENAME
 sudo docker build -t $TAG .
 #sudo docker tag $TAG scc-docker-docker.bintray.io/$TAG
 #sudo docker push scc-docker-docker.bintray.io/$TAG</command>

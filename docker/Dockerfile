@@ -13,7 +13,7 @@ RUN yum-config-manager \
 RUN yum -y install docker-ce
 
 # Change user id to fix permissions issues
-ARG USER_ID=11521
+ARG USER_ID=1000
 RUN usermod -u $USER_ID omero
 
 COPY run.sh /tmp/run.sh

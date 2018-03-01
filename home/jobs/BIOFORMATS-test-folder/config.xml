@@ -43,7 +43,7 @@
     echo &quot;EARLY EXIT&quot;
     exit 0
 fi
-sudo docker run --rm --name ${JOB_NAME}_${BUILD_NUMBER}_east -v $DATA_PATH:/opt/data -v $CONFIG_PATH:/opt/config openmicroscopy/bioformats:east $DOCKER_ARGS</command>
+sudo docker run --rm --name ${JOB_NAME}_${BUILD_NUMBER}_SPACENAME -v $DATA_PATH:/opt/data -v $CONFIG_PATH:/opt/config openmicroscopy/bioformats:SPACENAME $DOCKER_ARGS</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>

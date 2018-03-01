@@ -17,7 +17,7 @@
         <hudson.model.StringParameterDefinition>
           <name>PUSH_BRANCH</name>
           <description></description>
-          <defaultValue>east_merge_trigger</defaultValue>
+          <defaultValue>SPACENAME_merge_trigger</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
