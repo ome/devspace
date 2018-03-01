@@ -53,7 +53,6 @@ services:
             - omero-network
         volumes:
             - ./server:/home/omero
-            - /uod/idr:/uod/idr:ro
         environment:
             - SLAVE_NAME=omero
             - SLAVE_EXECUTORS=2
@@ -154,7 +153,8 @@ services:
             - omero-network
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-            - /uod/idr:/uod/idr:ro
+            - ${REPO_CURATED}:/repo/curated:ro
+            - ${REPO_CONFIG}:/repo/config:ro
         environment:
             - SLAVE_NAME=docker
             - SLAVE_PARAMS=-labels docker -disableClientsUniqueId

@@ -23,7 +23,7 @@ def stepsForParallel = []
 
 node(&quot;docker&quot;) {
     stage(&apos;List&apos;) {
-        def data_dir = &apos;/uod/idr/backups/from-squig/data_repo/curated/&apos;
+        def data_dir = System.getenv()['REPO_CURATED']
         def cmd = &quot;find ${data_dir} -mindepth 1 -maxdepth 1 -type d &quot;
         list = sh(returnStdout: true, script: cmd).trim()
         def formats = list.split()
