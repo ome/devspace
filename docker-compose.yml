@@ -106,13 +106,7 @@ services:
             - ./jenkins/conf.d:/etc/nginx/conf.d
             - ./jenkins/sslcert:/etc/nginx/ssl
         ports:
-<<<<<<< HEAD
             - "443"
-        networks:
-            - omero-network
-=======
-            - "58443:443"
->>>>>>> Saving before new SCC repo-config
 
     redis:
         image: redis
