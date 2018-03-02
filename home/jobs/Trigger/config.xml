@@ -14,8 +14,6 @@
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.36.1">
     <script>
-build job: &apos;MANAGEMENT_TOOLS-merge&apos;
-
 build job: &apos;BIOFORMATS-push&apos;
 
 build job: &apos;BIOFORMATS-maven&apos;

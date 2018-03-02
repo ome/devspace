@@ -7,7 +7,7 @@
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
-          <name>MERGE_OPTIONS</name>
+          <name>MERGE_COMMAND</name>
           <description></description>
           <defaultValue>merge SPACENAME --no-ask --reset</defaultValue>
         </hudson.model.StringParameterDefinition>
@@ -70,12 +70,8 @@
   <builders>
     <hudson.tasks.Shell>
       <command>pip install --user scc
-
-PATH=$HOME/.local/bin:$PATH
-
-MERGE_OPTIONS=&quot;$MERGE_OPTIONS -S $STATUS&quot;
-
-$WORKSPACE/../MANAGEMENT_TOOLS-merge/ci/files-scc-merge</command>
+test -e src &amp;&amp; cd src
+$HOME/.local/bin/scc $MERGE_COMMAND -S $STATUS --push $PUSH_BRANCH</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
