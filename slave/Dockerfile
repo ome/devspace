@@ -51,7 +51,7 @@ RUN pip install Sphinx
 ENV FINDBUGS_VERSION 3.0.0
 ENV FINDBUGS_HOME /opt/findbugs
 RUN mkdir -p $FINDBUGS_HOME
-RUN curl -fSLO http://downloads.sourceforge.net/project/findbugs/findbugs/$FINDBUGS_VERSION/findbugs-$FINDBUGS_VERSION.tar.gz && \
+RUN curl -fSLO http://downloads.openmicroscopy.org/resources/cache/findbugs-3.0.0.tar.gz && \
     tar xzf findbugs-$FINDBUGS_VERSION.tar.gz --strip-components 1 -C $FINDBUGS_HOME && \
     rm findbugs-$FINDBUGS_VERSION.tar.gz
 
