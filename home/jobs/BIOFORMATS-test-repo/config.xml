@@ -37,7 +37,7 @@ node(&quot;docker&quot;) {
 stage(&apos;Run&apos;) {
     parallel stepsForParallel
 }</script>
-    <sandbox>false</sandbox>
+    <sandbox>true</sandbox>
   </definition>
   <triggers/>
   <disabled>false</disabled>
