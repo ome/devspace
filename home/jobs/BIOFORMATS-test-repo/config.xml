@@ -23,7 +23,7 @@ def stepsForParallel = []
 
 node(&quot;docker&quot;) {
     stage(&apos;List&apos;) {
-        def cmd = &quot;find /repo/curated -mindepth 1 -maxdepth 1 -type d &quot;
+        def cmd = &quot;find ${env.REPO_CURATED} -mindepth 1 -maxdepth 1 -type d &quot;
         list = sh(returnStdout: true, script: cmd).trim()
         def formats = list.split()
         stepsForParallel = formats.collectEntries {

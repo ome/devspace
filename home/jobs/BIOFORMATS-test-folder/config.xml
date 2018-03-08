@@ -14,12 +14,12 @@
         <hudson.model.StringParameterDefinition>
           <name>DATA_PATH</name>
           <description></description>
-          <defaultValue>/repo/curated/$FORMAT_NAME</defaultValue>
+          <defaultValue>$REPO_CURATED/$FORMAT_NAME</defaultValue>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>CONFIG_PATH</name>
           <description></description>
-          <defaultValue>/repo/config/merge/curated/$FORMAT_NAME</defaultValue>
+          <defaultValue>$REPO_CONFIG/$FORMAT_NAME</defaultValue>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>DOCKER_ARGS</name>
