@@ -73,16 +73,11 @@ The following instructions explain how to deploy a devspace on a Docker host.
 
         $ ./rename.py MYTOPIC --user git_user
 
-*   Replace the `USER_ID` of the various Dockerfile with the ID of the user who
-    will run the devspace:
+*   This will also replace the `USER_ID` of the various Dockerfile with the ID of the user who
+    will run the devspace, assumed to be: `id -u`, i.e. the current user.
 
-        $ find . -iname Dockerfile -type f -exec sed -i -e 's/1000/<USER_ID>/g' {} \;
+*   Set environment variables in `.env`, especially:
 
-    To find the `USER_ID`, use the id command i.e. ``id -u username``
-
-*   Set the environment variables in `.env`:
-
-        USER_ID=<USER_ID>
         JENKINS_USERNAME=devspace
         JENKINS_PASSWORD=<password>
 

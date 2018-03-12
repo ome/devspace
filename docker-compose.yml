@@ -4,13 +4,13 @@ services:
 
     jenkins:
         build: jenkins
+        networks:
+            - omero-network
         user: ${USER_ID}
         volumes:
             - ./home:/var/jenkins_home
         environment:
             - JENKINS_OPTS= --argumentsRealm.passwd.${JENKINS_USERNAME}=${JENKINS_PASSWORD} --argumentsRealm.roles.${JENKINS_USERNAME}=admin
-        networks:
-            - omero-network
 
     git:
         build: git
@@ -20,10 +20,10 @@ services:
 
     pg:
         image: postgres
-        volumes:
-            - ./pgdata:/var/lib/postgresql/data
         networks:
             - omero-network
+        volumes:
+            - ./pgdata:/var/lib/postgresql/data
 
     testintegration:
         build:
@@ -37,8 +37,8 @@ services:
             - SLAVE_NAME=testintegration
             - SLAVE_EXECUTORS=2
             - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
-            - JENKINS_MASTER=http://jenkins:8080
-            - WEB_PREFIX=/web
+            - JENKINS_MASTER
+            - WEB_PREFIX
         extra_hosts:
             - "testintegration:127.0.0.1"
         ports:
@@ -57,7 +57,7 @@ services:
             - SLAVE_NAME=omero
             - SLAVE_EXECUTORS=2
             - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
-            - JENKINS_MASTER=http://jenkins:8080
+            - JENKINS_MASTER
         ports:
             - "4064"
             - "4063"
@@ -75,8 +75,8 @@ services:
             - SLAVE_NAME=web
             - SLAVE_EXECUTORS=2
             - SLAVE_PARAMS= -labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
-            - JENKINS_MASTER=http://jenkins:8080
-            - WEB_PREFIX=/web
+            - JENKINS_MASTER
+            - WEB_PREFIX
 
     nginx:
         build:
@@ -92,20 +92,20 @@ services:
         environment:
             - SLAVE_NAME=nginx
             - SLAVE_PARAMS=-labels centos7 -labels java18 -disableClientsUniqueId
-            - JENKINS_MASTER=http://jenkins:8080
+            - JENKINS_MASTER
         ports:
             - "80"
             - "443"
 
     nginxjenkins:
         image: nginx:1.10
+        networks:
+            - omero-network
         volumes:
             - ./jenkins/conf.d:/etc/nginx/conf.d
             - ./jenkins/sslcert:/etc/nginx/ssl
         ports:
             - "443"
-        networks:
-            - omero-network
 
     redis:
         image: redis
@@ -114,15 +114,17 @@ services:
 
     seleniumhub:
         image: selenium/hub
+        networks:
+            - omero-network
         environment:
             - GRID_TIMEOUT=0
         ports:
             - "4444"
-        networks:
-            - omero-network
 
     seleniumfirefox:
         image: selenium/node-firefox
+        networks:
+            - omero-network
         environment:
             - HUB_PORT_4444_TCP_ADDR=seleniumhub
             - HUB_PORT_4444_TCP_PORT=4444
@@ -131,11 +133,11 @@ services:
             - SCREEN_DEPTH=24
         depends_on:
             - seleniumhub
-        networks:
-            - omero-network
 
     seleniumchrome:
         image: selenium/node-chrome
+        networks:
+            - omero-network
         environment:
             - HUB_PORT_4444_TCP_ADDR=seleniumhub
             - HUB_PORT_4444_TCP_PORT=4444
@@ -144,8 +146,21 @@ services:
             - SCREEN_DEPTH=24
         depends_on:
             - seleniumhub
+
+    docker:
+        build: docker
         networks:
             - omero-network
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ${REPO_CURATED}:${REPO_CURATED}:ro
+            - ${REPO_CONFIG}:${REPO_CONFIG}:ro
+        environment:
+            - SLAVE_NAME=docker
+            - SLAVE_PARAMS=-labels docker -disableClientsUniqueId -executors ${DOCKER_EXECUTORS}
+            - JENKINS_MASTER
+            - REPO_CURATED
+            - REPO_CONFIG
 
 networks:
     omero-network:

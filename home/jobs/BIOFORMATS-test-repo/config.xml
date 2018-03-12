@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.11.1">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers/>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.36.1">
+    <script>def transformIntoStep(inputString) {
+    return {
+        //stage(inputString) {
+            //println inputString
+            build job: &apos;BIOFORMATS-test-folder&apos;, parameters: [
+            [$class: &apos;StringParameterValue&apos;, name: &apos;FORMAT_NAME&apos;, value: inputString]]
+        //}
+    }
+}
+
+def stepsForParallel = []
+
+node(&quot;docker&quot;) {
+    stage(&apos;List&apos;) {
+        def cmd = &quot;find ${env.REPO_CURATED} -mindepth 1 -maxdepth 1 -type d &quot;
+        list = sh(returnStdout: true, script: cmd).trim()
+        def formats = list.split()
+        stepsForParallel = formats.collectEntries {
+            [&quot;handling ${it}&quot; : transformIntoStep(it.substring(it.lastIndexOf(&apos;/&apos;) + 1))]
+        }
+    }
+    
+}
+
+stage(&apos;Run&apos;) {
+    parallel stepsForParallel
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
