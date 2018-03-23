@@ -94,8 +94,8 @@ services:
             - SLAVE_PARAMS=-labels centos7 -labels java18 -disableClientsUniqueId
             - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
         ports:
-            - "80"
-            - "443"
+            - "${NGINXPORT}80"
+            - "${NGINXSSLPORT}443"
 
     nginxjenkins:
         image: nginx:1.10
@@ -105,7 +105,7 @@ services:
             - ./jenkins/conf.d:/etc/nginx/conf.d
             - ./jenkins/sslcert:/etc/nginx/ssl
         ports:
-            - "443"
+            - "${NGINXJENKINSSSLPORT}443"
 
     redis:
         image: redis
