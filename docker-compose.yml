@@ -10,7 +10,7 @@ services:
         volumes:
             - ./home:/var/jenkins_home
         environment:
-            - JENKINS_OPTS= --argumentsRealm.passwd.${JENKINS_USERNAME}=${JENKINS_PASSWORD} --argumentsRealm.roles.${JENKINS_USERNAME}=admin
+            - JENKINS_OPTS= --prefix=${JENKINS_PREFIX} --argumentsRealm.passwd.${JENKINS_USERNAME}=${JENKINS_PASSWORD} --argumentsRealm.roles.${JENKINS_USERNAME}=admin
 
     git:
         build: git
@@ -37,7 +37,7 @@ services:
             - SLAVE_NAME=testintegration
             - SLAVE_EXECUTORS=2
             - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
-            - JENKINS_MASTER
+            - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
             - WEB_PREFIX
         extra_hosts:
             - "testintegration:127.0.0.1"
@@ -57,7 +57,7 @@ services:
             - SLAVE_NAME=omero
             - SLAVE_EXECUTORS=2
             - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
-            - JENKINS_MASTER
+            - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
         ports:
             - "4064"
             - "4063"
@@ -75,7 +75,7 @@ services:
             - SLAVE_NAME=web
             - SLAVE_EXECUTORS=2
             - SLAVE_PARAMS= -labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
-            - JENKINS_MASTER
+            - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
             - WEB_PREFIX
 
     nginx:
@@ -92,7 +92,7 @@ services:
         environment:
             - SLAVE_NAME=nginx
             - SLAVE_PARAMS=-labels centos7 -labels java18 -disableClientsUniqueId
-            - JENKINS_MASTER
+            - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
         ports:
             - "80"
             - "443"
@@ -158,7 +158,7 @@ services:
         environment:
             - SLAVE_NAME=docker
             - SLAVE_PARAMS=-labels docker -disableClientsUniqueId -executors ${DOCKER_EXECUTORS}
-            - JENKINS_MASTER
+            - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
             - REPO_CURATED
             - REPO_CONFIG
 
