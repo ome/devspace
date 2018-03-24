@@ -29,9 +29,6 @@ rm -rf $WORKSPACE/*</command>
       <command>OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
 
-# Variable set to access OMERO.web
-export WEBHOST=http://nginx/web
-
 # UNZIP OMERO.py
 OMERO_PY_DIST=$WORKSPACE/OMERO.py
 
