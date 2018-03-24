@@ -58,7 +58,7 @@ services:
             - SLAVE_EXECUTORS=2
             - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
             - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
-            - WEBHOST=http://nginx/${WEB_PREFIX}
+            - WEBHOST=http://nginx${WEB_PREFIX}
         ports:
             - "4064"
             - "4063"
