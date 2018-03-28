@@ -9,7 +9,7 @@
         <hudson.model.BooleanParameterDefinition>
           <name>PURGE_DATA</name>
           <description>Drops and creates the DB, cleans the binary repository</description>
-          <defaultValue>true</defaultValue>
+          <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>DB_NAME</name>
