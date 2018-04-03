@@ -33,12 +33,14 @@ services:
             - omero-network
         volumes:
             - ./slave:/home/omero
+            - ${REPO_CONFIG}:${REPO_CONFIG}
         environment:
             - SLAVE_NAME=testintegration
             - SLAVE_EXECUTORS=2
             - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
             - JENKINS_MASTER
             - WEB_PREFIX
+            - REPO_CONFIG
         extra_hosts:
             - "testintegration:127.0.0.1"
         ports:
