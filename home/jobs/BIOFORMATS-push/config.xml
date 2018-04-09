@@ -7,9 +7,9 @@
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
-          <name>MERGE_COMMAND</name>
+          <name>MERGE_OPTIONS</name>
           <description></description>
-          <defaultValue>merge SPACENAME --no-ask --reset</defaultValue>
+          <defaultValue>--no-ask --reset</defaultValue>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>STATUS</name>
@@ -27,37 +27,40 @@
           <description></description>
           <defaultValue>SPACEBRANCH_merge_trigger</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>BASE_BRANCH</name>
+          <description></description>
+          <defaultValue>master</defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.2.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>https://github.com/openmicroscopy/bioformats.git</url>
+        <url>https://github.com/ome/bio-formats-build</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>SPACEBRANCH</name>
+        <name>${BASE_BRANCH}</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-    <browser class="hudson.plugins.git.browser.AssemblaWeb">
-      <url></url>
-    </browser>
     <submoduleCfg class="list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
-        <relativeTargetDir>src</relativeTargetDir>
+        <relativeTargetDir>bio-formats-build</relativeTargetDir>
       </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
-      <hudson.plugins.git.extensions.impl.CloneOption>
-        <shallow>false</shallow>
-        <noTags>false</noTags>
-        <reference>/src/bio-formats.git</reference>
-        <depth>0</depth>
-        <honorRefspec>false</honorRefspec>
-      </hudson.plugins.git.extensions.impl.CloneOption>
+      <hudson.plugins.git.extensions.impl.SubmoduleOption>
+        <disableSubmodules>false</disableSubmodules>
+        <recursiveSubmodules>true</recursiveSubmodules>
+        <trackingSubmodules>true</trackingSubmodules>
+        <reference></reference>
+        <parentCredentials>false</parentCredentials>
+      </hudson.plugins.git.extensions.impl.SubmoduleOption>
+      <hudson.plugins.git.extensions.impl.CleanCheckout/>
     </extensions>
   </scm>
   <assignedNode>testintegration</assignedNode>
@@ -69,9 +72,37 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>pip install --user scc
-test -e src &amp;&amp; cd src
-$HOME/.local/bin/scc $MERGE_COMMAND -S $STATUS --push $PUSH_BRANCH</command>
+      <command>pip install -U --user scc
+
+PATH=$WORKSPACE/bio-formats-build/scripts:$HOME/.local/bin:$PATH
+
+MERGE_OPTIONS=&quot;$MERGE_OPTIONS -S $STATUS&quot;
+
+
+cd bio-formats-build
+
+echo &quot;Merge base repository (no submodule updates)&quot;
+scc merge -v $MERGE_OPTIONS --shallow $BASE_BRANCH
+
+# Update any changed submodules
+git submodule sync
+git submodule update --remote --recursive
+
+echo &quot;Merge all submodules using repository configuration:&quot;
+cat &quot;scripts/repositories.yml&quot;
+scc merge -v &quot;--repository-config=$(pwd)/scripts/repositories.yml&quot; $MERGE_OPTIONS --update-gitmodules --push $PUSH_BRANCH $BASE_BRANCH
+
+echo &quot;Update maven component versions&quot;
+update-versions
+
+echo &quot;Commit all component version changes&quot;
+git submodule foreach &quot;git add -u&quot;
+git submodule foreach &quot;git commit -m &apos;Update component versions&apos; || true&quot;
+
+echo &quot;Push all branches&quot;
+user=$(git config github.user)
+git submodule foreach &quot;git push -f git@github.com:$user/&quot;&apos;${path}.git&apos;&quot; HEAD:$PUSH_BRANCH&quot;
+git push -f git@github.com:$user/bio-formats-build.git HEAD:$PUSH_BRANCH</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
