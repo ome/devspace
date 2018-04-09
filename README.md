@@ -286,8 +286,8 @@ they are associated with and a short description of the jobs.
 | -----------------------|-----------------| ------------------------------------------|----------------------------|
 | Trigger                |                 | Runs all the following jobs in order      |                            |
 | BIOFORMATS-push        | testintegration | Merges all Bio-Formats PRs                | devspace_testintegration_1 |
-| BIOFORMATS-ant         | testintegration | Builds Bio-Formats and runs unit tests    | devspace_testintegration_1 |
-| BIOFORMATS-maven       | testintegration | Builds Bio-Formats and runs unit tests    | devspace_testintegration_1 |
+| BIOFORMATS-build       | testintegration | Builds Bio-Formats components    | devspace_testintegration_1 |
+| BIOFORMATS-image       | testintegration | Builds a Docker image of Bio-Formats   | devspace_docker_1 |
 | OMERO-push             | testintegration | Merges all OMERO PRs                      | devspace_testintegration_1 |
 | OMERO-build            | testintegration | Builds OMERO artifacts (server, clients)  | devspace_testintegration_1 |
 | OMERO-server           | omero           | Deploys an OMERO.server                   | devspace_omero_1           |
