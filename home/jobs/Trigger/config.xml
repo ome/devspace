@@ -16,7 +16,9 @@
     <script>
 build job: &apos;BIOFORMATS-push&apos;
 
-build job: &apos;BIOFORMATS-maven&apos;
+build job: &apos;BIOFORMATS-build&apos;
+
+build job: &apos;BIOFORMATS-docs&apos;, propagate: false
 
 build job: &apos;BIOFORMATS-image&apos;
 
