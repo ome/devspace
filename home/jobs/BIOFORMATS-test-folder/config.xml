@@ -19,7 +19,7 @@
         <hudson.model.StringParameterDefinition>
           <name>CONFIG_PATH</name>
           <description></description>
-          <defaultValue>$REPO_CONFIG/$FORMAT_NAME</defaultValue>
+          <defaultValue>$REPO_CONFIG/curated/$FORMAT_NAME</defaultValue>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>DOCKER_ARGS</name>
@@ -35,6 +35,7 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <jdk>(System)</jdk>
   <triggers/>
   <concurrentBuild>true</concurrentBuild>
   <builders>
@@ -46,18 +47,9 @@ fi
 if [ $(date +%u) -le 1 ]; then
     DOCKER_ARGS="$DOCKER_ARGS -Duser.language=fr -Duser.country=FR"
 fi
-sudo docker run --rm --name ${JOB_NAME}_${BUILD_NUMBER}_SPACENAME -v $DATA_PATH:/opt/data -v $CONFIG_PATH:/opt/config openmicroscopy/bioformats:SPACENAME $DOCKER_ARGS</command>
+sudo docker run --rm --name ${JOB_NAME}_${BUILD_NUMBER}_SPACENAME -v $DATA_PATH:/data -v $CONFIG_PATH:/config openmicroscopy/bioformats:SPACENAME $DOCKER_ARGS</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers>
-    <org.jvnet.hudson.plugins.groovypostbuild.GroovyPostbuildRecorder plugin="groovy-postbuild@2.3.1">
-      <script plugin="script-security@1.31">
-        <script>manager.build.setDisplayName(manager.build.getDisplayName() + &quot; &quot; + manager.build.buildVariables.get(&apos;FORMAT_NAME&apos;))</script>
-        <sandbox>true</sandbox>
-      </script>
-      <behavior>0</behavior>
-      <runForMatrixParent>false</runForMatrixParent>
-    </org.jvnet.hudson.plugins.groovypostbuild.GroovyPostbuildRecorder>
-  </publishers>
+  <publishers/>
   <buildWrappers/>
 </project>
