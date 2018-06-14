@@ -60,8 +60,8 @@ services:
             - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
             - WEBHOST=http://nginx${WEB_PREFIX}
         ports:
-            - "4064"
-            - "4063"
+            - "${OMERO_SERVER_SSL}4064"
+            - "${OMERO_SERVER_TCP}4063"
 
     web:
         build:
