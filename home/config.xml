@@ -1,13 +1,10 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <hudson>
   <disabledAdministrativeMonitors>
     <string>jenkins.security.s2m.MasterKillSwitchWarning</string>
   </disabledAdministrativeMonitors>
-  <version>2.89.4</version>
-  <installState class="jenkins.install.InstallState$5">
-    <isSetupComplete>true</isSetupComplete>
-    <name>RESTART</name>
-  </installState>
+  <version>2.121.1</version>
+  <installStateName>RESTART</installStateName>
   <numExecutors>0</numExecutors>
   <mode>NORMAL</mode>
   <useSecurity>true</useSecurity>
@@ -32,7 +29,7 @@
       <properties>
         <hudson.tools.InstallSourceProperty>
           <installers>
-            <hudson.tools.JDKInstaller>
+            <hudson.tools.JDKInstaller plugin="jdk-tool@1.0">
               <id>jdk-8u162-oth-JPR</id>
               <acceptLicense>true</acceptLicense>
             </hudson.tools.JDKInstaller>
