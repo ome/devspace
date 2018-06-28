@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.12">
+<?xml version='1.1' encoding='UTF-8'?>
+<matrix-project plugin="matrix-project@1.13">
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
@@ -18,6 +18,7 @@
           <name>PUSH_BRANCH</name>
           <description></description>
           <defaultValue>SPACEBRANCH_merge_trigger</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
           <name>SKIP_DOCS_VALIDATION</name>
@@ -27,11 +28,11 @@
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.1">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>git://github.com/snoopycrimecop/bio-formats-build</url>
+        <url>git://github.com/SPACEUSER/bio-formats-build</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
