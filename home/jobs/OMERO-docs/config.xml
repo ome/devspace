@@ -17,7 +17,7 @@
         <hudson.model.StringParameterDefinition>
           <name>MERGE_COMMAND</name>
           <description></description>
-          <defaultValue>merge SPACENAME --no-ask --reset</defaultValue>
+          <defaultValue>merge SPACEBRANCH --no-ask --reset</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
