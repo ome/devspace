@@ -98,8 +98,17 @@ rm dbsetup.sql
 
 ## END PURGE
 
-# install web dependencies
+# Install web dependencies
 pip install -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
+
+# Set up fake mail configuration
+export OMERO_PROFILE=$WORKSPACE/config
+mkdir -p $OMERO_PROFILE/blitz
+cp $OMERO_DIST/etc/blitz/* $OMERO_PROFILE/blitz
+for f in $OMERO_PROFILE/blitz/*; do mv $f $OMERO_PROFILE/blitz/`basename $f .ex
+$OMERO_DIST/bin/omero config set omero.mail.config true
+$OMERO_DIST/bin/omero config set omero.mail.fake true
+$OMERO_DIST/bin/omero config set omero.mail.port 2525
 
 # START OMERO
 BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero admin start
