@@ -125,9 +125,8 @@
 - src: openmicroscopy.reboot-server
   version: 0.1.0
 
-- src: git+https://github.com/openmicroscopy/ansible-role-devspace.git
+- src: openmicroscopy.devspace
   version: 0.2.1
-  name: openmicroscopy.devspace
 
 - src: openmicroscopy.system-monitor-agent
   version: 0.1.0
