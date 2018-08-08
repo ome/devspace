@@ -85,7 +85,7 @@ MERGE_OPTIONS=&quot;$MERGE_OPTIONS -S $STATUS&quot;
 cd bio-formats-build
 
 echo &quot;Merge base repository (no submodule updates)&quot;
-scc merge -v $MERGE_OPTIONS --shallow $BASE_BRANCH
+scc merge $MERGE_OPTIONS --shallow master
 
 # Update any changed submodules
 git submodule sync
@@ -93,7 +93,7 @@ git submodule update --remote --recursive
 
 echo &quot;Merge all submodules using repository configuration:&quot;
 cat &quot;scripts/repositories.yml&quot;
-scc merge -v &quot;--repository-config=$(pwd)/scripts/repositories.yml&quot; $MERGE_OPTIONS --update-gitmodules --push $PUSH_BRANCH $BASE_BRANCH
+scc merge &quot;--repository-config=$(pwd)/scripts/repositories.yml&quot; $MERGE_OPTIONS --update-gitmodules --push $PUSH_BRANCH master
 
 echo &quot;Update maven component versions&quot;
 update-versions
@@ -105,6 +105,11 @@ git submodule foreach &quot;git commit -m &apos;Update component versions&apos; 
 echo &quot;Push all branches&quot;
 user=$(git config github.user)
 git submodule foreach &quot;git push -f git@github.com:$user/&quot;&apos;${path}.git&apos;&quot; HEAD:$PUSH_BRANCH&quot;
+
+echo &quot;Commit all component version changes&quot;
+git add -u
+git commit -m &apos;Update component versions&apos; || true
+
 git push -f git@github.com:$user/bio-formats-build.git HEAD:$PUSH_BRANCH</command>
     </hudson.tasks.Shell>
   </builders>
