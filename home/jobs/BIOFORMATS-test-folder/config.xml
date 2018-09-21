@@ -43,6 +43,9 @@
     echo &quot;EARLY EXIT&quot;
     exit 0
 fi
+if [ $(date +%u) -gt 6 ]; then
+    DOCKER_ARGS="$DOCKER_ARGS -Duser.language=fr -Duser.country=FR"
+fi
 sudo docker run --rm --name ${JOB_NAME}_${BUILD_NUMBER}_SPACENAME -v $DATA_PATH:/opt/data -v $CONFIG_PATH:/opt/config openmicroscopy/bioformats:SPACENAME $DOCKER_ARGS</command>
     </hudson.tasks.Shell>
   </builders>
