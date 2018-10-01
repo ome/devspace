@@ -1,4 +1,4 @@
-FROM sbesson/devslave-c7:0.5.0
+FROM openmicroscopy/devslave-c7:0.5.0
 
 MAINTAINER OME
 
