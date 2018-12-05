@@ -19,7 +19,7 @@ services:
         command: 'true'
 
     pg:
-        image: postgres
+        image: postgres:10
         networks:
             - omero-network
         volumes:
