@@ -1,8 +1,5 @@
 # External Ansible roles required by this repository
 
-- src: openmicroscopy.omero-common
-  version: 0.1.0
-
 - src: openmicroscopy.analysis-tools
   version: 1.0.0
 
@@ -12,6 +9,9 @@
 - src: openmicroscopy.cli-utils
   version: 1.0.0
 
+- src: openmicroscopy.devspace
+  version: 0.2.1
+
 - src: openmicroscopy.docker
   version: 1.0.0
 
@@ -20,6 +20,9 @@
 
 - src: openmicroscopy.haproxy
   version: 1.0.0
+
+- src: openmicroscopy.hosts-populate
+  version: 0.1.0
 
 - src: openmicroscopy.ice
   version: 1.0.0
@@ -45,6 +48,9 @@
 - src: openmicroscopy.munin-node
   version: 1.2.1-openmicroscopy1
 
+- src: openmicroscopy.mysql-backup
+  version: 0.1.0
+
 - src: openmicroscopy.network-cloud-interfaces
   version: 1.1.0
 
@@ -63,6 +69,9 @@
 - src: openmicroscopy.nginx-ssl-selfsigned
   version: 1.0.0
 
+- src: openmicroscopy.omero-common
+  version: 0.1.0
+
 - src: openmicroscopy.omero-logmonitor
   version: 1.0.0
 
@@ -71,6 +80,12 @@
 
 - src: openmicroscopy.omero-server
   version: 1.2.0
+
+- src: openmicroscopy.omero-user
+  version: 0.1.0
+
+- src: openmicroscopy.omero-web-apps
+  version: 0.1.0
 
 - src: openmicroscopy.omero-web-runtime
   version: 1.1.0
@@ -83,6 +98,9 @@
 
 - src: openmicroscopy.python-pydata
   version: 1.0.0
+
+- src: openmicroscopy.reboot-server
+  version: 0.1.0
 
 - src: openmicroscopy.redis
   version: 1.0.0
@@ -105,28 +123,8 @@
 - src: openmicroscopy.upgrade-distpackages
   version: 1.0.0
 
-- src: openmicroscopy.versioncontrol-utils
-  version: 1.0.0
-
-# External development roles
-
-- src: openmicroscopy.omero-user
-  version: 0.1.0
-
-- src: openmicroscopy.hosts-populate
-  version: 0.1.0
-
-- src: openmicroscopy.mysql-backup
-  version: 0.1.0
-
-- src: openmicroscopy.omero-web-apps
-  version: 0.1.0
-
-- src: openmicroscopy.reboot-server
-  version: 0.1.0
-
-- src: openmicroscopy.devspace
-  version: 0.2.1
-
 - src: openmicroscopy.system-monitor-agent
   version: 0.1.0
+
+- src: openmicroscopy.versioncontrol-utils
+  version: 1.0.0
