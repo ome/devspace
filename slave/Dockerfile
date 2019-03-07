@@ -64,6 +64,15 @@ RUN yum -y install http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-cento
 RUN yum -y install postgresql94 \
     && yum clean all
 
+# gradle
+RUN cd /opt && \
+    curl -fSLO https://services.gradle.org/distributions/gradle-5.2.1-bin.zip && \
+    unzip gradle-5.2.1-bin.zip && \
+    rm gradle-5.2.1-bin.zip && \
+    ln -s /opt/gradle-5.2.1/bin/gradle /usr/local/bin/gradle
+# Needed for Gradle
+ENV JAVA_HOME /usr/lib/jvm/jre-1.8.0-openjdk
+
 EXPOSE 14064
 EXPOSE 14063
 
