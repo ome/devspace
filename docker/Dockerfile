@@ -14,9 +14,10 @@ RUN yum -y install docker-ce
 
 # Change user id to fix permissions issues
 ARG USER_ID=1000
-RUN usermod -u $USER_ID omero
+RUN usermod -u $USER_ID -aG docker omero
 
 COPY run.sh /tmp/run.sh
 RUN chmod a+x /tmp/run.sh
-USER omero
+# Start as root so docker permissions can be fixed
+# Drop to omero in startup script
 CMD ["/tmp/run.sh"]
