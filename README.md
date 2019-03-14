@@ -319,7 +319,7 @@ Creating a new job called `JOBNAME` should then be as easy as:
 
 Replace the following strings in `home/jobs/JOBNAME/config.xml`:
 - `[DESCRIPTION]`: Job description, recommended
-- `[REPOSITORY]`: GitHub username/repository
+- `[REPOSITORY]`: GitHub username (typically either `opemicroscopy` or `SPACEUSER`) and repository
 - `Jenkinsfile`: If you have multiple `Jenkinsfile`s change this to the required file
 
 Alternatively create a new Pipeline job in the Jenkins web-interface in the usual way.
