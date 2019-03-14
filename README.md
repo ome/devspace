@@ -309,6 +309,21 @@ If you do not have some of the repositories forked, you will need to remove the 
 of jobs to run either from the Trigger job [configuration](home/jobs/Trigger/config.xml) 
 or directly from the Jenkins UI i.e. ``Trigger > Configure``.
 
+# New jobs
+
+It is recommended that new jobs should be defined using [Jenkinsfile pipelines](https://jenkins.io/doc/book/pipeline/jenkinsfile/) in the target repository as this makes it easier to maintain jobs.
+Creating a new job called `JOBNAME` should then be as easy as:
+
+    mkdir home/jobs/JOBNAME
+    cp TEMPLATE-pipeline-job-config.xml home/jobs/JOBNAME/config.xml
+
+Replace the following strings in `home/jobs/JOBNAME/config.xml`:
+- `[DESCRIPTION]`: Job description, recommended
+- `[REPOSITORY]`: GitHub username/repository
+- `Jenkinsfile`: If you have multiple `Jenkinsfile`s change this to the required file
+
+Alternatively create a new Pipeline job in the Jenkins web-interface in the usual way.
+
 # Default packages used
 
 | Name       | Version       | Optional                           |
