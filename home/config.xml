@@ -68,9 +68,7 @@
           <default>
             <comparator class="hudson.util.CaseInsensitiveComparator"/>
           </default>
-          <int>2</int>
-          <string>MERGE_GIT_USER</string>
-          <string></string>
+          <int>1</int>
           <string>MERGE_PUSH_BRANCH</string>
           <string>SPACEBRANCH_merge_trigger</string>
         </tree-map>
