@@ -5,6 +5,8 @@ import fileinput
 import fnmatch
 import os
 import re
+import createpipelinejobs
+
 
 EXCLUDE = ["builds", "workspace", "fingerprints"]
 
@@ -32,6 +34,8 @@ def replace(name, branch, uid, user):
   return cnt
 
 if __name__ == "__main__":
+  if os.path.exists('pipeline-configs.yaml'):
+      createpipelinejobs.main()
   parser = argparse.ArgumentParser()
   parser.add_argument("--uid", type=int, default=os.getuid())
   parser.add_argument("name")
