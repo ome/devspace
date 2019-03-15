@@ -34,6 +34,7 @@
           <trackingSubmodules>false</trackingSubmodules>
           <reference></reference>
           <parentCredentials>false</parentCredentials>
+          <timeout>{CLONE_TIMEOUT}</timeout>
           <shallow>true</shallow>
         </hudson.plugins.git.extensions.impl.SubmoduleOption>
         <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
