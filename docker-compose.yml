@@ -19,7 +19,7 @@ services:
         command: 'true'
 
     pg:
-        image: postgres
+        image: postgres:${POSTGRES_VERSION}
         networks:
             - omero-network
         volumes:
@@ -101,7 +101,7 @@ services:
             - "${NGINX_SSL_PORT}443"
 
     nginxjenkins:
-        image: nginx:1.10
+        image: nginx:${NGINX_VERSION}
         networks:
             - omero-network
         volumes:
