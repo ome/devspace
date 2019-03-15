@@ -9,20 +9,20 @@
       <options/>
     </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
   </actions>
-  <description>[DESCRIPTION]</description>
+  <description>{DESCRIPTION}</description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  {PROPERTIES}
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@2.64">
     <scm class="hudson.plugins.git.GitSCM" plugin="git@4.0.0-rc">
       <configVersion>2</configVersion>
       <userRemoteConfigs>
         <hudson.plugins.git.UserRemoteConfig>
-          <url>https://github.com/[REPOSITORY].git</url>
+          <url>https://github.com/{REPOSITORY}.git</url>
         </hudson.plugins.git.UserRemoteConfig>
       </userRemoteConfigs>
       <branches>
         <hudson.plugins.git.BranchSpec>
-          <name>SPACEBRANCH</name>
+          <name>{BRANCH}</name>
         </hudson.plugins.git.BranchSpec>
       </branches>
       <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -37,9 +37,16 @@
           <shallow>true</shallow>
         </hudson.plugins.git.extensions.impl.SubmoduleOption>
         <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+        <hudson.plugins.git.extensions.impl.CloneOption>
+          <shallow>false</shallow>
+          <noTags>false</noTags>
+          <reference></reference>
+          <timeout>{CLONE_TIMEOUT}</timeout>
+          <honorRefspec>false</honorRefspec>
+        </hudson.plugins.git.extensions.impl.CloneOption>
       </extensions>
     </scm>
-    <scriptPath>Jenkinsfile</scriptPath>
+    <scriptPath>{JENKINSFILE}</scriptPath>
     <lightweight>true</lightweight>
   </definition>
   <triggers/>
