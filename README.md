@@ -21,7 +21,7 @@ Running Devspace requires access to SSH and Git configuration files used for fet
 Devspace code depends on the following repositories:
 
 * [OMERO install](https://github.com/ome/omero-install/)
-* [devslave-c7-docker](https://github.com/openmicroscopy/devslave-c7-docker) 
+* [devslave-c7-docker](https://github.com/openmicroscopy/devslave-c7-docker)
 
 and for OpenStack (optional)
 
@@ -44,7 +44,7 @@ The following instructions explain how to deploy a devspace on a Docker host.
         $ pip install docker-compose
 
 *   Create a directory ``/data/username`` and change ownership:
-    
+
         $ sudo mkdir /data/username
         $ sudo chown username /data/username
 
@@ -101,7 +101,7 @@ Start and configure:
 
 *   [Optional] Turn on Basic HTTP authentication for Jenkins
 
-        sudo htpasswd -c jenkins/conf.d/passwdfile nginx 
+        sudo htpasswd -c jenkins/conf.d/passwdfile nginx
 
     and update `jenkins/conf.d/jenkins.conf`:
 
@@ -121,8 +121,8 @@ The OpenStack and SSH and Git following steps are only need to be done the first
 #### OpenStack configuration
 
 * Log into [OpenStack](https://pony.openmicroscopy.org)
-* Register a key: 
-   * Go to the ``Access & Security`` tab 
+* Register a key:
+   * Go to the ``Access & Security`` tab
    * Click on ``Key Pairs`` and then on ``Import Key Pair``
    * Copy the content of the public key you use to access our resources e.g. ``id_rsa.pub``
    * The name you used is referred below as ``your_openstack_key``
@@ -241,7 +241,7 @@ Ports to access the various services are dynamically assigned. You will have to 
 
 * The port to access OMERO.web is obtained by running:
 
-       docker-compose port nginx 80 
+       docker-compose port nginx 80
 
     * The command will generate a similar output that the one above
 
@@ -249,16 +249,16 @@ Ports to access the various services are dynamically assigned. You will have to 
             WARNING: The USER_ID variable is not set. Defaulting to a blank string.
             0.0.0.0:xxxx
 
-        where ``xxxx`` is the assigned port ``$WEB_PORT`` 
+        where ``xxxx`` is the assigned port ``$WEB_PORT``
 
     * OMERO.web will be available at
 
-            http://devspace_openstack_ip:$WEB_PORT/web 
+            http://devspace_openstack_ip:$WEB_PORT/web
 
 
 * The port to access OMERO.insight or OMERO.cli is obtained by running:
 
-       docker-compose port omero 4064 
+       docker-compose port omero 4064
 
     * The command will generate a similar output that the one above
 
@@ -266,7 +266,7 @@ Ports to access the various services are dynamically assigned. You will have to 
             WARNING: The USER_ID variable is not set. Defaulting to a blank string.
             0.0.0.0:xxxx
 
-        where ``xxxx`` is the assigned port ``$SERVER_PORT`` 
+        where ``xxxx`` is the assigned port ``$SERVER_PORT``
 
     * To login either via OMERO.insight or OMERO.cli use ``$SERVER_PORT`` as the port value
 and ``devspace_openstack_ip`` as the server value. You **must** use the secure connection.
@@ -306,23 +306,20 @@ forked to your GitHub account:
 * [openmiscrocopy/bioformats](https://github.com/openmicroscopy/bioformats)
 
 If you do not have some of the repositories forked, you will need to remove the jobs from the list
-of jobs to run either from the Trigger job [configuration](home/jobs/Trigger/config.xml) 
+of jobs to run either from the Trigger job [configuration](home/jobs/Trigger/config.xml)
 or directly from the Jenkins UI i.e. ``Trigger > Configure``.
 
 # New jobs
 
 It is recommended that new jobs should be defined using [Jenkinsfile pipelines](https://jenkins.io/doc/book/pipeline/jenkinsfile/) in the target repository as this makes it easier to maintain jobs.
-Creating a new job called `JOBNAME` should then be as easy as:
+Most Jenkins Pipeline jobs can share the same configuration apart from the repository URL.
+If you do not require any special configuration use the [`TEMPLATE-pipeline-job-config.xml`](TEMPLATE-pipeline-job-config.xml) template by adding the job and parameters to [`pipeline-configs.yaml`](pipeline-configs.yaml).
+Supported parameters are documented in that file.
 
-    mkdir home/jobs/JOBNAME
-    cp TEMPLATE-pipeline-job-config.xml home/jobs/JOBNAME/config.xml
+The `rename.py` script will create the required job configurations from `pipeline-configs.yaml` as well as performing the renaming steps.
+If for some reason you want to create the new job without running `rename.py` you can just run `createpipelinejobs.py`.
 
-Replace the following strings in `home/jobs/JOBNAME/config.xml`:
-- `[DESCRIPTION]`: Job description, recommended
-- `[REPOSITORY]`: GitHub username (typically either `openmicroscopy` or `SPACEUSER`) and repository
-- `Jenkinsfile`: If you have multiple `Jenkinsfile`s change this to the required file
-
-Alternatively create a new Pipeline job in the Jenkins web-interface in the usual way.
+Alternatively create a new job in the Jenkins web-interface in the usual way.
 
 # Default packages used
 
