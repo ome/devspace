@@ -1,7 +1,7 @@
 jobs:
   # JOB-name:
   #   description: Description of job
-  #   repository: github-user/github-repo.git
+  #   repository: github-user/github-repo
   #   branch: branch to build
   #   clone_timeout: Timeout in minutes for git clone, default 10 minutes
   #   jenkinsfile: Path and name of the Jenkinsfile, default Jenkinsfile
