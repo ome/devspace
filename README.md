@@ -108,6 +108,10 @@ Start and configure:
         auth_basic "Restricted";
         auth_basic_user_file /etc/nginx/conf.d/passwdfile;
 
+*   [Optional] Create the `maven-internal` Nexus repository:
+
+        $ docker-compose exec nexus /nexus-data/createRepoMavenInternal.sh
+
 
 ## Deploy on OpenStack
 
