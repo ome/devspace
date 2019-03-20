@@ -12,8 +12,6 @@ jobs:
     repository: ome/omero-build
     branch: SPACEBRANCH
     jenkinsfile: Jenkinsfile.merge
-    after:
-      - OMERO-gradle-plugins-build
 
   OMERO-gradle-plugins-build:
     description: Build omero-gradle-plugins
