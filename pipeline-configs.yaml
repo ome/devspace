@@ -16,7 +16,7 @@ jobs:
   OMERO-gradle-plugins-build:
     description: Build omero-gradle-plugins
     repository: SPACEUSER/omero-gradle-plugins
-    branch: SPACEBRANCH
+    branch: SPACEBRANCH_merge_trigger
     after:
       - OMERO-gradle-plugins-push
 
