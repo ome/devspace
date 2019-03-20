@@ -24,6 +24,9 @@ build job: &apos;BIOFORMATS-image&apos;
 
 build job: &apos;BIOFORMATS-test-repo&apos;, wait: false
 
+// This triggers a pipeline-components chain
+build job: &apos;OMERO-gradle-plugins-push&apos;
+
 build job: &apos;OMERO-push&apos;
 
 build job: &apos;OMERO-build&apos;
