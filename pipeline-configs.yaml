@@ -7,16 +7,28 @@ jobs:
   #   jenkinsfile: Path and name of the Jenkinsfile, default Jenkinsfile
   #   after: [Automatically run this job after any of these jobs have been run]
 
+  OMERO-gradle-plugins-push:
+    description: Run scc merge and bump versions on omero-build
+    repository: ome/omero-build
+    branch: SPACEBRANCH
+    jenkinsfile: Jenkinsfile.merge
+    after:
+      - OMERO-gradle-plugins-build
+
   OMERO-gradle-plugins-build:
     description: Build omero-gradle-plugins
     repository: SPACEUSER/omero-gradle-plugins
     branch: SPACEBRANCH
+    after:
+      - OMERO-gradle-plugins-push
 
   OMERO-build-push:
     description: Run scc merge and bump versions on omero-build
-    repository: openmicroscopy/omero-build
+    repository: ome/omero-build
     branch: SPACEBRANCH
     jenkinsfile: Jenkinsfile.merge
+    after:
+      - OMERO-gradle-plugins-build
 
   OMERO-build-build:
     description: Build omero-build
