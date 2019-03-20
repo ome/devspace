@@ -9,7 +9,7 @@ jobs:
 
   OMERO-gradle-plugins-push:
     description: Run scc merge and bump versions on omero-build
-    repository: ome/omero-build
+    repository: ome/omero-gradle-plugins
     branch: SPACEBRANCH
     jenkinsfile: Jenkinsfile.merge
 
