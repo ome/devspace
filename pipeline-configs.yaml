@@ -1,0 +1,36 @@
+jobs:
+  # JOB-name:
+  #   description: Description of job
+  #   repository: github-user/github-repo
+  #   branch: branch to build
+  #   clone_timeout: Timeout in minutes for git clone, default 10 minutes
+  #   jenkinsfile: Path and name of the Jenkinsfile, default Jenkinsfile
+  #   after: [Automatically run this job after any of these jobs have been run]
+
+  OMERO-gradle-plugins-push:
+    description: Run scc merge and bump versions on omero-build
+    repository: ome/omero-gradle-plugins
+    branch: SPACEBRANCH
+    jenkinsfile: Jenkinsfile.merge
+
+  OMERO-gradle-plugins-build:
+    description: Build omero-gradle-plugins
+    repository: SPACEUSER/omero-gradle-plugins
+    branch: SPACEBRANCH_merge_trigger
+    after:
+      - OMERO-gradle-plugins-push
+
+  OMERO-build-push:
+    description: Run scc merge and bump versions on omero-build
+    repository: ome/omero-build
+    branch: SPACEBRANCH
+    jenkinsfile: Jenkinsfile.merge
+    after:
+      - OMERO-gradle-plugins-build
+
+  OMERO-build-build:
+    description: Build omero-build
+    repository: SPACEUSER/omero-build
+    branch: SPACEBRANCH_merge_trigger
+    after:
+      - OMERO-build-push
