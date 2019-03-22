@@ -32,7 +32,7 @@
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.1">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.0.0-rc">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -56,6 +56,7 @@
         <trackingSubmodules>false</trackingSubmodules>
         <reference></reference>
         <parentCredentials>false</parentCredentials>
+        <shallow>false</shallow>
       </hudson.plugins.git.extensions.impl.SubmoduleOption>
       <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
         <relativeTargetDir>src</relativeTargetDir>
@@ -71,14 +72,24 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
+      <project>OMERO-build-build</project>
+      <filter>version.properties</filter>
+      <target></target>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
       <command>pip install --user scc
 test -e src &amp;&amp; cd src
+cat $WORKSPACE/version.properties &gt;&gt; etc/omero.properties
+git commit -a -m &quot;Add version.properties to etc/omero.properties&quot;
 $HOME/.local/bin/scc $MERGE_COMMAND -S $STATUS --push $PUSH_BRANCH</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.8.10"/>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
   </buildWrappers>
 </project>
