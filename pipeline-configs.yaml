@@ -28,3 +28,14 @@ jobs:
     description: Build omero-build
     repository: SPACEUSER/omero-build
     branch: SPACEBRANCH_merge_trigger
+
+  OMERO-insight-push:
+    description: Run scc merge and bump versions on omero-insight
+    repository: ome/omero-insight
+    branch: SPACEBRANCH
+    jenkinsfile: Jenkinsfile.merge
+
+  OMERO-insight-build:
+    description: Build omero-insight
+    repository: SPACEUSER/omero-insight
+    branch: SPACEBRANCH_merge_trigger
