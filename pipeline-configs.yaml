@@ -17,20 +17,14 @@ jobs:
     description: Build omero-gradle-plugins
     repository: SPACEUSER/omero-gradle-plugins
     branch: SPACEBRANCH_merge_trigger
-    after:
-      - OMERO-gradle-plugins-push
 
   OMERO-build-push:
     description: Run scc merge and bump versions on omero-build
     repository: ome/omero-build
     branch: SPACEBRANCH
     jenkinsfile: Jenkinsfile.merge
-    after:
-      - OMERO-gradle-plugins-build
 
   OMERO-build-build:
     description: Build omero-build
     repository: SPACEUSER/omero-build
     branch: SPACEBRANCH_merge_trigger
-    after:
-      - OMERO-build-push

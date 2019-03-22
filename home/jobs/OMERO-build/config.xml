@@ -49,10 +49,21 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
+      <project>OMERO-build-build</project>
+      <filter>version.properties</filter>
+      <target></target>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector">
+        <stable>true</stable>
+      </selector>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
       <command>eval $(bash /opt/multi-config.sh ice3.5)
 
 export PATH=/opt/texlive/bin/x86_64-linux:$PATH # for dockerfile
+cat version.properties &gt;&gt; src/etc/omero.properties
 cd src
 export OMERO_BRANCH=SPACEBRANCH
 virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
@@ -73,6 +84,6 @@ source docs/hudson/OMERO.sh
     </hudson.tasks.ArtifactArchiver>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.8.10"/>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
   </buildWrappers>
 </project>
