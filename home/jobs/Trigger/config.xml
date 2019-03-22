@@ -68,9 +68,16 @@
             }
         }
 
-        stage(&quot;Other&quot;) {
+        stage(&quot;OMERO Docs&quot;) {
             steps {
                 build job: &apos;OMERO-docs&apos;, wait: false
+            }
+        }
+
+        stage(&apos;OMERO insight&apos;) {
+            steps {
+                build job: &apos;OMERO-insight-push&apos;
+                build job: &apos;OMERO-insight-build&apos;
             }
         }
     }
