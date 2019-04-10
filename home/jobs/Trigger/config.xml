@@ -80,6 +80,13 @@
                 build job: &apos;OMERO-insight-build&apos;
             }
         }
+
+        stage(&apos;OMERO Matlab&apos;) {
+            steps {
+                build job: &apos;OMERO-matlab-push&apos;
+                build job: &apos;OMERO-matlab-build&apos;
+            }
+        }
     }
 }</script>
     <sandbox>true</sandbox>
