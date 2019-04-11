@@ -39,3 +39,14 @@ jobs:
     description: Build omero-insight
     repository: SPACEUSER/omero-insight
     branch: SPACEBRANCH_merge_trigger
+
+  OMERO-matlab-push:
+    description: Run scc merge and bump versions on omero-matlab
+    repository: ome/omero-matlab
+    branch: SPACEBRANCH
+    jenkinsfile: Jenkinsfile.merge
+
+  OMERO-matlab-build:
+    description: Build omero-matlab
+    repository: SPACEUSER/omero-matlab
+    branch: SPACEBRANCH_merge_trigger
