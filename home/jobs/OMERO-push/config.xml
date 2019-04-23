@@ -83,9 +83,12 @@
     <hudson.tasks.Shell>
       <command>pip install --user scc
 test -e src &amp;&amp; cd src
+user=$(git config github.user)
+$HOME/.local/bin/scc $MERGE_COMMAND -S $STATUS
 cat $WORKSPACE/version.properties &gt;&gt; etc/omero.properties
 git commit -a -m &quot;Add version.properties to etc/omero.properties&quot;
-$HOME/.local/bin/scc $MERGE_COMMAND -S $STATUS --push $PUSH_BRANCH</command>
+git push -f git@github.com:$user/openmicroscopy.git HEAD:$PUSH_BRANCH
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
