@@ -84,19 +84,23 @@ $OMERO_DIST/bin/omero config set omero.web.wsgi_args -- &apos;--log-level=DEBUG 
 
 $OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
 
-# Hardcoded OMERO.iviewer installation
-pip install omero-iviewer
+# OMERO.iviewer installation
+pip install -U omero-iviewer
 $OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_iviewer&quot;&apos;
 $OMERO_DIST/bin/omero config set omero.web.viewer.view omero_iviewer.views.index
 $OMERO_DIST/bin/omero config append omero.web.open_with &apos;[&quot;omero_iviewer&quot;, &quot;omero_iviewer_index&quot;, {&quot;supported_objects&quot;:[&quot;images&quot;, &quot;dataset&quot;, &quot;well&quot;], &quot;script_url&quot;: &quot;omero_iviewer/openwith.js&quot;, &quot;label&quot;: &quot;OMERO.iviewer&quot;}]&apos;
 
-# Hardcoded OMERO.figure installation
-pip install omero-figure
+# OMERO.figure installation
+pip install -U omero-figure
 $OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_figure&quot;&apos;
 $OMERO_DIST/bin/omero config append omero.web.ui.top_links &apos;[&quot;Figure&quot;, &quot;figure_index&quot;, {&quot;title&quot;: &quot;Open Figure in new tab&quot;, &quot;target&quot;: &quot;_blank&quot;}]&apos;
 $OMERO_DIST/bin/omero config append omero.web.open_with &apos;[&quot;omero_figure&quot;, &quot;new_figure&quot;, {&quot;supported_objects&quot;:[&quot;images&quot;], &quot;target&quot;: &quot;_blank&quot;, &quot;label&quot;: &quot;OMERO.figure&quot;}]&apos;
 
-# Hardcoded twitter testing example
+# OMERO.weberror installation
+pip install -U omero-weberror
+$OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_weberror&quot;&apos;
+
+# Twitter testing example
 $OMERO_DIST/bin/omero config set omero.web.sharing.opengraph &apos;{&quot;omero&quot;:&quot;Open Microscopy&quot;}&apos;
 $OMERO_DIST/bin/omero config set omero.web.sharing.twitter &apos;{&quot;omero&quot;:&quot;@openmicroscopy&quot;}&apos;
 $OMERO_DIST/bin/omero config set omero.web.public.enabled true
@@ -107,6 +111,10 @@ $OMERO_DIST/bin/omero config set omero.web.public.url_filter &apos;^/&apos;
 # Security
 $OMERO_DIST/bin/omero config set omero.web.session_cookie_secure true
 $OMERO_DIST/bin/omero config set omero.web.csrf_cookie_secure true
+
+# QA feedback configuration
+$OMERO_DIST/bin/omero config set omero.web.feedback.comment.enabled false
+$OMERO_DIST/bin/omero config set omero.web.feedback.error.enabled false
 
 BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero web start
 $OMERO_DIST/bin/omero web diagnostics
