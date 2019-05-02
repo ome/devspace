@@ -59,7 +59,7 @@ RUN curl -fSLO http://downloads.sourceforge.net/project/findbugs/findbugs/$FINDB
 RUN yum -y install maven ant && yum clean all
 
 # install postgres tools
-RUN yum -y install http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-centos94-9.4-2.noarch.rpm \
+RUN yum -y install http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-redhat94-9.4-3.noarch.rpm \
     && yum clean all
 RUN yum -y install postgresql94 \
     && yum clean all
