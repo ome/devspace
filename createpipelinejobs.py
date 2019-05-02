@@ -60,6 +60,8 @@ def main():
         except OSError as e:
             if e.errno != errno.EEXIST:
                 raise
+        if os.path.exists(new_job_cfg):
+            raise Exception("exists: " + new_job_cfg)
         with open(new_job_cfg, 'w') as f:
             f.write(job_config_xml)
 
