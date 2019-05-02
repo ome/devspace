@@ -20,6 +20,7 @@
           <name>CONFIG_PATH</name>
           <description></description>
           <defaultValue>$REPO_CONFIG/curated/$FORMAT_NAME</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>DOCKER_ARGS</name>
