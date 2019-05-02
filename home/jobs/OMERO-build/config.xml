@@ -39,6 +39,13 @@
         <relativeTargetDir>src</relativeTargetDir>
       </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
       <hudson.plugins.git.extensions.impl.CleanCheckout/>
+      <hudson.plugins.git.extensions.impl.CloneOption>
+        <shallow>false</shallow>
+        <noTags>false</noTags>
+        <reference></reference>
+        <timeout>30</timeout>
+        <honorRefspec>false</honorRefspec>
+      </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
   <assignedNode>testintegration</assignedNode>
@@ -73,6 +80,6 @@ source docs/hudson/OMERO.sh
     </hudson.tasks.ArtifactArchiver>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.8.10"/>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
   </buildWrappers>
 </project>

@@ -33,7 +33,7 @@ rm -rf $HOME/static/web/
 rm -rf $WORKSPACE/*
       </command>
     </hudson.tasks.Shell>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.38.1">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
       <project>OMERO-build</project>
       <filter>src/target/OMERO.py*zip</filter>
       <target></target>
@@ -73,8 +73,8 @@ $OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&
 
 $OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;omero&quot;, 4064, &quot;omero&quot;], [&quot;testintegration&quot;, 14064, &quot;testintegration&quot;]]&apos;
 
-$OMERO_DIST/bin/omero config set omero.web.application_server.host $NODE_NAME
 $OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
+$OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
 
 $OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt;$OMERO_DIST/nginx.conf.tmp
 
@@ -82,7 +82,30 @@ sudo cp $OMERO_DIST/nginx.conf.tmp $HOME/nginx/$NODE_NAME.conf
 
 $OMERO_DIST/bin/omero config set omero.web.wsgi_args -- &apos;--log-level=DEBUG --error-logfile=&apos;$OMERO_DIST&apos;/var/log/gunicorn.err&apos;
 
-$OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
+
+# Hardcoded OMERO.iviewer installation
+pip install omero-iviewer
+$OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_iviewer&quot;&apos;
+$OMERO_DIST/bin/omero config set omero.web.viewer.view omero_iviewer.views.index
+$OMERO_DIST/bin/omero config append omero.web.open_with &apos;[&quot;omero_iviewer&quot;, &quot;omero_iviewer_index&quot;, {&quot;supported_objects&quot;:[&quot;images&quot;, &quot;dataset&quot;, &quot;well&quot;], &quot;script_url&quot;: &quot;omero_iviewer/openwith.js&quot;, &quot;label&quot;: &quot;OMERO.iviewer&quot;}]&apos;
+
+# Hardcoded OMERO.figure installation
+pip install omero-figure
+$OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_figure&quot;&apos;
+$OMERO_DIST/bin/omero config append omero.web.ui.top_links &apos;[&quot;Figure&quot;, &quot;figure_index&quot;, {&quot;title&quot;: &quot;Open Figure in new tab&quot;, &quot;target&quot;: &quot;_blank&quot;}]&apos;
+$OMERO_DIST/bin/omero config append omero.web.open_with &apos;[&quot;omero_figure&quot;, &quot;new_figure&quot;, {&quot;supported_objects&quot;:[&quot;images&quot;], &quot;target&quot;: &quot;_blank&quot;, &quot;label&quot;: &quot;OMERO.figure&quot;}]&apos;
+
+# Hardcoded twitter testing example
+$OMERO_DIST/bin/omero config set omero.web.sharing.opengraph &apos;{&quot;omero&quot;:&quot;Open Microscopy&quot;}&apos;
+$OMERO_DIST/bin/omero config set omero.web.sharing.twitter &apos;{&quot;omero&quot;:&quot;@openmicroscopy&quot;}&apos;
+$OMERO_DIST/bin/omero config set omero.web.public.enabled true
+$OMERO_DIST/bin/omero config set omero.web.public.user public
+$OMERO_DIST/bin/omero config set omero.web.public.password public
+$OMERO_DIST/bin/omero config set omero.web.public.url_filter &apos;^/&apos;
+
+# Security
+$OMERO_DIST/bin/omero config set omero.web.session_cookie_secure true
+$OMERO_DIST/bin/omero config set omero.web.csrf_cookie_secure true
 
 BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero web start
 $OMERO_DIST/bin/omero web diagnostics
@@ -93,6 +116,6 @@ deactivate
   </builders>
   <publishers/>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.8.8"/>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
   </buildWrappers>
 </project>

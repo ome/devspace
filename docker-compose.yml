@@ -44,8 +44,8 @@ services:
         extra_hosts:
             - "testintegration:127.0.0.1"
         ports:
-            - "14064"
-            - "14063"
+            - "${OMERO_SERVER_TEST_SSL}14064"
+            - "${OMERO_SERVER_TEST_TCP}14063"
 
     omero:
         build:
@@ -108,6 +108,7 @@ services:
             - ./jenkins/conf.d:/etc/nginx/conf.d
             - ./jenkins/sslcert:/etc/nginx/ssl
         ports:
+            - "${NGINXJENKINS_HTTP_PORT}80"
             - "${NGINXJENKINS_SSL_PORT}443"
 
     redis:
@@ -164,6 +165,22 @@ services:
             - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
             - REPO_CURATED
             - REPO_CONFIG
+
+    nexus:
+        image: sonatype/nexus3
+        user: ${USER_ID}
+        networks:
+            - omero-network
+        volumes:
+            - ./nexus-data:/nexus-data
+        ports:
+            # TODO: Remove all ports when we can configure nexus automatically
+            - 8081
+        environment:
+            # Needed so nexus can be proxied under /nexus
+            # Note additional configuration to set the full base url in Nexus
+            # may be required if running on a non-standard http/https port
+            NEXUS_CONTEXT: nexus
 
 networks:
     omero-network:

@@ -3,7 +3,7 @@
   <disabledAdministrativeMonitors>
     <string>jenkins.security.s2m.MasterKillSwitchWarning</string>
   </disabledAdministrativeMonitors>
-  <version>2.138.1</version>
+  <version>2.150.3</version>
   <installStateName>RESTART</installStateName>
   <numExecutors>0</numExecutors>
   <mode>NORMAL</mode>
@@ -29,7 +29,7 @@
       <properties>
         <hudson.tools.InstallSourceProperty>
           <installers>
-            <hudson.tools.JDKInstaller plugin="jdk-tool@1.1">
+            <hudson.tools.JDKInstaller plugin="jdk-tool@1.2">
               <id>jdk-8u192-oth-JPR</id>
               <acceptLicense>true</acceptLicense>
             </hudson.tools.JDKInstaller>
@@ -60,5 +60,19 @@
     <excludeClientIPFromCrumb>true</excludeClientIPFromCrumb>
   </crumbIssuer>
   <nodeProperties/>
-  <globalNodeProperties/>
+  <globalNodeProperties>
+    <hudson.slaves.EnvironmentVariablesNodeProperty>
+      <envVars serialization="custom">
+        <unserializable-parents/>
+        <tree-map>
+          <default>
+            <comparator class="hudson.util.CaseInsensitiveComparator"/>
+          </default>
+          <int>1</int>
+          <string>MERGE_PUSH_BRANCH</string>
+          <string>SPACEBRANCH_merge_trigger</string>
+        </tree-map>
+      </envVars>
+    </hudson.slaves.EnvironmentVariablesNodeProperty>
+  </globalNodeProperties>
 </hudson>
