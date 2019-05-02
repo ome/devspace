@@ -60,14 +60,6 @@
             }
         }
 
-        stage(&quot;OMERO Test&quot;) {
-            steps {
-                build job: &apos;OMERO-training&apos;, wait: false
-                build job: &apos;OMERO-test-integration&apos;, propagate: false
-                // build job: &apos;OMERO-robot&apos;, wait: false
-            }
-        }
-
         stage(&quot;OMERO Docs&quot;) {
             steps {
                 build job: &apos;OMERO-docs&apos;, wait: false
@@ -87,6 +79,15 @@
                 build job: &apos;OMERO-matlab-build&apos;
             }
         }
+
+        stage(&quot;OMERO Test&quot;) {
+            steps {
+                build job: &apos;OMERO-training&apos;, wait: false
+                build job: &apos;OMERO-test-integration&apos;, propagate: false
+                // build job: &apos;OMERO-robot&apos;, wait: false
+            }
+        }
+
     }
 }</script>
     <sandbox>true</sandbox>
