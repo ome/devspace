@@ -84,7 +84,9 @@
       <mavenName>(Default)</mavenName>
       <pom>bio-formats-build/pom.xml</pom>
       <properties>dryRun=true
-skipSphinxTests=${SKIP_DOCS_VALIDATION}
+skipTests=true
+skipSphinxTests=true
+XskipSphinxTests=${SKIP_DOCS_VALIDATION}
 ome-model.uri=file://${WORKSPACE}/bio-formats-build/ome-model/docs/sphinx/target/sphinx/html</properties>
       <usePrivateRepository>true</usePrivateRepository>
       <settings class="jenkins.mvn.DefaultSettingsProvider"/>
