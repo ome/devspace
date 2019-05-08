@@ -103,9 +103,9 @@ $OMERO_DIST/bin/omero config set omero.web.public.user public
 $OMERO_DIST/bin/omero config set omero.web.public.password public
 $OMERO_DIST/bin/omero config set omero.web.public.url_filter &apos;^/&apos;
 
-# Security
-$OMERO_DIST/bin/omero config set omero.web.session_cookie_secure true
-$OMERO_DIST/bin/omero config set omero.web.csrf_cookie_secure true
+# Security: Breaks internal connections to http://nginx/
+# $OMERO_DIST/bin/omero config set omero.web.session_cookie_secure true
+# $OMERO_DIST/bin/omero config set omero.web.csrf_cookie_secure true
 
 BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero web start
 $OMERO_DIST/bin/omero web diagnostics
