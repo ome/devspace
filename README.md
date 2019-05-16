@@ -276,6 +276,21 @@ Ports to access the various services are dynamically assigned. You will have to 
 and ``devspace_openstack_ip`` as the server value. You **must** use the secure connection.
 
 
+# GitHub OAuth
+
+You can optionally enable GitHub OAuth:
+
+*   Copy
+    [`home/init.groovy.d/github-oauth.groovy.disabled`](home/init.groovy.d/github-oauth.groovy.disabled)
+    to `home/init.groovy.d/github-oauth.groovy`
+*   Create a [new GitHub app](https://github.com/settings/applications/new) and edit the variables at the top of `home/init.groovy.d/github-oauth.groovy`.
+    The script also gives details of the required GitHub OAuth callback.
+*   Restart jenkins
+
+Note: if you are modifying an existing devspace you are advised to backup `home/config.xml`.
+If there are errors in the GitHub setup you can restore `home/config.xml` to return to the default authentication.
+
+
 # Job configurations
 
 # Job workflow

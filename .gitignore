@@ -6,7 +6,7 @@ home/cache/
 home/config-history/
 home/fingerprints/
 home/identity.key.enc
-home/init.groovy.d/
+home/init.groovy.d/*.groovy
 home/jobs/**/builds/
 home/jobs/**/lastStable
 home/jobs/**/lastSuccessful

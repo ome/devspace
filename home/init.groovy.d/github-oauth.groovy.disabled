@@ -1,0 +1,68 @@
+// GitHub OAuth settings
+// Create an app at https://github.com/settings/applications/new
+// The GitHub Authorization callback URL should be (add a prefix if necessary)
+// https://hostname/securityRealm/finishLogin
+
+// GitHub client ID
+String clientID = 'someid'
+// GitHub client secret
+String clientSecret = 'somesecret'
+// GitHub OAuth scopes
+String oauthScopes = 'read:org'
+// List of GitHub users who are Jenkins admins
+String adminUserNames = 'microscopepony,snoopycrimecop'
+// Allow access to members of this GitHub organisation
+String organizationNames = 'ome'
+
+// Permissions: you probably don't need to change these
+
+// Use Github repository permissions
+boolean useRepositoryPermissions = false
+// Grant READ permissions to all Authenticated Users
+boolean authenticatedUserReadPermission = false
+// Grant CREATE Job permissions to all Authenticated Users
+boolean authenticatedUserCreateJobPermission = false
+// Grant READ permissions for /github-webhook
+boolean allowGithubWebHookPermission = true
+// Grant READ permissions for /cc.xml
+boolean allowCcTrayPermission = true
+// Grant READ permissions for Anonymous Users
+boolean allowAnonymousReadPermission = true
+// Grant ViewStatus permissions for Anonymous Users
+boolean allowAnonymousJobStatusPermission = true
+
+
+// ************************************************************************* //
+// https://wiki.jenkins.io/display/JENKINS/GitHub+OAuth+Plugin#GitHubOAuthPlugin-Automaticallyconfiguresecurityrealmviascriptconsole
+
+import jenkins.model.Jenkins
+import hudson.security.SecurityRealm
+import org.jenkinsci.plugins.GithubSecurityRealm
+
+String githubWebUri = 'https://github.com'
+String githubApiUri = 'https://api.github.com'
+SecurityRealm github_realm = new GithubSecurityRealm(githubWebUri, githubApiUri, clientID, clientSecret, oauthScopes)
+//check for equality, no need to modify the runtime if no settings changed
+if(!github_realm.equals(Jenkins.instance.getSecurityRealm())) {
+    Jenkins.instance.setSecurityRealm(github_realm)
+    Jenkins.instance.save()
+}
+
+import org.jenkinsci.plugins.GithubAuthorizationStrategy
+import hudson.security.AuthorizationStrategy
+
+AuthorizationStrategy github_authorization = new GithubAuthorizationStrategy(adminUserNames,
+    authenticatedUserReadPermission,
+    useRepositoryPermissions,
+    authenticatedUserCreateJobPermission,
+    organizationNames,
+    allowGithubWebHookPermission,
+    allowCcTrayPermission,
+    allowAnonymousReadPermission,
+    allowAnonymousJobStatusPermission)
+
+//check for equality, no need to modify the runtime if no settings changed
+if(!github_authorization.equals(Jenkins.instance.getAuthorizationStrategy())) {
+    Jenkins.instance.setAuthorizationStrategy(github_authorization)
+    Jenkins.instance.save()
+}
