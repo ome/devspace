@@ -100,3 +100,5 @@ rundeck:3.6.4
 
 # ldap
 ldap:1.20
+# GitHub OAuth
+github-oauth:0.32
