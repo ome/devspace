@@ -27,13 +27,15 @@
 
         stage(&quot;Bio-Formats&quot;){
             steps {
-                build job: &apos;BIOFORMATS-push&apos;
-                build job: &apos;BIOFORMATS-build&apos;
-                build job: &apos;BIOFORMATS-docs&apos;, propagate: false
-                build job: &apos;BIOFORMATS-image&apos;
+
+                build job: &apos;MANAGEMENT_TOOLS-merge&apos;
                 build job: &apos;DATA_REPO_CONFIG-merge&apos;
-                build job: &apos;BIOFORMATS-performance&apos;, wait: false
+                build job: &apos;BIOFORMATS-push&apos;
+                build job: &apos;BIOFORMATS-merge&apos;
+                build job: &apos;BIOFORMATS-merge-docs&apos;, wait: false, propagate: false
+                build job: &apos;BIOFORMATS-image&apos;
                 build job: &apos;BIOFORMATS-test-repo&apos;, wait: false
+
             }
         }
 

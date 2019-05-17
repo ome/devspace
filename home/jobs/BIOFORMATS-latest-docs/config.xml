@@ -1,5 +1,5 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.14">
+<matrix-project plugin="matrix-project@1.13">
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
@@ -14,30 +14,24 @@
     </jenkins.model.BuildDiscarderProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
-        <hudson.model.StringParameterDefinition>
-          <name>PUSH_BRANCH</name>
-          <description></description>
-          <defaultValue>SPACEBRANCH_merge_trigger</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
           <name>SKIP_DOCS_VALIDATION</name>
           <description></description>
-          <defaultValue>true</defaultValue>
+          <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.0.0-rc">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.1">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>git://github.com/SPACEUSER/bio-formats-build</url>
+        <url>git://github.com/ome/bio-formats-build</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>$PUSH_BRANCH</name>
+        <name>master</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -52,7 +46,6 @@
         <trackingSubmodules>true</trackingSubmodules>
         <reference></reference>
         <parentCredentials>false</parentCredentials>
-        <shallow>false</shallow>
       </hudson.plugins.git.extensions.impl.SubmoduleOption>
       <hudson.plugins.git.extensions.impl.CleanCheckout/>
     </extensions>
@@ -62,7 +55,12 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
+  <triggers>
+    <hudson.triggers.SCMTrigger>
+      <spec>H/15 * * * *</spec>
+      <ignorePostCommitHooks>false</ignorePostCommitHooks>
+    </hudson.triggers.SCMTrigger>
+  </triggers>
   <concurrentBuild>false</concurrentBuild>
   <axes>
     <hudson.matrix.JDKAxis>
@@ -90,18 +88,10 @@ skipSphinxTests=${SKIP_DOCS_VALIDATION}</properties>
       <globalSettings class="jenkins.mvn.DefaultGlobalSettingsProvider"/>
       <injectBuildVariables>false</injectBuildVariables>
     </hudson.tasks.Maven>
-    <hudson.tasks.Shell>
-      <command># TODO: move to Jenkinsfile
-cd ${WORKSPACE}/target
-curl -sfL https://github.com/sbesson/build-infra/archive/bf_omero_coupling.tar.gz | tar -zxf -
-export PATH=$PATH:${WORKSPACE}/target/build-infra-bf_omero_coupling/
-cd ${WORKSPACE}/bio-formats-build
-foreach-get-version-as-property &gt;&gt; ${WORKSPACE}/target/version.properties</command>
-    </hudson.tasks.Shell>
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>**/target/*.zip,**/target/*.jar,**/target/*.tar*,target/version.properties</artifacts>
+      <artifacts>**/bio-formats-examples/target/*.jar,**/bio-formats-documentation/target/*.zip,**/bio-formats-documentation/target/*.jar,**/bio-formats-documentation/target/*.tar*</artifacts>
       <allowEmptyArchive>false</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>

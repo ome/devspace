@@ -8,7 +8,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>git://github.com/SPACEUSER/bioformats</url>
+        <url>git://github.com/SPACEUSER/bio-formats-build</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -20,6 +20,7 @@
     <submoduleCfg class="list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.PruneStaleBranch/>
+      <hudson.plugins.git.extensions.impl.CleanCheckout/>
     </extensions>
   </scm>
   <assignedNode>docker</assignedNode>
@@ -27,6 +28,7 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <jdk>(System)</jdk>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
