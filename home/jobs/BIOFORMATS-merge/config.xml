@@ -95,6 +95,7 @@ ome-model.uri=file://${WORKSPACE}/bio-formats-build/ome-model/docs/sphinx/target
     </hudson.tasks.Maven>
     <hudson.tasks.Shell>
       <command># TODO: move to Jenkinsfile
+mkdir ${WORKSPACE}/target
 cd ${WORKSPACE}/target
 curl -sfL https://github.com/ome/build-infra/archive/master.tar.gz | tar -zxf -
 export PATH=$PATH:${WORKSPACE}/target/build-infra-bf_omero_coupling/
