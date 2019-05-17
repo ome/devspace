@@ -1,8 +1,8 @@
-FROM openmicroscopy/devslave-c7:0.6.0
+FROM openmicroscopy/devslave-c7:0.6.1
 
 MAINTAINER OME
 
-ARG JAVAVER=openjdk18
+ARG JAVAVER=openjdk1.8
 ARG ICEVER=ice36-devel
 
 # skip some omero-install
@@ -45,7 +45,7 @@ WORKDIR /tmp/omero-install/linux
 
 RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh
 
-RUN pip install Sphinx
+RUN pip install 'Sphinx<2.0.0'
 
 # Install FindBugs
 ENV FINDBUGS_VERSION 3.0.0

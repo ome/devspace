@@ -6,7 +6,7 @@ home/cache/
 home/config-history/
 home/fingerprints/
 home/identity.key.enc
-home/init.groovy.d/
+home/init.groovy.d/*.groovy
 home/jobs/**/builds/
 home/jobs/**/lastStable
 home/jobs/**/lastSuccessful
@@ -28,6 +28,7 @@ home/scriptApproval.xml
 home/secret.key
 home/secret.key.not-so-secret
 home/secrets/
+home/tools/
 home/updates/
 home/users/
 home/userContent/
@@ -38,6 +39,7 @@ home/repositoryPlugin/
 
 pgdata/
 
+server/.bash_history
 server/.java/
 server/.jenkins/
 server/.oracle_jre_usage/
@@ -48,6 +50,8 @@ server/tools/
 nginx/conf.d/
 nginx/log/
 nginx/sslcert/
+nginx/server.crt
+nginx/server.key
 
 jenkins/sslcert/
 
