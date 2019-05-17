@@ -10,11 +10,13 @@
           <name>HOSTNAME</name>
           <description></description>
           <defaultValue>testintegration</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>PORT</name>
           <description></description>
           <defaultValue>14064</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
           <name>RUN_IN_PARALLEL</name>
@@ -32,7 +34,7 @@
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>testintegration</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
