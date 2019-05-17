@@ -290,6 +290,8 @@ You can optionally enable GitHub OAuth:
 Note: if you are modifying an existing devspace you are advised to backup `home/config.xml`.
 If there are errors in the GitHub setup you can restore `home/config.xml` to return to the default authentication.
 
+After the script has completed you can either leave it in place so it will override any manual changes on restart, or delete it and make changes through the Jenkins UI.
+
 
 # Job configurations
 
