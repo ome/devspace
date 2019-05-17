@@ -16,7 +16,7 @@ String organizationNames = 'ome'
 
 // Permissions: you probably don't need to change these
 
-// Use Github repository permissions
+// Use GitHub repository permissions
 boolean useRepositoryPermissions = false
 // Grant READ permissions to all Authenticated Users
 boolean authenticatedUserReadPermission = false
