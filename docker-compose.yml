@@ -24,6 +24,8 @@ services:
             - omero-network
         volumes:
             - ./pgdata:/var/lib/postgresql/data
+        ports:
+            - "${POSTGRES_PORT}5432"
 
     testintegration:
         build:
