@@ -48,8 +48,8 @@
         stage(&quot;Bio-Formats&quot;){
             steps {
 
-                build job: &apos;MANAGEMENT_TOOLS-merge&apos;
-                build job: &apos;DATA_REPO_CONFIG-merge&apos;
+                // build job: &apos;MANAGEMENT_TOOLS-merge&apos;
+                // build job: &apos;DATA_REPO_CONFIG-merge&apos;
                 build job: &apos;BIOFORMATS-push&apos;, parameters: [string(name: &apos;STATUS&apos;, value: &quot;${params.STATUS}&quot;)]
                 build job: &apos;BIOFORMATS-merge&apos;
                 build job: &apos;BIOFORMATS-merge-docs&apos;, wait: false, propagate: false
