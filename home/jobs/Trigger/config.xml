@@ -27,8 +27,8 @@
           <name>STATUS</name>
           <description>scc status flag</description>
           <choices>
-            <string>no-error</string>
             <string>success-only</string>
+            <string>no-error</string>
             <string>none</string>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
