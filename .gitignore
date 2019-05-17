@@ -27,6 +27,7 @@ home/scriptApproval.xml
 home/secret.key
 home/secret.key.not-so-secret
 home/secrets/
+home/tools/
 home/updates/
 home/users/
 home/userContent/
@@ -37,6 +38,7 @@ home/repositoryPlugin/
 
 pgdata/
 
+server/.bash_history
 server/.java/
 server/.jenkins/
 server/.oracle_jre_usage/
@@ -47,6 +49,8 @@ server/tools/
 nginx/conf.d/
 nginx/log/
 nginx/sslcert/
+nginx/server.crt
+nginx/server.key
 
 jenkins/sslcert/
 
