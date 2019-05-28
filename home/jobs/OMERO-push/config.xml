@@ -92,20 +92,19 @@
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
       <command>pip install -U --user scc
-test -e src && cd src
+test -e src &amp;&amp; cd src
 user=$(git config github.user)
 $HOME/.local/bin/scc $MERGE_COMMAND -S $STATUS
 cp etc/omero.properties etc/omero.properties.bak
 rm etc/omero.properties
 touch etc/omero.properties
-ne=$(sed -n "/Internal dependencies/=" "etc/omero.properties.bak")
-line=$(sed -n "1,"$ne"p" "etc/omero.properties.bak")
-echo "$line" >> etc/omero.properties
+ne=$(sed -n &quot;/Internal dependencies/=&quot; &quot;etc/omero.properties.bak&quot;)
+line=$(sed -n &quot;1,&quot;$ne&quot;p&quot; &quot;etc/omero.properties.bak&quot;)
+echo &quot;$line&quot; &gt;&gt; etc/omero.properties
 
-cat $WORKSPACE/version.properties >> etc/omero.properties
-git commit -a -m "Add version.properties to etc/omero.properties"
-git push -f git@github.com:$user/openmicroscopy.git HEAD:$PUSH_BRANCH
-</command>
+cat $WORKSPACE/version.properties &gt;&gt; etc/omero.properties
+git commit -a -m &quot;Add version.properties to etc/omero.properties&quot;
+git push -f git@github.com:$user/openmicroscopy.git HEAD:$PUSH_BRANCH</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
