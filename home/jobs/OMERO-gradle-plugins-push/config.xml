@@ -20,58 +20,42 @@
         <hudson.model.ChoiceParameterDefinition>
           <name>STATUS</name>
           <description>PR check status</description>
-          <choices>
-            <string>success-only</string>
-            <string>no-error</string>
-            <string>none</string>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>success-only</string>
+              <string>no-error</string>
+              <string>none</string>
+            </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>MERGE_OPTIONS</name>
           <description>scc merge options</description>
-          <defaultValue>-vvv --no-ask --reset --comment</defaultValue>
+          <defaultValue>-vvv --no-ask --reset --comment -Dnone</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@2.64">
-    <scm class="hudson.plugins.git.GitSCM" plugin="git@4.0.0-rc">
-      <configVersion>2</configVersion>
-      <userRemoteConfigs>
-        <hudson.plugins.git.UserRemoteConfig>
-          <url>https://github.com/ome/omero-gradle-plugins.git</url>
-        </hudson.plugins.git.UserRemoteConfig>
-      </userRemoteConfigs>
-      <branches>
-        <hudson.plugins.git.BranchSpec>
-          <name>master</name>
-        </hudson.plugins.git.BranchSpec>
-      </branches>
-      <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-      <submoduleCfg class="list"/>
-      <extensions>
-        <hudson.plugins.git.extensions.impl.SubmoduleOption>
-          <disableSubmodules>false</disableSubmodules>
-          <recursiveSubmodules>true</recursiveSubmodules>
-          <trackingSubmodules>false</trackingSubmodules>
-          <reference></reference>
-          <parentCredentials>false</parentCredentials>
-          <timeout>10</timeout>
-          <shallow>true</shallow>
-        </hudson.plugins.git.extensions.impl.SubmoduleOption>
-        <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
-        <hudson.plugins.git.extensions.impl.CloneOption>
-          <shallow>false</shallow>
-          <noTags>false</noTags>
-          <reference></reference>
-          <timeout>10</timeout>
-          <honorRefspec>false</honorRefspec>
-        </hudson.plugins.git.extensions.impl.CloneOption>
-      </extensions>
-    </scm>
-    <scriptPath>Jenkinsfile.merge</scriptPath>
-    <lightweight>true</lightweight>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.64">
+    <script>node(&apos;testintegration&apos;) {
+
+  git(
+    branch: &apos;master&apos;,
+    url: &apos;git://github.com/ome/omero-gradle-plugins.git&apos;,
+    local: &apos;.&apos;,
+    extensions: [[$class: &apos;WipeWorkspace&apos;]])
+
+  library identifier: &apos;recursiveMerge@master&apos;, retriever: modernSCM(
+    [$class: &apos;GitSCMSource&apos;,
+     remote: &apos;git://github.com/ome/jenkins-library-recursivemerge.git&apos;])
+
+  recursiveMerge(
+    baseRepo: &apos;omero-gradle-plugins.git&apos;,
+    parentVersions: &apos;BIOFORMATS-build&apos;,
+    versionFile: &apos;target/version.tsv&apos;)
+}</script>
+    <sandbox>true</sandbox>
   </definition>
   <triggers/>
   <disabled>false</disabled>
