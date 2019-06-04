@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
   <description></description>
@@ -18,11 +18,12 @@
           <name>MERGE_COMMAND</name>
           <description></description>
           <defaultValue>merge SPACEBRANCH --no-ask --reset</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.3.2">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.0.0-rc">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -53,7 +54,7 @@
 test -e src &amp;&amp; cd src
 $HOME/.local/bin/scc $MERGE_COMMAND</command>
     </hudson.tasks.Shell>
-    <hudson.tasks.Ant plugin="ant@1.4">
+    <hudson.tasks.Ant plugin="ant@1.9">
       <targets>clean html linkcheck</targets>
       <antName>Ant 1.9</antName>
       <buildFile>omero/build.xml</buildFile>
@@ -70,6 +71,6 @@ $HOME/.local/bin/scc $MERGE_COMMAND</command>
     </hudson.tasks.ArtifactArchiver>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.8.8"/>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
   </buildWrappers>
 </project>
