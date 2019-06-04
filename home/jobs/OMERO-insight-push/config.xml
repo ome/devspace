@@ -17,7 +17,7 @@
         <hudson.model.StringParameterDefinition>
           <name>MERGE_OPTIONS</name>
           <description>scc merge options</description>
-          <defaultValue>-vvv --no-ask --reset --comment -Dnone</defaultValue>
+          <defaultValue>-vvv --no-ask --reset --comment -Dnone -Ihotfix</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -29,14 +29,16 @@
     url: &apos;git://github.com/ome/omero-insight.git&apos;
     local: &apos;.&apos;
 
+  sh &quot;git clean -fdx&quot;
+
   library identifier: &apos;recursiveMerge@master&apos;, retriever: modernSCM(
     [$class: &apos;GitSCMSource&apos;,
      remote: &apos;git://github.com/ome/jenkins-library-recursivemerge.git&apos;])
 
   recursiveMerge(
     baseRepo: &apos;omero-insight.git&apos;,
-    parentVersions: &apos;OMERO-build&apos;,
-    versionFile: &apos;target/version.tsv&apos;)
+    parentVersions: &apos;OMERO-build-push&apos;,
+    versionFile: &apos;build/version.tsv&apos;)
 }</script>
     <sandbox>true</sandbox>
   </definition>

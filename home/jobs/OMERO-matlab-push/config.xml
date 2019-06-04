@@ -29,14 +29,16 @@
     url: &apos;git://github.com/ome/omero-matlab.git&apos;
     local: &apos;.&apos;
 
+  sh &quot;git clean -fdx&quot;
+
   library identifier: &apos;recursiveMerge@master&apos;, retriever: modernSCM(
     [$class: &apos;GitSCMSource&apos;,
      remote: &apos;git://github.com/ome/jenkins-library-recursivemerge.git&apos;])
 
   recursiveMerge(
     baseRepo: &apos;omero-matlab.git&apos;,
-    parentVersions: &apos;OMERO-insight&apos;,
-    versionFile: &apos;target/version.tsv&apos;)
+    parentVersions: &apos;OMERO-insight-push&apos;,
+    versionFile: &apos;build/version.tsv&apos;)
 }</script>
     <sandbox>true</sandbox>
   </definition>
