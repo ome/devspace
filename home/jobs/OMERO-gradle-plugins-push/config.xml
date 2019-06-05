@@ -31,7 +31,7 @@
         <hudson.model.StringParameterDefinition>
           <name>MERGE_OPTIONS</name>
           <description>scc merge options</description>
-          <defaultValue>-vvv --no-ask --reset --comment -Dnone</defaultValue>
+          <defaultValue>-vvv --no-ask --reset --comment</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
