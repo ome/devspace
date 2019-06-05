@@ -25,15 +25,13 @@
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.64">
     <script>node(&apos;testintegration&apos;) {
-  git branch: &apos;master&apos;,
-    url: &apos;git://github.com/ome/omero-insight.git&apos;
-    local: &apos;.&apos;
-
-  sh &quot;git clean -fdx&quot;
 
   library identifier: &apos;recursiveMerge@master&apos;, retriever: modernSCM(
     [$class: &apos;GitSCMSource&apos;,
      remote: &apos;git://github.com/ome/jenkins-library-recursivemerge.git&apos;])
+
+  recursiveCheckout(
+    repo: &apos;omero-insight.git&apos;)
 
   recursiveMerge(
     baseRepo: &apos;omero-insight.git&apos;,
