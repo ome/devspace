@@ -94,14 +94,7 @@ ome-model.uri=file://${WORKSPACE}/bio-formats-build/ome-model/docs/sphinx/target
       <injectBuildVariables>false</injectBuildVariables>
     </hudson.tasks.Maven>
     <hudson.tasks.Shell>
-      <command># TODO: move to Jenkinsfile
-mkdir -p ${WORKSPACE}/target
-cd ${WORKSPACE}/target
-curl -sfL https://github.com/ome/build-infra/archive/master.tar.gz | tar -zxf -
-export PATH=$PATH:${WORKSPACE}/target/build-infra-master/
-cd ${WORKSPACE}/bio-formats-build
-foreach-get-version &gt; ${WORKSPACE}/target/version.tsv
-foreach-get-version-as-property &gt; ${WORKSPACE}/target/version.properties
+      <command>cd ${WORKSPACE}/bio-formats-build
 mvn deploy -DskipTests -DaltDeploymentRepository=ome.staging::default::http://admin:admin123@nexus:8081/nexus/repository/maven-internal/</command>
     </hudson.tasks.Shell>
   </builders>

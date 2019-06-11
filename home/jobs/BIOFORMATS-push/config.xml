@@ -113,7 +113,26 @@ git commit -m &apos;Update component versions&apos; || true
 
 git push -f git@github.com:$user/bio-formats-build.git HEAD:$PUSH_BRANCH</command>
     </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command># TODO: move to Jenkinsfile
+mkdir -p ${WORKSPACE}/target
+cd ${WORKSPACE}/target
+curl -sfL https://github.com/ome/build-infra/archive/master.tar.gz | tar -zxf -
+export PATH=$PATH:${WORKSPACE}/target/build-infra-master/
+cd ${WORKSPACE}/bio-formats-build
+foreach-get-version &gt; ${WORKSPACE}/target/version.tsv
+foreach-get-version-as-property &gt; ${WORKSPACE}/target/version.properties</command>
+    </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>target/version.tsv</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+      <caseSensitive>true</caseSensitive>
+    </hudson.tasks.ArtifactArchiver>
+  </publishers>
   <buildWrappers/>
 </project>
