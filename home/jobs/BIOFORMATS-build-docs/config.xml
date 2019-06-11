@@ -23,7 +23,7 @@
         <hudson.model.BooleanParameterDefinition>
           <name>SKIP_DOCS_VALIDATION</name>
           <description></description>
-          <defaultValue>true</defaultValue>
+          <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
@@ -84,30 +84,17 @@
       <mavenName>(Default)</mavenName>
       <pom>bio-formats-build/pom.xml</pom>
       <properties>dryRun=true
-skipTests=true
-skipSphinxTests=true
-XskipSphinxTests=${SKIP_DOCS_VALIDATION}
+skipSphinxTests=${SKIP_DOCS_VALIDATION}
 ome-model.uri=file://${WORKSPACE}/bio-formats-build/ome-model/docs/sphinx/target/sphinx/html</properties>
       <usePrivateRepository>true</usePrivateRepository>
       <settings class="jenkins.mvn.DefaultSettingsProvider"/>
       <globalSettings class="jenkins.mvn.DefaultGlobalSettingsProvider"/>
       <injectBuildVariables>false</injectBuildVariables>
     </hudson.tasks.Maven>
-    <hudson.tasks.Shell>
-      <command># TODO: move to Jenkinsfile
-mkdir -p ${WORKSPACE}/target
-cd ${WORKSPACE}/target
-curl -sfL https://github.com/ome/build-infra/archive/master.tar.gz | tar -zxf -
-export PATH=$PATH:${WORKSPACE}/target/build-infra-bf_omero_coupling/
-cd ${WORKSPACE}/bio-formats-build
-foreach-get-version &gt; ${WORKSPACE}/target/version.tsv
-foreach-get-version-as-property &gt; ${WORKSPACE}/target/version.properties
-mvn deploy -DskipTests -DaltDeploymentRepository=ome.staging::default::http://admin:admin123@nexus:8081/nexus/repository/maven-internal/</command>
-    </hudson.tasks.Shell>
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>**/target/*.zip,**/target/*.jar,**/target/*.tar*,target/version.properties,target/version.tsv</artifacts>
+      <artifacts>**/bio-formats-examples/target/*.jar,**/bio-formats-documentation/target/*.zip,**/bio-formats-documentation/target/*.jar,**/bio-formats-documentation/target/*.tar*</artifacts>
       <allowEmptyArchive>false</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
@@ -115,7 +102,9 @@ mvn deploy -DskipTests -DaltDeploymentRepository=ome.staging::default::http://ad
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
   </publishers>
-  <buildWrappers/>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
+  </buildWrappers>
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
     <runSequentially>false</runSequentially>
   </executionStrategy>

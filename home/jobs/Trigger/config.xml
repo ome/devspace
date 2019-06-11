@@ -14,6 +14,21 @@
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>STATUS</name>
+          <description>scc status flag</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>success-only</string>
+              <string>no-error</string>
+              <string>none</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
     <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
       <triggers>
         <hudson.triggers.TimerTrigger>
@@ -21,26 +36,13 @@
         </hudson.triggers.TimerTrigger>
       </triggers>
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
-    <hudson.model.ParametersDefinitionProperty>
-      <parameterDefinitions>
-        <hudson.model.ChoiceParameterDefinition>
-          <name>STATUS</name>
-          <description>scc status flag</description>
-          <choices>
-            <string>success-only</string>
-            <string>no-error</string>
-            <string>none</string>
-          </choices>
-        </hudson.model.ChoiceParameterDefinition>
-      </parameterDefinitions>
-    </hudson.model.ParametersDefinitionProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.64">
     <script>pipeline {
     agent any
 
     parameters {
-        choice(choices: [&apos;no-error&apos;, &apos;success-only&apos;, &apos;none&apos;], description: &apos;scc status flag&apos;, name: &apos;STATUS&apos;)
+        choice(choices: [&apos;success-only&apos;, &apos;no-error&apos;, &apos;none&apos;], description: &apos;scc status flag&apos;, name: &apos;STATUS&apos;)
     }
 
     stages {
@@ -51,8 +53,8 @@
                 // build job: &apos;MANAGEMENT_TOOLS-merge&apos;
                 // build job: &apos;DATA_REPO_CONFIG-merge&apos;
                 build job: &apos;BIOFORMATS-push&apos;, parameters: [string(name: &apos;STATUS&apos;, value: &quot;${params.STATUS}&quot;)]
-                build job: &apos;BIOFORMATS-merge&apos;
-                build job: &apos;BIOFORMATS-merge-docs&apos;, wait: false, propagate: false
+                build job: &apos;BIOFORMATS-build&apos;
+                build job: &apos;BIOFORMATS-build-docs&apos;, wait: false, propagate: false
                 build job: &apos;BIOFORMATS-image&apos;
                 build job: &apos;BIOFORMATS-test-repo&apos;, wait: false
 
