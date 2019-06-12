@@ -27,7 +27,6 @@ def replace(name, branch, uid, user):
         if regexp.search(line) is not None:
           cnt += 1
           line = line.replace("SPACENAME", name)
-          line = line.replace("SPACEBRANCH", name)
           line = line.replace("SPACEUSER", user)
           line = line.replace("1000", str(uid))
         print line,

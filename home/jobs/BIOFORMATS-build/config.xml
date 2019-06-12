@@ -17,7 +17,7 @@
         <hudson.model.StringParameterDefinition>
           <name>PUSH_BRANCH</name>
           <description></description>
-          <defaultValue>SPACEBRANCH_merge_trigger</defaultValue>
+          <defaultValue>SPACENAME_ci</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.BooleanParameterDefinition>

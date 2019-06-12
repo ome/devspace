@@ -22,7 +22,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>SPACEBRANCH_merge_trigger</name>
+        <name>SPACENAME_ci</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -62,7 +62,7 @@
 
 export PATH=/opt/texlive/bin/x86_64-linux:$PATH # for dockerfile
 cd src
-export OMERO_BRANCH=SPACEBRANCH
+export OMERO_BRANCH=SPACENAME_ci
 virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
 source $WORKSPACE/omero-virtualenv/bin/activate
 pip install -U setuptools

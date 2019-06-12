@@ -9,7 +9,7 @@
         <hudson.model.StringParameterDefinition>
           <name>MERGE_COMMAND</name>
           <description></description>
-          <defaultValue>merge SPACEBRANCH --no-ask --reset --shallow</defaultValue>
+          <defaultValue>merge develop --no-ask --reset --shallow</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
@@ -26,7 +26,7 @@
         <hudson.model.StringParameterDefinition>
           <name>PUSH_BRANCH</name>
           <description></description>
-          <defaultValue>SPACEBRANCH_merge_trigger</defaultValue>
+          <defaultValue>SPACENAME_ci</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
