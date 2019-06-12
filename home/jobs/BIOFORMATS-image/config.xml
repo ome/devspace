@@ -13,7 +13,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>SPACENAME_ci</name>
+        <name>$MERGE_PUSH_BRANCH</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -33,7 +33,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>TAG=SPACEUSER/bioformats:SPACENAME_ci
+      <command>TAG=SPACEUSER/bioformats:${MERGE_PUSH_BRANCH}
 sudo docker build -t $TAG .
 #sudo docker tag $TAG scc-docker-docker.bintray.io/$TAG
 #sudo docker push scc-docker-docker.bintray.io/$TAG</command>

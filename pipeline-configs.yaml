@@ -10,19 +10,19 @@ jobs:
   OMERO-gradle-plugins-build:
     description: Build omero-gradle-plugins
     repository: SPACEUSER/omero-gradle-plugins
-    branch: SPACENAME_ci
+    branch: $MERGE_PUSH_BRANCH
 
   OMERO-build-build:
     description: Build omero-build
     repository: SPACEUSER/omero-build
-    branch: SPACENAME_ci
+    branch: $MERGE_PUSH_BRANCH
 
   OMERO-insight-build:
     description: Build omero-insight
     repository: SPACEUSER/omero-insight
-    branch: SPACENAME_ci
+    branch: $MERGE_PUSH_BRANCH
 
   OMERO-matlab-build:
     description: Build omero-matlab
     repository: SPACEUSER/omero-matlab
-    branch: SPACENAME_ci
+    branch: $MERGE_PUSH_BRANCH
