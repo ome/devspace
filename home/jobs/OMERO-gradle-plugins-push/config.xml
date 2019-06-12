@@ -49,7 +49,7 @@
 
   recursiveMerge(
     baseRepo: &apos;omero-gradle-plugins.git&apos;,
-    parentVersions: &apos;BIOFORMATS-build&apos;,
+    parentVersions: &apos;BIOFORMATS-push&apos;,
     versionFile: &apos;target/version.tsv&apos;)
     
 }</script>
