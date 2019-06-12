@@ -3,7 +3,15 @@
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>OMERO_PY_ZIP_URL</name>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>web</assignedNode>
   <canRoam>false</canRoam>
@@ -48,6 +56,13 @@ OMERO_DIST=$WORKSPACE/OMERO.web
 OMERO_INSTALL=/tmp/omero-install/linux
 
 ZIP=$(ls OMERO.py*.zip)
+if [ ! -z "$OMERO_PY_ZIP_URL" ]
+then
+   rm -f $ZIP
+   wget -q $OMERO_PY_ZIP_URL
+   ZIP=$(basename $OMERO_PY_ZIP_URL)
+fi
+
 DIST=${ZIP%.zip}
 unzip $ZIP
 rm -f $ZIP
