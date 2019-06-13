@@ -47,9 +47,9 @@
     exit 0
 fi
 if [ $(date +%u) -le 1 ]; then
-    DOCKER_ARGS="$DOCKER_ARGS -Duser.language=fr -Duser.country=FR"
+    DOCKER_ARGS=&quot;$DOCKER_ARGS -Duser.language=fr -Duser.country=FR&quot;
 fi
-sudo docker run --rm --name ${JOB_NAME}_${BUILD_NUMBER}_SPACENAME -v $DATA_PATH:/data -v $CONFIG_PATH:/config openmicroscopy/bioformats:SPACENAME $DOCKER_ARGS</command>
+sudo docker run --rm --name ${JOB_NAME}_${BUILD_NUMBER}_${MERGE_PUSH_BRANCH} -v $DATA_PATH:/data -v $CONFIG_PATH:/config SPACEUSER/bioformats:${MERGE_PUSH_BRANCH} $DOCKER_ARGS</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>

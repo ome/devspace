@@ -9,7 +9,7 @@
         <hudson.model.StringParameterDefinition>
           <name>MERGE_COMMAND</name>
           <description></description>
-          <defaultValue>merge SPACEBRANCH --no-ask --reset --shallow</defaultValue>
+          <defaultValue>merge develop --no-ask --reset --shallow</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
@@ -23,12 +23,6 @@
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>PUSH_BRANCH</name>
-          <description></description>
-          <defaultValue>SPACEBRANCH_merge_trigger</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -104,7 +98,7 @@ echo &quot;$line&quot; &gt;&gt; etc/omero.properties
 
 cat $WORKSPACE/version.properties &gt;&gt; etc/omero.properties
 git commit -a -m &quot;Add version.properties to etc/omero.properties&quot;
-git push -f git@github.com:$user/openmicroscopy.git HEAD:$PUSH_BRANCH</command>
+git push -f git@github.com:$user/openmicroscopy.git HEAD:refs/heads/$MERGE_PUSH_BRANCH</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
