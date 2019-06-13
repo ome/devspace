@@ -98,7 +98,7 @@ echo &quot;$line&quot; &gt;&gt; etc/omero.properties
 
 cat $WORKSPACE/version.properties &gt;&gt; etc/omero.properties
 git commit -a -m &quot;Add version.properties to etc/omero.properties&quot;
-git push -f git@github.com:$user/openmicroscopy.git HEAD:$MERGE_PUSH_BRANCH</command>
+git push -f git@github.com:$user/openmicroscopy.git HEAD:refs/heads/$MERGE_PUSH_BRANCH</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
