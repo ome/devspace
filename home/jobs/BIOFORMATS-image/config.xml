@@ -4,22 +4,23 @@
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties/>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.1">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.0.0-rc">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>git://github.com/SPACEUSER/bioformats</url>
+        <url>git://github.com/SPACEUSER/bio-formats-build</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>SPACEBRANCH_merge_trigger</name>
+        <name>$MERGE_PUSH_BRANCH</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.PruneStaleBranch/>
+      <hudson.plugins.git.extensions.impl.CleanCheckout/>
     </extensions>
   </scm>
   <assignedNode>docker</assignedNode>
@@ -31,7 +32,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>TAG=openmicroscopy/bioformats:SPACENAME
+      <command>TAG=SPACEUSER/bioformats:$MERGE_PUSH_BRANCH
 sudo docker build -t $TAG .
 #sudo docker tag $TAG scc-docker-docker.bintray.io/$TAG
 #sudo docker push scc-docker-docker.bintray.io/$TAG</command>

@@ -12,6 +12,7 @@ home/jobs/**/lastStable
 home/jobs/**/lastSuccessful
 home/jobs/**/modules/
 home/jobs/**/nextBuildNumber
+home/jobs/**/scm-polling.log
 home/logs/
 home/nodeMonitors.xml
 home/org.jenkinsci.plugins.workflow.flow.FlowExecutionList.xml
@@ -27,6 +28,7 @@ home/scriptApproval.xml
 home/secret.key
 home/secret.key.not-so-secret
 home/secrets/
+home/tools/
 home/updates/
 home/users/
 home/userContent/
@@ -37,6 +39,7 @@ home/repositoryPlugin/
 
 pgdata/
 
+server/.bash_history
 server/.java/
 server/.jenkins/
 server/.oracle_jre_usage/
@@ -47,6 +50,8 @@ server/tools/
 nginx/conf.d/
 nginx/log/
 nginx/sslcert/
+nginx/server.crt
+nginx/server.key
 
 jenkins/sslcert/
 

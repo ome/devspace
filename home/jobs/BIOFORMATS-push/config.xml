@@ -24,12 +24,6 @@
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>PUSH_BRANCH</name>
-          <description></description>
-          <defaultValue>SPACEBRANCH_merge_trigger</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
           <name>BASE_BRANCH</name>
           <description></description>
           <defaultValue>master</defaultValue>
@@ -38,7 +32,7 @@
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.1">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.0.0-rc">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -62,6 +56,7 @@
         <trackingSubmodules>true</trackingSubmodules>
         <reference></reference>
         <parentCredentials>false</parentCredentials>
+        <shallow>false</shallow>
       </hudson.plugins.git.extensions.impl.SubmoduleOption>
       <hudson.plugins.git.extensions.impl.CleanCheckout/>
     </extensions>
@@ -93,7 +88,7 @@ git submodule update --remote --recursive
 
 echo &quot;Merge all submodules using repository configuration:&quot;
 cat &quot;scripts/repositories.yml&quot;
-scc merge &quot;--repository-config=$(pwd)/scripts/repositories.yml&quot; $MERGE_OPTIONS --update-gitmodules --push $PUSH_BRANCH master
+scc merge &quot;--repository-config=$(pwd)/scripts/repositories.yml&quot; $MERGE_OPTIONS --update-gitmodules --push $MERGE_PUSH_BRANCH master
 
 echo &quot;Update maven component versions&quot;
 update-versions
@@ -104,15 +99,34 @@ git submodule foreach &quot;git commit -m &apos;Update component versions&apos; 
 
 echo &quot;Push all branches&quot;
 user=$(git config github.user)
-git submodule foreach &quot;git push -f git@github.com:$user/&quot;&apos;${path}.git&apos;&quot; HEAD:$PUSH_BRANCH&quot;
+git submodule foreach &quot;git push -f git@github.com:$user/&quot;&apos;${path}.git&apos;&quot; HEAD:$MERGE_PUSH_BRANCH&quot;
 
 echo &quot;Commit all component version changes&quot;
 git add -u
 git commit -m &apos;Update component versions&apos; || true
 
-git push -f git@github.com:$user/bio-formats-build.git HEAD:$PUSH_BRANCH</command>
+git push -f git@github.com:$user/bio-formats-build.git HEAD:$MERGE_PUSH_BRANCH</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command># TODO: move to Jenkinsfile
+mkdir -p ${WORKSPACE}/target
+cd ${WORKSPACE}/target
+curl -sfL https://github.com/ome/build-infra/archive/master.tar.gz | tar -zxf -
+export PATH=$PATH:${WORKSPACE}/target/build-infra-master/
+cd ${WORKSPACE}/bio-formats-build
+foreach-get-version &gt; ${WORKSPACE}/target/version.tsv
+foreach-get-version-as-property &gt; ${WORKSPACE}/target/version.properties</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>target/version.tsv</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+      <caseSensitive>true</caseSensitive>
+    </hudson.tasks.ArtifactArchiver>
+  </publishers>
   <buildWrappers/>
 </project>

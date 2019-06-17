@@ -5,7 +5,9 @@
     <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.3.6">
       <jobProperties/>
       <triggers/>
-      <parameters/>
+      <parameters>
+        <string>STATUS</string>
+      </parameters>
       <options/>
     </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
   </actions>
@@ -19,36 +21,56 @@
         </hudson.triggers.TimerTrigger>
       </triggers>
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>STATUS</name>
+          <description>scc status flag</description>
+          <choices>
+            <string>success-only</string>
+            <string>no-error</string>
+            <string>none</string>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.64">
     <script>pipeline {
     agent any
+
+    parameters {
+        choice(choices: [&apos;success-only&apos;, &apos;no-error&apos;, &apos;none&apos;], description: &apos;scc status flag&apos;, name: &apos;STATUS&apos;)
+    }
+
     stages {
 
         stage(&quot;Bio-Formats&quot;){
             steps {
-                build job: &apos;BIOFORMATS-push&apos;
+
+                // build job: &apos;MANAGEMENT_TOOLS-merge&apos;
+                // build job: &apos;DATA_REPO_CONFIG-merge&apos;
+                build job: &apos;BIOFORMATS-push&apos;, parameters: [string(name: &apos;STATUS&apos;, value: &quot;${params.STATUS}&quot;)]
                 build job: &apos;BIOFORMATS-build&apos;
-                build job: &apos;BIOFORMATS-docs&apos;, propagate: false
+                build job: &apos;BIOFORMATS-build-docs&apos;, wait: false, propagate: false
                 build job: &apos;BIOFORMATS-image&apos;
-                build job: &apos;DATA_REPO_CONFIG-merge&apos;
-                build job: &apos;BIOFORMATS-performance&apos;, wait: false
                 build job: &apos;BIOFORMATS-test-repo&apos;, wait: false
+
             }
         }
 
         stage(&apos;OMERO Jars&apos;) {
             steps {
-                build job: &apos;OMERO-gradle-plugins-push&apos;
+                build job: &apos;OMERO-gradle-plugins-push&apos;, parameters: [string(name: &apos;STATUS&apos;, value: &quot;${params.STATUS}&quot;)]
                 build job: &apos;OMERO-gradle-plugins-build&apos;
-                build job: &apos;OMERO-build-push&apos;
+                build job: &apos;OMERO-build-push&apos;, parameters: [string(name: &apos;STATUS&apos;, value: &quot;${params.STATUS}&quot;)]
                 build job: &apos;OMERO-build-build&apos;
             }
         }
 
         stage(&apos;OMERO Distribution&apos;) {
             steps {
-                build job: &apos;OMERO-push&apos;
+                build job: &apos;OMERO-push&apos;, parameters: [string(name: &apos;STATUS&apos;, value: &quot;${params.STATUS}&quot;)]
                 build job: &apos;OMERO-build&apos;
             }
         }
@@ -69,14 +91,14 @@
 
         stage(&apos;OMERO insight&apos;) {
             steps {
-                build job: &apos;OMERO-insight-push&apos;
+                build job: &apos;OMERO-insight-push&apos;, parameters: [string(name: &apos;STATUS&apos;, value: &quot;${params.STATUS}&quot;)]
                 build job: &apos;OMERO-insight-build&apos;
             }
         }
 
         stage(&apos;OMERO Matlab&apos;) {
             steps {
-                build job: &apos;OMERO-matlab-push&apos;
+                build job: &apos;OMERO-matlab-push&apos;, parameters: [string(name: &apos;STATUS&apos;, value: &quot;${params.STATUS}&quot;)]
                 build job: &apos;OMERO-matlab-build&apos;
             }
         }

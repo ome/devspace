@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
   <description></description>
@@ -10,11 +10,13 @@
           <name>HOSTNAME</name>
           <description></description>
           <defaultValue>testintegration</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>PORT</name>
           <description></description>
           <defaultValue>14064</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
           <name>RUN_IN_PARALLEL</name>
@@ -32,7 +34,7 @@
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>testintegration</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
@@ -41,7 +43,7 @@
     <hudson.tasks.Shell>
       <command>rm -rf src</command>
     </hudson.tasks.Shell>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.38.1">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
       <project>OMERO-build</project>
       <filter>src/target/openmicroscopy*zip</filter>
       <target></target>
@@ -50,7 +52,7 @@
       <flatten>true</flatten>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.38.1">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
       <project>OMERO-build</project>
       <filter>src/target/OMERO.server*zip</filter>
       <target></target>
@@ -131,7 +133,7 @@ deactivate
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.plugins.robot.RobotPublisher plugin="robot@1.6.4">
+    <hudson.plugins.robot.RobotPublisher plugin="robot@1.6.5">
       <outputPath>$WORKSPACE/src/components/tests/ui/target/reports</outputPath>
       <reportFileName>report.html</reportFileName>
       <logFileName>log.html</logFileName>
