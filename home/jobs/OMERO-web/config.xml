@@ -8,6 +8,9 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>OMERO_PY_ZIP_URL</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
@@ -56,7 +59,7 @@ OMERO_DIST=$WORKSPACE/OMERO.web
 OMERO_INSTALL=/tmp/omero-install/linux
 
 ZIP=$(ls OMERO.py*.zip)
-if [ ! -z "$OMERO_PY_ZIP_URL" ]
+if [ ! -z &quot;$OMERO_PY_ZIP_URL&quot; ]
 then
    rm -f $ZIP
    wget -q $OMERO_PY_ZIP_URL

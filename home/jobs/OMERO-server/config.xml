@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
   <description></description>
@@ -15,14 +15,19 @@
           <name>DB_NAME</name>
           <description>Default is $JOB_NAME</description>
           <defaultValue>$JOB_NAME</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>DATA_DIR</name>
           <description>Default is $HOME/omero-server-data</description>
           <defaultValue>$HOME/omero-server-data</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>OMERO_SERVER_ZIP_URL</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
@@ -64,7 +69,7 @@ fi
 
 rm -rf $WORKSPACE/*</command>
     </hudson.tasks.Shell>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.38.1">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
       <project>OMERO-build</project>
       <filter>src/target/OMERO.server*zip</filter>
       <target></target>
@@ -85,7 +90,7 @@ mkdir -p $OMERO_DATA_DIR
 OMERO_DIST=$WORKSPACE/OMERO.server
 
 ZIP=$(ls OMERO.server*.zip)
-if [ ! -z "$OMERO_SERVER_ZIP_URL" ]
+if [ ! -z &quot;$OMERO_SERVER_ZIP_URL&quot; ]
 then
    rm -f $ZIP
    wget -q $OMERO_SERVER_ZIP_URL
@@ -142,6 +147,6 @@ deactivate</command>
   </builders>
   <publishers/>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.8.8"/>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
   </buildWrappers>
 </project>
