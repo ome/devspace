@@ -21,6 +21,9 @@
           <description>Default is $HOME/omero-server-data</description>
           <defaultValue>$HOME/omero-server-data</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>OMERO_SERVER_ZIP_URL</name>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -82,6 +85,12 @@ mkdir -p $OMERO_DATA_DIR
 OMERO_DIST=$WORKSPACE/OMERO.server
 
 ZIP=$(ls OMERO.server*.zip)
+if [ ! -z "$OMERO_SERVER_ZIP_URL" ]
+then
+   rm -f $ZIP
+   wget -q $OMERO_SERVER_ZIP_URL
+   ZIP=$(basename $OMERO_SERVER_ZIP_URL)
+fi
 DIST=${ZIP%.zip}
 unzip $ZIP
 rm -f $ZIP
