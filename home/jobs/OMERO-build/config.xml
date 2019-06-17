@@ -58,11 +58,9 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>eval $(bash /opt/multi-config.sh ice3.5)
-
-export PATH=/opt/texlive/bin/x86_64-linux:$PATH # for dockerfile
-cd src
+      <command>cd src
 export OMERO_BRANCH=$MERGE_PUSH_BRANCH
+
 virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
 source $WORKSPACE/omero-virtualenv/bin/activate
 pip install -U setuptools
