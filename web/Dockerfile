@@ -49,8 +49,10 @@ WORKDIR /tmp/omero-install/linux
 RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh
 
 # manually install ICEPY dependences
-RUN yum -y install gcc-c++
+RUN yum -y install gcc-c++ make
 RUN yum -y install openssl-devel bzip2-devel expat-devel
+RUN curl -sL https://rpm.nodesource.com/setup | bash
+RUN yum install -y nodejs
 
 RUN yum install -y python-redis && yum clean all
 
