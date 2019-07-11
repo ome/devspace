@@ -103,13 +103,13 @@ $OMERO_DIST/bin/omero config set omero.web.wsgi_args -- &apos;--log-level=DEBUG 
 $OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
 
 # OMERO.iviewer installation
-pip install omero-iviewer
+pip install &quot;git+git://github.com/snoopycrimecop/omero-iviewer.git@$MERGE_PUSH_BRANCH#egg=omero-iviewer&amp;subdirectory=plugin&quot;
 $OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_iviewer&quot;&apos;
 $OMERO_DIST/bin/omero config set omero.web.viewer.view omero_iviewer.views.index
 $OMERO_DIST/bin/omero config append omero.web.open_with &apos;[&quot;omero_iviewer&quot;, &quot;omero_iviewer_index&quot;, {&quot;supported_objects&quot;:[&quot;images&quot;, &quot;dataset&quot;, &quot;well&quot;], &quot;script_url&quot;: &quot;omero_iviewer/openwith.js&quot;, &quot;label&quot;: &quot;OMERO.iviewer&quot;}]&apos;
 
 # OMERO.figure installation
-pip install omero-figure
+pip install git+git://github.com/snoopycrimecop/omero-figure.git@$MERGE_PUSH_BRANCH#egg=omero-figure
 $OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_figure&quot;&apos;
 $OMERO_DIST/bin/omero config append omero.web.ui.top_links &apos;[&quot;Figure&quot;, &quot;figure_index&quot;, {&quot;title&quot;: &quot;Open Figure in new tab&quot;, &quot;target&quot;: &quot;_blank&quot;}]&apos;
 $OMERO_DIST/bin/omero config append omero.web.open_with &apos;[&quot;omero_figure&quot;, &quot;new_figure&quot;, {&quot;supported_objects&quot;:[&quot;images&quot;], &quot;target&quot;: &quot;_blank&quot;, &quot;label&quot;: &quot;OMERO.figure&quot;}]&apos;
