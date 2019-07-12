@@ -114,6 +114,11 @@ $OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_figure&quot
 $OMERO_DIST/bin/omero config append omero.web.ui.top_links &apos;[&quot;Figure&quot;, &quot;figure_index&quot;, {&quot;title&quot;: &quot;Open Figure in new tab&quot;, &quot;target&quot;: &quot;_blank&quot;}]&apos;
 $OMERO_DIST/bin/omero config append omero.web.open_with &apos;[&quot;omero_figure&quot;, &quot;new_figure&quot;, {&quot;supported_objects&quot;:[&quot;images&quot;], &quot;target&quot;: &quot;_blank&quot;, &quot;label&quot;: &quot;OMERO.figure&quot;}]&apos;
 
+# OMERO.fpbioimage installation
+pip install git+git://github.com/snoopycrimecop/omero-fpbioimage.git@$MERGE_PUSH_BRANCH#egg=omero-fpbioimage
+$OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_fpbioimage&quot;&apos;
+$OMERO_DIST/bin/omero config append omero.web.open_with &apos;[&quot;omero_fpbioimage&quot;, &quot;fpbioimage_index&quot;, {&quot;script_url&quot;: &quot;fpbioimage/openwith.js&quot;, &quot;supported_objects&quot;: [&quot;image&quot;], &quot;label&quot;: &quot;FPBioimage&quot;}]&apos;
+
 # OMERO.gallery installation
 pip install git+git://github.com/snoopycrimecop/omero-gallery.git@$MERGE_PUSH_BRANCH#egg=omero-gallery
 $OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_gallery&quot;&apos;
@@ -130,6 +135,16 @@ $OMERO_DIST/bin/omero config set omero.web.secure_proxy_ssl_header &apos;[&quot;
 # OMERO.weberror installation
 pip install git+git://github.com/snoopycrimecop/omero-weberror.git@$MERGE_PUSH_BRANCH#egg=omero-weberror
 $OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_weberror&quot;&apos;
+
+# OMERO.omero-webtagging-autotag installation
+pip install omero-webtagging-autotag
+$OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_webtagging_autotag&quot;&apos;
+$OMERO_DIST/bin/omero config append omero.web.ui.center_plugins &apos;[&quot;Auto Tag&quot;, &quot;omero_webtagging_autotag/auto_tag_init.js.html&quot;, &quot;auto_tag_panel&quot;]&apos;
+
+# OMERO.webtagging-tagsearch installation
+pip install omero-webtagging-tagsearch
+$OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_webtagging_tagsearch&quot;&apos;
+$OMERO_DIST/bin/omero config append omero.web.ui.top_links &apos;[&quot;Tag Search&quot;, &quot;tagsearch&quot;]&apos;
 
 # Twitter testing example
 $OMERO_DIST/bin/omero config set omero.web.sharing.opengraph &apos;{&quot;omero&quot;:&quot;Open Microscopy&quot;}&apos;
