@@ -106,6 +106,7 @@ virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
 source $WORKSPACE/omero-virtualenv/bin/activate
 
 pip install omego
+pip install git+git://github.com/snoopycrimecop/omero-metadata.git@$MERGE_PUSH_BRANCH#egg=omero-metadata
 
 ## LOAD CONFIG
 
