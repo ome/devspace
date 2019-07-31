@@ -9,13 +9,11 @@ TEMPLATE_CONFIG_XML = 'TEMPLATE-pipeline-job-config.xml'
 JENKINS_JOBS_DIR = './home/jobs'
 
 PROPERTIES = """\
-  <properties>
     <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
       <triggers>
         {TRIGGERS}
       </triggers>
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
-  </properties>
 """
 TRIGGER = """\
         <jenkins.triggers.ReverseBuildTrigger>
@@ -46,7 +44,7 @@ def main():
                         for j in jobcfg['after']]
             properties = PROPERTIES.format(TRIGGERS='\n'.join(triggers))
         else:
-            properties = '<properties/>'
+            properties = ''
         job_config_xml = template.format(
             DESCRIPTION=jobcfg['description'],
             REPOSITORY=jobcfg['repository'],
