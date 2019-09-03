@@ -70,6 +70,8 @@
 
         stage(&apos;OMERO Distribution&apos;) {
             steps {
+                build job: &apos;OMERO-python-superbuild-push&apos;, parameters: [string(name: &apos;STATUS&apos;, value: &quot;${params.STATUS}&quot;)]
+                build job: &apos;OMERO-python-superbuild-build&apos;
                 build job: &apos;OMERO-push&apos;, parameters: [string(name: &apos;STATUS&apos;, value: &quot;${params.STATUS}&quot;)]
                 build job: &apos;OMERO-build&apos;
             }
