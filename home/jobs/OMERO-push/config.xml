@@ -77,7 +77,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
-      <project>OMERO-build-build</project>
+      <project>OMERO-python-superbuild-build</project>
       <filter>version.properties</filter>
       <target></target>
       <excludes></excludes>
@@ -95,6 +95,7 @@ touch etc/omero.properties
 ne=$(sed -n &quot;/Internal dependencies/=&quot; &quot;etc/omero.properties.bak&quot;)
 line=$(sed -n &quot;1,&quot;$ne&quot;p&quot; &quot;etc/omero.properties.bak&quot;)
 echo &quot;$line&quot; &gt;&gt; etc/omero.properties
+echo &quot;versions.omero-pypi=https://SPACENAME-ci.openmicroscopy.org/jenkins/job/OMERO-python-superbuild-build/lastSuccessfulBuild/artifact/PACKAGE/dist/&quot; &gt;&gt; etc/omero.properties
 
 cat $WORKSPACE/version.properties &gt;&gt; etc/omero.properties
 git commit -a -m &quot;Add version.properties to etc/omero.properties&quot;

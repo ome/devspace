@@ -46,6 +46,15 @@ rm -rf $WORKSPACE/*
       <flatten>true</flatten>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
+      <project>OMERO-python-superbuild-build</project>
+      <filter>**/omero_marshal*</filter>
+      <target></target>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
       <command>
 OMERO_INSTALL=/tmp/omero-install/linux
@@ -100,6 +109,7 @@ rm dbsetup.sql
 
 # Install web dependencies
 pip install -r $OMERO_DIST/share/web/requirements-py27-nginx.txt
+pip install $(ls omero_marshal*tar.gz) # Install marshal *after* requirements
 
 # Set up fake mail configuration
 export OMERO_PROFILE=$WORKSPACE/config

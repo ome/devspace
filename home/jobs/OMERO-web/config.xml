@@ -53,6 +53,15 @@ rm -rf $WORKSPACE/*
       <flatten>true</flatten>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
+      <project>OMERO-python-superbuild-build</project>
+      <filter>**/omero_marshal*</filter>
+      <target></target>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
       <command>
 OMERO_DIST=$WORKSPACE/OMERO.web
@@ -77,6 +86,7 @@ source $WORKSPACE/omero-virtualenv/bin/activate
 source $OMERO_INSTALL/settings.env
 
 pip install -r $OMERO_DIST/share/web/requirements-py27.txt
+pip install $(ls omero_marshal*tar.gz) # Install marshal *after* requirements
 
 #start-config
 $OMERO_DIST/bin/omero config set omero.web.application_server &apos;wsgi-tcp&apos;
