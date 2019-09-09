@@ -12,6 +12,11 @@ jobs:
     repository: SPACEUSER/omero-gradle-plugins
     branch: SPACENAME_ci
 
+  OMERO-python-superbuild-build:
+    description: Build omero-python-superbuild
+    repository: SPACEUSER/omero-python-superbuild
+    branch: SPACENAME_ci
+
   OMERO-build-build:
     description: Build omero-build
     repository: SPACEUSER/omero-build
