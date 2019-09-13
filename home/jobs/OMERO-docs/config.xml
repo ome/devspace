@@ -17,9 +17,20 @@
         <hudson.model.StringParameterDefinition>
           <name>MERGE_COMMAND</name>
           <description></description>
-          <defaultValue>merge develop --no-ask --reset</defaultValue>
+          <defaultValue>merge develop --no-ask --reset --comment</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>STATUS</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>success-only</string>
+              <string>no-error</string>
+              <string>none</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -52,7 +63,7 @@
     <hudson.tasks.Shell>
       <command>pip install --user scc
 test -e src &amp;&amp; cd src
-$HOME/.local/bin/scc $MERGE_COMMAND</command>
+$HOME/.local/bin/scc $MERGE_COMMAND -S $STATUS --push $MERGE_PUSH_BRANCH</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Ant plugin="ant@1.9">
       <targets>clean html linkcheck</targets>
