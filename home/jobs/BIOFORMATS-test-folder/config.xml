@@ -28,6 +28,7 @@
           <name>DOCKER_ARGS</name>
           <description></description>
           <defaultValue>-Dtestng.memory=15g -Dtestng.threadCount=12</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
@@ -49,7 +50,7 @@ fi
 if [ $(date +%u) -le 1 ]; then
     DOCKER_ARGS=&quot;$DOCKER_ARGS -Duser.language=fr -Duser.country=FR&quot;
 fi
-sudo docker run --rm --name ${JOB_NAME}_${BUILD_NUMBER}_${MERGE_PUSH_BRANCH} -v $DATA_PATH:/data -v $CONFIG_PATH:/config SPACEUSER/bioformats:${MERGE_PUSH_BRANCH} $DOCKER_ARGS</command>
+sudo docker run --rm --name ${JOB_NAME}_${BUILD_NUMBER}_${MERGE_PUSH_BRANCH} -v $DATA_PATH:/data -v $CONFIG_PATH:/config $SPACE_USER/bioformats:${MERGE_PUSH_BRANCH} $DOCKER_ARGS</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
