@@ -8,7 +8,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>git://github.com/SPACEUSER/bio-formats-build</url>
+        <url>git://github.com/$SPACE_USER/bio-formats-build</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -32,7 +32,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>TAG=SPACEUSER/bioformats:$MERGE_PUSH_BRANCH
+      <command>TAG=$SPACE_USER/bioformats:$MERGE_PUSH_BRANCH
 sudo docker build -t $TAG .
 #sudo docker tag $TAG scc-docker-docker.bintray.io/$TAG
 #sudo docker push scc-docker-docker.bintray.io/$TAG</command>

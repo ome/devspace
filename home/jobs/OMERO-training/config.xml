@@ -1,8 +1,9 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
+  <properties/>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>omero</assignedNode>
   <canRoam>false</canRoam>
@@ -16,7 +17,7 @@
       <command>
 rm -rf $WORKSPACE/*</command>
     </hudson.tasks.Shell>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.38.1">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
       <project>OMERO-build</project>
       <filter>src/target/OMERO.server*zip, src/target/OMERO.py*zip, src/target/openmicroscopy*zip</filter>
       <target></target>
@@ -85,6 +86,6 @@ java -cp .:$OMERO_SERVER_DIST/lib/client/* training/Setup</command>
   </builders>
   <publishers/>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.8.8"/>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
   </buildWrappers>
 </project>
