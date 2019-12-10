@@ -10,7 +10,7 @@ before_install:
   - docker --version
   - pip install docker-compose
   - docker-compose -v
-  - export USER_ID=`$UID`
+  - export USER_ID=$UID
   - export JENKINS_PASSWORD=*****
 
 install:
