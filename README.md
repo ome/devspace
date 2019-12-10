@@ -108,9 +108,15 @@ Start and configure:
         auth_basic "Restricted";
         auth_basic_user_file /etc/nginx/conf.d/passwdfile;
 
-*   [Optional] Create the `maven-internal` Nexus repository:
+*   [Optional] Create the Nexus repositories:
 
-        $ docker-compose exec nexus /nexus-data/createRepoMavenInternal.sh
+    Wait for Nexus to start: Look for `Started Sonatype Nexus OSS` in the docker logs.
+
+    Reset the admin password if necessary and create Maven and Pypi repositories:
+
+        $ docker-compose exec nexus /initialise-repos.py
+
+    If the admin password was reset you must restart Nexus and rerun the script.
 
 
 ## Deploy on OpenStack

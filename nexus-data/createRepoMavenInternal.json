@@ -1,5 +1,0 @@
-{
-  "name": "createRepoMavenInternal",
-  "type": "groovy",
-  "content": "import org.sonatype.nexus.blobstore.api.BlobStoreManager; import org.sonatype.nexus.repository.maven.LayoutPolicy; import org.sonatype.nexus.repository.storage.WritePolicy; import org.sonatype.nexus.repository.maven.VersionPolicy; repository.createMavenHosted('maven-internal', BlobStoreManager.DEFAULT_BLOBSTORE_NAME, true, VersionPolicy.MIXED, WritePolicy.ALLOW_ONCE, LayoutPolicy.STRICT)"
-}

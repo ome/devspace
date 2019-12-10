@@ -169,7 +169,10 @@ services:
             - REPO_CONFIG
 
     nexus:
-        image: sonatype/nexus3
+        build:
+            context: ./nexus
+            args:
+                USER_ID: ${USER_ID}
         user: ${USER_ID}
         networks:
             - omero-network
