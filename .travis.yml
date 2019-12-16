@@ -16,6 +16,7 @@ install:
   - ./rename.py travis
   - ./sslcert jenkins/sslcert localhost
   - ./sslcert nginx/sslcert localhost
+  - cat docker-compose.yml
   - docker-compose -f docker-compose.yml build
 
 script:
