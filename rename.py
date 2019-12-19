@@ -29,7 +29,7 @@ def replace(name, branch, uid, user):
           line = line.replace("SPACENAME", name)
           line = line.replace("SPACEUSER", user)
           line = line.replace("1000", str(uid))
-        print(line, end=' ')
+        print(line, end='')
   return cnt
 
 if __name__ == "__main__":
