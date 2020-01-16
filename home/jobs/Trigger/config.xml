@@ -19,12 +19,10 @@
         <hudson.model.ChoiceParameterDefinition>
           <name>STATUS</name>
           <description>scc status flag</description>
-          <choices class="java.util.Arrays$ArrayList">
-            <a class="string-array">
-              <string>success-only</string>
-              <string>no-error</string>
-              <string>none</string>
-            </a>
+          <choices>
+            <string>success-only</string>
+            <string>no-error</string>
+            <string>none</string>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>

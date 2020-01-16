@@ -38,13 +38,7 @@ pip install omero-py omero-web  # Latest in order to stop server.</command>
     <hudson.tasks.Shell>
       <command>
 OMERO_DIST=$WORKSPACE/OMERO.web
-<<<<<<< HEAD
-||||||| parent of 2e5802e... OMERO 5.6.0 / Python 3 updates
 export OMERODIR=$OMERO_DIST
-export PYTHONPATH=$OMERO_DIST/lib/python
-=======
-export OMERODIR=$OMERO_DIST
->>>>>>> 2e5802e... OMERO 5.6.0 / Python 3 updates
 if [ -e $OMERO_DIST ]; then
     source $WORKSPACE/.venv3/bin/activate
     $OMERO_DIST/bin/omero web stop || echo &apos;not running&apos;
@@ -116,9 +110,15 @@ pip install pillow
 =======
 for x in *.tar.gz; do
   pip install $x
+<<<<<<< HEAD
 done
 
 >>>>>>> 2e5802e... OMERO 5.6.0 / Python 3 updates
+||||||| parent of 33a1b74... (upstream) Minor fixes for py3
+
+=======
+done
+>>>>>>> 33a1b74... (upstream) Minor fixes for py3
 
 #start-config
 omero config set omero.web.application_server &apos;wsgi-tcp&apos;
