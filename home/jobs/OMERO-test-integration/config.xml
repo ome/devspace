@@ -38,10 +38,9 @@ export OMERODIR=$OMERO_DIST
 
 if [ -e $OMERO_DIST ]; then
     source $WORKSPACE/.venv3/bin/activate
-    omero admin stop
+    omero admin stop || echo not running
     deactivate
     sleep 5
-    fi
 fi
 
 dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo Already exists maybe

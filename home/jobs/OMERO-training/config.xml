@@ -14,7 +14,18 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>
+      <command>if [ ! -e $WORKSPACE/.venv3 ]; then
+    virtualenv $WORKSPACE/.venv3 --system-site-packages
+fi
+
+source $WORKSPACE/.venv3/bin/activate
+pip install https://github.com/ome/zeroc-ice-py-manylinux/releases/download/0.1.0/zeroc_ice-3.6.5-cp36-cp36m-manylinux2010_x86_64.whl
+pip install -U pip future setuptools
+pip install markdown
+pip install mox3 pytest pytest-xdist
+pip install tables
+pip install jinja2
+
 rm -rf $WORKSPACE/*</command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
@@ -57,9 +68,8 @@ unzip -n $ZIP
 rm -f $ZIP
 mv $WORKSPACE/$DIST $OMERODIR
 
-# CREATE a virtual environment
-virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
-source $WORKSPACE/omero-virtualenv/bin/activate
+# load a virtual environment
+source $WORKSPACE/.venv3/bin/activate
 
 for x in *.gz; do
   pip install $x
