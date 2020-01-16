@@ -66,6 +66,12 @@ ADD ./run.sh /tmp/run.sh
 RUN chown omero:omero /tmp/run.sh
 RUN chmod a+x /tmp/run.sh
 
+RUN yum install -y python36
+RUN python3 -m venv /py3 && /py3/bin/pip install -U pip tox future wheel restructuredtext-lint
+RUN /py3/bin/pip install https://github.com/ome/zeroc-ice-py-manylinux/releases/download/0.1.0/zeroc_ice-3.6.5-cp36-cp36m-manylinux2010_x86_64.whl
+RUN /py3/bin/pip install scc
+ENV VIRTUAL_ENV=/py3
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Change user id to fix permissions issues
 ARG USER_ID=1000
