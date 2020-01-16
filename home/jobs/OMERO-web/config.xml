@@ -25,28 +25,40 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
+      <command>if [ ! -e $WORKSPACE/.venv3 ]; then
+    virtualenv $WORKSPACE/.venv3 --system-site-packages
+fi
+
+source $WORKSPACE/.venv3/bin/activate
+pip install https://github.com/ome/zeroc-ice-py-manylinux/releases/download/0.1.0/zeroc_ice-3.6.5-cp36-cp36m-manylinux2010_x86_64.whl
+pip install -U pip future
+pip install markdown
+pip install omero-py omero-web  # Latest in order to stop server.</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
       <command>
 OMERO_DIST=$WORKSPACE/OMERO.web
+<<<<<<< HEAD
+||||||| parent of 2e5802e... OMERO 5.6.0 / Python 3 updates
+export OMERODIR=$OMERO_DIST
+export PYTHONPATH=$OMERO_DIST/lib/python
+=======
+export OMERODIR=$OMERO_DIST
+>>>>>>> 2e5802e... OMERO 5.6.0 / Python 3 updates
 if [ -e $OMERO_DIST ]; then
-    if [ -e $WORKSPACE/omero-virtualenv ]; then
-        source $WORKSPACE/omero-virtualenv/bin/activate
-    fi
-
+    source $WORKSPACE/.venv3/bin/activate
     $OMERO_DIST/bin/omero web stop || echo &apos;not running&apos;
     sleep 5
     $OMERO_DIST/bin/omero web status || echo &apos;no status&apos;
-    if [ -e $WORKSPACE/omero-virtualenv ]; then
-        deactivate
-    fi
+    deactivate
 fi
 
 rm -rf $HOME/static/web/
-rm -rf $WORKSPACE/*
-      </command>
+rm -rf $WORKSPACE/*</command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
       <project>OMERO-build</project>
-      <filter>src/target/OMERO.py*zip</filter>
+      <filter>src/target/OMERO.server*zip</filter>
       <target></target>
       <excludes></excludes>
       <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
@@ -55,7 +67,7 @@ rm -rf $WORKSPACE/*
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
       <project>OMERO-python-superbuild-build</project>
-      <filter>**/omero_marshal*</filter>
+      <filter>**/*.gz</filter>
       <target></target>
       <excludes></excludes>
       <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
@@ -65,9 +77,16 @@ rm -rf $WORKSPACE/*
     <hudson.tasks.Shell>
       <command>
 OMERO_DIST=$WORKSPACE/OMERO.web
+<<<<<<< HEAD
+||||||| parent of 2e5802e... OMERO 5.6.0 / Python 3 updates
+export OMERODIR=$OMERO_DIST
+export PYTHONPATH=$OMERO_DIST/lib/python
+=======
+export OMERODIR=$OMERO_DIST
+>>>>>>> 2e5802e... OMERO 5.6.0 / Python 3 updates
 OMERO_INSTALL=/tmp/omero-install/linux
 
-ZIP=$(ls OMERO.py*.zip)
+ZIP=$(ls OMERO.server*.zip)
 if [ ! -z &quot;$OMERO_PY_ZIP_URL&quot; ]
 then
    rm -f $ZIP
@@ -76,103 +95,133 @@ then
 fi
 
 DIST=${ZIP%.zip}
-unzip $ZIP
+unzip -n $ZIP ## TODO: unclear why this has dupes
 rm -f $ZIP
 mv $WORKSPACE/$DIST $OMERO_DIST
 
-virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
-source $WORKSPACE/omero-virtualenv/bin/activate
+
+source $WORKSPACE/.venv3/bin/activate
 
 source $OMERO_INSTALL/settings.env
 
+<<<<<<< HEAD
 pip install -r $OMERO_DIST/share/web/requirements-py27.txt
 pip install $(ls omero_marshal*tar.gz) # Install marshal *after* requirements
+||||||| parent of 2e5802e... OMERO 5.6.0 / Python 3 updates
+pip install https://github.com/ome/zeroc-ice-py-manylinux/releases/download/0.2.0/zeroc_ice-3.6.5-cp36-cp36m-manylinux2010_x86_64.whl
+pip install -r $OMERO_DIST/share/web/requirements-py27.txt
+pip install $(ls omero_marshal*tar.gz) # Install marshal *after* requirements
+pip install future
+pip install pillow
+=======
+for x in *.tar.gz; do
+  pip install $x
+done
+
+>>>>>>> 2e5802e... OMERO 5.6.0 / Python 3 updates
 
 #start-config
-$OMERO_DIST/bin/omero config set omero.web.application_server &apos;wsgi-tcp&apos;
-$OMERO_DIST/bin/omero config set omero.web.application_server.max_requests 0
+omero config set omero.web.application_server &apos;wsgi-tcp&apos;
+omero config set omero.web.application_server.max_requests 0
 
-$OMERO_DIST/bin/omero config set omero.web.prefix $WEB_PREFIX
-$OMERO_DIST/bin/omero config set omero.web.static_url $WEB_PREFIX&apos;/static/&apos;
-$OMERO_DIST/bin/omero config set omero.web.static_root $HOME&apos;/static/web/&apos;
+omero config set omero.web.prefix $WEB_PREFIX
+omero config set omero.web.static_url $WEB_PREFIX&apos;/static/&apos;
+omero config set omero.web.static_root $HOME&apos;/static/web/&apos;
 
-$OMERO_DIST/bin/omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;
-$OMERO_DIST/bin/omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;django_redis.cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;redis://redis:6379/0&quot;}}&apos;
+omero config set omero.web.session_engine &apos;django.contrib.sessions.backends.cache&apos;
+omero config set omero.web.caches &apos;{&quot;default&quot;: {&quot;BACKEND&quot;: &quot;django_redis.cache.RedisCache&quot;,&quot;LOCATION&quot;: &quot;redis://redis:6379/0&quot;}}&apos;
 
-$OMERO_DIST/bin/omero config set omero.web.server_list &apos;[[&quot;omero&quot;, 4064, &quot;omero&quot;], [&quot;testintegration&quot;, 14064, &quot;testintegration&quot;]]&apos;
+omero config set omero.web.server_list &apos;[[&quot;omero&quot;, 4064, &quot;omero&quot;], [&quot;testintegration&quot;, 14064, &quot;testintegration&quot;]]&apos;
 
-$OMERO_DIST/bin/omero config set omero.web.application_server.host $NODE_NAME
-$OMERO_DIST/bin/omero config set omero.web.application_server.port 4080
+omero config set omero.web.application_server.host $NODE_NAME
+omero config set omero.web.application_server.port 4080
 
-$OMERO_DIST/bin/omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt;$OMERO_DIST/nginx.conf.tmp
+omero web config nginx --http &quot;$OMERO_WEB_PORT&quot; &gt;$OMERO_DIST/nginx.conf.tmp
 
 sudo cp $OMERO_DIST/nginx.conf.tmp $HOME/nginx/$NODE_NAME.conf
 
-$OMERO_DIST/bin/omero config set omero.web.wsgi_args -- &apos;--log-level=DEBUG --error-logfile=&apos;$OMERO_DIST&apos;/var/log/gunicorn.err&apos;
+omero config set omero.web.wsgi_args -- &apos;--log-level=DEBUG --error-logfile=&apos;$OMERO_DIST&apos;/var/log/gunicorn.err&apos;
 
-$OMERO_DIST/bin/omero config set omero.web.application_server.host 0.0.0.0
+omero config set omero.web.application_server.host 0.0.0.0
 
 # OMERO.iviewer installation
 pip install &quot;git+git://github.com/snoopycrimecop/omero-iviewer.git@$MERGE_PUSH_BRANCH#egg=omero-iviewer&amp;subdirectory=plugin&quot;
-$OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_iviewer&quot;&apos;
-$OMERO_DIST/bin/omero config set omero.web.viewer.view omero_iviewer.views.index
-$OMERO_DIST/bin/omero config append omero.web.open_with &apos;[&quot;omero_iviewer&quot;, &quot;omero_iviewer_index&quot;, {&quot;supported_objects&quot;:[&quot;images&quot;, &quot;dataset&quot;, &quot;well&quot;], &quot;script_url&quot;: &quot;omero_iviewer/openwith.js&quot;, &quot;label&quot;: &quot;OMERO.iviewer&quot;}]&apos;
+omero config append omero.web.apps &apos;&quot;omero_iviewer&quot;&apos;
+omero config set omero.web.viewer.view omero_iviewer.views.index
+omero config append omero.web.open_with &apos;[&quot;omero_iviewer&quot;, &quot;omero_iviewer_index&quot;, {&quot;supported_objects&quot;:[&quot;images&quot;, &quot;dataset&quot;, &quot;well&quot;], &quot;script_url&quot;: &quot;omero_iviewer/openwith.js&quot;, &quot;label&quot;: &quot;OMERO.iviewer&quot;}]&apos;
 
 # OMERO.figure installation
 pip install git+git://github.com/snoopycrimecop/omero-figure.git@$MERGE_PUSH_BRANCH#egg=omero-figure
-$OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_figure&quot;&apos;
-$OMERO_DIST/bin/omero config append omero.web.ui.top_links &apos;[&quot;Figure&quot;, &quot;figure_index&quot;, {&quot;title&quot;: &quot;Open Figure in new tab&quot;, &quot;target&quot;: &quot;_blank&quot;}]&apos;
-$OMERO_DIST/bin/omero config append omero.web.open_with &apos;[&quot;omero_figure&quot;, &quot;new_figure&quot;, {&quot;supported_objects&quot;:[&quot;images&quot;], &quot;target&quot;: &quot;_blank&quot;, &quot;label&quot;: &quot;OMERO.figure&quot;}]&apos;
+omero config append omero.web.apps &apos;&quot;omero_figure&quot;&apos;
+omero config append omero.web.ui.top_links &apos;[&quot;Figure&quot;, &quot;figure_index&quot;, {&quot;title&quot;: &quot;Open Figure in new tab&quot;, &quot;target&quot;: &quot;_blank&quot;}]&apos;
+omero config append omero.web.open_with &apos;[&quot;omero_figure&quot;, &quot;new_figure&quot;, {&quot;supported_objects&quot;:[&quot;images&quot;], &quot;target&quot;: &quot;_blank&quot;, &quot;label&quot;: &quot;OMERO.figure&quot;}]&apos;
+
+
+# OMERO.parade installation
+pip install https://github.com/snoopycrimecop/omero-parade/archive/$MERGE_PUSH_BRANCH.tar.gz
+# pip install &quot;omero-parade&gt;=0.2.dev2&quot;
+omero config append omero.web.apps &apos;&quot;omero_parade&quot;&apos;
+omero config append omero.web.ui.center_plugins &apos;[&quot;Parade&quot;, &quot;omero_parade/init.js.html&quot;, &quot;omero_parade&quot;]&apos;
+omero config set omero.web.use_x_forwarded_host true
+omero config set omero.web.secure_proxy_ssl_header &apos;[&quot;HTTP_X_FORWARDED_PROTO&quot;, &quot;https&quot;]&apos;
+
+pip --version
+find $WORKSPACE/.venv3 -name \*parade\*
 
 # OMERO.fpbioimage installation
 pip install git+git://github.com/snoopycrimecop/omero-fpbioimage.git@$MERGE_PUSH_BRANCH#egg=omero-fpbioimage
-$OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_fpbioimage&quot;&apos;
-$OMERO_DIST/bin/omero config append omero.web.open_with &apos;[&quot;omero_fpbioimage&quot;, &quot;fpbioimage_index&quot;, {&quot;script_url&quot;: &quot;fpbioimage/openwith.js&quot;, &quot;supported_objects&quot;: [&quot;image&quot;], &quot;label&quot;: &quot;FPBioimage&quot;}]&apos;
+omero config append omero.web.apps &apos;&quot;omero_fpbioimage&quot;&apos;
+omero config append omero.web.open_with &apos;[&quot;omero_fpbioimage&quot;, &quot;fpbioimage_index&quot;, {&quot;script_url&quot;: &quot;fpbioimage/openwith.js&quot;, &quot;supported_objects&quot;: [&quot;image&quot;], &quot;label&quot;: &quot;FPBioimage&quot;}]&apos;
 
 # OMERO.gallery installation
 pip install git+git://github.com/snoopycrimecop/omero-gallery.git@$MERGE_PUSH_BRANCH#egg=omero-gallery
-$OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_gallery&quot;&apos;
-$OMERO_DIST/bin/omero config append omero.web.ui.top_links &apos;[&quot;Gallery&quot;, &quot;webgallery_index&quot;, {&quot;title&quot;: &quot;Browse Gallery&quot;}]&apos;
-$OMERO_DIST/bin/omero config set omero.web.gallery.category_queries &apos;{&quot;all&quot;:{&quot;label&quot;:&quot;All Studies&quot;, &quot;index&quot;:0, &quot;query&quot;:&quot;FIRST50:Name&quot;}}&apos;
+omero config append omero.web.apps &apos;&quot;omero_gallery&quot;&apos;
+omero config append omero.web.ui.top_links &apos;[&quot;Gallery&quot;, &quot;webgallery_index&quot;, {&quot;title&quot;: &quot;Browse Gallery&quot;}]&apos;
+omero config set omero.web.gallery.category_queries &apos;{&quot;all&quot;:{&quot;label&quot;:&quot;All Studies&quot;, &quot;index&quot;:0, &quot;query&quot;:&quot;FIRST50:Name&quot;}}&apos;
 
-# OMERO.parade installation
-pip install git+git://github.com/snoopycrimecop/omero-parade.git@$MERGE_PUSH_BRANCH#egg=omero-parade
-$OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_parade&quot;&apos;
-$OMERO_DIST/bin/omero config append omero.web.ui.center_plugins &apos;[&quot;Parade&quot;, &quot;omero_parade/init.js.html&quot;, &quot;omero_parade&quot;]&apos;
-$OMERO_DIST/bin/omero config set omero.web.use_x_forwarded_host true
-$OMERO_DIST/bin/omero config set omero.web.secure_proxy_ssl_header &apos;[&quot;HTTP_X_FORWARDED_PROTO&quot;, &quot;https&quot;]&apos;
+# OMERO.mapr installation
+pip install git+git://github.com/snoopycrimecop/omero-mapr.git@$MERGE_PUSH_BRANCH#egg=omero-mapr
+omero config append omero.web.apps &apos;&quot;omero_mapr&quot;&apos;
+omero config append omero.web.mapr.config &apos;{&quot;menu&quot;: &quot;anyvalue&quot;, &quot;config&quot;:{&quot;default&quot;:[&quot;Any Value&quot;], &quot;all&quot;:[], &quot;ns&quot;:[&quot;openmicroscopy.org/omero/client/mapAnnotation&quot;], &quot;label&quot;:&quot;Any&quot;}}&apos;
+omero config append omero.web.ui.top_links &apos;[&quot;Any Map Value&quot;, {&quot;viewname&quot;: &quot;maprindex_anyvalue&quot;}, {&quot;title&quot;: &quot;Search for values in any Key-Value pair&quot;}]&apos;
+
+# OMERO.webtest
+pip install git+git://github.com/snoopycrimecop/omero-webtest.git@$MERGE_PUSH_BRANCH#egg=omero-webtest
+omero config append omero.web.apps &apos;&quot;omero_webtest&quot;&apos;
 
 # OMERO.weberror installation
 pip install git+git://github.com/snoopycrimecop/omero-weberror.git@$MERGE_PUSH_BRANCH#egg=omero-weberror
-$OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_weberror&quot;&apos;
+omero config append omero.web.apps &apos;&quot;omero_weberror&quot;&apos;
 
 # OMERO.omero-webtagging-autotag installation
-pip install omero-webtagging-autotag
-$OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_webtagging_autotag&quot;&apos;
-$OMERO_DIST/bin/omero config append omero.web.ui.center_plugins &apos;[&quot;Auto Tag&quot;, &quot;omero_webtagging_autotag/auto_tag_init.js.html&quot;, &quot;auto_tag_panel&quot;]&apos;
+# TEMP - install from Douglas&apos; branch...
+# pip install omero-webtagging-autotag
+pip install &quot;git+git://github.com/dpwrussell/webtagging.git@python_django_upgrade#egg=omero-webtagging-autotag&amp;subdirectory=autotag&quot;
+omero config append omero.web.apps &apos;&quot;omero_webtagging_autotag&quot;&apos;
+omero config append omero.web.ui.center_plugins &apos;[&quot;Auto Tag&quot;, &quot;omero_webtagging_autotag/auto_tag_init.js.html&quot;, &quot;auto_tag_panel&quot;]&apos;
 
 # OMERO.webtagging-tagsearch installation
-pip install omero-webtagging-tagsearch
-$OMERO_DIST/bin/omero config append omero.web.apps &apos;&quot;omero_webtagging_tagsearch&quot;&apos;
-$OMERO_DIST/bin/omero config append omero.web.ui.top_links &apos;[&quot;Tag Search&quot;, &quot;tagsearch&quot;]&apos;
+# pip install omero-webtagging-tagsearch
+pip install &quot;git+git://github.com/dpwrussell/webtagging.git@python_django_upgrade#egg=omero-webtagging-tagsearch&amp;subdirectory=tagsearch&quot;
+omero config append omero.web.apps &apos;&quot;omero_webtagging_tagsearch&quot;&apos;
+omero config append omero.web.ui.top_links &apos;[&quot;Tag Search&quot;, &quot;tagsearch&quot;]&apos;
 
 # Twitter testing example
-$OMERO_DIST/bin/omero config set omero.web.sharing.opengraph &apos;{&quot;omero&quot;:&quot;Open Microscopy&quot;}&apos;
-$OMERO_DIST/bin/omero config set omero.web.sharing.twitter &apos;{&quot;omero&quot;:&quot;@openmicroscopy&quot;}&apos;
-$OMERO_DIST/bin/omero config set omero.web.public.enabled true
-$OMERO_DIST/bin/omero config set omero.web.public.user public
-$OMERO_DIST/bin/omero config set omero.web.public.password public
-$OMERO_DIST/bin/omero config set omero.web.public.url_filter &apos;^/&apos;
+omero config set omero.web.sharing.opengraph &apos;{&quot;omero&quot;:&quot;Open Microscopy&quot;}&apos;
+omero config set omero.web.sharing.twitter &apos;{&quot;omero&quot;:&quot;@openmicroscopy&quot;}&apos;
+omero config set omero.web.public.enabled true
+omero config set omero.web.public.user public
+omero config set omero.web.public.password public
+omero config set omero.web.public.url_filter &apos;^/&apos;
 
 # QA feedback configuration
-$OMERO_DIST/bin/omero config set omero.web.feedback.comment.enabled false
-$OMERO_DIST/bin/omero config set omero.web.feedback.error.enabled false
+omero config set omero.web.feedback.comment.enabled false
+omero config set omero.web.feedback.error.enabled false
 
-BUILD_ID=DONT_KILL_ME $OMERO_DIST/bin/omero web start
-$OMERO_DIST/bin/omero web diagnostics
+BUILD_ID=DONT_KILL_ME omero web start
+omero web diagnostics
 
-deactivate
-      </command>
+deactivate</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>

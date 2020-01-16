@@ -59,6 +59,14 @@ RUN chown omero:omero /tmp/run.sh
 RUN chmod a+x /tmp/run.sh
 
 
+# Install mencoder
+# See https://github.com/ome/prod-playbooks/blob/7d8e59ced0b47a224d6be02907d913c392ef9379/ome-dundeeomero.yml#L48
+RUN yum install -y http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+RUN yum install -y mencoder
+
+RUN localedef -i en_US -f UTF-8 en_US.UTF-8
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+
 # Change user id to fix permissions issues
 ARG USER_ID=1000
 RUN usermod -u $USER_ID omero
