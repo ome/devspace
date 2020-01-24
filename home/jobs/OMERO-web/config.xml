@@ -26,11 +26,11 @@
   <builders>
     <hudson.tasks.Shell>
       <command>if [ ! -e $WORKSPACE/.venv3 ]; then
-    virtualenv $WORKSPACE/.venv3 --system-site-packages
+    virtualenv $WORKSPACE/.venv3
 fi
 
 source $WORKSPACE/.venv3/bin/activate
-pip install https://github.com/ome/zeroc-ice-py-manylinux/releases/download/0.1.0/zeroc_ice-3.6.5-cp36-cp36m-manylinux2010_x86_64.whl
+pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.2.1/zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
 pip install -U pip future
 pip install markdown
 pip install omero-py omero-web  # Latest in order to stop server.</command>
