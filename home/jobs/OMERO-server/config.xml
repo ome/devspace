@@ -47,7 +47,8 @@
 fi
 
 source $WORKSPACE/.venv3/bin/activate
-pip install https://github.com/ome/zeroc-ice-py-manylinux/releases/download/0.1.0/zeroc_ice-3.6.5-cp36-cp36m-manylinux2010_x86_64.whl
+pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.2.1/zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
+# pip install https://github.com/ome/zeroc-ice-py-manylinux/releases/download/0.1.0/zeroc_ice-3.6.5-cp36-cp36m-manylinux2010_x86_64.whl
 pip install -U pip future
 pip install -U omego
 pip install tables
@@ -109,6 +110,7 @@ mkdir -p $OMERO_DATA_DIR
 
 # UNZIP SERVER
 OMERO_DIST=$WORKSPACE/OMERO.server
+export OMERODIR=$OMERO_DIST
 
 ZIP=$(ls OMERO.server*.zip)
 if [ ! -z &quot;$OMERO_SERVER_ZIP_URL&quot; ]
