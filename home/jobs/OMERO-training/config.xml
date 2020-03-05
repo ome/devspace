@@ -14,12 +14,32 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>
+      <command>if [ ! -e $WORKSPACE/.venv3 ]; then
+    virtualenv $WORKSPACE/.venv3
+fi
+
+source $WORKSPACE/.venv3/bin/activate
+pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.2.1/zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
+pip install -U pip future setuptools
+pip install markdown
+pip install mox3 pytest pytest-xdist
+pip install tables
+pip install jinja2
+
 rm -rf $WORKSPACE/*</command>
     </hudson.tasks.Shell>
     <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
+      <project>OMERO-python-superbuild-build</project>
+      <filter>**/*.gz</filter>
+      <target></target>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
       <project>OMERO-build</project>
-      <filter>src/target/OMERO.server*zip, src/target/OMERO.py*zip, src/target/openmicroscopy*zip</filter>
+      <filter>src/target/OMERO.server*zip,src/target/openmicroscopy*zip</filter>
       <target></target>
       <excludes></excludes>
       <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
@@ -30,42 +50,36 @@ rm -rf $WORKSPACE/*</command>
       <command>OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
 
-# UNZIP OMERO.py
-OMERO_PY_DIST=$WORKSPACE/OMERO.py
-
-ZIP=$(ls OMERO.py*.zip)
-DIST=${ZIP%.zip}
-unzip $ZIP
-rm -f $ZIP
-mv $WORKSPACE/$DIST $OMERO_PY_DIST
-
 # UNZIP openmicroscopy
 OMERO_EXAMPLE_DIST=$WORKSPACE/openmicroscopy
 
 ZIP=$(ls openmicroscopy*.zip)
 DIST=${ZIP%.zip}
-unzip $ZIP
+unzip -n $ZIP
 rm -f $ZIP
 mv $WORKSPACE/$DIST $OMERO_EXAMPLE_DIST
 
 # UNZIP SERVER
-OMERO_SERVER_DIST=$WORKSPACE/OMERO.server
+export OMERODIR=$WORKSPACE/OMERO.server
 
 ZIP=$(ls OMERO.server*.zip)
 DIST=${ZIP%.zip}
-unzip $ZIP
+unzip -n $ZIP
 rm -f $ZIP
-mv $WORKSPACE/$DIST $OMERO_SERVER_DIST
+mv $WORKSPACE/$DIST $OMERODIR
 
-# CREATE a virtual environment
-virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
-source $WORKSPACE/omero-virtualenv/bin/activate
+# load a virtual environment
+source $WORKSPACE/.venv3/bin/activate
 
-cd $OMERO_SERVER_DIST
+for x in *.gz; do
+  pip install $x
+done
+
+cd $OMERODIR
 bash $OMERO_EXAMPLE_DIST/examples/Training/training_setup.sh
 mv training_ice.config $OMERO_EXAMPLE_DIST/examples/Training
 
-$OMERO_SERVER_DIST/bin/omero sessions clear
+omero sessions clear
 
 
 # Run the Python and Java examples
@@ -74,14 +88,13 @@ export ICE_CONFIG=$OMERO_EXAMPLE_DIST/examples/Training/training_ice.config
 
 # OMERO.py examples
 pip install --upgrade requests
-export PYTHONPATH=$OMERO_PY_DIST/lib/python:$PYTHONPATH
 python $OMERO_EXAMPLE_DIST/examples/Training/python
 deactivate
 
 # OMERO.java examples
 cd $OMERO_EXAMPLE_DIST/examples/Training/java/src
-javac -cp .:$OMERO_SERVER_DIST/lib/client/* training/*.java
-java -cp .:$OMERO_SERVER_DIST/lib/client/* training/Setup</command>
+javac -cp .:$OMERODIR/lib/client/* training/*.java
+java -cp .:$OMERODIR/lib/client/* training/Setup</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
