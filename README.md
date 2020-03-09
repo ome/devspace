@@ -10,12 +10,6 @@ Running and maintaining Devspace requires brief understanding of:
 *  [Docker engine](https://docs.docker.com/)
 *  [Docker compose](https://docs.docker.com/compose/)
 
-Running and maintaining Devspace in OpenStack requires, in addition, brief understanding of:
-
-* [Ansible](http://docs.ansible.com/ansible/intro_getting_started.html)
-    *  [playbook](http://docs.ansible.com/ansible/playbooks.html)
-*  access to openstack tenancy
-
 Running Devspace requires access to SSH and Git configuration files used for fetching and pushing the Git repositories.
 
 Devspace code depends on the following repositories:
@@ -23,15 +17,7 @@ Devspace code depends on the following repositories:
 * [OMERO install](https://github.com/ome/omero-install/)
 * [devslave-c7-docker](https://github.com/openmicroscopy/devslave-c7-docker)
 
-and for OpenStack (optional)
-
-* [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devspace)
-
 # Installation
-
-You can either deploy manually a devspace on a Docker host or you can use the [Ansible playbooks](http://docs.ansible.com/ansible/playbooks.html) to deploy a devspace on [OpenStack](https://www.openstack.org/).
-
-## Deploy on a Docker host
 
 The following instructions explain how to deploy a devspace on a Docker host.
 
@@ -111,169 +97,6 @@ Start and configure:
 *   [Optional] Create the `maven-internal` Nexus repository:
 
         $ docker-compose exec nexus /nexus-data/createRepoMavenInternal.sh
-
-
-## Deploy on OpenStack
-
-The following instructions explain how to deploy a devspace on OpenStack.
-First, you will need to have an account on [OME OpenStack](https://pony.openmicroscopy.org).
-
-The SSH and Git configuration files are used for fetching from and pushing to the Git repositories. They will be copied to the devspace.
-
-The OpenStack and SSH and Git following steps are only need to be done the first time you generate instances.
-
-#### OpenStack configuration
-
-* Log into [OpenStack](https://pony.openmicroscopy.org)
-* Register a key:
-   * Go to the ``Access & Security`` tab
-   * Click on ``Key Pairs`` and then on ``Import Key Pair``
-   * Copy the content of the public key you use to access our resources e.g. ``id_rsa.pub``
-   * The name you used is referred below as ``your_openstack_key``
-* Download your configuration:
-   * Go to the ``Access & Security`` tab
-   * Then ``API Access``
-   * Click on ``Download OpenStack RC File v2.0``
-   * The file will be named by default ``omedev-openrc.sh``. It will be used to set environment variables needed to connect to OpenStack via the command line.
-
-#### SSH and Git configuration files
-
-In order to be able to push result of the build job to your GitHub account, you will need a SSH key **without passphrase**. The key must be named ``id_gh_rsa``.
-The key and the configuration files will be copied to the devspace.
-
-* Create a directory ``devspace_config`` where you wish and a directory ``devspace_config/.ssh``
-
-* Generate a SSH key **without passphrase** in ``devspace_config/.ssh`` directory:
-
-        $ ssh-keygen -t rsa -b 4096 -C "your_email_address" -f path/to/devspace_config/.ssh/id_gh_rsa -q -P ""
-
-* Upload the corresponding public key i.e. ``id_gh_rsa.pub`` to your GitHub account
-
-* Create a file ``devspace_config/.ssh/config`` and add the following:
-
-        Host github.com
-            User git
-            IdentityFile ~/.ssh/id_gh_rsa
-
-* Create a ``devspace_config/.gitconfig`` file
-
-* Generate a [GitHub token](https://github.com/settings/tokens) and add it to ``devspace_config/.gitconfig``. Minimally the file should contain:
-
-        [github]
-                token = your_token
-                user = your_github_username
-        [user]
-                email = your_email_address
-                name = your_real_name
-
-* The ``devspace_config`` directory should look like:
-
-```
-/path/to/devspace_config/
-   .gitconfig
-   .ssh/
-        config
-        id_gh_rsa
-        id_gh_rsa.pub
-```
-
-#### Create and provision the devspace
-
-* Clone the ``devspace`` Git repository:
-
-        $ git clone https://github.com/openmicroscopy/devspace.git
-
-* Create a virtual environment and from the ``devspace`` directory, install ``shade`` to access OpenStack via the command line and ``Ansible``:
-
-        $ virtualenv ~/dev
-        $ . ~/dev/bin/activate
-        $ cd devspace
-        (dev) $ pip install -r requirements.txt
-
-* Source the OpenStack configuration file to set the environments variables allowing connection to OpenStack via the command line, adjust to your local configuration:
-
-        (dev) $ . path/to/omedev-openrc.sh
-        Enter your password
-
-The following commands need to be executed from the ``ansible`` subdirectory.
-
-* Install the various ansible roles from the [Galaxy website](https://galaxy.ansible.com/):
-
-        (dev) $ cd ansible
-        (dev) $ ansible-galaxy install -r requirements.yml
-
-To "upgrade" roles, you may want to specify ``--force`` when installing the roles.
-
-* Create an instance on [OpenStack](https://pony.openmicroscopy.org) using the playbook ``create-devspace.yml``. It is recommended to prefix the name of the devspace by your name or your initals:
-
-        (dev) $ ansible-playbook create-devspace.yml -e vm_name=your_name-devspace-name -e vm_key_name=your_openstack_key
-
-By default the size of the volume is ``50``GiB, if you required a larger size, it can be set by passing for example `-e vm_size=100`.
-The Floating IP of the generated instance is referred as ``devspace_openstack_ip`` below.
-
-* To provision the devpace, use the playbook ``provision-devspace.yml``. Before running
-the playbook you will minimally **need to edit** the value of the parameter:
-   * ``configuration_dir_path``: set it to ``path/to/devspace_config``
-
-See [ansible-role-devspace](https://github.com/openmicroscopy/ansible-role-devspace) for a full list of supported parameters. Provision the devspace by running:
-
-        (dev) $ ansible-playbook -u centos -i devspace_openstack_ip, provision-devspace.yml
-
-### Access the devspace and determine ports
-
-Ports to access the various services are dynamically assigned. You will have to log in to the devspace as the ``omero`` user to determine the port used by a given service using your usual ssh key and not the ``id_gh_rsa`` key:
-
-        ssh omero@devspace_openstack_ip
-        cd devspace
-
-* The port to access the Jenkins UI is obtained by running:
-
-        docker-compose port nginxjenkins 443
-
-    * The output of the command looks like:
-
-            WARNING: The JENKINS_PASSWORD variable is not set. Defaulting to a blank string.
-            WARNING: The USER_ID variable is not set. Defaulting to a blank string.
-            0.0.0.0:xxxx
-
-        where ``xxxx`` is the assigned port ``$JENKINS_PORT``
-
-    * The Jenkins UI will be available at:
-
-            https://devspace_openstack_ip:$JENKINS_PORT
-
-
-* The port to access OMERO.web is obtained by running:
-
-       docker-compose port nginx 80
-
-    * The command will generate a similar output that the one above
-
-            WARNING: The JENKINS_PASSWORD variable is not set. Defaulting to a blank string.
-            WARNING: The USER_ID variable is not set. Defaulting to a blank string.
-            0.0.0.0:xxxx
-
-        where ``xxxx`` is the assigned port ``$WEB_PORT``
-
-    * OMERO.web will be available at
-
-            http://devspace_openstack_ip:$WEB_PORT/web
-
-
-* The port to access OMERO.insight or OMERO.cli is obtained by running:
-
-       docker-compose port omero 4064
-
-    * The command will generate a similar output that the one above
-
-            WARNING: The JENKINS_PASSWORD variable is not set. Defaulting to a blank string.
-            WARNING: The USER_ID variable is not set. Defaulting to a blank string.
-            0.0.0.0:xxxx
-
-        where ``xxxx`` is the assigned port ``$SERVER_PORT``
-
-    * To login either via OMERO.insight or OMERO.cli use ``$SERVER_PORT`` as the port value
-and ``devspace_openstack_ip`` as the server value. You **must** use the secure connection.
 
 
 # GitHub OAuth
