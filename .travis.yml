@@ -1,7 +1,6 @@
 sudo: required
 
 language: python
-python: 2.7
 
 services:
   - docker
@@ -17,6 +16,7 @@ install:
   - ./rename.py travis
   - ./sslcert jenkins/sslcert localhost
   - ./sslcert nginx/sslcert localhost
+  - cat docker-compose.yml
   - docker-compose -f docker-compose.yml build
 
 script:
