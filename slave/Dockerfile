@@ -45,7 +45,7 @@ WORKDIR /tmp/omero-install/linux
 
 RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh
 
-RUN pip install 'Sphinx<2.0.0'
+RUN pip install sphinx
 
 # Install FindBugs
 ENV FINDBUGS_VERSION 3.0.0
