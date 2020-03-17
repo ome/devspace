@@ -50,11 +50,11 @@ The following instructions explain how to deploy a devspace on a Docker host.
 
 *   Copy the SSH and Git configuration files used for fetching and pushing the
     Git repositories under `slave/.ssh` and `slave/.gitconfig`. This is usually
-    your own SSH and Git configuration files
+    your own SSH and Git configuration files.
 
  *  Run `rename.py` to match your topic name. Specify the Git user corresponding to
     the confguration files used above. If you do not yet have
-    topic branches available on origin, use "develop" or one of the
+    topic branches available on origin, use `develop` or one of the
     main branches:
 
         $ ./rename.py MYTOPIC --user git_user
@@ -62,7 +62,7 @@ The following instructions explain how to deploy a devspace on a Docker host.
 *   This will also replace the `USER_ID` of the various Dockerfile with the ID of the user who
     will run the devspace, assumed to be: `id -u`, i.e. the current user.
 
-*   Set environment variables in `.env`, especially:
+*   Set the environment variables in `.env`, especially:
 
         JENKINS_USERNAME=devspace
         JENKINS_PASSWORD=<password>
@@ -108,7 +108,7 @@ You can optionally enable GitHub OAuth:
     to `home/init.groovy.d/github-oauth.groovy`
 *   Create a [new GitHub app](https://github.com/settings/applications/new) and edit the variables at the top of `home/init.groovy.d/github-oauth.groovy`.
     The script also gives details of the required GitHub OAuth callback.
-*   Restart jenkins
+*   Restart Jenkins
 
 Note: if you are modifying an existing devspace you are advised to backup `home/config.xml`.
 If there are errors in the GitHub setup you can restore `home/config.xml` to return to the default authentication.
