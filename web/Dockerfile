@@ -53,7 +53,7 @@ RUN yum -y install gcc-c++
 # ant for iviewer, make for nodejs
 RUN yum -y install ant make
 RUN yum -y install openssl-devel bzip2-devel expat-devel
-RUN curl -sL https://rpm.nodesource.com/setup | bash
+RUN curl -sL https://rpm.nodesource.com/setup_10.x | bash
 RUN yum install -y nodejs
 # grunt for figure
 RUN npm install -g grunt
