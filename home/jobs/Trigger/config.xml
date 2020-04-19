@@ -45,6 +45,14 @@
 
     stages {
 
+        stage(&quot;Website&quot;){
+            steps {
+                build job: &apos;WEBSITE-push&apos;, parameters: [string(name: &apos;STATUS&apos;, value: &quot;${params.STATUS}&quot;)]
+                build job: &apos;WEBSITE-build&apos;
+
+            }
+        }
+
         stage(&quot;Bio-Formats&quot;){
             steps {
 
