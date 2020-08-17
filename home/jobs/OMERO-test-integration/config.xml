@@ -14,9 +14,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>if [ ! -e $WORKSPACE/.venv3 ]; then
-    virtualenv $WORKSPACE/.venv3
-fi
+      <command>rm -rf $WORKSPACE/.venv3
+python -m venv $WORKSPACE/.venv3
 
 source $WORKSPACE/.venv3/bin/activate
 pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.2.1/zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
@@ -144,6 +143,8 @@ omero admin diagnostics
 # RUN TESTS
 export OMERO_SESSION_DIR=/tmp/$JOB_NAME/$BUILD_NUMBER
 export ICE_CONFIG=$SRC/dist/etc/ice.config
+#export PYTEST_ADDOPTS=&quot;-n16&quot;
+
 echo Running the integration tests with -Dtestng.useDefaultListeners=true
 
 $SRC/build.py -f components/tools/OmeroJava/build.xml -Dtestng.useDefaultListeners=true -Dtestreports.dir=target/reports/integration integration
