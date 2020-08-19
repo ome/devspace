@@ -41,6 +41,10 @@ if [ -e $OMERO_DIST ]; then
     source $WORKSPACE/.venv3/bin/activate
     omero web stop || echo &apos;not running&apos;
     sleep 5
+    echo &quot;Using kill to be extra careful&quot;
+    for x in $(ps aux -H | grep python3 | grep -v grep | cut -b 10-16); do
+        kill $x
+    done
     omero web status || echo &apos;no status&apos;
     deactivate
 fi
