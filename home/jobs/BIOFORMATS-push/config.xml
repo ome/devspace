@@ -9,7 +9,7 @@
         <hudson.model.StringParameterDefinition>
           <name>MERGE_OPTIONS</name>
           <description></description>
-          <defaultValue>--no-ask --reset</defaultValue>
+          <defaultValue>--no-ask --reset --comment</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
