@@ -42,18 +42,17 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>if [ ! -e $WORKSPACE/.venv3 ]; then
-    virtualenv $WORKSPACE/.venv3
-fi
+      <command>rm -rf $WORKSPACE/.venv3
+python -m venv $WORKSPACE/.venv3
 
 source $WORKSPACE/.venv3/bin/activate
 pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.2.1/zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
 pip install -U pip future
-pip install -U omego
+pip install markdown
+pip install reportlab # For figure
+pip install omego
 pip install tables
 pip install jinja2
-pip install reportlab
-pip install markdown
 pip install omero-py  # Latest in order to stop server.</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
@@ -125,7 +124,7 @@ mv $WORKSPACE/$DIST $OMERO_DIST
 
 # INSTALL PYTHON PACKAGES
 source $WORKSPACE/.venv3/bin/activate
-pip install git+git://github.com/snoopycrimecop/omero-metadata.git@$MERGE_PUSH_BRANCH#egg=omero-metadata
+pip install git+git://github.com/$SPACE_USER/omero-metadata.git@$MERGE_PUSH_BRANCH#egg=omero-metadata
 
 for x in *.tar.gz; do
     pip install -U $x # Install marshal, etc. *after* requirements
