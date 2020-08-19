@@ -1,0 +1,57 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.31">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.3.6"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.3.6">
+      <jobProperties/>
+      <triggers/>
+      <parameters>
+        <string>STATUS</string>
+        <string>MERGE_OPTIONS</string>
+      </parameters>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description>Run scc merge and bump versions on omero-plugins</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>STATUS</name>
+          <description>PR check status</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>success-only</string>
+              <string>no-error</string>
+              <string>none</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MERGE_OPTIONS</name>
+          <description>scc merge options</description>
+          <defaultValue>-vvv --no-ask --reset --comment</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.64">
+    <script>node(&apos;testintegration&apos;) {
+
+  library identifier: &apos;recursiveMerge@master&apos;, retriever: modernSCM(
+    [$class: &apos;GitSCMSource&apos;,
+     remote: &apos;git://github.com/ome/jenkins-library-recursivemerge.git&apos;])
+
+  recursiveCheckout(
+    repo: &apos;omero-guides.git&apos;)
+
+  recursiveMerge(
+    baseRepo: &apos;omero-guides.git&apos;)
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
