@@ -14,6 +14,21 @@
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>STATUS</name>
+          <description>scc status flag</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>success-only</string>
+              <string>no-error</string>
+              <string>none</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
     <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
       <triggers>
         <hudson.triggers.TimerTrigger>
@@ -21,19 +36,6 @@
         </hudson.triggers.TimerTrigger>
       </triggers>
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
-    <hudson.model.ParametersDefinitionProperty>
-      <parameterDefinitions>
-        <hudson.model.ChoiceParameterDefinition>
-          <name>STATUS</name>
-          <description>scc status flag</description>
-          <choices>
-            <string>success-only</string>
-            <string>no-error</string>
-            <string>none</string>
-          </choices>
-        </hudson.model.ChoiceParameterDefinition>
-      </parameterDefinitions>
-    </hudson.model.ParametersDefinitionProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.64">
     <script>pipeline {
@@ -118,6 +120,11 @@
             }
         }
 
+        stage(&quot;Website&quot;) {
+            steps {
+                build job: &apos;WEBSITE-push&apos;, wait: false
+            }
+        }
     }
 }</script>
     <sandbox>true</sandbox>
