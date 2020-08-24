@@ -25,15 +25,14 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>if [ ! -e $WORKSPACE/.venv3 ]; then
-    virtualenv $WORKSPACE/.venv3
-fi
+      <command>rm -rf $WORKSPACE/.venv3
+python -m venv $WORKSPACE/.venv3
 
 source $WORKSPACE/.venv3/bin/activate
 pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.2.1/zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
 pip install -U pip future
 pip install markdown
-pip install omero-py omero-web  # Latest in order to stop server.</command>
+pip install omero-py omero-web  # Latest in order to stop server. NB: Re-installed from python-superbuild below</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>OMERO_DIST=$WORKSPACE/OMERO.web
@@ -42,6 +41,10 @@ if [ -e $OMERO_DIST ]; then
     source $WORKSPACE/.venv3/bin/activate
     omero web stop || echo &apos;not running&apos;
     sleep 5
+    echo &quot;Using kill to be extra careful&quot;
+    for x in $(ps aux -H | grep python3 | grep -v grep | cut -b 10-16); do
+        kill $x
+    done
     omero web status || echo &apos;no status&apos;
     deactivate
 fi
@@ -91,6 +94,7 @@ source $WORKSPACE/.venv3/bin/activate
 
 source $OMERO_INSTALL/settings.env
 
+# Install omero-py, omero-web etc from OMERO-python-superbuild-build job
 for x in *.tar.gz; do
   pip install $x
 done
@@ -120,21 +124,20 @@ omero config set omero.web.wsgi_args -- &apos;--log-level=DEBUG --error-logfile=
 omero config set omero.web.application_server.host 0.0.0.0
 
 # OMERO.iviewer installation
-pip install &quot;git+git://github.com/snoopycrimecop/omero-iviewer.git@$MERGE_PUSH_BRANCH#egg=omero-iviewer&amp;subdirectory=plugin&quot;
+pip install &quot;git+git://github.com/$SPACE_USER/omero-iviewer.git@$MERGE_PUSH_BRANCH#egg=omero-iviewer&amp;subdirectory=plugin&quot;
 omero config append omero.web.apps &apos;&quot;omero_iviewer&quot;&apos;
 omero config set omero.web.viewer.view omero_iviewer.views.index
 omero config append omero.web.open_with &apos;[&quot;omero_iviewer&quot;, &quot;omero_iviewer_index&quot;, {&quot;supported_objects&quot;:[&quot;images&quot;, &quot;dataset&quot;, &quot;well&quot;], &quot;script_url&quot;: &quot;omero_iviewer/openwith.js&quot;, &quot;label&quot;: &quot;OMERO.iviewer&quot;}]&apos;
 
 # OMERO.figure installation
-pip install git+git://github.com/snoopycrimecop/omero-figure.git@$MERGE_PUSH_BRANCH#egg=omero-figure
+pip install git+git://github.com/$SPACE_USER/omero-figure.git@$MERGE_PUSH_BRANCH#egg=omero-figure
 omero config append omero.web.apps &apos;&quot;omero_figure&quot;&apos;
 omero config append omero.web.ui.top_links &apos;[&quot;Figure&quot;, &quot;figure_index&quot;, {&quot;title&quot;: &quot;Open Figure in new tab&quot;, &quot;target&quot;: &quot;_blank&quot;}]&apos;
 omero config append omero.web.open_with &apos;[&quot;omero_figure&quot;, &quot;new_figure&quot;, {&quot;supported_objects&quot;:[&quot;images&quot;], &quot;target&quot;: &quot;_blank&quot;, &quot;label&quot;: &quot;OMERO.figure&quot;}]&apos;
 
 
 # OMERO.parade installation
-pip install https://github.com/snoopycrimecop/omero-parade/archive/$MERGE_PUSH_BRANCH.tar.gz
-# pip install &quot;omero-parade&gt;=0.2.dev2&quot;
+pip install https://github.com/$SPACE_USER/omero-parade/archive/$MERGE_PUSH_BRANCH.tar.gz
 omero config append omero.web.apps &apos;&quot;omero_parade&quot;&apos;
 omero config append omero.web.ui.center_plugins &apos;[&quot;Parade&quot;, &quot;omero_parade/init.js.html&quot;, &quot;omero_parade&quot;]&apos;
 omero config set omero.web.use_x_forwarded_host true
@@ -144,28 +147,28 @@ pip --version
 find $WORKSPACE/.venv3 -name \*parade\*
 
 # OMERO.fpbioimage installation
-pip install git+git://github.com/snoopycrimecop/omero-fpbioimage.git@$MERGE_PUSH_BRANCH#egg=omero-fpbioimage
+pip install git+git://github.com/$SPACE_USER/omero-fpbioimage.git@$MERGE_PUSH_BRANCH#egg=omero-fpbioimage
 omero config append omero.web.apps &apos;&quot;omero_fpbioimage&quot;&apos;
 omero config append omero.web.open_with &apos;[&quot;omero_fpbioimage&quot;, &quot;fpbioimage_index&quot;, {&quot;script_url&quot;: &quot;fpbioimage/openwith.js&quot;, &quot;supported_objects&quot;: [&quot;image&quot;], &quot;label&quot;: &quot;FPBioimage&quot;}]&apos;
 
 # OMERO.gallery installation
-pip install git+git://github.com/snoopycrimecop/omero-gallery.git@$MERGE_PUSH_BRANCH#egg=omero-gallery
+pip install git+git://github.com/$SPACE_USER/omero-gallery.git@$MERGE_PUSH_BRANCH#egg=omero-gallery
 omero config append omero.web.apps &apos;&quot;omero_gallery&quot;&apos;
 omero config append omero.web.ui.top_links &apos;[&quot;Gallery&quot;, &quot;webgallery_index&quot;, {&quot;title&quot;: &quot;Browse Gallery&quot;}]&apos;
 omero config set omero.web.gallery.category_queries &apos;{&quot;all&quot;:{&quot;label&quot;:&quot;All Studies&quot;, &quot;index&quot;:0, &quot;query&quot;:&quot;FIRST50:Name&quot;}}&apos;
 
 # OMERO.mapr installation
-pip install git+git://github.com/snoopycrimecop/omero-mapr.git@$MERGE_PUSH_BRANCH#egg=omero-mapr
+pip install git+git://github.com/$SPACE_USER/omero-mapr.git@$MERGE_PUSH_BRANCH#egg=omero-mapr
 omero config append omero.web.apps &apos;&quot;omero_mapr&quot;&apos;
 omero config append omero.web.mapr.config &apos;{&quot;menu&quot;: &quot;anyvalue&quot;, &quot;config&quot;:{&quot;default&quot;:[&quot;Any Value&quot;], &quot;all&quot;:[], &quot;ns&quot;:[&quot;openmicroscopy.org/omero/client/mapAnnotation&quot;], &quot;label&quot;:&quot;Any&quot;}}&apos;
 omero config append omero.web.ui.top_links &apos;[&quot;Any Map Value&quot;, {&quot;viewname&quot;: &quot;maprindex_anyvalue&quot;}, {&quot;title&quot;: &quot;Search for values in any Key-Value pair&quot;}]&apos;
 
 # OMERO.weberror installation
-pip install git+git://github.com/snoopycrimecop/omero-weberror.git@$MERGE_PUSH_BRANCH#egg=omero-weberror
+pip install git+git://github.com/$SPACE_USER/omero-weberror.git@$MERGE_PUSH_BRANCH#egg=omero-weberror
 omero config append omero.web.apps &apos;&quot;omero_weberror&quot;&apos;
 
 # OMERO.webtest
-pip install git+git://github.com/snoopycrimecop/omero-webtest.git@$MERGE_PUSH_BRANCH#egg=omero-webtest
+pip install git+git://github.com/$SPACE_USER/omero-webtest.git@$MERGE_PUSH_BRANCH#egg=omero-webtest
 omero config append omero.web.apps &apos;&quot;omero_webtest&quot;&apos;
 
 # OMERO.omero-webtagging-autotag installation
