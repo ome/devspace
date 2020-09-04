@@ -19,10 +19,12 @@
         <hudson.model.ChoiceParameterDefinition>
           <name>STATUS</name>
           <description>scc status flag</description>
-          <choices>
-            <string>success-only</string>
-            <string>no-error</string>
-            <string>none</string>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>success-only</string>
+              <string>no-error</string>
+              <string>none</string>
+            </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
@@ -119,6 +121,11 @@
             }
         }
 
+        stage(&quot;Website&quot;) {
+            steps {
+                build job: &apos;WEBSITE-push&apos;, wait: false
+            }
+        }
     }
 }</script>
     <sandbox>true</sandbox>
