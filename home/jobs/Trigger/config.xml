@@ -96,6 +96,7 @@
         stage(&quot;OMERO Docs&quot;) {
             steps {
                 build job: &apos;OMERO-docs&apos;, wait: false
+                build job: &apos;OMERO-guides-push&apos;, wait: false
             }
         }
 
