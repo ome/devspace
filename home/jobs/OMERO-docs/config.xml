@@ -61,9 +61,11 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>pip install --user scc
+      <command>python3 -mvenv venv
+source $WORKSPACE/venv/bin/activate
+pip install -U scc
 test -e src &amp;&amp; cd src
-$HOME/.local/bin/scc $MERGE_COMMAND -S $STATUS --push $MERGE_PUSH_BRANCH</command>
+scc $MERGE_COMMAND -S $STATUS --push $MERGE_PUSH_BRANCH</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Ant plugin="ant@1.9">
       <targets>clean html linkcheck</targets>
