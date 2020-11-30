@@ -13,6 +13,8 @@ home/jobs/**/lastSuccessful
 home/jobs/**/modules/
 home/jobs/**/nextBuildNumber
 home/jobs/**/scm-polling.log
+home/jobs/DATA_REPO_CONFIG-merge/build.xml
+home/jobs/MANAGEMENT_TOOLS-merge/build.xml
 home/logs/
 home/nodeMonitors.xml
 home/org.jenkinsci.plugins.workflow.flow.FlowExecutionList.xml
