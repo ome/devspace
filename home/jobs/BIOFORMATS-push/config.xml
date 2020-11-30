@@ -70,9 +70,11 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>pip install -U --user scc
+      <command>python3 -mvenv venv
+source $WORKSPACE/venv/bin/activate
+pip install -U scc
 
-PATH=$WORKSPACE/bio-formats-build/scripts:$HOME/.local/bin:$PATH
+PATH=$WORKSPACE/bio-formats-build/scripts:$PATH
 
 MERGE_OPTIONS=&quot;$MERGE_OPTIONS -S $STATUS&quot;
 
