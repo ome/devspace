@@ -73,22 +73,12 @@
     </hudson.matrix.LabelAxis>
   </axes>
   <builders>
-    <hudson.tasks.Maven>
-      <targets>clean install</targets>
-      <mavenName>(Default)</mavenName>
-      <pom>bio-formats-build/pom.xml</pom>
-      <properties>dryRun=true
-skipTests=true
-skipSphinxTests=true
-XskipSphinxTests=${SKIP_DOCS_VALIDATION}
-ome-model.uri=file://${WORKSPACE}/bio-formats-build/ome-model/docs/sphinx/target/sphinx/html</properties>
-      <usePrivateRepository>true</usePrivateRepository>
-      <settings class="jenkins.mvn.DefaultSettingsProvider"/>
-      <globalSettings class="jenkins.mvn.DefaultGlobalSettingsProvider"/>
-      <injectBuildVariables>false</injectBuildVariables>
-    </hudson.tasks.Maven>
     <hudson.tasks.Shell>
-      <command>cd ${WORKSPACE}/bio-formats-build
+      <command>python3 -mvenv venv
+source $WORKSPACE/venv/bin/activate
+
+cd bio-formats-build
+pip install -r ome-model/requirements.txt
 mvn deploy -DskipTests -DaltDeploymentRepository=ome.staging::default::http://admin:admin123@nexus:8081/nexus/repository/maven-internal/</command>
     </hudson.tasks.Shell>
   </builders>
