@@ -1,5 +1,5 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.14">
+<project>
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
@@ -9,24 +9,15 @@
         <daysToKeep>-1</daysToKeep>
         <numToKeep>-1</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
-        <artifactNumToKeep>4</artifactNumToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
-    <hudson.model.ParametersDefinitionProperty>
-      <parameterDefinitions>
-        <hudson.model.BooleanParameterDefinition>
-          <name>SKIP_DOCS_VALIDATION</name>
-          <description></description>
-          <defaultValue>true</defaultValue>
-        </hudson.model.BooleanParameterDefinition>
-      </parameterDefinitions>
-    </hudson.model.ParametersDefinitionProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@4.0.0-rc">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>git://github.com/$SPACE_USER/bio-formats-build</url>
+        <url>https://github.com/$SPACE_USER/bio-formats-build</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -53,25 +44,11 @@
   </scm>
   <assignedNode>testintegration</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>true</disabled>
+  <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <axes>
-    <hudson.matrix.JDKAxis>
-      <name>jdk</name>
-      <values>
-        <string>JDK8</string>
-      </values>
-    </hudson.matrix.JDKAxis>
-    <hudson.matrix.LabelAxis>
-      <name>label</name>
-      <values>
-        <string>testintegration</string>
-      </values>
-    </hudson.matrix.LabelAxis>
-  </axes>
   <builders>
     <hudson.tasks.Shell>
       <command>python3 -mvenv venv
@@ -82,18 +59,6 @@ pip install -r ome-model/requirements.txt
 mvn deploy -DskipTests -DaltDeploymentRepository=ome.staging::default::http://admin:admin123@nexus:8081/nexus/repository/maven-internal/</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers>
-    <hudson.tasks.ArtifactArchiver>
-      <artifacts>**/target/*.zip,**/target/*.jar,**/target/*.tar*,target/version.properties,target/version.tsv</artifacts>
-      <allowEmptyArchive>false</allowEmptyArchive>
-      <onlyIfSuccessful>false</onlyIfSuccessful>
-      <fingerprint>false</fingerprint>
-      <defaultExcludes>true</defaultExcludes>
-      <caseSensitive>true</caseSensitive>
-    </hudson.tasks.ArtifactArchiver>
-  </publishers>
+  <publishers/>
   <buildWrappers/>
-  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
-    <runSequentially>false</runSequentially>
-  </executionStrategy>
-</matrix-project>
+</project>
