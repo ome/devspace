@@ -19,6 +19,8 @@ jobs:
           ./rename.py travis
           ./sslcert jenkins/sslcert localhost
           ./sslcert nginx/sslcert localhost
+      - name: Display Docker version
+        run: docker version
       - name: Build
         run: docker-compose -f docker-compose.yml build
       - name: Run tests

@@ -78,7 +78,7 @@ ARG USER_ID=1000
 RUN usermod -u $USER_ID omero
 
 # make sure mounted volumes has correct permissions
-VOLUME ['/home/omero']
+VOLUME ["/home/omero"]
 
 USER omero
 CMD ["/tmp/run.sh"]

@@ -81,7 +81,7 @@ RUN usermod -u $USER_ID omero
 RUN mkdir -p /home/omero/nginx
 RUN chown -R omero:omero /home/omero/nginx
 
-VOLUME ['/home/omero', '/home/omero/nginx']
+VOLUME ["/home/omero", "/home/omero/nginx"]
 
 USER omero
 CMD ["/tmp/run.sh"]
