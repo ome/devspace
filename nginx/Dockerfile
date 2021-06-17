@@ -33,7 +33,7 @@ RUN usermod -u $USER_ID omero
 RUN mkdir -p /home/omero/static
 RUN chown -R omero:omero /home/omero/static
 
-VOLUME ['/etc/nginx/conf.d', '/home/omero/static', '/var/log/nginx', '/etc/nginx/ssl']
+VOLUME ["/etc/nginx/conf.d", "/home/omero/static", "/var/log/nginx", "/etc/nginx/ssl"]
 
 USER omero
 CMD ["/tmp/run.sh"]
