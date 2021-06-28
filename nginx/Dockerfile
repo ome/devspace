@@ -4,7 +4,7 @@ MAINTAINER OME
 
 RUN yum -y localinstall http://nginx.org/packages/rhel/7/noarch/RPMS/nginx-release-rhel-7-0.el7.ngx.noarch.rpm \
     && yum clean all
-RUN yum -y install nginx \
+RUN yum -y install nginx --disablerepo=epel \
     && yum clean all
 RUN mv /etc/nginx/conf.d/default.conf  /etc/nginx/conf.d/default.conf.disabled
 
