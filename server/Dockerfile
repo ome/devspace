@@ -70,6 +70,8 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN yum install -y http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
 RUN yum install -y mencoder
 
+RUN yum install -y openssl
+
 RUN localedef -i en_US -f UTF-8 en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
