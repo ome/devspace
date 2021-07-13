@@ -125,6 +125,8 @@ mv $WORKSPACE/$DIST $OMERO_DIST
 # INSTALL PYTHON PACKAGES
 source $WORKSPACE/.venv3/bin/activate
 pip install git+git://github.com/$SPACE_USER/omero-metadata.git@$MERGE_PUSH_BRANCH#egg=omero-metadata
+pip install git+git://github.com/$SPACE_USER/omero-cli-render.git@$MERGE_PUSH_BRANCH#egg=omero-cli-render
+pip install omero-certificates
 
 for x in *.tar.gz; do
     pip install -U $x # Install marshal, etc. *after* requirements
@@ -144,6 +146,7 @@ omero config set omero.fs.repo.path &quot;%user%_%userId%/%thread%//%year%-%mont
 omero config set omero.db.poolsize 25
 omero config set omero.security.trustStore /etc/pki/ca-trust/extracted/java/cacerts
 omero config set omero.security.trustStorePassword changeit
+omero certificates
 ## END LOAD CONFIG
 
 
