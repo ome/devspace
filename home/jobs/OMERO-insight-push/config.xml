@@ -14,6 +14,17 @@
   <properties>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>STATUS</name>
+          <description>PR check status</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>success-only</string>
+              <string>no-error</string>
+              <string>none</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>MERGE_OPTIONS</name>
           <description>scc merge options</description>
