@@ -63,15 +63,14 @@
     <hudson.tasks.Shell>
       <command>python3 -mvenv venv
 source $WORKSPACE/venv/bin/activate
-pip install -U scc
+pip install -U scc Sphinx
 test -e src &amp;&amp; cd src
 scc $MERGE_COMMAND -S $STATUS --push $MERGE_PUSH_BRANCH</command>
     </hudson.tasks.Shell>
-    <hudson.tasks.Ant plugin="ant@1.9">
-      <targets>clean html linkcheck</targets>
-      <antName>Ant 1.9</antName>
-      <buildFile>omero/build.xml</buildFile>
-    </hudson.tasks.Ant>
+    <hudson.tasks.Shell>
+      <command>source $WORKSPACE/venv/bin/activate
+make clean html linkcheck</command>
+    </hudson.tasks.Shell>
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
