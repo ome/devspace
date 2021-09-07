@@ -62,6 +62,17 @@
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
+      <command>
+        rm -rf $WORKSPACE/.venv3
+        python -m venv $WORKSPACE/.venv3
+
+        source $WORKSPACE/.venv3/bin/activate
+        pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.2.1/zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
+        pip install -U pip future setuptools
+        pip install omero-py omero-web
+      </command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
       <command>SRC=$WORKSPACE/src
 WEBHOST=nginx
 # Setup configuration for robot job
@@ -69,22 +80,22 @@ ZIP_SRC=$(ls openmicroscopy*zip)
 unzip $ZIP_SRC
 rm -f $ZIP_SRC
 mv $WORKSPACE/${ZIP_SRC%.zip} $SRC
+OMERO_DIST=$SRC/dist
+export OMERODIR=$OMERO_DIST
 
-ZIP_DIST=$(ls OMERO.server*.zip)
-unzip $ZIP_DIST
-rm -f $ZIP_DIST
-mv $WORKSPACE/${ZIP_DIST%.zip} $SRC/dist
+source $WORKSPACE/.venv3/bin/activate
 
-virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
-source $WORKSPACE/omero-virtualenv/bin/activate
-pip install -r $SRC/dist/share/web/requirements-py27.txt
-pip install &quot;robotframework==3.0.2&quot; &quot;robotframework-selenium2library==3.0.0&quot;
+pip install &quot;robotframework==4.1&quot; &quot;robotframework-selenium2library==3.0.0&quot;
+pip install &quot;robotframework-pythonlibcore==3.0.0&quot; &quot;robotframework-seleniumlibrary==5.1.3&quot;
 
 if [ &quot;$RUN_IN_PARALLEL&quot; = &quot;true&quot; ]; then
     pip install &quot;robotframework-pabot==0.43&quot;
 fi
 
-$SRC/dist/bin/omero config set omero.web.prefix $WEB_PREFIX
+omero config set omero.web.prefix $WEB_PREFIX
+
+mkdir $SRC/dist/etc/templates
+mv $SRC/components/tests/ui/resources/robot.template $SRC/dist/etc/templates
 
 cd $SRC/dist
 
@@ -109,10 +120,10 @@ if [ &quot;$RUN_IN_PARALLEL&quot; = &quot;true&quot; ]; then
         $SRC/build.py -f components/tests/ui/build.xml aggregate-results
     fi
 else
-    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser
+    $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser -DBROWSER=chrome
     if [ &quot;$RERUN_FAILED_TESTS&quot; = &quot;true&quot; ]; then
-        $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-rerun
-        $SRC/build.py -f components/tests/ui/build.xml merge-results-rerun
+        $SRC/build.py -f components/tests/ui/build.xml -Dtest.with.fail=false web-browser-rerun -DBROWSER=chrome -DTARGETBROWSER=firefox
+        $SRC/build.py -f components/tests/ui/build.xml merge-results-rerun -DBROWSER=chrome
     else
         $SRC/build.py -f components/tests/ui/build.xml aggregate-results
     fi
