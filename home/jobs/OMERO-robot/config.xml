@@ -25,7 +25,7 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
           <name>RERUN_FAILED_TESTS</name>
-          <description>Rerun the failed tests in Chrome</description>
+          <description>Rerun the failed tests in Firefox</description>
           <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
       </parameterDefinitions>
