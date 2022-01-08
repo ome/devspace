@@ -63,6 +63,7 @@
     <hudson.tasks.Shell>
       <command>python3 -mvenv venv
 source $WORKSPACE/venv/bin/activate
+pip install -U pip
 pip install -U scc Sphinx
 test -e src &amp;&amp; cd src
 scc $MERGE_COMMAND -S $STATUS --push $MERGE_PUSH_BRANCH</command>
