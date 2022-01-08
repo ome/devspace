@@ -33,7 +33,7 @@ def main():
     with open(TEMPLATE_CONFIG_XML) as f:
         template = f.read()
     with open('pipeline-configs.yaml') as f:
-        cfg = yaml.load(f)
+        cfg = yaml.safe_load(f)
 
     for (jobname, jobcfg) in cfg['jobs'].items():
         new_job_dir = os.path.join(JENKINS_JOBS_DIR, jobname)
