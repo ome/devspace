@@ -96,7 +96,7 @@ done
 
 # Cause CLI plugin tests to be run against the relevant version.
 for x in omero-cli-duplicate; do
-    pip install git+git://github.com/$SPACE_USER/$x.git@$MERGE_PUSH_BRANCH#egg=$x
+    pip install git+https://github.com/$SPACE_USER/$x.git@$MERGE_PUSH_BRANCH#egg=$x
 done
 
 ## BUILD

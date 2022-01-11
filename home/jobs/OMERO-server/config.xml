@@ -124,8 +124,8 @@ mv $WORKSPACE/$DIST $OMERO_DIST
 
 # INSTALL PYTHON PACKAGES
 source $WORKSPACE/.venv3/bin/activate
-pip install git+git://github.com/$SPACE_USER/omero-metadata.git@$MERGE_PUSH_BRANCH#egg=omero-metadata
-pip install git+git://github.com/$SPACE_USER/omero-cli-render.git@$MERGE_PUSH_BRANCH#egg=omero-cli-render
+pip install git+https://github.com/$SPACE_USER/omero-metadata.git@$MERGE_PUSH_BRANCH#egg=omero-metadata
+pip install git+https://github.com/$SPACE_USER/omero-cli-render.git@$MERGE_PUSH_BRANCH#egg=omero-cli-render
 pip install omero-certificates
 
 for x in *.tar.gz; do

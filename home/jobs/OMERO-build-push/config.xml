@@ -42,7 +42,7 @@
 
   library identifier: &apos;recursiveMerge@master&apos;, retriever: modernSCM(
     [$class: &apos;GitSCMSource&apos;,
-     remote: &apos;git://github.com/ome/jenkins-library-recursivemerge.git&apos;])
+     remote: &apos;https://github.com/ome/jenkins-library-recursivemerge.git&apos;])
 
   recursiveCheckout(
     repo: &apos;omero-build.git&apos;)
