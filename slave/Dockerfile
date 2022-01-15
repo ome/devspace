@@ -3,7 +3,7 @@ FROM openmicroscopy/devslave-c7:0.6.1
 MAINTAINER OME
 
 ARG JAVAVER=openjdk1.8
-ARG ICEVER=ice36-devel
+ARG ICEVER=ice36
 
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
