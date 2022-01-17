@@ -15,9 +15,9 @@ ENV OMERO_INSTALL_ROOT=/tmp/omero-install
 ## update omero-install to the latest one
 #RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.email "you@example.com"
 #RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.name "Your Name"
-#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add username https://github.com/username/omero-install.git
-#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch username
-#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge username/yourbranch
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add ome https://github.com/ome/omero-install.git
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch ome
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge ome/develop
 
 
 ADD ./settings.env $OMERO_INSTALL/settings.env
@@ -34,9 +34,6 @@ RUN touch $OMERO_INSTALL/step02_all_setup.sh
 # omeroweb will be isntalled by the job
 RUN rm -f $OMERO_INSTALL/step04_all_omero.sh
 RUN touch $OMERO_INSTALL/step04_all_omero.sh
-# remove nginx
-RUN mv $OMERO_INSTALL/step05_centos7_nginx.sh $OMERO_INSTALL/_step05_centos7_nginx.sh
-RUN touch $OMERO_INSTALL/step05_centos7_nginx.sh
 # no systemd
 RUN rm -rf $OMERO_INSTALL/step06_centos7_daemon.sh
 RUN touch $OMERO_INSTALL/step06_centos7_daemon.sh
@@ -46,7 +43,7 @@ RUN touch $OMERO_INSTALL/requirements.txt
 
 WORKDIR /tmp/omero-install/linux
 
-RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh
+RUN JAVAVER=$JAVAVER ICEVER=$ICEVER bash install_centos7.sh
 
 # manually install ICEPY dependences
 RUN yum -y install gcc-c++
