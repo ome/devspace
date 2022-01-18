@@ -22,8 +22,8 @@ RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch
 RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge jburel/develop
 
 
-ADD ./settings.env $OMERO_INSTALL/settings.env
-RUN chmod +x $OMERO_INSTALL/settings.env
+#ADD ./settings.env $OMERO_INSTALL/settings.env
+#RUN chmod +x $OMERO_INSTALL/settings.env
 
 # Customize: run particular scripts from omero-install
 RUN rm -f $OMERO_INSTALL/setup_centos_selinux.sh
@@ -45,7 +45,7 @@ RUN touch $OMERO_INSTALL/requirements.txt
 
 WORKDIR /tmp/omero-install/linux
 
-RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7.sh
+#RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7.sh
 
 # manually install ICEPY dependences
 RUN yum -y install gcc-c++
