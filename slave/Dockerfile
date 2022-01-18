@@ -5,6 +5,14 @@ MAINTAINER OME
 ARG JAVAVER=openjdk1.8
 ARG ICEVER=ice36
 
+RUN yum -y install ca-certificates
+
+
+# Remove the existing omero user
+RUN userdel -r omero && \
+	rm -f /etc/sudoers.d/omero && \
+	echo 'root:omero' | chpasswd
+
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
 
@@ -12,9 +20,9 @@ ENV OMERO_INSTALL_ROOT=/tmp/omero-install
 ## update omero-install to the latest one
 #RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.email "you@example.com"
 #RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.name "Your Name"
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add ome https://github.com/ome/omero-install.git
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch ome
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge ome/develop
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add jburel https://github.com/jburel/omero-install.git
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch jburel
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge jburel/develop
 
 
 ADD ./settings.env $OMERO_INSTALL/settings.env
@@ -40,7 +48,7 @@ RUN touch $OMERO_INSTALL/requirements.txt
 
 WORKDIR /tmp/omero-install/linux
 
-RUN JAVAVER=$JAVAVER ICEVER=$ICEVER bash install_centos7.sh
+RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7.sh
 
 # Install FindBugs
 ENV FINDBUGS_VERSION 3.0.0
@@ -54,10 +62,8 @@ RUN curl -fSLO http://downloads.sourceforge.net/project/findbugs/findbugs/$FINDB
 RUN yum -y install maven ant && yum clean all
 
 # install postgres tools
-#RUN yum -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm \
-#    && yum clean all
-#RUN yum -y install postgresql10 \
-#    && yum clean all
+RUN yum -y install postgresql10-server postgresql10 \
+    && yum clean all
 
 # gradle
 RUN cd /opt && \
@@ -72,7 +78,7 @@ EXPOSE 14064
 EXPOSE 14063
 
 ADD ./run.sh /tmp/run.sh
-RUN chown omero:omero /tmp/run.sh
+RUN chown omero-server:omero-server /tmp/run.sh
 RUN chmod a+x /tmp/run.sh
 
 RUN yum install -y python36
@@ -83,10 +89,10 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Change user id to fix permissions issues
 ARG USER_ID=1000
-RUN usermod -u $USER_ID omero
+RUN usermod -u $USER_ID omero-server
 
 # make sure mounted volumes has correct permissions
-VOLUME ["/home/omero"]
+VOLUME ["/home/omero-server"]
 
-USER omero
+USER omero-server
 CMD ["/tmp/run.sh"]

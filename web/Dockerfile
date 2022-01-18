@@ -8,6 +8,8 @@ ARG ICEVER=noice
 # make ICEVERSION environment variable to use in OMERO-web job
 ENV ICEVERSION ${ICEVER:-noice}
 
+RUN yum -y install ca-certificates
+
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
 
@@ -15,9 +17,9 @@ ENV OMERO_INSTALL_ROOT=/tmp/omero-install
 ## update omero-install to the latest one
 #RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.email "you@example.com"
 #RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.name "Your Name"
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add ome https://github.com/ome/omero-install.git
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch ome
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge ome/develop
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add jburel https://github.com/jburel/omero-install.git
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch jburel
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge jburel/develop
 
 
 ADD ./settings.env $OMERO_INSTALL/settings.env
@@ -43,7 +45,7 @@ RUN touch $OMERO_INSTALL/requirements.txt
 
 WORKDIR /tmp/omero-install/linux
 
-RUN JAVAVER=$JAVAVER ICEVER=$ICEVER bash install_centos7.sh
+RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7.sh
 
 # manually install ICEPY dependences
 RUN yum -y install gcc-c++
