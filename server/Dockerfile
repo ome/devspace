@@ -4,6 +4,8 @@ MAINTAINER OME
 
 ARG JAVAVER=openjdk1.8
 ARG ICEVER=ice36
+ARG TAG=v5.6.3
+ARG BRANCH=develop
 
 RUN yum -y install ca-certificates
 
@@ -20,9 +22,9 @@ ENV OMERO_INSTALL_ROOT=/tmp/omero-install
 ## update omero-install to the latest one
 #RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.email "you@example.com"
 #RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.name "Your Name"
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add jburel https://github.com/jburel/omero-install.git
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch jburel
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge jburel/develop
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add ome https://github.com/ome/omero-install.git
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch ome
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge ome/$BRANCH
 
 
 ADD ./settings.env $OMERO_INSTALL/settings.env
