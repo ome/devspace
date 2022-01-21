@@ -1,12 +1,10 @@
-FROM openmicroscopy/devslave-c7:0.6.1
+FROM jburel/devslave-c7-docker:0.6.9
 
 MAINTAINER OME
 
 ARG JAVAVER=openjdk1.8
 ARG ICEVER=ice36
 ARG BRANCH=develop
-
-RUN yum -y install ca-certificates
 
 
 # Remove the existing omero user

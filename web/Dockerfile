@@ -1,4 +1,4 @@
-FROM openmicroscopy/devslave-c7:0.6.1
+FROM jburel/devslave-c7-docker:0.6.9
 
 MAINTAINER OME
 
@@ -8,7 +8,6 @@ ARG BRANCH=develop
 # make ICEVERSION environment variable to use in OMERO-web job
 ENV ICEVERSION ${ICEVER:-noice}
 
-RUN yum -y install ca-certificates
 
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
