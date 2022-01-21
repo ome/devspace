@@ -56,7 +56,7 @@ services:
         networks:
             - omero-network
         volumes:
-            - ./server:/home/omero
+            - ./server:/home/omero-server
         environment:
             - SLAVE_NAME=omero
             - SLAVE_EXECUTORS=2
@@ -74,8 +74,8 @@ services:
         networks:
             - omero-network
         volumes:
-            - ./web:/home/omero
-            - ./nginx/conf.d:/home/omero/nginx
+            - ./web:/home/omero-web
+            - ./nginx/conf.d:/home/omero-web/nginx
         environment:
             - SLAVE_NAME=web
             - SLAVE_EXECUTORS=2
@@ -91,7 +91,7 @@ services:
             - omero-network
         volumes:
             - ./nginx/conf.d:/etc/nginx/conf.d
-            - ./web/static:/home/omero/static
+            - ./web/static:/home/omero-web/static
             - ./nginx/log:/var/log/nginx
             - ./nginx/sslcert:/etc/nginx/ssl
         environment:

@@ -9,42 +9,24 @@ ARG BRANCH=develop
 ENV ICEVERSION ${ICEVER:-noice}
 
 
+# Remove the existing omero user
+RUN userdel -r omero && \
+    rm -f /etc/sudoers.d/omero && \
+    echo 'root:omero' | chpasswd
+
+# Create the omero-web user
+RUN useradd omero-web && \
+	echo 'omero-web:omero-web' | chpasswd && \
+	echo "omero-web ALL= (ALL) NOPASSWD: ALL" >> /etc/sudoers.d/omero-web
+
+
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
 
 ENV OMERO_INSTALL_ROOT=/tmp/omero-install
-## update omero-install to the latest one
-#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.email "you@example.com"
-#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.name "Your Name"
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add ome https://github.com/ome/omero-install.git
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch ome
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge ome/$BRANCH
 
-
-#ADD ./settings.env $OMERO_INSTALL/settings.env
-#RUN chmod +x $OMERO_INSTALL/settings.env
-
-# Customize: run particular scripts from omero-install
-RUN rm -f $OMERO_INSTALL/setup_centos_selinux.sh
-RUN touch $OMERO_INSTALL/setup_centos_selinux.sh
-RUN rm -f $OMERO_INSTALL/setup_omero_db.sh
-RUN touch $OMERO_INSTALL/setup_omero_db.sh
-# do not create user
-RUN rm -f $OMERO_INSTALL/step02_all_setup.sh
-RUN touch $OMERO_INSTALL/step02_all_setup.sh
-# omeroweb will be isntalled by the job
-RUN rm -f $OMERO_INSTALL/step04_all_omero.sh
-RUN touch $OMERO_INSTALL/step04_all_omero.sh
-# no systemd
-RUN rm -rf $OMERO_INSTALL/step06_centos7_daemon.sh
-RUN touch $OMERO_INSTALL/step06_centos7_daemon.sh
-# no Pillow
-RUN rm -rf $OMERO_INSTALL/requirements.txt
-RUN touch $OMERO_INSTALL/requirements.txt
-
-WORKDIR /tmp/omero-install/linux
-
-#RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7.sh
+ADD ./settings.env $OMERO_INSTALL/settings.env
+RUN chmod +x $OMERO_INSTALL/settings.env
 
 # manually install ICEPY dependences
 RUN yum -y install gcc-c++
@@ -61,7 +43,7 @@ RUN yum install -y python-redis && yum clean all
 EXPOSE 4080
 
 ADD ./run.sh /tmp/run.sh
-RUN chown omero:omero /tmp/run.sh
+RUN chown omero-web:omero-web /tmp/run.sh
 RUN chmod a+x /tmp/run.sh
 
 RUN yum install -y python36
@@ -72,13 +54,13 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Change user id to fix permissions issues
 ARG USER_ID=1000
-RUN usermod -u $USER_ID omero
+RUN usermod -u $USER_ID omero-web
 
 # make sure mounted volumes has correct permissions
-RUN mkdir -p /home/omero/nginx
-RUN chown -R omero:omero /home/omero/nginx
+RUN mkdir -p /home/omero-web/nginx
+RUN chown -R omero-web:omero-web /home/omero-web/nginx
 
-VOLUME ["/home/omero", "/home/omero/nginx"]
+VOLUME ["/home/omero-web", "/home/omero-web/nginx"]
 
-USER omero
+USER omero-web
 CMD ["/tmp/run.sh"]

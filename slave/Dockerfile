@@ -4,13 +4,8 @@ MAINTAINER OME
 
 ARG JAVAVER=openjdk1.8
 ARG ICEVER=ice36
-ARG BRANCH=develop
+ARG BRANCH=test
 
-
-# Remove the existing omero user
-RUN userdel -r omero && \
-	rm -f /etc/sudoers.d/omero && \
-	echo 'root:omero' | chpasswd
 
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
@@ -19,7 +14,7 @@ ENV OMERO_INSTALL_ROOT=/tmp/omero-install
 ## update omero-install to the latest one
 #RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.email "you@example.com"
 #RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.name "Your Name"
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add ome https://github.com/ome/omero-install.git
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add ome https://github.com/jburel/omero-install.git
 RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch ome
 RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge ome/$BRANCH
 
@@ -77,7 +72,7 @@ EXPOSE 14064
 EXPOSE 14063
 
 ADD ./run.sh /tmp/run.sh
-RUN chown omero-server:omero-server /tmp/run.sh
+RUN chown omero:omero /tmp/run.sh
 RUN chmod a+x /tmp/run.sh
 
 RUN yum install -y python36
@@ -88,10 +83,10 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Change user id to fix permissions issues
 ARG USER_ID=1000
-RUN usermod -u $USER_ID omero-server
+RUN usermod -u $USER_ID omero
 
 # make sure mounted volumes has correct permissions
-VOLUME ["/home/omero-server"]
+VOLUME ["/home/omero"]
 
-USER omero-server
+USER omero
 CMD ["/tmp/run.sh"]
