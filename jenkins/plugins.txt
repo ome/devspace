@@ -88,7 +88,7 @@ handlebars
 momentjs
 
 # Robot
-robot:1.6.5
+robot
 
 # Utils
 greenballs
