@@ -11,6 +11,7 @@ script-security
 role-strategy
 matrix-auth
 authentication-tokens
+authorize-project
 
 junit
 testng-plugin
@@ -73,7 +74,7 @@ pipeline-build-step
 pipeline-input-step
 pipeline-milestone-step
 pipeline-graph-analysis
-pipeline-model-definition:
+pipeline-model-definition
 pipeline-model-api
 pipeline-model-extensions
 pipeline-stage-tags-metadata
