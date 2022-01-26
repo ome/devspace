@@ -51,7 +51,17 @@ The following instructions explain how to deploy a devspace on a Docker host.
 *   Copy the SSH and Git configuration files used for fetching and pushing the
     Git repositories under `slave/.ssh` and `slave/.gitconfig`. This is usually
     your own SSH and Git configuration files.
-
+    You need to use a public key without a passphrase and a `.gitconfig` file containing
+    the following sections:
+    ```
+    [user]
+       name = YOUR_NAME
+       email = YOUR_EMAIL
+    [github]
+        token = YOUR_GITHUB_TOKEN
+        user = YOUR_GITHUB_NAME
+    ```
+    
  *  Run `rename.py` to match your topic name. Specify the Git user corresponding to
     the confguration files used above. If you do not yet have
     topic branches available on origin, use `develop` or one of the
