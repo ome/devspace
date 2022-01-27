@@ -3,7 +3,7 @@ FROM jburel/devslave-c7-docker:0.6.9
 MAINTAINER OME
 
 ARG JAVAVER=openjdk1.8
-ARG ICEVER=ice36
+ARG ICEVER=ice36-devel
 ARG BRANCH=test
 
 
