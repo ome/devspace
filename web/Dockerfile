@@ -56,6 +56,8 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 ARG USER_ID=1000
 RUN usermod -u $USER_ID omero-web
 
+RUN chown -R omero-web:omero-web /home/omero-web/static
+
 # make sure mounted volumes has correct permissions
 RUN mkdir -p /home/omero-web/nginx
 RUN chown -R omero-web:omero-web /home/omero-web/nginx
