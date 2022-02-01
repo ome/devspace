@@ -95,6 +95,10 @@ Start and configure:
 
         $ docker-compose -p my_project port nginxjenkins 443
 
+*   Create the `maven-internal` Nexus repository:
+
+        $ docker-compose exec nexus /nexus-data/createRepoMavenInternal.sh
+
 *   [Optional] Turn on Basic HTTP authentication for Jenkins
 
         sudo htpasswd -c jenkins/conf.d/passwdfile nginx
@@ -103,10 +107,6 @@ Start and configure:
 
         auth_basic "Restricted";
         auth_basic_user_file /etc/nginx/conf.d/passwdfile;
-
-*   [Optional] Create the `maven-internal` Nexus repository:
-
-        $ docker-compose exec nexus /nexus-data/createRepoMavenInternal.sh
 
 
 # GitHub OAuth
