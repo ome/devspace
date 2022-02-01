@@ -128,6 +128,8 @@ After the script has completed you can either leave it in place so it will overr
 
 # Job configurations
 
+*   When running the OMERO-build job for the first time, select the ``PURGE_DATA`` option to create the database.
+
 # Job workflow
 
 The default deployment initializes a Jenkins server with a [predefined set of
