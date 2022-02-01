@@ -57,15 +57,27 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact">
+      <project>OMERO-python-superbuild-build</project>
+      <filter></filter>
+      <target></target>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>false</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command>cd src
-export OMERO_BRANCH=$MERGE_PUSH_BRANCH
+      <command>
+        mv omero-scripts/dist/*.tar.gz .
+        cd src
+        export OMERO_BRANCH=$MERGE_PUSH_BRANCH
+        
+        virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
 
-virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
-source $WORKSPACE/omero-virtualenv/bin/activate
-pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.2.1/zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
-pip install -U setuptools &apos;omero-py&gt;=5.6.0.dev9&apos;
-source docs/hudson/OMERO.sh
+        source $WORKSPACE/omero-virtualenv/bin/activate
+        pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.2.1/zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
+        pip install -U setuptools omero-py
+        source docs/hudson/OMERO.sh
 </command>
     </hudson.tasks.Shell>
   </builders>
