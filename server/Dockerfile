@@ -1,4 +1,4 @@
-FROM jburel/devslave-c7-docker:0.6.9
+FROM openmicroscopy/devslave-c7:0.7.1
 
 MAINTAINER OME
 
