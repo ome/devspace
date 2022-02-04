@@ -68,16 +68,16 @@
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
       <command>
-        mv omero-scripts/dist/*.tar.gz .
-        cd src
-        export OMERO_BRANCH=$MERGE_PUSH_BRANCH
+mv omero-scripts/dist/*.tar.gz .
+cd src
+export OMERO_BRANCH=$MERGE_PUSH_BRANCH
         
-        virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
+virtualenv $WORKSPACE/omero-virtualenv --system-site-packages
 
-        source $WORKSPACE/omero-virtualenv/bin/activate
-        pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.2.1/zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
-        pip install -U setuptools omero-py
-        source docs/hudson/OMERO.sh
+source $WORKSPACE/omero-virtualenv/bin/activate
+pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.2.1/zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
+pip install -U setuptools omero-py
+source docs/hudson/OMERO.sh
 </command>
     </hudson.tasks.Shell>
   </builders>
