@@ -81,9 +81,13 @@ The following instructions explain how to deploy a devspace on a Docker host.
 
 Start and configure:
 
+*   Build devspace using `docker-compose`:
+    
+        $ docker-compose -f docker-compose.yml build 
+
 *   Start devspace using `docker-compose`:
 
-        $ docker-compose up -d
+        $ docker-compose -f docker-compose.yml up -d
 
     By default, this will use the name of the directory as the project name. In the case of a shared Docker host, it is possible to override the project name using
 
