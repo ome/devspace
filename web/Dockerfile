@@ -61,6 +61,8 @@ RUN chown -R omero-web:omero-web /home/omero-web/
 # make sure mounted volumes has correct permissions
 RUN mkdir -p /home/omero-web/nginx
 RUN chown -R omero-web:omero-web /home/omero-web/nginx
+RUN mkdir -p /home/omero-web/static
+RUN chown -R omero-web:omero-web /home/omero-web/static
 
 VOLUME ["/home/omero-web", "/home/omero-web/nginx"]
 
