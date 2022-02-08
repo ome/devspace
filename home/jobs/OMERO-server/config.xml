@@ -49,7 +49,7 @@ source $WORKSPACE/.venv3/bin/activate
 pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.2.1/zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
 pip install -U pip future
 pip install markdown
-pip install reportlab # For figure
+pip install &quot;reportlab<3.6&quot; # For figure
 pip install omego
 pip install tables
 pip install jinja2
