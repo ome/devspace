@@ -61,10 +61,10 @@ RUN yum -y install postgresql10-server postgresql10 \
 
 # gradle
 RUN cd /opt && \
-    curl -fSLO https://services.gradle.org/distributions/gradle-6.8.3-bin.zip && \
-    unzip gradle-6.8.3-bin.zip && \
-    rm gradle-6.8.3-bin.zip && \
-    ln -s /opt/gradle-6.8.3/bin/gradle /usr/local/bin/gradle
+    curl -fSLO https://services.gradle.org/distributions/gradle-5.2.1-bin.zip && \
+    unzip gradle-5.2.1-bin.zip && \
+    rm gradle-5.2.1-bin.zip && \
+    ln -s /opt/gradle-5.2.1/bin/gradle /usr/local/bin/gradle
 # Needed for Gradle
 ENV JAVA_HOME /usr/lib/jvm/jre-1.8.0-openjdk
 
