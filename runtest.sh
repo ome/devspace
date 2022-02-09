@@ -49,14 +49,14 @@ do
 done
 
 
-#JENKINS_PORT=$(docker-compose port nginxjenkins 443 | cut -d: -f2)
-#curl -k -I https://localhost:$JENKINS_PORT
+JENKINS_PORT=$(docker-compose port nginxjenkins 443 | cut -d: -f2)
+curl -k -I https://localhost:$JENKINS_PORT
 
-#STATUS=$(curl -k --write-out %{http_code} --silent --output /dev/null https://localhost:$JENKINS_PORT)
+STATUS=$(curl -k --write-out %{http_code} --silent --output /dev/null https://localhost:$JENKINS_PORT)
 
-#if [ ! "200" == "$STATUS" ]; then
-#    exit 1
-#fi
+if [ ! "200" == "$STATUS" ]; then
+    exit 1
+fi
 
 # CLEANUP
 docker-compose -f docker-compose.yml stop
