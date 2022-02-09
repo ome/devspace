@@ -3,7 +3,7 @@
   <disabledAdministrativeMonitors>
     <string>jenkins.security.s2m.MasterKillSwitchWarning</string>
   </disabledAdministrativeMonitors>
-  <version>2.150.3</version>
+  <version>2.319.2</version>
   <installStateName>RESTART</installStateName>
   <numExecutors>0</numExecutors>
   <mode>NORMAL</mode>
@@ -29,7 +29,7 @@
       <properties>
         <hudson.tools.InstallSourceProperty>
           <installers>
-            <hudson.tools.JDKInstaller plugin="jdk-tool@1.2">
+            <hudson.tools.JDKInstaller plugin="jdk-tool@1.5">
               <id>jdk-8u221-oth-JPR</id>
               <acceptLicense>true</acceptLicense>
             </hudson.tools.JDKInstaller>
