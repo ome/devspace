@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:lts
+FROM jenkins/jenkins:2.319.2-lts-jdk11
 MAINTAINER OME
 
 # Temp fix robot test results
