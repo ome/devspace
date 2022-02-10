@@ -1,4 +1,4 @@
-FROM openmicroscopy/devslave-c7:0.7.1
+FROM openmicroscopy/devslave-c7:0.7.2
 
 MAINTAINER OME
 
