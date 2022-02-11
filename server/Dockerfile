@@ -4,8 +4,8 @@ MAINTAINER OME
 
 ARG JAVAVER=openjdk11-devel
 ARG ICEVER=ice36
-ARG BRANCH=yourbranch
-ARG NAME=yourname
+ARG BRANCH=scl_c7
+ARG NAME=jburel
 
 # Remove the existing omero user
 RUN userdel -r omero && \
@@ -20,9 +20,9 @@ ENV OMERO_INSTALL_ROOT=/tmp/omero-install
 ## update omero-install to the latest one
 #RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.email "you@example.com"
 #RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.name "Your Name"
-#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add $NAME https://github.com/$NAME/omero-install.git
-#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch $NAME
-#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge $NAME/$BRANCH
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add $NAME https://github.com/$NAME/omero-install.git
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch $NAME
+RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge $NAME/$BRANCH
 
 
 ADD ./settings.env $OMERO_INSTALL/settings.env
