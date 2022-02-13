@@ -42,20 +42,6 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>rm -rf $WORKSPACE/.venv3
-python -m venv $WORKSPACE/.venv3
-
-source $WORKSPACE/.venv3/bin/activate
-pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.2.1/zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
-pip install -U pip future
-pip install markdown
-pip install &quot;reportlab<3.6&quot; # For figure
-pip install omego
-pip install tables
-pip install jinja2
-pip install omero-py  # Latest in order to stop server.</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
       <command>OMERO_INSTALL=/tmp/omero-install/linux
 source $OMERO_INSTALL/settings.env
 OMERO_DB_NAME=$DB_NAME
@@ -121,7 +107,19 @@ unzip $ZIP
 rm -f $ZIP
 mv $WORKSPACE/$DIST $OMERO_DIST
 
+rm -rf $WORKSPACE/.venv3
+python3 -m venv $WORKSPACE/.venv3
+
 source $WORKSPACE/.venv3/bin/activate
+pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.3.0/zeroc_ice-3.6.5-cp38-cp38-linux_x86_64.whl
+pip install -U pip future
+pip install markdown
+pip install reportlab # For figure
+pip install omego
+pip install tables
+pip install jinja2
+pip install omero-py
+
 pip install git+https://github.com/$SPACE_USER/omero-metadata.git@$MERGE_PUSH_BRANCH#egg=omero-metadata
 pip install git+https://github.com/$SPACE_USER/omero-cli-render.git@$MERGE_PUSH_BRANCH#egg=omero-cli-render
 pip install omero-certificates

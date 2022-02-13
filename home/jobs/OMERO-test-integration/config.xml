@@ -18,7 +18,7 @@
 python -m venv $WORKSPACE/.venv3
 
 source $WORKSPACE/.venv3/bin/activate
-pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.2.1/zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
+pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.3.0/zeroc_ice-3.6.5-cp38-cp38-linux_x86_64.whl
 pip install -U pip future setuptools
 pip install markdown
 # Avoid installing psutil for now
