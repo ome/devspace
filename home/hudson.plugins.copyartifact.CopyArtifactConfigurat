@@ -1,0 +1,4 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<hudson.plugins.copyartifact.CopyArtifactConfiguration plugin="copyartifact@1.46.2">
+  <mode>PRODUCTION</mode>
+</hudson.plugins.copyartifact.CopyArtifactConfiguration>

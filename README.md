@@ -51,7 +51,17 @@ The following instructions explain how to deploy a devspace on a Docker host.
 *   Copy the SSH and Git configuration files used for fetching and pushing the
     Git repositories under `slave/.ssh` and `slave/.gitconfig`. This is usually
     your own SSH and Git configuration files.
-
+    You need to use a public key without a passphrase and a `.gitconfig` file containing
+    the following sections:
+    ```
+    [user]
+       name = YOUR_NAME
+       email = YOUR_EMAIL
+    [github]
+        token = YOUR_GITHUB_TOKEN
+        user = YOUR_GITHUB_NAME
+    ```
+    
  *  Run `rename.py` to match your topic name. Specify the Git user corresponding to
     the confguration files used above. If you do not yet have
     topic branches available on origin, use `develop` or one of the
@@ -71,9 +81,13 @@ The following instructions explain how to deploy a devspace on a Docker host.
 
 Start and configure:
 
+*   Build devspace using `docker-compose`:
+    
+        $ docker-compose -f docker-compose.yml build 
+
 *   Start devspace using `docker-compose`:
 
-        $ docker-compose up -d
+        $ docker-compose -f docker-compose.yml up -d
 
     By default, this will use the name of the directory as the project name. In the case of a shared Docker host, it is possible to override the project name using
 
@@ -85,6 +99,10 @@ Start and configure:
 
         $ docker-compose -p my_project port nginxjenkins 443
 
+*   Create the `maven-internal` Nexus repository:
+
+        $ docker-compose exec nexus /nexus-data/createRepoMavenInternal.sh
+
 *   [Optional] Turn on Basic HTTP authentication for Jenkins
 
         sudo htpasswd -c jenkins/conf.d/passwdfile nginx
@@ -93,10 +111,6 @@ Start and configure:
 
         auth_basic "Restricted";
         auth_basic_user_file /etc/nginx/conf.d/passwdfile;
-
-*   [Optional] Create the `maven-internal` Nexus repository:
-
-        $ docker-compose exec nexus /nexus-data/createRepoMavenInternal.sh
 
 
 # GitHub OAuth
@@ -117,6 +131,8 @@ After the script has completed you can either leave it in place so it will overr
 
 
 # Job configurations
+
+*   When running the OMERO-build job for the first time, select the ``PURGE_DATA`` option to create the database.
 
 # Job workflow
 

@@ -1,20 +1,28 @@
-FROM openmicroscopy/devslave-c7:0.6.1
+FROM openmicroscopy/devslave-c7:0.7.2
 
 MAINTAINER OME
 
 ARG JAVAVER=openjdk1.8
 ARG ICEVER=ice36
+ARG BRANCH=yourbranch
+ARG NAME=yourname
+
+# Remove the existing omero user
+RUN userdel -r omero && \
+    rm -f /etc/sudoers.d/omero && \
+    echo 'root:omero' | chpasswd
 
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
 
 ENV OMERO_INSTALL_ROOT=/tmp/omero-install
+
 ## update omero-install to the latest one
 #RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.email "you@example.com"
 #RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.name "Your Name"
-#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add username https://github.com/username/omero-install.git
-#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch username
-#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge username/yourbranch
+#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add $NAME https://github.com/$NAME/omero-install.git
+#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch $NAME
+#RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge $NAME/$BRANCH
 
 
 ADD ./settings.env $OMERO_INSTALL/settings.env
@@ -31,9 +39,6 @@ RUN touch $OMERO_INSTALL/step03_all_postgres.sh
 # omeroweb will be installed by the job
 RUN rm -f $OMERO_INSTALL/step04_all_omero.sh
 RUN touch $OMERO_INSTALL/step04_all_omero.sh
-# remove nginx
-RUN rm -rf $OMERO_INSTALL/step05_centos7_nginx.sh
-RUN touch $OMERO_INSTALL/step05_centos7_nginx.sh
 # no systemd
 RUN rm -rf $OMERO_INSTALL/step06_centos7_daemon.sh
 RUN touch $OMERO_INSTALL/step06_centos7_daemon.sh
@@ -43,11 +48,9 @@ RUN touch $OMERO_INSTALL/requirements.txt
 
 WORKDIR /tmp/omero-install/linux
 
-RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7_nginx.sh
+RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7.sh
 
 # install postgres tools
-RUN yum -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm \
-    && yum clean all
 RUN yum -y install postgresql10 \
     && yum clean all
 
@@ -55,7 +58,7 @@ EXPOSE 4064
 EXPOSE 4063
 
 ADD ./run.sh /tmp/run.sh
-RUN chown omero:omero /tmp/run.sh
+RUN chown omero-server:omero-server /tmp/run.sh
 RUN chmod a+x /tmp/run.sh
 
 RUN yum install -y python36
@@ -76,10 +79,10 @@ ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 # Change user id to fix permissions issues
 ARG USER_ID=1000
-RUN usermod -u $USER_ID omero
+RUN usermod -u $USER_ID omero-server
 
 # make sure mounted volumes has correct permissions
-VOLUME ["/home/omero"]
+VOLUME ["/home/omero-server"]
 
-USER omero
+USER omero-server
 CMD ["/tmp/run.sh"]

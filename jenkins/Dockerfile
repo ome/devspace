@@ -1,10 +1,11 @@
-FROM jenkins/jenkins:2.150.3
+FROM jenkins/jenkins:2.319.2-lts-jdk11
 MAINTAINER OME
 
 # Temp fix robot test results
-ENV JAVA_OPTS "-Dhudson.model.DirectoryBrowserSupport.CSP="
+ENV JAVA_OPTS "-Dhudson.model.DirectoryBrowserSupport.CSP=" -Djenkins.install.runSetupWizard=false
 
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
+
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 
 USER root
