@@ -179,6 +179,10 @@ pip install omero-webtagging-tagsearch
 omero config append omero.web.apps &apos;&quot;omero_webtagging_tagsearch&quot;&apos;
 omero config append omero.web.ui.top_links &apos;[&quot;Tag Search&quot;, &quot;tagsearch&quot;]&apos;
 
+# omero-web-zarr
+pip install git+https://github.com/$SPACE_USER/omero-web-zarr.git@$MERGE_PUSH_BRANCH#egg=omero-web-zarr
+omero config append omero.web.apps &apos;&quot;omero_web_zarr&quot;&apos;
+
 # OMERO.signup installation
 pip install git+https://github.com/$SPACE_USER/omero-signup.git@$MERGE_PUSH_BRANCH#egg=omero-signup
 omero config append omero.web.apps &apos;&quot;omero_signup&quot;&apos;
