@@ -32,8 +32,17 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>TAG=$SPACE_USER/bioformats:$MERGE_PUSH_BRANCH
-sudo docker build -t $TAG .
+      <command>if (( $(date +%u) % 2 == 1 )); then
+    BASE_IMAGE=openjdk:8-slim-bullseye
+else
+    BASE_IMAGE=openjdk:11-slim-bullseye
+fi
+
+sudo docker pull $BASE_IMAGE
+
+
+TAG=$SPACE_USER/bioformats:$MERGE_PUSH_BRANCH
+sudo docker build -t $TAG . --build-arg BUILD_IMAGE=$BASE_IMAGE
 #sudo docker tag $TAG scc-docker-docker.bintray.io/$TAG
 #sudo docker push scc-docker-docker.bintray.io/$TAG</command>
     </hudson.tasks.Shell>
