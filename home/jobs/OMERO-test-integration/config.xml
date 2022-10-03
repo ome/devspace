@@ -93,6 +93,7 @@ source $WORKSPACE/.venv3/bin/activate
 for x in *.tar.gz; do
     pip install -U $x
 done
+pip install omero-certificates
 
 # Cause CLI plugin tests to be run against the relevant version.
 for x in omero-cli-duplicate; do
@@ -119,6 +120,7 @@ omero config set omero.jvmcfg.max_system_memory.blitz 64000
 omero config set omero.data.dir $OMERO_DATA_DIR
 omero config set omero.ports.prefix 1
 omero config set omero.web.server_list &apos;[[&quot;testintegration&quot;,14064,&quot;testintegration&quot;]]&apos;
+omero certificates
 
 ## END LOAD CONFIG
 
