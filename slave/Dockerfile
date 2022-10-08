@@ -76,7 +76,7 @@ ADD ./run.sh /tmp/run.sh
 RUN chown omero:omero /tmp/run.sh
 RUN chmod a+x /tmp/run.sh
 
-RUN yum install -y python36
+RUN yum install -y python36 openssl
 RUN python3 -m venv /py3 && /py3/bin/pip install -U pip tox future wheel restructuredtext-lint
 RUN /py3/bin/pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.2.1/zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
 RUN ln -s /py3/bin/slice2py /usr/bin/slice2py
