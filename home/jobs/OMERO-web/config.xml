@@ -181,6 +181,12 @@ pip install omero-webtagging-tagsearch
 omero config append omero.web.apps &apos;&quot;omero_webtagging_tagsearch&quot;&apos;
 omero config append omero.web.ui.top_links &apos;[&quot;Tag Search&quot;, &quot;tagsearch&quot;]&apos;
 
+# CORS configuration
+omero config append omero.web.apps &apos;&quot;corsheaders&quot;&apos;
+omero config append omero.web.middleware &apos;{&quot;index&quot;: 0.5, &quot;class&quot;: &quot;corsheaders.middleware.CorsMiddleware&quot;}&apos;
+omero config append omero.web.middleware &apos;{&quot;index&quot;: 10, &quot;class&quot;: &quot;corsheaders.middleware.CorsPostCsrfMiddleware&quot;}&apos;
+omero config set omero.web.cors_origin_allow_all True
+
 # Twitter testing example
 omero config set omero.web.sharing.opengraph &apos;{&quot;omero&quot;:&quot;Open Microscopy&quot;}&apos;
 omero config set omero.web.sharing.twitter &apos;{&quot;omero&quot;:&quot;@openmicroscopy&quot;}&apos;
