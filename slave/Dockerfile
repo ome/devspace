@@ -45,6 +45,10 @@ WORKDIR /tmp/omero-install/linux
 
 RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7.sh
 
+# Switch Java version
+ENV JAVA_HOME /usr/lib/jvm/jre-11-openjdk
+ENV PATH=$JAVA_HOME/bin:$PATH
+
 # Install FindBugs
 ENV FINDBUGS_VERSION 3.0.0
 ENV FINDBUGS_HOME /opt/findbugs
@@ -66,9 +70,7 @@ RUN cd /opt && \
     unzip gradle-5.2.1-bin.zip && \
     rm gradle-5.2.1-bin.zip && \
     ln -s /opt/gradle-5.2.1/bin/gradle /usr/local/bin/gradle
-# Needed for Gradle
-ENV JAVA_HOME /usr/lib/jvm/jre-1.8.0-openjdk
-
+    
 EXPOSE 14064
 EXPOSE 14063
 

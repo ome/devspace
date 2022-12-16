@@ -2,7 +2,6 @@ FROM openmicroscopy/devslave-c7:0.7.2
 
 MAINTAINER OME
 
-ARG JAVAVER=openjdk1.8
 ARG ICEVER=ice36
 ARG BRANCH=scl_c7
 ARG NAME=jburel
@@ -53,6 +52,10 @@ RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7.sh
 # install postgres tools
 RUN yum -y install postgresql10 \
     && yum clean all
+
+# Switch Java version
+ENV JAVA_HOME /usr/lib/jvm/jre-11-openjdk
+ENV PATH=$JAVA_HOME/bin:$PATH
 
 EXPOSE 4064
 EXPOSE 4063

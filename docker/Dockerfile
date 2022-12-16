@@ -2,6 +2,12 @@ FROM openmicroscopy/devslave-c7:0.7.2
 
 MAINTAINER OME
 
+# manually install java11
+RUN yum -y install java-11-openjdk
+# Switch Java version
+ENV JAVA_HOME /usr/lib/jvm/jre-11-openjdk
+ENV PATH=$JAVA_HOME/bin:$PATH
+
 RUN yum -y install -y yum-utils \
   device-mapper-persistent-data \
   lvm2
