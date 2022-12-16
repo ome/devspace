@@ -66,10 +66,10 @@ RUN yum -y install postgresql10-server postgresql10 \
 
 # gradle
 RUN cd /opt && \
-    curl -fSLO https://services.gradle.org/distributions/gradle-5.2.1-bin.zip && \
-    unzip gradle-5.2.1-bin.zip && \
-    rm gradle-5.2.1-bin.zip && \
-    ln -s /opt/gradle-5.2.1/bin/gradle /usr/local/bin/gradle
+    curl -fSLO https://services.gradle.org/distributions/gradle-6.9.2-bin.zip && \
+    unzip gradle-6.9.2-bin.zip && \
+    rm gradle-6.9.2-bin.zip && \
+    ln -s /opt/gradle-6.9.2/bin/gradle /usr/local/bin/gradle
     
 EXPOSE 14064
 EXPOSE 14063
