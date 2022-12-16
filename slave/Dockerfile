@@ -2,7 +2,7 @@ FROM openmicroscopy/devslave-c7:0.7.2
 
 MAINTAINER OME
 
-ARG JAVAVER=openjdk1.8
+ARG JAVAVER=openjdk11
 ARG ICEVER=ice36-devel
 ARG BRANCH=scl_c7
 ARG NAME=jburel
