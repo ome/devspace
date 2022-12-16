@@ -39,7 +39,7 @@ services:
         environment:
             - SLAVE_NAME=testintegration
             - SLAVE_EXECUTORS=2
-            - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
+            - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java11 -disableClientsUniqueId
             - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
             - WEB_PREFIX
             - REPO_CONFIG
@@ -60,7 +60,7 @@ services:
         environment:
             - SLAVE_NAME=omero
             - SLAVE_EXECUTORS=2
-            - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
+            - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java11 -disableClientsUniqueId
             - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
             - WEBHOST=http://nginx${WEB_PREFIX}
         ports:
@@ -79,7 +79,7 @@ services:
         environment:
             - SLAVE_NAME=web
             - SLAVE_EXECUTORS=2
-            - SLAVE_PARAMS= -labels centos7 -labels ice36 -labels java18 -disableClientsUniqueId
+            - SLAVE_PARAMS= -labels centos7 -labels ice36 -labels java11 -disableClientsUniqueId
             - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
             - WEB_PREFIX
 
@@ -96,7 +96,7 @@ services:
             - ./nginx/sslcert:/etc/nginx/ssl
         environment:
             - SLAVE_NAME=nginx
-            - SLAVE_PARAMS=-labels centos7 -labels java18 -disableClientsUniqueId
+            - SLAVE_PARAMS=-labels centos7 -labels java11 -disableClientsUniqueId
             - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
         ports:
             - "${NGINX_PORT}80"
