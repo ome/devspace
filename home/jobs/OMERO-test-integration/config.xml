@@ -27,7 +27,7 @@ pip install mox3 pytest pytest-django &apos;pytest-xdist&lt;2&apos;
 pip install tables
 pip install jinja2
 pip install PyYAML
-pip install omero-py omero-web  # Latest in order to stop server.
+pip install omero-py omero-web  --use-pep517 # Latest in order to stop server.
       </command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
@@ -91,7 +91,7 @@ source $WORKSPACE/.venv3/bin/activate
 
 ## Install python dependencies
 for x in *.tar.gz; do
-    pip install -U $x
+    pip install -U $x -use-pep517
 done
 
 # Cause CLI plugin tests to be run against the relevant version.

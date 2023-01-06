@@ -73,7 +73,7 @@ mv $WORKSPACE/$DIST $OMERODIR
 source $WORKSPACE/.venv3/bin/activate
 
 for x in *.gz; do
-  pip install $x
+  pip install $x --use-pep517
 done
 
 cd $OMERODIR

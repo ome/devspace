@@ -32,7 +32,7 @@ source $WORKSPACE/.venv3/bin/activate
 pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.3.0/zeroc_ice-3.6.5-cp38-cp38-linux_x86_64.whl
 pip install -U pip future
 pip install markdown
-pip install omero-py omero-web  # Latest in order to stop server. NB: Re-installed from python-superbuild below</command>
+pip install omero-py omero-web  --use-pep517 # Latest in order to stop server. NB: Re-installed from python-superbuild below</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>OMERO_DIST=$WORKSPACE/OMERO.web
@@ -96,7 +96,7 @@ source $OMERO_INSTALL/settings.env
 
 # Install omero-py, omero-web etc from OMERO-python-superbuild-build job
 for x in *.tar.gz; do
-  pip install $x
+  pip install $x --use-pep517
 done
 
 #start-config
