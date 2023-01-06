@@ -2,7 +2,7 @@ FROM openmicroscopy/devslave-c7:0.7.2
 
 MAINTAINER OME
 
-ARG JAVAVER=openjdk11
+ARG JAVAVER=openjdk11-devel
 ARG ICEVER=ice36-devel
 ARG BRANCH=scl_c7
 ARG NAME=jburel
@@ -46,7 +46,7 @@ WORKDIR /tmp/omero-install/linux
 RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7.sh
 
 # Switch Java version
-ENV JAVA_HOME /usr/lib/jvm/jre-11-openjdk
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk
 ENV PATH=$JAVA_HOME/bin:$PATH
 
 # Install FindBugs

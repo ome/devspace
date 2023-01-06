@@ -40,9 +40,9 @@ RUN npm install -g grunt
 RUN yum install -y python-redis && yum clean all
 
 # manually install java11
-RUN yum -y install java-11-openjdk
+RUN yum -y install java-11-openjdk-devel
 # Switch Java version
-ENV JAVA_HOME /usr/lib/jvm/jre-11-openjdk
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk
 ENV PATH=$JAVA_HOME/bin:$PATH
 
 

@@ -54,7 +54,7 @@ RUN yum -y install postgresql13 \
     && yum clean all
 
 # Switch Java version
-ENV JAVA_HOME /usr/lib/jvm/jre-11-openjdk
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk
 ENV PATH=$JAVA_HOME/bin:$PATH
 
 EXPOSE 4064
