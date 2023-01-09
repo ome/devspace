@@ -198,7 +198,6 @@ omero config set omero.web.login_redirect &apos;{&quot;redirect&quot;: [&quot;we
 
 
 # CORS
-pip install &quot;django-cors-headers==3.2.1&quot;  # 3.7.0 for Django 3.2
 omero config append omero.web.apps &apos;&quot;corsheaders&quot;&apos;
 omero config append omero.web.middleware &apos;{&quot;index&quot;: 0.5, &quot;class&quot;: &quot;corsheaders.middleware.CorsMiddleware&quot;}&apos;
 omero config append omero.web.middleware &apos;{&quot;index&quot;: 10, &quot;class&quot;: &quot;corsheaders.middleware.CorsPostCsrfMiddleware&quot;}&apos;
