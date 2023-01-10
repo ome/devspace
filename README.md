@@ -15,7 +15,7 @@ Running Devspace requires access to SSH and Git configuration files used for fet
 Devspace code depends on the following repositories:
 
 * [OMERO install](https://github.com/ome/omero-install/)
-* [devslave-c7-docker](https://github.com/openmicroscopy/devslave-c7-docker)
+* [devslave-c7-docker](https://github.com/ome/devslave-c7-docker)
 
 # Installation
 
@@ -37,7 +37,7 @@ The following instructions explain how to deploy a devspace on a Docker host.
 
 *   Clone the ``devspace`` Git repository:
 
-        $ git clone https://github.com/openmicroscopy/devspace.git
+        $ git clone https://github.com/ome/devspace.git
         $ cd devspace
 
 *   Generated self-signed SSL certificates for the Jenkins and NGINX
@@ -161,9 +161,9 @@ they are associated with and a short description of the jobs.
 This means that by default the following repositories need to be
 forked to your GitHub account:
 
-* [openmiscrocopy/openmiscrocopy](https://github.com/openmicroscopy/openmicroscopy)
-* [openmiscrocopy/ome-documentation](https://github.com/openmicroscopy/ome-documentation)
-* [openmiscrocopy/bioformats](https://github.com/openmicroscopy/bioformats)
+* [ome/openmiscrocopy](https://github.com/ome/openmicroscopy)
+* [ome/ome-documentation](https://github.com/ome/ome-documentation)
+* [ome/bioformats](https://github.com/ome/bioformats)
 
 If you do not have some of the repositories forked, you will need to remove the jobs from the list
 of jobs to run either from the Trigger job [configuration](home/jobs/Trigger/config.xml)
@@ -201,7 +201,7 @@ See [Troubleshooting](Troubleshooting.md)
 In order to install additional components or new version of packages e.g. PostgreSQL 10, it is required to:
 
 * Modify the files in [omero-install](https://github.com/ome/omero-install)
-* Create a new image of [devslave-c7-docker](https://github.com/openmicroscopy/devslave-c7-docker) using the updated omero-install files
+* Create a new image of [devslave-c7-docker](https://github.com/ome/devslave-c7-docker) using the updated omero-install files
 * Push the new image to [Docker Hub](https://hub.docker.com/). You will need to your own account
 * Modify each Dockerfile of this repository to use the new image
 

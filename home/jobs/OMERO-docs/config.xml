@@ -38,7 +38,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>https://github.com/openmicroscopy/ome-documentation</url>
+        <url>https://github.com/ome/ome-documentation</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>

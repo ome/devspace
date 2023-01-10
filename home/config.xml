@@ -47,7 +47,7 @@
     <hudson.model.AllView>
       <owner class="hudson" reference="../../.."/>
       <name>all</name>
-      <description>See Job workflow https://github.com/openmicroscopy/devspace#job-workflow for more information</description>
+      <description>See Job workflow https://github.com/ome/devspace#job-workflow for more information</description>
       <filterExecutors>false</filterExecutors>
       <filterQueue>false</filterQueue>
       <properties class="hudson.model.View$PropertyList"/>
