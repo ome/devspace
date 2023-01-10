@@ -59,12 +59,6 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <axes>
-    <hudson.matrix.JDKAxis>
-      <name>jdk</name>
-      <values>
-        <string>JDK8</string>
-      </values>
-    </hudson.matrix.JDKAxis>
     <hudson.matrix.LabelAxis>
       <name>label</name>
       <values>
