@@ -2,7 +2,6 @@ FROM openmicroscopy/devslave-c7:0.7.2
 
 MAINTAINER OME
 
-ARG JAVAVER=openjdk1.8
 ARG ICEVER=noice
 
 # make ICEVERSION environment variable to use in OMERO-web job
@@ -39,6 +38,12 @@ RUN yum install -y nodejs
 RUN npm install -g grunt
 
 RUN yum install -y python-redis && yum clean all
+
+# manually install java11
+RUN yum -y install java-11-openjdk
+# Switch Java version
+ENV JAVA_HOME /usr/lib/jvm/jre-11-openjdk
+ENV PATH=$JAVA_HOME/bin:$PATH
 
 EXPOSE 4080
 
