@@ -143,8 +143,6 @@ omero config append omero.web.ui.center_plugins &apos;[&quot;Parade&quot;, &quot
 omero config set omero.web.use_x_forwarded_host true
 omero config set omero.web.secure_proxy_ssl_header &apos;[&quot;HTTP_X_FORWARDED_PROTO&quot;, &quot;https&quot;]&apos;
 
-pip --version
-find $WORKSPACE/.venv3 -name \*parade\*
 
 # OMERO.fpbioimage installation
 pip install git+https://github.com/$SPACE_USER/omero-fpbioimage.git@$MERGE_PUSH_BRANCH#egg=omero-fpbioimage
@@ -180,6 +178,31 @@ omero config append omero.web.ui.center_plugins &apos;[&quot;Auto Tag&quot;, &qu
 pip install omero-webtagging-tagsearch
 omero config append omero.web.apps &apos;&quot;omero_webtagging_tagsearch&quot;&apos;
 omero config append omero.web.ui.top_links &apos;[&quot;Tag Search&quot;, &quot;tagsearch&quot;]&apos;
+
+# omero-web-zarr
+pip install git+https://github.com/$SPACE_USER/omero-web-zarr.git@$MERGE_PUSH_BRANCH#egg=omero-web-zarr
+omero config append omero.web.apps &apos;&quot;omero_web_zarr&quot;&apos;
+
+# OMERO.signup installation
+pip install git+https://github.com/$SPACE_USER/omero-signup.git@$MERGE_PUSH_BRANCH#egg=omero-signup
+omero config append omero.web.apps &apos;&quot;omero_signup&quot;&apos;
+omero config set omero.web.signup.admin.user &quot;root&quot;
+omero config set omero.web.signup.admin.password &quot;omero&quot;
+omero config set omero.web.signup.group.name &quot;signup-test&quot;
+omero config set omero.web.signup.email.enabled True
+
+# virtual microscope
+pip install git+https://github.com/$SPACE_USER/omero-virtual-microscope.git@$MERGE_PUSH_BRANCH#egg=omero-virtual-microscope
+omero config append omero.web.apps &apos;&quot;virtualmicroscope&quot;&apos;
+omero config set omero.web.login_redirect &apos;{&quot;redirect&quot;: [&quot;webindex&quot;], &quot;viewname&quot;: &quot;webindex_custom&quot;}&apos;
+
+
+# CORS
+omero config append omero.web.apps &apos;&quot;corsheaders&quot;&apos;
+omero config append omero.web.middleware &apos;{&quot;index&quot;: 0.5, &quot;class&quot;: &quot;corsheaders.middleware.CorsMiddleware&quot;}&apos;
+omero config append omero.web.middleware &apos;{&quot;index&quot;: 10, &quot;class&quot;: &quot;corsheaders.middleware.CorsPostCsrfMiddleware&quot;}&apos;
+omero config set omero.web.cors_origin_allow_all True
+
 
 # Twitter testing example
 omero config set omero.web.sharing.opengraph &apos;{&quot;omero&quot;:&quot;Open Microscopy&quot;}&apos;
