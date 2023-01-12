@@ -57,7 +57,7 @@ RUN curl -fSLO http://downloads.sourceforge.net/project/findbugs/findbugs/$FINDB
 RUN yum -y install maven ant && yum clean all
 
 # install postgres tools
-RUN yum -y install postgresql10-server postgresql10 \
+RUN yum -y install postgresql13-server postgresql13 \
     && yum clean all
 
 # gradle
