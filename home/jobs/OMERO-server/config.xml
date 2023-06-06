@@ -53,6 +53,7 @@ pip install &quot;reportlab<3.6&quot; # For figure
 pip install omego
 pip install tables
 pip install jinja2
+pip install &quot;urllib3<2&quot; # to be removed if/when included in omero-py
 pip install omero-py  # Latest in order to stop server.</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
