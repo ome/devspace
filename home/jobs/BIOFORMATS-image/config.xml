@@ -32,10 +32,12 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>if (( $(date +%u) % 2 == 1 )); then
+      <command>if (( $(date +%u) % 3 == 1 )); then
     BASE_IMAGE=openjdk:8-slim-bullseye
-else
+elif (( $(date +%u) % 3 == 2 )); then
     BASE_IMAGE=openjdk:11-slim-bullseye
+else
+    BASE_IMAGE=openjdk:17-slim-bullseye
 fi
 
 sudo docker pull $BASE_IMAGE
