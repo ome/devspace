@@ -26,6 +26,8 @@ services:
             - ./pgdata:/var/lib/postgresql/data
         ports:
             - "${POSTGRES_PORT}5432"
+        environment:
+            - POSTGRES_HOST_AUTH_METHOD=trust
 
     testintegration:
         build:

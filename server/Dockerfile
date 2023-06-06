@@ -51,7 +51,7 @@ WORKDIR /tmp/omero-install/linux
 RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7.sh
 
 # install postgres tools
-RUN yum -y install postgresql10 \
+RUN yum -y install postgresql13 \
     && yum clean all
 
 EXPOSE 4064
