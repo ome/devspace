@@ -1,3 +1,5 @@
+[![Actions Status](https://github.com/ome/devspace/workflows/Build/badge.svg)](https://github.com/ome/devspace/actions)
+
 # Getting started
 
 Devspace is a Continuous Integration tool managed by [Jenkins CI](https://jenkins.io/) providing
