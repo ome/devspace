@@ -5,7 +5,7 @@ MAINTAINER OME
 ARG JAVAVER=openjdk11-devel
 ARG ICEVER=ice36
 ARG BRANCH=scl_c7
-ARG NAME=jburel
+ARG NAME=ome
 
 # Remove the existing omero user
 RUN userdel -r omero && \

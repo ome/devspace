@@ -5,7 +5,7 @@ MAINTAINER OME
 ARG JAVAVER=openjdk11-devel
 ARG ICEVER=ice36-devel
 ARG BRANCH=scl_c7
-ARG NAME=jburel
+ARG NAME=ome
 
 ARG GRADLEVER=6.9.3
 
