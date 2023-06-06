@@ -2,11 +2,12 @@ FROM openmicroscopy/devslave-c7:0.7.2
 
 MAINTAINER OME
 
-ARG JAVAVER=openjdk1.8
+ARG JAVAVER=openjdk11-devel
 ARG ICEVER=ice36-devel
 ARG BRANCH=yourbranch
 ARG NAME=yourname
 
+ARG GRADLEVER=6.9.3
 
 # skip some omero-install
 RUN echo 'export container=docker' > /etc/profile.d/docker.sh
@@ -62,12 +63,13 @@ RUN yum -y install postgresql13-server postgresql13 \
 
 # gradle
 RUN cd /opt && \
-    curl -fSLO https://services.gradle.org/distributions/gradle-5.2.1-bin.zip && \
-    unzip gradle-5.2.1-bin.zip && \
-    rm gradle-5.2.1-bin.zip && \
-    ln -s /opt/gradle-5.2.1/bin/gradle /usr/local/bin/gradle
-# Needed for Gradle
-ENV JAVA_HOME /usr/lib/jvm/jre-1.8.0-openjdk
+    curl -fSLO https://services.gradle.org/distributions/gradle-$GRADLEVER-bin.zip && \
+    unzip gradle-$GRADLEVER-bin.zip && \
+    rm gradle-$GRADLEVER-bin.zip && \
+    ln -s /opt/gradle-$GRADLEVER/bin/gradle /usr/local/bin/gradle
+
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk
+ENV PATH=$JAVA_HOME/bin:$PATH
 
 EXPOSE 14064
 EXPOSE 14063
