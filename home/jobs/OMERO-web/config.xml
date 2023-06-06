@@ -100,6 +100,8 @@ for x in *.tar.gz; do
   pip install $x
 done
 
+pip install packaging # to be removed if/when included in omero-web
+
 #start-config
 omero config set omero.web.application_server &apos;wsgi-tcp&apos;
 omero config set omero.web.application_server.max_requests 0
