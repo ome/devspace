@@ -101,6 +101,7 @@ for x in *.tar.gz; do
 done
 
 pip install packaging # to be removed if/when included in omero-web
+pip install build # require to build omero-iviewer to be removed when possible to install directly from github
 
 #start-config
 omero config set omero.web.application_server &apos;wsgi-tcp&apos;
@@ -127,7 +128,15 @@ omero config set omero.web.wsgi_args -- &apos;--log-level=DEBUG --error-logfile=
 omero config set omero.web.application_server.host 0.0.0.0
 
 # OMERO.iviewer installation
-pip install &quot;git+https://github.com/$SPACE_USER/omero-iviewer.git@$MERGE_PUSH_BRANCH#egg=omero-iviewer&amp;subdirectory=plugin&quot;
+#pip install &quot;git+https://github.com/$SPACE_USER/omero-iviewer.git@$MERGE_PUSH_BRANCH#egg=omero-iviewer&amp;subdirectory=plugin&quot;
+git clone -b $MERGE_PUSH_BRANCH https://github.com/$SPACE_USER/omero-iviewer.git
+cd omero-iviewer/plugin
+python -m build
+cd dist
+for x in *.tar.gz; do
+    pip install -U $x # install iviewer
+done
+
 omero config append omero.web.apps &apos;&quot;omero_iviewer&quot;&apos;
 omero config set omero.web.viewer.view omero_iviewer.views.index
 omero config append omero.web.open_with &apos;[&quot;omero_iviewer&quot;, &quot;omero_iviewer_index&quot;, {&quot;supported_objects&quot;:[&quot;images&quot;, &quot;dataset&quot;, &quot;well&quot;], &quot;script_url&quot;: &quot;omero_iviewer/openwith.js&quot;, &quot;label&quot;: &quot;OMERO.iviewer&quot;}]&apos;
