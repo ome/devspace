@@ -83,3 +83,14 @@ Below is an example on how to only include PRs opened against [ome/openmicroscop
  * Go to ``MERGE_COMMAND`` and enter
 
 	merge develop -Dnone -Itraining --no-ask --reset --shallow
+
+## GitHub access
+
+Due to Recent change in [RSA SSH host key](https://github.blog/2023-03-23-we-updated-our-rsa-ssh-host-key/)
+
+In a terminal, Run:
+
+``
+mv ~/.ssh/known_hosts ~/.ssh/known_hosts.bak
+ssh -T git@github.com
+``
