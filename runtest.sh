@@ -2,6 +2,7 @@
 
 set -e -u -x
 
+source .env
 
 # start docker container
 docker-compose -f docker-compose.yml up -d
@@ -49,10 +50,10 @@ do
 done
 
 
-JENKINS_PORT=$(docker-compose port nginxjenkins 443 | cut -d: -f2)
-curl -k -I https://localhost:$JENKINS_PORT
+JENKINS_PORT=$(docker-compose port nginxjenkins 80 | cut -d: -f2)
+curl -L -k -I http://localhost:$JENKINS_PORT$JENKINS_PREFIX
 
-STATUS=$(curl -k --write-out %{http_code} --silent --output /dev/null https://localhost:$JENKINS_PORT)
+STATUS=$(curl -L -k --write-out %{http_code} --silent --output /dev/null http://localhost:$JENKINS_PORT$JENKINS_PREFIX)
 
 if [ ! "200" == "$STATUS" ]; then
     exit 1
