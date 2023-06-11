@@ -27,6 +27,7 @@ pip install mox3 pytest pytest-django &apos;pytest-xdist&lt;2&apos;
 pip install tables
 pip install jinja2
 pip install PyYAML
+pip install &quot;urllib3<2&quot; # to be removed if/when included in omero-py
 pip install omero-py omero-web  # Latest in order to stop server.
       </command>
     </hudson.tasks.Shell>
