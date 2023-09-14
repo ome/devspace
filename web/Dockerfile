@@ -1,4 +1,4 @@
-FROM jburel/devslave-c7:0.8.0
+FROM jburel/devslave-c7:0.8.1
 
 MAINTAINER OME
 
@@ -28,12 +28,6 @@ RUN dnf install -y nodejs
 # grunt for figure
 RUN npm install -g grunt
 
-
-# manually install java11 devel
-RUN dnf -y install java-11-openjdk-devel
-# Switch Java version
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk
-ENV PATH=$JAVA_HOME/bin:$PATH
 
 EXPOSE 4080
 
