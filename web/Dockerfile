@@ -38,11 +38,6 @@ RUN chmod a+x /tmp/run.sh
 RUN dnf install -y python3
 
 RUN dnf clean all
-RUN python3 -m venv /py3 && /py3/bin/pip install -U pip tox future wheel restructuredtext-lint
-RUN /py3/bin/pip install https://github.com/glencoesoftware/zeroc-ice-py-rhel9-x86_64/releases/download/20230830/zeroc_ice-3.6.5-cp39-cp39-linux_x86_64.whl
-RUN /py3/bin/pip install redis
-ENV VIRTUAL_ENV=/py3
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Change user id to fix permissions issues
 ARG USER_ID=1000
