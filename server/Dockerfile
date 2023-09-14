@@ -54,7 +54,7 @@ RUN chmod a+x /tmp/run.sh
 # RUN dnf install -y mencoder
 
 
-RUN localedef -i en_US -f UTF-8 en_US.UTF-8
+#RUN localedef -i en_US -f UTF-8 en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 # Change user id to fix permissions issues
