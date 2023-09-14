@@ -2,12 +2,6 @@ FROM jburel/devslave-c7:0.8.1
 
 MAINTAINER OME
 
-ARG ICEVER=noice
-
-# make ICEVERSION environment variable to use in OMERO-web job
-ENV ICEVERSION ${ICEVER:-noice}
-
-
 # Remove the existing omero user
 RUN userdel -r omero && \
     echo 'root:omero' | chpasswd
@@ -18,11 +12,8 @@ RUN useradd omero-web && \
 	echo "%omero-web ALL= (ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 
-# manually install ICEPY dependences
-RUN dnf -y install gcc-c++
 # ant for iviewer, make for nodejs
 RUN dnf -y install ant make
-RUN dnf -y install openssl-devel bzip2-devel expat-devel
 RUN curl -sL https://rpm.nodesource.com/setup_16.x | bash
 RUN dnf install -y nodejs
 # grunt for figure
@@ -35,7 +26,7 @@ ADD ./run.sh /tmp/run.sh
 RUN chown omero-web:omero-web /tmp/run.sh
 RUN chmod a+x /tmp/run.sh
 
-RUN dnf install -y python3
+RUN dnf install -y python3 openssl
 
 RUN dnf clean all
 
