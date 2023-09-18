@@ -33,6 +33,7 @@ services:
         build:
             context: ./slave
             dockerfile: Dockerfile
+        user: root
         networks:
             - omero-network
         volumes:
@@ -55,6 +56,7 @@ services:
         build:
             context: ./server
             dockerfile: Dockerfile
+        user: root
         networks:
             - omero-network
         volumes:
@@ -73,6 +75,7 @@ services:
         build:
             context: ./web
             dockerfile: Dockerfile
+        user: root
         networks:
             - omero-network
         volumes:
@@ -157,6 +160,7 @@ services:
 
     docker:
         build: docker
+        user: root
         networks:
             - omero-network
         volumes:
