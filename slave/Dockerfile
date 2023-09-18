@@ -1,4 +1,4 @@
-FROM openmicroscopy/devslave-c7:0.8.3
+FROM jburel/devslave-c7:0.8.3
 
 MAINTAINER OME
 
