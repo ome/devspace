@@ -13,8 +13,8 @@ RUN useradd omero-server && \
 
 
 
-ADD ./settings.env $OMERO_INSTALL/settings.env
-RUN chmod +x $OMERO_INSTALL/settings.env
+ADD ./settings.env /home/settings.env
+RUN chmod +x  /home/settings.env
 
 WORKDIR /tmp/omero-install/linux
 

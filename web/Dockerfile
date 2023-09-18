@@ -11,6 +11,8 @@ RUN useradd omero-web && \
 	echo 'omero-web:omero-web' | chpasswd && \
 	echo "%omero-web ALL= (ALL) NOPASSWD: ALL" >> /etc/sudoers
 
+ADD ./settings.env  /home/settings.env
+RUN chmod +x /home/settings.env
 
 # ant for iviewer, make for nodejs
 RUN dnf -y install ant make
