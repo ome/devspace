@@ -48,8 +48,8 @@ rm -rf $WORKSPACE/*</command>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command>OMERO_INSTALL=/tmp/omero-install/linux
-source $OMERO_INSTALL/settings.env
+      <command>
+source /home/settings.env
 
 # UNZIP openmicroscopy
 OMERO_EXAMPLE_DIST=$WORKSPACE/openmicroscopy

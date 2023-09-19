@@ -33,8 +33,7 @@ pip install omero-py omero-web  # Latest in order to stop server.
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>
-OMERO_INSTALL=/tmp/omero-install/linux
-source $OMERO_INSTALL/settings.env
+source /home/settings.env
 OMERO_DB_NAME=$JOB_NAME
 SRC=$WORKSPACE/src
 OMERO_DIST=$SRC/dist
@@ -72,8 +71,7 @@ rm -rf $WORKSPACE/*
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
       <command>
-OMERO_INSTALL=/tmp/omero-install/linux
-source $OMERO_INSTALL/settings.env
+source /home/settings.env
 OMERO_DB_NAME=$JOB_NAME
 OMERO_DATA_DIR=$WORKSPACE/data
 

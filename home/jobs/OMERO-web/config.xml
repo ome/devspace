@@ -75,7 +75,6 @@ rm -rf $WORKSPACE/*</command>
       <command>
 OMERO_DIST=$WORKSPACE/OMERO.web
 export OMERODIR=$OMERO_DIST
-OMERO_INSTALL=/tmp/omero-install/linux
 
 ZIP=$(ls OMERO.server*.zip)
 if [ ! -z &quot;$OMERO_PY_ZIP_URL&quot; ]
@@ -93,7 +92,7 @@ mv $WORKSPACE/$DIST $OMERO_DIST
 
 source $WORKSPACE/.venv3/bin/activate
 
-source $OMERO_INSTALL/settings.env
+source /home/settings.env
 
 # Install omero-py, omero-web etc from OMERO-python-superbuild-build job
 for x in *.tar.gz; do

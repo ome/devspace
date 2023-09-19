@@ -42,8 +42,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>OMERO_INSTALL=/tmp/omero-install/linux
-source $OMERO_INSTALL/settings.env
+      <command>
+source /home/settings.env
 OMERO_DB_NAME=$DB_NAME
 OMERO_DIST=$WORKSPACE/OMERO.server
 export OMERODIR=$OMERO_DIST
@@ -85,8 +85,8 @@ rm -rf $WORKSPACE/*  # Should leave .venv3</command>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command>OMERO_INSTALL=/tmp/omero-install/linux
-source $OMERO_INSTALL/settings.env
+      <command>
+source /home/settings.env
 OMERO_DB_NAME=$DB_NAME
 OMERO_DATA_DIR=$DATA_DIR
 
