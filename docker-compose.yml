@@ -175,7 +175,7 @@ services:
             - REPO_CONFIG
 
     nexus:
-        image: sonatype/nexus3
+        image: sonatype/nexus3:3.59.0
         user: ${USER_ID}
         networks:
             - omero-network
