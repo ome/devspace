@@ -10,6 +10,8 @@ ADD ./settings.env  /home/settings.env
 RUN chmod +x /home/settings.env
 
 
+# Python job
+RUN dnf install -y python3-setuptools
 # Ice dependencies
 RUN dnf install -y 'dnf-command(config-manager)' && \
     dnf config-manager --set-enabled crb
