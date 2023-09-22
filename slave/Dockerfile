@@ -10,6 +10,9 @@ ADD ./settings.env  /home/settings.env
 RUN chmod +x /home/settings.env
 
 
+# Required for the docs build
+RUN dnf install -y make
+
 # Python job
 RUN dnf install -y python3-setuptools
 # Ice dependencies
