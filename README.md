@@ -185,14 +185,13 @@ Alternatively create a new job in the Jenkins web-interface in the usual way.
 
 # Default packages used
 
-| Name       | Version       | Optional                           |
-| -----------|---------------| -----------------------------------|
-| Java       | openJDK 1.8   | openJDK 1.8 devel, oracleJDK 1.8   |
-| Python     | 2.7           | -                                  |
-| Ice        | 3.6           | 3.5                                |
-| PostgreSQL | 9.4           | https://hub.docker.com/_/postgres/ |
-| Nginx      | 1.8           | -                                  |
-| Redis      | latest        | https://hub.docker.com/_/redis/    |
+| Name       | Version           |
+| -----------|-------------------|
+| Java       | openJDK 11-devel  |
+| Python     | 3.9               |
+| Ice        | 3.6               |
+| PostgreSQL | 13                |
+| Nginx      | 1.23              |
 
 # Troubleshooting
 
