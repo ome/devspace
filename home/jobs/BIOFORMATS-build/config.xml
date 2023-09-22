@@ -72,7 +72,6 @@
 source $WORKSPACE/venv/bin/activate
 
 cd bio-formats-build
-pip install &quot;urllib3<2&quot;
 pip install -r bio-formats-documentation/requirements.txt
 pip install -r ome-model/requirements.txt
 mvn deploy -DskipTests -DaltDeploymentRepository=ome.staging::default::http://admin:admin123@nexus:8081/nexus/repository/maven-internal/</command>
