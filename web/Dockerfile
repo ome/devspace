@@ -2,15 +2,6 @@ FROM jburel/devslave-c7:0.8.3
 
 MAINTAINER OME
 
-# Remove the existing omero user
-RUN userdel -r omero && \
-    echo 'root:omero' | chpasswd
-
-# Create the omero-web user
-RUN useradd omero-web && \
-	echo 'omero-web:omero-web' | chpasswd && \
-	echo "%omero-web ALL= (ALL) NOPASSWD: ALL" >> /etc/sudoers
-
 ADD ./settings.env  /home/settings.env
 RUN chmod +x /home/settings.env
 
@@ -25,7 +16,7 @@ RUN npm install -g grunt
 EXPOSE 4080
 
 ADD ./run.sh /tmp/run.sh
-RUN chown omero-web:omero-web /tmp/run.sh
+RUN chown omero:omero /tmp/run.sh
 RUN chmod a+x /tmp/run.sh
 
 RUN dnf install -y python3 openssl
@@ -34,17 +25,17 @@ RUN dnf clean all
 
 # Change user id to fix permissions issues
 ARG USER_ID=1000
-RUN usermod -u $USER_ID omero-web
+RUN usermod -u $USER_ID omero
 
-RUN chown -R omero-web:omero-web /home/omero-web/
+RUN chown -R omero:omero /home/omero/
 
 # make sure mounted volumes has correct permissions
-RUN mkdir -p /home/omero-web/nginx
-RUN chown -R omero-web:omero-web /home/omero-web/nginx
-RUN mkdir -p /home/omero-web/static
-RUN chown -R omero-web:omero-web /home/omero-web/static
+RUN mkdir -p /home/omero/nginx
+RUN chown -R omero:omero /home/omero/nginx
+RUN mkdir -p /home/omero/static
+RUN chown -R omero:omero /home/omero/static
 
-VOLUME ["/home/omero-web", "/home/omero-web/nginx"]
+VOLUME ["/home/omero", "/home/omero/nginx"]
 
-USER omero-web
+USER omero
 CMD ["/tmp/run.sh"]

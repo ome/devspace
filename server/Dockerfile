@@ -2,16 +2,6 @@ FROM jburel/devslave-c7:0.8.3
 
 MAINTAINER OME
 
-# Remove the existing omero user
-RUN userdel -r omero && \
-    echo 'root:omero' | chpasswd
-
-# Create the omero-server user
-RUN useradd omero-server && \
-    echo 'omero-server:omero-server' | chpasswd && \
-    echo "%omero-server ALL= (ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-
 
 ADD ./settings.env /home/settings.env
 RUN chmod +x  /home/settings.env
@@ -44,7 +34,7 @@ EXPOSE 4064
 EXPOSE 4063
 
 ADD ./run.sh /tmp/run.sh
-RUN chown omero-server:omero-server /tmp/run.sh
+RUN chown omero:omero /tmp/run.sh
 RUN chmod a+x /tmp/run.sh
 
 
@@ -56,10 +46,10 @@ RUN chmod a+x /tmp/run.sh
 
 # Change user id to fix permissions issues
 ARG USER_ID=1000
-RUN usermod -u $USER_ID omero-server
+RUN usermod -u $USER_ID omero
 
 # make sure mounted volumes has correct permissions
-VOLUME ["/home/omero-server"]
+VOLUME ["/home/omero"]
 
-USER omero-server
+USER omero
 CMD ["/tmp/run.sh"]
