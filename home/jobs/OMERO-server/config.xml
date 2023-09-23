@@ -117,7 +117,6 @@ pip install reportlab # For figure
 pip install omego
 pip install tables
 pip install jinja2
-pip install &quot;urllib3<2&quot; # to be removed if/when included in omero-py
 pip install omero-py
 
 pip install git+https://github.com/$SPACE_USER/omero-metadata.git@$MERGE_PUSH_BRANCH#egg=omero-metadata

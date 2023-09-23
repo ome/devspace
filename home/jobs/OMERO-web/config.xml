@@ -32,7 +32,6 @@ source $WORKSPACE/.venv3/bin/activate
 pip install https://github.com/glencoesoftware/zeroc-ice-py-rhel9-x86_64/releases/download/20230830/zeroc_ice-3.6.5-cp39-cp39-linux_x86_64.whl
 pip install -U pip future
 pip install markdown
-pip install &quot;urllib3<2&quot; # to be removed if/when included in omero-py
 pip install omero-py omero-web  # Latest in order to stop server. NB: Re-installed from python-superbuild below</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
