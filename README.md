@@ -69,7 +69,7 @@ The following instructions explain how to deploy a devspace on a Docker host.
     topic branches available on origin, use `develop` or one of the
     main branches:
 
-        $ ./rename.py MYTOPIC --user git_user
+        $ ./rename.py USER MYTOPIC --user git_user
 
 *   This will also replace the `USER_ID` of the various Dockerfile with the ID of the user who
     will run the devspace, assumed to be: `id -u`, i.e. the current user.
