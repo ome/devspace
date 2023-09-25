@@ -180,9 +180,16 @@ pip install git+https://github.com/$SPACE_USER/omero-webtest.git@$MERGE_PUSH_BRA
 omero config append omero.web.apps &apos;&quot;omero_webtest&quot;&apos;
 
 # OMERO.omero-webtagging-autotag installation
-pip install omero-webtagging-autotag
-omero config append omero.web.apps &apos;&quot;omero_webtagging_autotag&quot;&apos;
-omero config append omero.web.ui.center_plugins &apos;[&quot;Auto Tag&quot;, &quot;omero_webtagging_autotag/auto_tag_init.js.html&quot;, &quot;auto_tag_panel&quot;]&apos;
+pip install omero-autotag
+# Add autotag to webclient
+omero config append omero.web.apps &apos;&quot;omero_autotag&quot;&apos;
+# Add autotag to centre panel
+omero config append omero.web.ui.center_plugins &apos;[&quot;Auto Tag&quot;, &quot;omero_autotag/auto_tag_init.js.html&quot;, &quot;auto_tag_panel&quot;]&apos;
+
+pip install omero-tagsearch
+# Add tagsearch to webclient
+omero config append omero.web.apps &apos;&quot;omero_tagsearch&quot;&apos;
+
 
 # OMERO.webtagging-tagsearch installation
 pip install omero-webtagging-tagsearch
