@@ -16,7 +16,6 @@ Running Devspace requires access to SSH and Git configuration files used for fet
 
 Devspace code depends on the following repositories:
 
-* [OMERO install](https://github.com/ome/omero-install/)
 * [devslave-c7-docker](https://github.com/ome/devslave-c7-docker)
 
 # Installation
