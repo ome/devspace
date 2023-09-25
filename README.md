@@ -51,7 +51,8 @@ The following instructions explain how to deploy a devspace on a Docker host.
 
 *   Copy the SSH and Git configuration files used for fetching and pushing the
     Git repositories under `slave/.ssh` and `slave/.gitconfig`. This is usually
-    your own SSH and Git configuration files.
+    your own SSH and Git configuration files. Make sure that the permissions of the key are not 
+    too open. If this is the case, change the permissions e.g. ``chmod 400 YOUR_KEY`
     You need to use a public key without a passphrase and a `.gitconfig` file containing
     the following sections:
     ```
@@ -93,6 +94,13 @@ Start and configure:
     By default, this will use the name of the directory as the project name. In the case of a shared Docker host, it is possible to override the project name using
 
         $ docker-compose up -p my_project -d
+
+*  Depending on the ssh key, you might have to run the following comment in the ``test_integration`` container. For example:
+        $ docker exec -it devspace_testintegration_1 bash
+        $ ssh -T git@github.com
+
+    A message should be returned after running the command:
+        $ Hi snoopycrimecop! You've successfully authenticated, but GitHub does not provide shell access.
 
 *   Retrieve the dynamic port of the Jenkins NGINX container. You can access
     the Jenkins UI from https://HOST_IP:PORT after accepting the self-signed
