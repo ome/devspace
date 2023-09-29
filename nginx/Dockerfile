@@ -2,6 +2,9 @@ FROM jburel/devslave-c7:0.8.5
 
 MAINTAINER OME
 
+COPY nginx-stable.repo /etc/yum.repos.d/
+RUN dnf -y install dnf-utils
+RUN yum-config-manager --enable nginx-stable
 
 RUN dnf -y install nginx\
     && dnf clean all
