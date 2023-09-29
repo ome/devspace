@@ -6,6 +6,9 @@ MAINTAINER OME
 RUN dnf -y install nginx\
     && dnf clean all
 
+# comment out default server config in nginx.conf
+RUN sed -i "/^\s\s\s\sserver/, /^\s\s\s\s}/ s|^|#|" /etc/nginx/nginx.conf
+
 VOLUME ["/etc/nginx/conf.d", "/var/log/nginx"]
 
 WORKDIR /etc/nginx
