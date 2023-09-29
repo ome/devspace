@@ -204,15 +204,6 @@ Alternatively create a new job in the Jenkins web-interface in the usual way.
 
 See [Troubleshooting](Troubleshooting.md)
 
-# ADVANCE: extend omero-install
-
-In order to install additional components or new version of packages e.g. PostgreSQL 10, it is required to:
-
-* Modify the files in [omero-install](https://github.com/ome/omero-install)
-* Create a new image of [devslave-c7-docker](https://github.com/ome/devslave-c7-docker) using the updated omero-install files
-* Push the new image to [Docker Hub](https://hub.docker.com/). You will need to your own account
-* Modify each Dockerfile of this repository to use the new image
-
 
 # Upgrade
 
