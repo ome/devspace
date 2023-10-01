@@ -197,7 +197,7 @@ Alternatively create a new job in the Jenkins web-interface in the usual way.
 | Java       | openJDK 11-devel  |
 | Python     | 3.9               |
 | Ice        | 3.6               |
-| PostgreSQL | 13                |
+| PostgreSQL | 16                |
 | Nginx      | 1.24              |
 
 # Troubleshooting

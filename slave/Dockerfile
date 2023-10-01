@@ -41,8 +41,10 @@ RUN curl -fSLO http://downloads.sourceforge.net/project/findbugs/findbugs/$FINDB
 # Install build tools from EPEL
 RUN dnf -y install maven ant && dnf clean all
 
-# install postgres tools
-RUN dnf -y install postgresql-server postgresql\
+# install postgres tools for pg16 (default is 13)
+RUN dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+RUN dnf -qy module disable postgresql
+RUN dnf -y install postgresql16-server postgresql16\
     && dnf clean all
 
 # gradle
