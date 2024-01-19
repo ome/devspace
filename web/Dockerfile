@@ -56,7 +56,7 @@ RUN yum install -y rh-python38-python
 
 ENV PATH=/opt/rh/rh-python38/root/usr/bin:$PATH
 
-RUN python3 -m venv /py3 && /py3/bin/pip install -U pip tox future wheel restructuredtext-lint
+RUN python3 -m venv /py3 && /py3/bin/pip install -U pip tox build future wheel restructuredtext-lint
 RUN /py3/bin/pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.3.0/zeroc_ice-3.6.5-cp38-cp38-linux_x86_64.whl
 ENV VIRTUAL_ENV=/py3
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
