@@ -7,7 +7,7 @@ RUN chmod +x /home/settings.env
 
 # ant for iviewer, make for nodejs
 RUN dnf -y install ant make
-RUN curl -sL https://rpm.nodesource.com/setup_16.x | bash
+RUN curl -sL https://rpm.nodesource.com/setup_20.x | bash
 RUN dnf install -y nodejs
 # grunt for figure
 RUN npm install -g grunt
