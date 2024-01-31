@@ -1,12 +1,18 @@
 #!/bin/bash
 
+workspace=/home/omero/workspace/OMERO-test-integration
 function shut_down() {
-    /home/omero/workspace/OMERO-test-integration/src/dist/bin/omero admin stop
+    if [ -d "$workspace" ]; then
+      $workspace/src/dist/bin/omero admin stop
+    fi
 }
 
-/tmp/jenkins-slave.sh &
-/home/omero/workspace/OMERO-test-integration/src/dist/bin/omero admin start
-/home/omero/workspace/OMERO-test-integration/src/dist/bin/omero admin diagnostics
+/tmp/jenkins-slave.sh
+if [ -d "$workspace" ]; then
+
+  $workspace/src/dist/bin/omero admin start
+  $workspace/src/dist/bin/omero admin diagnostics
+fi
 
 trap "shut_down" SIGKILL SIGTERM SIGHUP SIGINT EXIT
 
