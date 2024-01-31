@@ -1,4 +1,4 @@
-FROM jburel/devslave-c7:0.8.5
+FROM jburel/devslave-c7:0.8.7
 
 MAINTAINER OME
 
@@ -41,6 +41,12 @@ RUN chown omero:omero /tmp/run.sh
 RUN chmod a+x /tmp/run.sh
 
 
+cd /home/omero
+SERVER=https://downloads.openmicroscopy.org/omero/5.6/server-ice36.zip
+wget -q $SERVER -O OMERO.server-ice36.zip
+unzip -q OMERO.server*
+rm OMERO.server-ice36.zip
+
 # Install mencoder
 # See https://github.com/ome/prod-playbooks/blob/7d8e59ced0b47a224d6be02907d913c392ef9379/ome-dundeeomero.yml#L48
 # RUN dnf install -y http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
@@ -50,6 +56,8 @@ RUN chmod a+x /tmp/run.sh
 # Change user id to fix permissions issues
 ARG USER_ID=1000
 RUN usermod -u $USER_ID omero
+
+
 
 # make sure mounted volumes has correct permissions
 VOLUME ["/home/omero"]
