@@ -190,10 +190,6 @@ pip install omero-tagsearch
 # Add tagsearch to webclient
 omero config append omero.web.apps &apos;&quot;omero_tagsearch&quot;&apos;
 
-
-# OMERO.webtagging-tagsearch installation
-pip install omero-webtagging-tagsearch
-omero config append omero.web.apps &apos;&quot;omero_webtagging_tagsearch&quot;&apos;
 omero config append omero.web.ui.top_links &apos;[&quot;Tag Search&quot;, &quot;tagsearch&quot;]&apos;
 
 # omero-web-zarr
