@@ -19,7 +19,8 @@ ADD ./run.sh /tmp/run.sh
 RUN chown omero:omero /tmp/run.sh
 RUN chmod a+x /tmp/run.sh
 
-RUN dnf install -y python3 openssl
+RUN dnf install -y python3 openssl python3-pip
+RUN pip install build
 
 RUN dnf clean all
 
