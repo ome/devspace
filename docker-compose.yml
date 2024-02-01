@@ -139,6 +139,9 @@ services:
             - SCREEN_WIDTH=1920
             - SCREEN_HEIGHT=1080
             - SCREEN_DEPTH=24
+            - SE_EVENT_BUS_HOST=seleniumhub
+            - SE_EVENT_BUS_PUBLISH_PORT=4442
+            - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
         depends_on:
             - seleniumhub
 
@@ -152,6 +155,9 @@ services:
             - SCREEN_WIDTH=1920
             - SCREEN_HEIGHT=1080
             - SCREEN_DEPTH=24
+            - SE_EVENT_BUS_HOST=seleniumhub
+            - SE_EVENT_BUS_PUBLISH_PORT=4442
+            - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
         depends_on:
             - seleniumhub
 
