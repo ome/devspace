@@ -1,4 +1,4 @@
-FROM jburel/devslave-c7:0.8.5
+FROM jburel/devslave-c7:0.8.7
 
 MAINTAINER OME
 
