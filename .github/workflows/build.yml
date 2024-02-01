@@ -9,10 +9,12 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
       - name: Set up environment
         run: |
           pip install -r requirements.txt
@@ -22,6 +24,6 @@ jobs:
       - name: Display Docker version
         run: docker version
       - name: Build
-        run: docker-compose -f docker-compose.yml build
+        run: docker compose -f docker-compose.yml build
       - name: Run tests
         run: ./runtest.sh
