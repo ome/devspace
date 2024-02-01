@@ -36,7 +36,7 @@ RUN dnf -y install postgresql16 \
 # For OME-zarr
 RUN dnf -y install epel-release
 RUN dnf -y update
-RUN dnf -y blosc
+RUN dnf -y install blosc
 
 EXPOSE 4064
 EXPOSE 4063

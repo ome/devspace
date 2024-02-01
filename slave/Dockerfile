@@ -60,7 +60,7 @@ RUN cd /opt && \
 # For OME-zarr
 RUN dnf -y install epel-release
 RUN dnf -y update
-RUN dnf -y blosc
+RUN dnf -y install blosc
 
 EXPOSE 14064
 EXPOSE 14063
