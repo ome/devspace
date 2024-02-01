@@ -57,6 +57,11 @@ RUN cd /opt && \
     ln -s /opt/gradle-$GRADLEVER/bin/gradle /usr/local/bin/gradle
 
 
+# For OME-zarr
+RUN dnf -y install epel-release
+RUN dnf -y update
+RUN dnf -y blosc
+
 EXPOSE 14064
 EXPOSE 14063
 

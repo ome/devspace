@@ -33,6 +33,10 @@ RUN dnf -qy module disable postgresql
 RUN dnf -y install postgresql16 \
     && dnf clean all
 
+# For OME-zarr
+RUN dnf -y install epel-release
+RUN dnf -y update
+RUN dnf -y blosc
 
 EXPOSE 4064
 EXPOSE 4063
