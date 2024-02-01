@@ -1,5 +1,5 @@
 #!/bin/bash
-
+sudo chmod 777 -R /home/omero
 workspace=/home/omero/workspace/OMERO-web
 djangopid="$workspace/OMERO.web/var/django.pid"
 if [ -f $djangopid ]; then

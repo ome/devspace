@@ -1,5 +1,5 @@
 #!/bin/bash
-
+sudo chmod 777 -R /home/omero
 workspace=/home/omero/workspace/OMERO-test-integration
 function shut_down() {
     if [ -d "$workspace" ]; then
