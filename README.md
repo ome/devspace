@@ -85,15 +85,15 @@ Start and configure:
 
 *   Build devspace using `docker-compose`:
     
-        $ docker-compose -f docker-compose.yml build 
+        $ docker compose -f docker-compose.yml build 
 
 *   Start devspace using `docker-compose`:
 
-        $ docker-compose -f docker-compose.yml up -d
+        $ docker compose -f docker-compose.yml up -d
 
     By default, this will use the name of the directory as the project name. In the case of a shared Docker host, it is possible to override the project name using
 
-        $ docker-compose up -p my_project -d
+        $ docker compose up -p my_project -d
 
 *  Depending on the ssh key, you might have to run the following comment in the ``test_integration`` container. For example:
         $ docker exec -it devspace_testintegration_1 bash
@@ -106,11 +106,11 @@ Start and configure:
     the Jenkins UI from https://HOST_IP:PORT after accepting the self-signed
     certificate:
 
-        $ docker-compose -p my_project port nginxjenkins 443
+        $ docker compose -p my_project port nginxjenkins 443
 
 *   Create the `maven-internal` Nexus repository:
 
-        $ docker-compose exec nexus /nexus-data/createRepoMavenInternal.sh
+        $ docker compose exec nexus /nexus-data/createRepoMavenInternal.sh
 
 *   [Optional] Turn on Basic HTTP authentication for Jenkins
 
