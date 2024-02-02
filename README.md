@@ -24,12 +24,6 @@ The following instructions explain how to deploy a devspace on a Docker host.
 
 *   Log into the Docker host using ssh
 
-*   Install the prerequisites [Docker engine](https://docs.docker.com/) and
-    [Docker compose](https://docs.docker.com/compose/) either globally or in
-    a virtual environment:
-
-        $ pip install docker-compose
-
 *   Create a directory ``/data/username`` and change ownership:
 
         $ sudo mkdir /data/username
