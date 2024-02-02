@@ -12,12 +12,6 @@ services:
         environment:
             - JENKINS_OPTS= --prefix=${JENKINS_PREFIX} --argumentsRealm.passwd.${JENKINS_USERNAME}=${JENKINS_PASSWORD} --argumentsRealm.roles.${JENKINS_USERNAME}=admin
 
-    git:
-        build: git
-        volumes:
-            - /src
-        command: 'true'
-
     pg:
         image: postgres:${POSTGRES_VERSION}
         networks:
