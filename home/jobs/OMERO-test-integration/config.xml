@@ -21,9 +21,7 @@ source $WORKSPACE/.venv3/bin/activate
 pip install https://github.com/glencoesoftware/zeroc-ice-py-rhel9-x86_64/releases/download/20230830/zeroc_ice-3.6.5-cp39-cp39-linux_x86_64.whl
 pip install -U pip future setuptools
 pip install markdown
-# Avoid installing psutil for now
-# https://github.com/pytest-dev/pytest-xdist/issues/585
-pip install mox3 pytest pytest-django &apos;pytest-xdist&lt;2&apos;
+pip install mox3 pytest pytest-django pytest-xdist pytest-mock
 pip install tables
 pip install jinja2
 pip install PyYAML
