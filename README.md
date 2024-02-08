@@ -16,7 +16,7 @@ Running Devspace requires access to SSH and Git configuration files used for fet
 
 Devspace code depends on the following repositories:
 
-* [devslave-c7-docker](https://github.com/ome/devslave-c7-docker)
+* [devagent-docker](https://github.com/ome/devagent-docker)
 
 # Installation
 
@@ -60,7 +60,7 @@ The following instructions explain how to deploy a devspace on a Docker host.
     
  *  Run `rename.py` to match your topic name. Specify the Git user corresponding to
     the confguration files used above. If you do not yet have
-    topic branches available on origin, use `develop` or one of the
+    topic branches available on origin, use `develop/master` or one of the
     main branches:
 
         $ ./rename.py USER MYTOPIC --user git_user
@@ -77,11 +77,11 @@ The following instructions explain how to deploy a devspace on a Docker host.
 
 Start and configure:
 
-*   Build devspace using `docker-compose`:
+*   Build devspace using `docker compose`:
     
         $ docker compose -f docker-compose.yml build 
 
-*   Start devspace using `docker-compose`:
+*   Start devspace using `docker compose`:
 
         $ docker compose -f docker-compose.yml up -d
 
@@ -89,8 +89,8 @@ Start and configure:
 
         $ docker compose up -p my_project -d
 
-*  Depending on the ssh key, you might have to run the following comment in the ``test_integration`` container. For example:
-        $ docker exec -it devspace_testintegration_1 bash
+*  Depending on the ssh key, you might have to run the following comment in the ``test-integration`` container. For example:
+        $ docker exec -it devspace-testintegration-1 bash
         $ ssh -T git@github.com
 
     A message should be returned after running the command:
@@ -148,24 +148,24 @@ they are associated with and a short description of the jobs.
 | Job name               | Name            | Description                               |     docker name            |
 | -----------------------|-----------------| ------------------------------------------|----------------------------|
 | Trigger                |                 | Runs all the following jobs in order      |                            |
-| BIOFORMATS-push        | testintegration | Merges all Bio-Formats PRs                | devspace_testintegration_1 |
-| BIOFORMATS-build       | testintegration | Builds Bio-Formats components    | devspace_testintegration_1 |
-| BIOFORMATS-image       | testintegration | Builds a Docker image of Bio-Formats   | devspace_docker_1 |
-| OMERO-push             | testintegration | Merges all OMERO PRs                      | devspace_testintegration_1 |
-| OMERO-build            | testintegration | Builds OMERO artifacts (server, clients)  | devspace_testintegration_1 |
-| OMERO-server           | omero           | Deploys an OMERO.server                   | devspace_omero_1           |
-| OMERO-web              | web             | Deploys an OMERO.web client               | devspace_web_1             |
-| OMERO-test-integration | testintegration | Runs the OMERO integration tests          | devspace_testintegration_1 |
-| OMERO-robot            | testintegration | Runs the Robot tests                      | devspace_testintegration_1 |
-| nginx                  | nginx           | Reloads the nginx server                  | devspace_nginx_1           |
-| OMERO-docs             | testintegration | Builds the OMERO documentation            | devspace_testintegration_1 |
+| BIOFORMATS-push        | testintegration | Merges all Bio-Formats PRs                | devspace-testintegration-1 |
+| BIOFORMATS-build       | testintegration | Builds Bio-Formats components             | devspace-testintegration-1 |
+| BIOFORMATS-image       | testintegration | Builds a Docker image of Bio-Formats      | devspace-docker-1          |
+| OMERO-push             | testintegration | Merges all OMERO PRs                      | devspace-testintegration-1 |
+| OMERO-build            | testintegration | Builds OMERO artifacts (server, clients)  | devspace-testintegration-1 |
+| OMERO-server           | omero           | Deploys an OMERO.server                   | devspace-omero-1           |
+| OMERO-web              | web             | Deploys an OMERO.web client               | devspace-web-1             |
+| OMERO-test-integration | testintegration | Runs the OMERO integration tests          | devspace-testintegration-1 |
+| OMERO-robot            | testintegration | Runs the Robot tests                      | devspace-testintegration-1 |
+| nginx                  | nginx           | Reloads the nginx server                  | devspace-nginx-1           |
+| OMERO-docs             | testintegration | Builds the OMERO documentation            | devspace-testintegration-1 |
 
 
 This means that by default the following repositories need to be
 forked to your GitHub account:
 
 * [ome/openmiscrocopy](https://github.com/ome/openmicroscopy)
-* [ome/ome-documentation](https://github.com/ome/ome-documentation)
+* [ome/omero-documentation](https://github.com/ome/omero-documentation)
 * [ome/bioformats](https://github.com/ome/bioformats)
 
 If you do not have some of the repositories forked, you will need to remove the jobs from the list
