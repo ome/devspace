@@ -1,4 +1,4 @@
-FROM openmicroscopy/devagent:0.8.0
+FROM openmicroscopy/devagent:0.8.1
 
 MAINTAINER OME
 
