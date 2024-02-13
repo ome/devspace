@@ -52,20 +52,32 @@ fi
 rm -rf $HOME/static/web/
 rm -rf $WORKSPACE/*</command>
     </hudson.tasks.Shell>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@722.v0662a_9b_e22a_c">
       <project>OMERO-build</project>
       <filter>src/target/OMERO.server*zip</filter>
-      <target></target>
-      <excludes></excludes>
+      <target/>
+      <includeBuildNumberInTargetPath>false</includeBuildNumberInTargetPath>
+      <excludes/>
       <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
       <flatten>true</flatten>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@722.v0662a_9b_e22a_c">
       <project>OMERO-python-superbuild-build</project>
-      <filter>**/*.gz</filter>
-      <target></target>
-      <excludes></excludes>
+      <filter>**/*.tar.gz</filter>
+      <target/>
+      <includeBuildNumberInTargetPath>false</includeBuildNumberInTargetPath>
+      <excludes/>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@722.v0662a_9b_e22a_c">
+      <project>OMERO-build-build</project>
+      <filter/>
+      <target/>
+      <includeBuildNumberInTargetPath>false</includeBuildNumberInTargetPath>
+      <excludes/>
       <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
       <flatten>true</flatten>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
@@ -74,6 +86,8 @@ rm -rf $WORKSPACE/*</command>
       <command>
 OMERO_DIST=$WORKSPACE/OMERO.web
 export OMERODIR=$OMERO_DIST
+export ZIP_FILE=$WORKSPACE/omero-blitz-VERSION-python.zip
+export VERSION_PROPERTIES=$WORKSPACE/version.properties
 
 ZIP=$(ls OMERO.server*.zip)
 if [ ! -z &quot;$OMERO_PY_ZIP_URL&quot; ]
