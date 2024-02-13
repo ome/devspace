@@ -202,3 +202,12 @@ See [Troubleshooting](Troubleshooting.md)
 # Upgrade
 
 See [Changelog](CHANGELOG.md)
+
+# Run BioFormats jobs
+
+To run the BioFormats testing the various readers on sample data, you will need to activate the a private
+job
+
+* In the ``devspace``, create a directory ``home/jobs/DATA_REPO_CONFIG-merge/``
+* Download the job configuration from ``config.xml`` in https://github.com/openmicroscopy/management_tools/tree/master/ci/jobs/DATA_REPO_CONFIG-merge (private repository) and place it in the newly created directory
+* Comment out the line ``build job: "DATA_REPO_CONFIG-merge"`` in the ``trigger`` job
