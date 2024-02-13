@@ -44,6 +44,10 @@ services:
         ports:
             - "${OMERO_SERVER_TEST_SSL}14064"
             - "${OMERO_SERVER_TEST_TCP}14063"
+        ulimits:
+          nofile:
+            soft: 8192
+            hard: 65536
 
     omero:
         build:
@@ -62,6 +66,10 @@ services:
         ports:
             - "${OMERO_SERVER_SSL}4064"
             - "${OMERO_SERVER_TCP}4063"
+        ulimits:
+          nofile:
+            soft: 8192
+            hard: 65536
 
     web:
         build:
