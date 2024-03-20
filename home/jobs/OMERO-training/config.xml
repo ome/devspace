@@ -15,10 +15,10 @@
   <builders>
     <hudson.tasks.Shell>
       <command>rm -rf $WORKSPACE/.venv3
-python -m venv $WORKSPACE/.venv3
+python3 -m venv $WORKSPACE/.venv3
 
 source $WORKSPACE/.venv3/bin/activate
-pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.2.1/zeroc_ice-3.6.5-cp36-cp36m-linux_x86_64.whl
+pip install https://github.com/glencoesoftware/zeroc-ice-py-rhel9-x86_64/releases/download/20230830/zeroc_ice-3.6.5-cp39-cp39-linux_x86_64.whl
 pip install -U pip future setuptools
 pip install markdown
 # Avoid installing psutil for now
@@ -29,7 +29,7 @@ pip install jinja2
 
 rm -rf $WORKSPACE/*</command>
     </hudson.tasks.Shell>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@722.v0662a_9b_e22a_c">
       <project>OMERO-python-superbuild-build</project>
       <filter>**/*.gz</filter>
       <target></target>
@@ -38,7 +38,7 @@ rm -rf $WORKSPACE/*</command>
       <flatten>true</flatten>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@722.v0662a_9b_e22a_c">
       <project>OMERO-build</project>
       <filter>src/target/OMERO.server*zip,src/target/openmicroscopy*zip</filter>
       <target></target>
@@ -47,10 +47,22 @@ rm -rf $WORKSPACE/*</command>
       <flatten>true</flatten>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@722.v0662a_9b_e22a_c">
+      <project>OMERO-build-build</project>
+      <filter/>
+      <target/>
+      <includeBuildNumberInTargetPath>false</includeBuildNumberInTargetPath>
+      <excludes/>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command>OMERO_INSTALL=/tmp/omero-install/linux
-source $OMERO_INSTALL/settings.env
+      <command>
+source /home/settings.env
 
+export ZIP_FILE=$WORKSPACE/omero-blitz-VERSION-python.zip
+export VERSION_PROPERTIES=$WORKSPACE/version.properties
 # UNZIP openmicroscopy
 OMERO_EXAMPLE_DIST=$WORKSPACE/openmicroscopy
 

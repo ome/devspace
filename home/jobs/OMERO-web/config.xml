@@ -26,13 +26,12 @@
   <builders>
     <hudson.tasks.Shell>
       <command>rm -rf $WORKSPACE/.venv3
-python -m venv $WORKSPACE/.venv3
+python3 -m venv $WORKSPACE/.venv3
 
 source $WORKSPACE/.venv3/bin/activate
-pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.3.0/zeroc_ice-3.6.5-cp38-cp38-linux_x86_64.whl
+pip install https://github.com/glencoesoftware/zeroc-ice-py-rhel9-x86_64/releases/download/20230830/zeroc_ice-3.6.5-cp39-cp39-linux_x86_64.whl
 pip install -U pip future
 pip install markdown
-pip install &quot;urllib3<2&quot; # to be removed if/when included in omero-py
 pip install omero-py omero-web  # Latest in order to stop server. NB: Re-installed from python-superbuild below</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
@@ -53,20 +52,32 @@ fi
 rm -rf $HOME/static/web/
 rm -rf $WORKSPACE/*</command>
     </hudson.tasks.Shell>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@722.v0662a_9b_e22a_c">
       <project>OMERO-build</project>
       <filter>src/target/OMERO.server*zip</filter>
-      <target></target>
-      <excludes></excludes>
+      <target/>
+      <includeBuildNumberInTargetPath>false</includeBuildNumberInTargetPath>
+      <excludes/>
       <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
       <flatten>true</flatten>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@722.v0662a_9b_e22a_c">
       <project>OMERO-python-superbuild-build</project>
-      <filter>**/*.gz</filter>
-      <target></target>
-      <excludes></excludes>
+      <filter>**/*.tar.gz</filter>
+      <target/>
+      <includeBuildNumberInTargetPath>false</includeBuildNumberInTargetPath>
+      <excludes/>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@722.v0662a_9b_e22a_c">
+      <project>OMERO-build-build</project>
+      <filter/>
+      <target/>
+      <includeBuildNumberInTargetPath>false</includeBuildNumberInTargetPath>
+      <excludes/>
       <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
       <flatten>true</flatten>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
@@ -75,7 +86,8 @@ rm -rf $WORKSPACE/*</command>
       <command>
 OMERO_DIST=$WORKSPACE/OMERO.web
 export OMERODIR=$OMERO_DIST
-OMERO_INSTALL=/tmp/omero-install/linux
+export ZIP_FILE=$WORKSPACE/omero-blitz-VERSION-python.zip
+export VERSION_PROPERTIES=$WORKSPACE/version.properties
 
 ZIP=$(ls OMERO.server*.zip)
 if [ ! -z &quot;$OMERO_PY_ZIP_URL&quot; ]
@@ -93,7 +105,7 @@ mv $WORKSPACE/$DIST $OMERO_DIST
 
 source $WORKSPACE/.venv3/bin/activate
 
-source $OMERO_INSTALL/settings.env
+source /home/settings.env
 
 # Install omero-py, omero-web etc from OMERO-python-superbuild-build job
 for x in *.tar.gz; do
@@ -182,13 +194,16 @@ pip install git+https://github.com/$SPACE_USER/omero-webtest.git@$MERGE_PUSH_BRA
 omero config append omero.web.apps &apos;&quot;omero_webtest&quot;&apos;
 
 # OMERO.omero-webtagging-autotag installation
-pip install omero-webtagging-autotag
-omero config append omero.web.apps &apos;&quot;omero_webtagging_autotag&quot;&apos;
-omero config append omero.web.ui.center_plugins &apos;[&quot;Auto Tag&quot;, &quot;omero_webtagging_autotag/auto_tag_init.js.html&quot;, &quot;auto_tag_panel&quot;]&apos;
+pip install omero-autotag
+# Add autotag to webclient
+omero config append omero.web.apps &apos;&quot;omero_autotag&quot;&apos;
+# Add autotag to centre panel
+omero config append omero.web.ui.center_plugins &apos;[&quot;Auto Tag&quot;, &quot;omero_autotag/auto_tag_init.js.html&quot;, &quot;auto_tag_panel&quot;]&apos;
 
-# OMERO.webtagging-tagsearch installation
-pip install omero-webtagging-tagsearch
-omero config append omero.web.apps &apos;&quot;omero_webtagging_tagsearch&quot;&apos;
+pip install omero-tagsearch
+# Add tagsearch to webclient
+omero config append omero.web.apps &apos;&quot;omero_tagsearch&quot;&apos;
+
 omero config append omero.web.ui.top_links &apos;[&quot;Tag Search&quot;, &quot;tagsearch&quot;]&apos;
 
 # omero-web-zarr

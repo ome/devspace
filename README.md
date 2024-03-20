@@ -16,20 +16,13 @@ Running Devspace requires access to SSH and Git configuration files used for fet
 
 Devspace code depends on the following repositories:
 
-* [OMERO install](https://github.com/ome/omero-install/)
-* [devslave-c7-docker](https://github.com/ome/devslave-c7-docker)
+* [devagent-docker](https://github.com/ome/devagent-docker)
 
 # Installation
 
 The following instructions explain how to deploy a devspace on a Docker host.
 
 *   Log into the Docker host using ssh
-
-*   Install the prerequisites [Docker engine](https://docs.docker.com/) and
-    [Docker compose](https://docs.docker.com/compose/) either globally or in
-    a virtual environment:
-
-        $ pip install docker-compose
 
 *   Create a directory ``/data/username`` and change ownership:
 
@@ -52,7 +45,8 @@ The following instructions explain how to deploy a devspace on a Docker host.
 
 *   Copy the SSH and Git configuration files used for fetching and pushing the
     Git repositories under `slave/.ssh` and `slave/.gitconfig`. This is usually
-    your own SSH and Git configuration files.
+    your own SSH and Git configuration files. Make sure that the permissions of the key are not 
+    too open. If this is the case, change the permissions e.g. ``chmod 400 YOUR_KEY`
     You need to use a public key without a passphrase and a `.gitconfig` file containing
     the following sections:
     ```
@@ -66,10 +60,10 @@ The following instructions explain how to deploy a devspace on a Docker host.
     
  *  Run `rename.py` to match your topic name. Specify the Git user corresponding to
     the confguration files used above. If you do not yet have
-    topic branches available on origin, use `develop` or one of the
+    topic branches available on origin, use `develop/master` or one of the
     main branches:
 
-        $ ./rename.py MYTOPIC --user git_user
+        $ ./rename.py USER MYTOPIC --user git_user
 
 *   This will also replace the `USER_ID` of the various Dockerfile with the ID of the user who
     will run the devspace, assumed to be: `id -u`, i.e. the current user.
@@ -83,27 +77,34 @@ The following instructions explain how to deploy a devspace on a Docker host.
 
 Start and configure:
 
-*   Build devspace using `docker-compose`:
+*   Build devspace using `docker compose`:
     
-        $ docker-compose -f docker-compose.yml build 
+        $ docker compose -f docker-compose.yml build 
 
-*   Start devspace using `docker-compose`:
+*   Start devspace using `docker compose`:
 
-        $ docker-compose -f docker-compose.yml up -d
+        $ docker compose -f docker-compose.yml up -d
 
     By default, this will use the name of the directory as the project name. In the case of a shared Docker host, it is possible to override the project name using
 
-        $ docker-compose up -p my_project -d
+        $ docker compose up -p my_project -d
+
+*  Depending on the ssh key, you might have to run the following comment in the ``test-integration`` container. For example:
+        $ docker exec -it devspace-testintegration-1 bash
+        $ ssh -T git@github.com
+
+    A message should be returned after running the command:
+        $ Hi snoopycrimecop! You've successfully authenticated, but GitHub does not provide shell access.
 
 *   Retrieve the dynamic port of the Jenkins NGINX container. You can access
     the Jenkins UI from https://HOST_IP:PORT after accepting the self-signed
     certificate:
 
-        $ docker-compose -p my_project port nginxjenkins 443
+        $ docker compose -p my_project port nginxjenkins 443
 
 *   Create the `maven-internal` Nexus repository:
 
-        $ docker-compose exec nexus /nexus-data/createRepoMavenInternal.sh
+        $ docker compose exec nexus /nexus-data/createRepoMavenInternal.sh
 
 *   [Optional] Turn on Basic HTTP authentication for Jenkins
 
@@ -134,7 +135,7 @@ After the script has completed you can either leave it in place so it will overr
 
 # Job configurations
 
-*   When running the OMERO-build job for the first time, select the ``PURGE_DATA`` option to create the database.
+*   When running the OMERO-server job for the first time, select the ``PURGE_DATA`` option to create the database.
 
 # Job workflow
 
@@ -147,24 +148,24 @@ they are associated with and a short description of the jobs.
 | Job name               | Name            | Description                               |     docker name            |
 | -----------------------|-----------------| ------------------------------------------|----------------------------|
 | Trigger                |                 | Runs all the following jobs in order      |                            |
-| BIOFORMATS-push        | testintegration | Merges all Bio-Formats PRs                | devspace_testintegration_1 |
-| BIOFORMATS-build       | testintegration | Builds Bio-Formats components    | devspace_testintegration_1 |
-| BIOFORMATS-image       | testintegration | Builds a Docker image of Bio-Formats   | devspace_docker_1 |
-| OMERO-push             | testintegration | Merges all OMERO PRs                      | devspace_testintegration_1 |
-| OMERO-build            | testintegration | Builds OMERO artifacts (server, clients)  | devspace_testintegration_1 |
-| OMERO-server           | omero           | Deploys an OMERO.server                   | devspace_omero_1           |
-| OMERO-web              | web             | Deploys an OMERO.web client               | devspace_web_1             |
-| OMERO-test-integration | testintegration | Runs the OMERO integration tests          | devspace_testintegration_1 |
-| OMERO-robot            | testintegration | Runs the Robot tests                      | devspace_testintegration_1 |
-| nginx                  | nginx           | Reloads the nginx server                  | devspace_nginx_1           |
-| OMERO-docs             | testintegration | Builds the OMERO documentation            | devspace_testintegration_1 |
+| BIOFORMATS-push        | testintegration | Merges all Bio-Formats PRs                | devspace-testintegration-1 |
+| BIOFORMATS-build       | testintegration | Builds Bio-Formats components             | devspace-testintegration-1 |
+| BIOFORMATS-image       | testintegration | Builds a Docker image of Bio-Formats      | devspace-docker-1          |
+| OMERO-push             | testintegration | Merges all OMERO PRs                      | devspace-testintegration-1 |
+| OMERO-build            | testintegration | Builds OMERO artifacts (server, clients)  | devspace-testintegration-1 |
+| OMERO-server           | omero           | Deploys an OMERO.server                   | devspace-omero-1           |
+| OMERO-web              | web             | Deploys an OMERO.web client               | devspace-web-1             |
+| OMERO-test-integration | testintegration | Runs the OMERO integration tests          | devspace-testintegration-1 |
+| OMERO-robot            | testintegration | Runs the Robot tests                      | devspace-testintegration-1 |
+| nginx                  | nginx           | Reloads the nginx server                  | devspace-nginx-1           |
+| OMERO-docs             | testintegration | Builds the OMERO documentation            | devspace-testintegration-1 |
 
 
 This means that by default the following repositories need to be
 forked to your GitHub account:
 
 * [ome/openmiscrocopy](https://github.com/ome/openmicroscopy)
-* [ome/ome-documentation](https://github.com/ome/ome-documentation)
+* [ome/omero-documentation](https://github.com/ome/omero-documentation)
 * [ome/bioformats](https://github.com/ome/bioformats)
 
 If you do not have some of the repositories forked, you will need to remove the jobs from the list
@@ -185,29 +186,28 @@ Alternatively create a new job in the Jenkins web-interface in the usual way.
 
 # Default packages used
 
-| Name       | Version       | Optional                           |
-| -----------|---------------| -----------------------------------|
-| Java       | openJDK 1.8   | openJDK 1.8 devel, oracleJDK 1.8   |
-| Python     | 2.7           | -                                  |
-| Ice        | 3.6           | 3.5                                |
-| PostgreSQL | 9.4           | https://hub.docker.com/_/postgres/ |
-| Nginx      | 1.8           | -                                  |
-| Redis      | latest        | https://hub.docker.com/_/redis/    |
+| Name       | Version           |
+| -----------|-------------------|
+| Java       | openJDK 11-devel  |
+| Python     | 3.9               |
+| Ice        | 3.6               |
+| PostgreSQL | 16                |
+| Nginx      | 1.24              |
 
 # Troubleshooting
 
 See [Troubleshooting](Troubleshooting.md)
 
-# ADVANCE: extend omero-install
-
-In order to install additional components or new version of packages e.g. PostgreSQL 10, it is required to:
-
-* Modify the files in [omero-install](https://github.com/ome/omero-install)
-* Create a new image of [devslave-c7-docker](https://github.com/ome/devslave-c7-docker) using the updated omero-install files
-* Push the new image to [Docker Hub](https://hub.docker.com/). You will need to your own account
-* Modify each Dockerfile of this repository to use the new image
-
 
 # Upgrade
 
 See [Changelog](CHANGELOG.md)
+
+# Run BioFormats jobs
+
+To run the BioFormats testing the various readers on sample data, you will need to activate the a private
+job
+
+* In the ``devspace``, create a directory ``home/jobs/DATA_REPO_CONFIG-merge/``
+* Download the job configuration from ``config.xml`` in https://github.com/openmicroscopy/management_tools/tree/master/ci/jobs/DATA_REPO_CONFIG-merge (private repository) and place it in the newly created directory
+* Comment out the line ``build job: "DATA_REPO_CONFIG-merge"`` in the ``trigger`` job

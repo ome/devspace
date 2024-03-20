@@ -1,18 +1,16 @@
-FROM openmicroscopy/devslave-c7:0.7.2
+FROM openmicroscopy/devagent:0.8.1
 
 MAINTAINER OME
 
-# manually install java11
-RUN yum -y install java-11-openjdk-devel
-# Switch Java version
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk
-ENV PATH=$JAVA_HOME/bin:$PATH
+COPY nginx-stable.repo /etc/yum.repos.d/
+RUN dnf -y install dnf-utils
+RUN yum-config-manager --enable nginx-stable
 
-RUN yum -y localinstall http://nginx.org/packages/rhel/7/noarch/RPMS/nginx-release-rhel-7-0.el7.ngx.noarch.rpm \
-    && yum clean all
-RUN yum -y install nginx --disablerepo=epel \
-    && yum clean all
-RUN mv /etc/nginx/conf.d/default.conf  /etc/nginx/conf.d/default.conf.disabled
+RUN dnf -y install nginx\
+    && dnf clean all
+
+# comment out default server config in nginx.conf
+RUN sed -i "/^\s\s\s\sserver/, /^\s\s\s\s}/ s|^|#|" /etc/nginx/nginx.conf
 
 VOLUME ["/etc/nginx/conf.d", "/var/log/nginx"]
 

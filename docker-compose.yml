@@ -12,12 +12,6 @@ services:
         environment:
             - JENKINS_OPTS= --prefix=${JENKINS_PREFIX} --argumentsRealm.passwd.${JENKINS_USERNAME}=${JENKINS_PASSWORD} --argumentsRealm.roles.${JENKINS_USERNAME}=admin
 
-    git:
-        build: git
-        volumes:
-            - /src
-        command: 'true'
-
     pg:
         image: postgres:${POSTGRES_VERSION}
         networks:
@@ -41,7 +35,7 @@ services:
         environment:
             - SLAVE_NAME=testintegration
             - SLAVE_EXECUTORS=2
-            - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java11 -disableClientsUniqueId
+            - SLAVE_PARAMS=-labels rocky9 -labels ice36 -labels java11 -disableClientsUniqueId
             - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
             - WEB_PREFIX
             - REPO_CONFIG
@@ -50,6 +44,10 @@ services:
         ports:
             - "${OMERO_SERVER_TEST_SSL}14064"
             - "${OMERO_SERVER_TEST_TCP}14063"
+        ulimits:
+          nofile:
+            soft: 8192
+            hard: 65536
 
     omero:
         build:
@@ -58,16 +56,20 @@ services:
         networks:
             - omero-network
         volumes:
-            - ./server:/home/omero-server
+            - ./server:/home/omero
         environment:
             - SLAVE_NAME=omero
             - SLAVE_EXECUTORS=2
-            - SLAVE_PARAMS=-labels centos7 -labels ice36 -labels java11 -disableClientsUniqueId
+            - SLAVE_PARAMS=-labels rocky9 -labels ice36 -labels java11 -disableClientsUniqueId
             - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
             - WEBHOST=http://nginx${WEB_PREFIX}
         ports:
             - "${OMERO_SERVER_SSL}4064"
             - "${OMERO_SERVER_TCP}4063"
+        ulimits:
+          nofile:
+            soft: 8192
+            hard: 65536
 
     web:
         build:
@@ -76,12 +78,12 @@ services:
         networks:
             - omero-network
         volumes:
-            - ./web:/home/omero-web
-            - ./nginx/conf.d:/home/omero-web/nginx
+            - ./web:/home/omero
+            - ./nginx/conf.d:/home/omero/nginx
         environment:
             - SLAVE_NAME=web
             - SLAVE_EXECUTORS=2
-            - SLAVE_PARAMS= -labels centos7 -labels ice36 -labels java11 -disableClientsUniqueId
+            - SLAVE_PARAMS= -labels rocky9 -labels ice36 -labels java11 -disableClientsUniqueId
             - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
             - WEB_PREFIX
 
@@ -93,12 +95,12 @@ services:
             - omero-network
         volumes:
             - ./nginx/conf.d:/etc/nginx/conf.d
-            - ./web/static:/home/omero-web/static
+            - ./web/static:/home/omero/static
             - ./nginx/log:/var/log/nginx
             - ./nginx/sslcert:/etc/nginx/ssl
         environment:
             - SLAVE_NAME=nginx
-            - SLAVE_PARAMS=-labels centos7 -labels java11 -disableClientsUniqueId
+            - SLAVE_PARAMS=-labels rocky9 -labels java11 -disableClientsUniqueId
             - JENKINS_MASTER=${JENKINS_BASE}${JENKINS_PREFIX}
         ports:
             - "${NGINX_PORT}80"
@@ -139,6 +141,9 @@ services:
             - SCREEN_WIDTH=1920
             - SCREEN_HEIGHT=1080
             - SCREEN_DEPTH=24
+            - SE_EVENT_BUS_HOST=seleniumhub
+            - SE_EVENT_BUS_PUBLISH_PORT=4442
+            - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
         depends_on:
             - seleniumhub
 
@@ -152,6 +157,9 @@ services:
             - SCREEN_WIDTH=1920
             - SCREEN_HEIGHT=1080
             - SCREEN_DEPTH=24
+            - SE_EVENT_BUS_HOST=seleniumhub
+            - SE_EVENT_BUS_PUBLISH_PORT=4442
+            - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
         depends_on:
             - seleniumhub
 
@@ -171,7 +179,7 @@ services:
             - REPO_CONFIG
 
     nexus:
-        image: sonatype/nexus3
+        image: sonatype/nexus3:3.59.0
         user: ${USER_ID}
         networks:
             - omero-network

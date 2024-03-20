@@ -1,93 +1,65 @@
-FROM openmicroscopy/devslave-c7:0.7.2
+FROM openmicroscopy/devagent:0.8.1
 
 MAINTAINER OME
 
-ARG JAVAVER=openjdk11-devel
-ARG ICEVER=ice36
-ARG BRANCH=scl_c7
-ARG NAME=ome
 
-# Remove the existing omero user
-RUN userdel -r omero && \
-    rm -f /etc/sudoers.d/omero && \
-    echo 'root:omero' | chpasswd
-
-# skip some omero-install
-RUN echo 'export container=docker' > /etc/profile.d/docker.sh
-
-ENV OMERO_INSTALL_ROOT=/tmp/omero-install
-
-## update omero-install to the latest one
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.email "you@example.com"
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT config --global user.name "Your Name"
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT remote add $NAME https://github.com/$NAME/omero-install.git
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT fetch $NAME
-RUN git --git-dir=$OMERO_INSTALL_ROOT/.git --work-tree=$OMERO_INSTALL_ROOT merge $NAME/$BRANCH
-
-
-ADD ./settings.env $OMERO_INSTALL/settings.env
-RUN chmod +x $OMERO_INSTALL/settings.env
-
-# Customize: run particular scripts from omero-install
-RUN rm -f $OMERO_INSTALL/setup_centos_selinux.sh
-RUN touch $OMERO_INSTALL/setup_centos_selinux.sh
-# db will be managed by the job
-RUN rm -f $OMERO_INSTALL/setup_omero_db.sh
-RUN touch $OMERO_INSTALL/setup_omero_db.sh
-RUN rm -f $OMERO_INSTALL/step03_all_postgres.sh
-RUN touch $OMERO_INSTALL/step03_all_postgres.sh
-# omeroweb will be installed by the job
-RUN rm -f $OMERO_INSTALL/step04_all_omero.sh
-RUN touch $OMERO_INSTALL/step04_all_omero.sh
-# no systemd
-RUN rm -rf $OMERO_INSTALL/step06_centos7_daemon.sh
-RUN touch $OMERO_INSTALL/step06_centos7_daemon.sh
-# no Pillow
-RUN rm -rf $OMERO_INSTALL/requirements.txt
-RUN touch $OMERO_INSTALL/requirements.txt
+ADD ./settings.env /home/settings.env
+RUN chmod +x  /home/settings.env
 
 WORKDIR /tmp/omero-install/linux
 
-RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=nopg bash install_centos7.sh
 
-# install postgres tools
-RUN yum -y install postgresql13 \
-    && yum clean all
+RUN dnf install -y python3 python3-pip
+RUN pip install build
 
-# Switch Java version
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk
-ENV PATH=$JAVA_HOME/bin:$PATH
+# Ice dependencies
+RUN dnf install -y 'dnf-command(config-manager)' && \
+    dnf config-manager --set-enabled crb
+RUN dnf install -y openssl libdb-cxx
+RUN cd /tmp && \
+    wget -q https://github.com/glencoesoftware/zeroc-ice-rhel9-x86_64/releases/download/20230928/Ice-3.6.5-rhel9-x86_64.tar.gz && \
+    tar xf Ice-3.6.5-rhel9-x86_64.tar.gz && \
+    mv Ice-3.6.5 /opt/ice-3.6.5 && \
+    echo /opt/ice-3.6.5/lib64 > /etc/ld.so.conf.d/ice-x86_64.conf && \
+    ldconfig
+ENV ICE_HOME=/opt/ice-3.6.5
 
+ENV PATH=$ICE_HOME/bin:$PATH
+
+# install postgres tools for pg16 (default is 13)
+RUN dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+RUN dnf -qy module disable postgresql
+
+RUN dnf -y install postgresql16 \
+    && dnf clean all
+
+# For OME-zarr
+RUN dnf -y install epel-release
+RUN dnf -y update
+RUN dnf -y install blosc
 
 EXPOSE 4064
 EXPOSE 4063
 
 ADD ./run.sh /tmp/run.sh
-RUN chown omero-server:omero-server /tmp/run.sh
+RUN chown omero:omero /tmp/run.sh
 RUN chmod a+x /tmp/run.sh
 
-ENV PATH=/opt/rh/rh-python38/root/usr/bin:$PATH
-RUN python3 -m venv /py3 && /py3/bin/pip install -U pip tox build future wheel restructuredtext-lint
-RUN /py3/bin/pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.3.0/zeroc_ice-3.6.5-cp38-cp38-linux_x86_64.whl
-ENV VIRTUAL_ENV=/py3
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Install mencoder
 # See https://github.com/ome/prod-playbooks/blob/7d8e59ced0b47a224d6be02907d913c392ef9379/ome-dundeeomero.yml#L48
-RUN yum install -y http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
-RUN yum install -y mencoder
+# RUN dnf install -y http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+# RUN dnf install -y mencoder
 
-RUN yum install -y openssl
-
-RUN localedef -i en_US -f UTF-8 en_US.UTF-8
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 # Change user id to fix permissions issues
 ARG USER_ID=1000
-RUN usermod -u $USER_ID omero-server
+RUN usermod -u $USER_ID omero
+
+
 
 # make sure mounted volumes has correct permissions
-VOLUME ["/home/omero-server"]
+VOLUME ["/home/omero"]
 
-USER omero-server
+USER omero
 CMD ["/tmp/run.sh"]

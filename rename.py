@@ -12,6 +12,7 @@ EXCLUDE = ["builds", "workspace", "fingerprints"]
 
 def replace(name, branch, uid, user):
   cnt = 0
+  branch_ci = branch + "-ci"
   for root, dirs, files in os.walk("."):
     dirs[:] = list([x for x in dirs if not x in EXCLUDE])
     env = list(fnmatch.filter(files, ".env"))
@@ -26,6 +27,7 @@ def replace(name, branch, uid, user):
         regexp = re.compile(r'(SPACE[NAME|BRANCH|USER]|1000)')
         if regexp.search(line) is not None:
           cnt += 1
+          line = line.replace("BRANCHCI", branch_ci)
           line = line.replace("SPACENAME", name)
           line = line.replace("SPACEUSER", user)
           line = line.replace("1000", str(uid))

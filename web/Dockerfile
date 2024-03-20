@@ -1,79 +1,42 @@
-FROM openmicroscopy/devslave-c7:0.7.2
+FROM openmicroscopy/devagent:0.8.1
 
 MAINTAINER OME
 
-ARG ICEVER=noice
+ADD ./settings.env  /home/settings.env
+RUN chmod +x /home/settings.env
 
-# make ICEVERSION environment variable to use in OMERO-web job
-ENV ICEVERSION ${ICEVER:-noice}
-
-
-# Remove the existing omero user
-RUN userdel -r omero && \
-    rm -f /etc/sudoers.d/omero && \
-    echo 'root:omero' | chpasswd
-
-# Create the omero-web user
-RUN useradd omero-web && \
-	echo 'omero-web:omero-web' | chpasswd && \
-	echo "omero-web ALL= (ALL) NOPASSWD: ALL" >> /etc/sudoers.d/omero-web
-
-
-# skip some omero-install
-RUN echo 'export container=docker' > /etc/profile.d/docker.sh
-
-ENV OMERO_INSTALL_ROOT=/tmp/omero-install
-
-ADD ./settings.env $OMERO_INSTALL/settings.env
-RUN chmod +x $OMERO_INSTALL/settings.env
-
-# manually install ICEPY dependences
-RUN yum -y install gcc-c++
 # ant for iviewer, make for nodejs
-RUN yum -y install ant make
-RUN yum -y install openssl-devel bzip2-devel expat-devel
-RUN curl -sL https://rpm.nodesource.com/setup_16.x | bash
-RUN yum install -y nodejs
+RUN dnf -y install ant make
+RUN curl -sL https://rpm.nodesource.com/setup_20.x | bash
+RUN dnf install -y nodejs
 # grunt for figure
 RUN npm install -g grunt
 
-RUN yum install -y python-redis && yum clean all
-
-# manually install java11
-RUN yum -y install java-11-openjdk-devel
-# Switch Java version
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk
-ENV PATH=$JAVA_HOME/bin:$PATH
 
 EXPOSE 4080
 
 ADD ./run.sh /tmp/run.sh
-RUN chown omero-web:omero-web /tmp/run.sh
+RUN chown omero:omero /tmp/run.sh
 RUN chmod a+x /tmp/run.sh
 
-RUN yum -y install centos-release-scl
-RUN yum install -y rh-python38-python
+RUN dnf install -y python3 openssl python3-pip
+RUN pip install build
 
-ENV PATH=/opt/rh/rh-python38/root/usr/bin:$PATH
-
-RUN python3 -m venv /py3 && /py3/bin/pip install -U pip tox build future wheel restructuredtext-lint
-RUN /py3/bin/pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.3.0/zeroc_ice-3.6.5-cp38-cp38-linux_x86_64.whl
-ENV VIRTUAL_ENV=/py3
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+RUN dnf clean all
 
 # Change user id to fix permissions issues
 ARG USER_ID=1000
-RUN usermod -u $USER_ID omero-web
+RUN usermod -u $USER_ID omero
 
-RUN chown -R omero-web:omero-web /home/omero-web/
+RUN chown -R omero:omero /home/omero/
 
 # make sure mounted volumes has correct permissions
-RUN mkdir -p /home/omero-web/nginx
-RUN chown -R omero-web:omero-web /home/omero-web/nginx
-RUN mkdir -p /home/omero-web/static
-RUN chown -R omero-web:omero-web /home/omero-web/static
+RUN mkdir -p /home/omero/nginx
+RUN chown -R omero:omero /home/omero/nginx
+RUN mkdir -p /home/omero/static
+RUN chown -R omero:omero /home/omero/static
 
-VOLUME ["/home/omero-web", "/home/omero-web/nginx"]
+VOLUME ["/home/omero", "/home/omero/nginx"]
 
-USER omero-web
+USER omero
 CMD ["/tmp/run.sh"]

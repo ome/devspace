@@ -77,7 +77,7 @@ OMERO_VEN=$WORKSPACE/omero-virtualenv
 source $HOME/settings.env
 python3 -m venv $OMERO_VEN
 
-$OMERO_VEN/bin/pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.3.0/zeroc_ice-3.6.5-cp38-cp38-linux_x86_64.whl
+$OMERO_VEN/bin/pip install https://github.com/glencoesoftware/zeroc-ice-py-rhel9-x86_64/releases/download/20230830/zeroc_ice-3.6.5-cp39-cp39-linux_x86_64.whl
 $OMERO_VEN/bin/pip install -U setuptools omero-py
 source docs/hudson/OMERO.sh
 </command>
@@ -85,7 +85,7 @@ source docs/hudson/OMERO.sh
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>src/target/*.zip,src/target/*.egg,src/target/*.log,src/target/*INFO,target/version.tsv</artifacts>
+      <artifacts>src/target/*.zip,src/target/*.log,src/target/*INFO</artifacts>
       <allowEmptyArchive>false</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>

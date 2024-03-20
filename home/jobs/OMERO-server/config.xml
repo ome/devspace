@@ -1,7 +1,6 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description></description>
+  <description/>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.model.ParametersDefinitionProperty>
@@ -25,12 +24,11 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>OMERO_SERVER_ZIP_URL</name>
-          <description></description>
-          <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
+    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>omero</assignedNode>
@@ -42,8 +40,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>OMERO_INSTALL=/tmp/omero-install/linux
-source $OMERO_INSTALL/settings.env
+      <command>source /home/settings.env
 OMERO_DB_NAME=$DB_NAME
 OMERO_DIST=$WORKSPACE/OMERO.server
 export OMERODIR=$OMERO_DIST
@@ -56,37 +53,52 @@ if [ -e $OMERO_DIST ]; then
     deactivate
 fi
 
+rm -rf $WORKSPACE/.venv3
+python3 -m venv $WORKSPACE/.venv3
 
-if [ &quot;$PURGE_DATA&quot; = &quot;true&quot; ]; then
-    dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo &quot;First run or already exists&quot;
+if [ "$PURGE_DATA" = "true" ]; then
+    dropdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME || echo "First run or already exists"
     rm -rf $OMERO_DATA_DIR
 else
-    echo &quot;Skipping PURGE_DATA:CleanDbAndRepo&quot;
+    echo "Skipping PURGE_DATA:CleanDbAndRepo"
 fi
 
 rm -rf $WORKSPACE/*  # Should leave .venv3</command>
+      <configuredLocalRules/>
     </hudson.tasks.Shell>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@722.v0662a_9b_e22a_c">
       <project>OMERO-build</project>
       <filter>src/target/OMERO.server*zip</filter>
-      <target></target>
-      <excludes></excludes>
+      <target/>
+      <includeBuildNumberInTargetPath>false</includeBuildNumberInTargetPath>
+      <excludes/>
       <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
       <flatten>true</flatten>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@722.v0662a_9b_e22a_c">
       <project>OMERO-python-superbuild-build</project>
       <filter>**/*.tar.gz</filter>
-      <target></target>
-      <excludes></excludes>
+      <target/>
+      <includeBuildNumberInTargetPath>false</includeBuildNumberInTargetPath>
+      <excludes/>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@722.v0662a_9b_e22a_c">
+      <project>OMERO-build-build</project>
+      <filter/>
+      <target/>
+      <includeBuildNumberInTargetPath>false</includeBuildNumberInTargetPath>
+      <excludes/>
       <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
       <flatten>true</flatten>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command>OMERO_INSTALL=/tmp/omero-install/linux
-source $OMERO_INSTALL/settings.env
+      <command>
+source /home/settings.env
 OMERO_DB_NAME=$DB_NAME
 OMERO_DATA_DIR=$DATA_DIR
 
@@ -94,9 +106,11 @@ mkdir -p $OMERO_DATA_DIR
 
 OMERO_DIST=$WORKSPACE/OMERO.server
 export OMERODIR=$OMERO_DIST
+export ZIP_FILE=$WORKSPACE/omero-blitz-VERSION-python.zip
+export VERSION_PROPERTIES=$WORKSPACE/version.properties
 
 ZIP=$(ls OMERO.server*.zip)
-if [ ! -z &quot;$OMERO_SERVER_ZIP_URL&quot; ]
+if [ ! -z "$OMERO_SERVER_ZIP_URL" ]
 then
    rm -f $ZIP
    wget -q $OMERO_SERVER_ZIP_URL
@@ -108,18 +122,19 @@ rm -f $ZIP
 mv $WORKSPACE/$DIST $OMERO_DIST
 
 source $WORKSPACE/.venv3/bin/activate
-pip install https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.3.0/zeroc_ice-3.6.5-cp38-cp38-linux_x86_64.whl
+
+pip install https://github.com/glencoesoftware/zeroc-ice-py-rhel9-x86_64/releases/download/20230830/zeroc_ice-3.6.5-cp39-cp39-linux_x86_64.whl
 pip install -U pip future
 pip install markdown
 pip install reportlab # For figure
 pip install omego
 pip install tables
 pip install jinja2
-pip install &quot;urllib3<2&quot; # to be removed if/when included in omero-py
 pip install omero-py
 
 pip install git+https://github.com/$SPACE_USER/omero-metadata.git@$MERGE_PUSH_BRANCH#egg=omero-metadata
 pip install git+https://github.com/$SPACE_USER/omero-cli-render.git@$MERGE_PUSH_BRANCH#egg=omero-cli-render
+pip install git+https://github.com/$SPACE_USER/omero-cli-duplicate.git@$MERGE_PUSH_BRANCH#egg=omero-cli-duplicate
 pip install omero-certificates
 
 for x in *.tar.gz; do
@@ -131,33 +146,38 @@ omero config set omero.db.name $OMERO_DB_NAME
 omero config set omero.db.host $OMERO_DB_HOST
 omero config set omero.db.user $OMERO_DB_USER
 omero config set omero.data.dir $OMERO_DATA_DIR
-omero config set omero.fs.repo.path &quot;%user%_%userId%/%thread%//%year%-%month%/%day%/%time%&quot;
+omero config set omero.fs.repo.path "%user%_%userId%/%thread%//%year%-%month%/%day%/%time%"
 omero config set omero.db.poolsize 25
 omero config set omero.security.trustStore /etc/pki/ca-trust/extracted/java/cacerts
 omero config set omero.security.trustStorePassword changeit
+omero config set omero.mail.config true
+# omero config set omero.mail.from your_address
+# omero config set omero.mail.host your_smtp_server_for_example
 omero certificates
 
-if [ &quot;$PURGE_DATA&quot; = &quot;true&quot; ]; then
+if [ "$PURGE_DATA" = "true" ]; then
     createdb -h $OMERO_DB_HOST -U $OMERO_DB_USER $OMERO_DB_NAME
     omego db init --serverdir $OMERO_DIST --dbname $OMERO_DB_NAME
 else
-    echo &quot;Skipping PURGE_DATA:CleanDbAndRepo. Check for DB upgrade&quot;
+    echo "Skipping PURGE_DATA:CleanDbAndRepo. Check for DB upgrade"
     omego db -vvv upgrade --serverdir $OMERO_DIST --dbname $OMERO_DB_NAME
 fi
 
-export LANG=&apos;en_US.UTF-8&apos;
-export LANGUAGE=&apos;en_US:en&apos;
-export LC_ALL=&apos;en_US.UTF-8&apos;
+export LANG='en_US.UTF-8'
+export LANGUAGE='en_US:en'
+export LC_ALL='en_US.UTF-8'
 BUILD_ID=DONT_KILL_ME omero admin start
 
 omero admin waitup
 omero admin diagnostics
 
-deactivate</command>
+deactivate
+</command>
+      <configuredLocalRules/>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.26"/>
   </buildWrappers>
 </project>
