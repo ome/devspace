@@ -141,6 +141,10 @@ for x in *.tar.gz; do
     pip install -U $x # Install marshal, etc. *after* requirements
 done
 
+# Install figure script
+wget https://raw.githubusercontent.com/$SPACE_USER/omero-figure/$MERGE_PUSH_BRANCH/omero_figure/scripts/omero/figure_scripts/Figure_To_Pdf.py
+chmod 755 Figure_To_Pdf.py
+mv Figure_To_Pdf.py $OMERO_DIST/lib/scripts/omero/figure_scripts
 
 omero config set omero.db.name $OMERO_DB_NAME
 omero config set omero.db.host $OMERO_DB_HOST
