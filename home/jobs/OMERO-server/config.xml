@@ -155,6 +155,7 @@ omero config set omero.db.poolsize 25
 omero config set omero.security.trustStore /etc/pki/ca-trust/extracted/java/cacerts
 omero config set omero.security.trustStorePassword changeit
 omero config set omero.mail.config true
+omero config set omero.server.nodedescriptors master:Blitz-0,Indexer-0,Processor-0,Storm,Tables-0
 # omero config set omero.mail.from your_address
 # omero config set omero.mail.host your_smtp_server_for_example
 omero certificates
