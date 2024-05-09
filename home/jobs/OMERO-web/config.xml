@@ -112,7 +112,6 @@ for x in *.tar.gz; do
   pip install $x
 done
 
-pip install packaging # to be removed if/when included in omero-web
 pip install build # require to build omero-iviewer to be removed when possible to install directly from github
 
 #start-config
