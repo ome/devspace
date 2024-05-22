@@ -38,6 +38,15 @@ RUN dnf -y install epel-release
 RUN dnf -y update
 RUN dnf -y install blosc
 
+# install various Java versions
+RUN dnf install -y java-21-openjdk-devel java-17-openjdk-devel
+RUN dnf install -y cronie
+
+# Add cron job to rotate java versions
+ADD ./root /var/spool/cron/
+RUN chmod +x  /var/spool/cron/root
+
+
 EXPOSE 4064
 EXPOSE 4063
 

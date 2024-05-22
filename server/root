@@ -1,0 +1,7 @@
+0 0 * * 0 ln -vfns /usr/lib/jvm/java-11-openjdk/bin/java /etc/alternatives/java
+0 0 * * 1 ln -vfns /usr/lib/jvm/java-17-openjdk/bin/java /etc/alternatives/java
+0 0 * * 2 ln -vfns /usr/lib/jvm/java-21-openjdk/bin/java /etc/alternatives/java
+0 0 * * 3 ln -vfns /usr/lib/jvm/java-11-openjdk/bin/java /etc/alternatives/java
+0 0 * * 4 ln -vfns /usr/lib/jvm/java-17-openjdk/bin/java /etc/alternatives/java
+0 0 * * 5 ln -vfns /usr/lib/jvm/java-21-openjdk/bin/java /etc/alternatives/java
+0 0 * * 6 ln -vfns /usr/lib/jvm/java-11-openjdk/bin/java /etc/alternatives/java
