@@ -90,7 +90,7 @@ Due to Recent change in [RSA SSH host key](https://github.blog/2023-03-23-we-upd
 
 In a terminal, Run:
 
-``
+```
 mv ~/.ssh/known_hosts ~/.ssh/known_hosts.bak
 ssh -T git@github.com
-``
+```
