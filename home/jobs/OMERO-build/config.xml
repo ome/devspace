@@ -75,9 +75,9 @@ export OMERO_BRANCH=$MERGE_PUSH_BRANCH
 OMERO_VEN=$WORKSPACE/omero-virtualenv      
 
 source $HOME/settings.env
-python3 -m venv $OMERO_VEN
+python3.11 -m venv $OMERO_VEN
 
-$OMERO_VEN/bin/pip install https://github.com/glencoesoftware/zeroc-ice-py-rhel9-x86_64/releases/download/20230830/zeroc_ice-3.6.5-cp39-cp39-linux_x86_64.whl
+$OMERO_VEN/bin/pip install https://github.com/glencoesoftware/zeroc-ice-py-linux-x86_64/releases/download/20240202/zeroc_ice-3.6.5-cp311-cp311-manylinux_2_28_x86_64.whl
 $OMERO_VEN/bin/pip install -U setuptools omero-py
 source docs/hudson/OMERO.sh
 </command>
