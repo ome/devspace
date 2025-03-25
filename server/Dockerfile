@@ -9,7 +9,7 @@ RUN chmod +x  /home/settings.env
 WORKDIR /tmp/omero-install/linux
 
 
-RUN dnf install -y python3 python3-pip
+RUN dnf install -y python3.11 python3.11-pip
 RUN pip install build
 
 # Ice dependencies

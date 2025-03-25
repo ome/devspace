@@ -14,7 +14,7 @@ RUN chmod +x /home/settings.env
 RUN dnf install -y make
 
 # Python job
-RUN dnf install -y python3-setuptools python3-pip
+RUN dnf install -y python3.11 python3.11-pip
 RUN pip install build
 
 # Ice dependencies
