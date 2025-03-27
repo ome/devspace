@@ -55,11 +55,11 @@
     <hudson.tasks.Shell>
       <command>
         rm -rf $WORKSPACE/.venv3
-python -m venv $WORKSPACE/.venv3
+python3.11 -m venv $WORKSPACE/.venv3
 
 source $WORKSPACE/.venv3/bin/activate
-pip install https://github.com/glencoesoftware/zeroc-ice-py-rhel9-x86_64/releases/download/20230830/zeroc_ice-3.6.5-cp39-cp39-linux_x86_64.whl
-pip install -U pip future setuptools
+pip install -U pip setuptools
+pip install https://github.com/glencoesoftware/zeroc-ice-py-linux-x86_64/releases/download/20240202/zeroc_ice-3.6.5-cp311-cp311-manylinux_2_28_x86_64.whl
 pip install omero-py omero-web  # Latest in order to stop server.
 </command>
     </hudson.tasks.Shell>
