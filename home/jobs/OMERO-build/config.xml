@@ -79,6 +79,7 @@ python3.11 -m venv $OMERO_VEN
 
 $OMERO_VEN/bin/pip install https://github.com/glencoesoftware/zeroc-ice-py-linux-x86_64/releases/download/20240202/zeroc_ice-3.6.5-cp311-cp311-manylinux_2_28_x86_64.whl
 $OMERO_VEN/bin/pip install -U setuptools omero-py
+source $OMERO_VEN/bin/activate
 source docs/hudson/OMERO.sh
 </command>
     </hudson.tasks.Shell>
