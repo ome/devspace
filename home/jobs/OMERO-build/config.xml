@@ -73,7 +73,7 @@ cd src
 export OMERO_BRANCH=$MERGE_PUSH_BRANCH
         
 OMERO_VEN=$WORKSPACE/omero-virtualenv      
-
+rm -rf $OMERO_VEN
 source $HOME/settings.env
 python3.11 -m venv $OMERO_VEN
 
