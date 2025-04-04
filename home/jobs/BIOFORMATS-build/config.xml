@@ -73,7 +73,7 @@
   </axes>
   <builders>
     <hudson.tasks.Shell>
-      <command>python3 -mvenv venv
+      <command>python3.11 -mvenv venv
 source $WORKSPACE/venv/bin/activate
 
 cd bio-formats-build

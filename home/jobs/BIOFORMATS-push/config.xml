@@ -72,7 +72,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>python3 -mvenv venv
+      <command>python3.11 -mvenv venv
 source $WORKSPACE/venv/bin/activate
 pip install -U pip
 pip install -U scc
