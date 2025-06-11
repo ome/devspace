@@ -88,7 +88,11 @@ Start and configure:
     By default, this will use the name of the directory as the project name. In the case of a shared Docker host, it is possible to override the project name using
 
         $ docker compose up -p my_project -d
+    
+*   Stop devspace using `docker compose`:
 
+        $ docker compose -f docker-compose.yml down
+    
 *  Depending on the ssh key, you might have to run the following comment in the ``test-integration`` container. For example:
         $ docker exec -it devspace-testintegration-1 bash
         $ ssh -T git@github.com
