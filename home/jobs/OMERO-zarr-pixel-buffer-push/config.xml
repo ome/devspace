@@ -1,0 +1,47 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1385.vb_58b_86ea_fff1">
+  <actions/>
+  <description>Run scc merge and bump versions on omero-zarr-pixel-buffer</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>STATUS</name>
+          <description>PR check status</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>success-only</string>
+              <string>no-error</string>
+              <string>none</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MERGE_OPTIONS</name>
+          <description>scc merge options</description>
+          <defaultValue>-vvv --no-ask --reset --comment</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@3964.v0767b_4b_a_0b_fa_">
+    <script>node(&apos;testintegration&apos;) {
+
+  library identifier: &apos;recursiveMerge@master&apos;, retriever: modernSCM(
+    [$class: &apos;GitSCMSource&apos;,
+     remote: &apos;https://github.com/ome/jenkins-library-recursivemerge.git&apos;])
+
+  recursiveCheckout(
+    repo: &apos;omero-zarr-pixel-buffer.git&apos;)
+    
+  recursiveMerge(
+    baseRepo: &apos;omero-zarr-pixel-buffer.git&apos;)
+
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
