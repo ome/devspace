@@ -14,13 +14,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>rm -rf zarr-java
-git clone https://github.com/zarr-developers/zarr-java.git
-cd zarr-java
-mvn clean install -DskipTests -Dgpg.skip=true
-cd ..
-
-rm -rf omero-zarr-pixel-buffer
+      <command>rm -rf omero-zarr-pixel-buffer
 git clone -b $MERGE_PUSH_BRANCH https://github.com/$SPACE_USER/omero-zarr-pixel-buffer.git
 cd omero-zarr-pixel-buffer
 ./gradlew publishToMavenLocal</command>
