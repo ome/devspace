@@ -43,6 +43,8 @@ ADD ./root /var/spool/cron/
 RUN chmod +x  /var/spool/cron/root
 
 
+RUN update-alternatives --set java java-11-openjdk.x86_64
+
 EXPOSE 4064
 EXPOSE 4063
 
