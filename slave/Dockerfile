@@ -1,4 +1,4 @@
-FROM openmicroscopy/devagent:0.8.1
+FROM openmicroscopy/devagent:0.8.2
 
 LABEL org.opencontainers.image.authors="OME"
 
@@ -62,8 +62,6 @@ RUN dnf -y install epel-release
 RUN dnf -y update
 RUN dnf -y install blosc
 
-# install various Java versions
-RUN dnf install -y java-21-openjdk-devel java-17-openjdk-devel
 RUN dnf install -y cronie
 
 EXPOSE 14064
