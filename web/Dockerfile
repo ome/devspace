@@ -9,9 +9,6 @@ RUN chmod +x /home/settings.env
 RUN dnf -y install ant make
 RUN curl -sL https://rpm.nodesource.com/setup_20.x | bash
 RUN dnf install -y nodejs
-# grunt for figure
-RUN npm install -g grunt
-
 
 EXPOSE 4080
 
