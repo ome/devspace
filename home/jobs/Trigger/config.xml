@@ -56,7 +56,7 @@
                 build job: &apos;BIOFORMATS-build&apos;
                 build job: &apos;BIOFORMATS-image&apos;
                 build job: &apos;BIOFORMATS-linkcheck&apos;, wait: false, propagate: false
-                build job: &apos;BIOFORMATS-test-repo&apos;, wait: false, propagate: false
+                // build job: &apos;BIOFORMATS-test-repo&apos;, wait: false, propagate: false
             }
         }
 
