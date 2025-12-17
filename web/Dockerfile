@@ -1,6 +1,6 @@
 FROM openmicroscopy/devagent:0.8.1
 
-MAINTAINER OME
+LABEL org.opencontainers.image.authors="OME"
 
 ADD ./settings.env  /home/settings.env
 RUN chmod +x /home/settings.env

@@ -1,5 +1,5 @@
 FROM jenkins/jenkins:lts-jdk17
-MAINTAINER OME
+LABEL OME
 
 # Temp fix robot test results
 ENV JAVA_OPTS "-Dhudson.model.DirectoryBrowserSupport.CSP=" -Djenkins.install.runSetupWizard=false
