@@ -1,6 +1,6 @@
 FROM openmicroscopy/devagent:0.8.2
 
-MAINTAINER OME
+LABEL org.opencontainers.image.authors="OME"
 
 COPY nginx-stable.repo /etc/yum.repos.d/
 RUN dnf -y install dnf-utils
