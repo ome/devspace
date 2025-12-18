@@ -1,6 +1,6 @@
-FROM openmicroscopy/devagent:0.8.1
+FROM openmicroscopy/devagent:0.8.2
 
-MAINTAINER OME
+LABEL org.opencontainers.image.authors="OME"
 
 USER root
 

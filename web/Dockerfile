@@ -1,6 +1,6 @@
-FROM openmicroscopy/devagent:0.8.1
+FROM openmicroscopy/devagent:0.8.2
 
-MAINTAINER OME
+LABEL org.opencontainers.image.authors="OME"
 
 ADD ./settings.env  /home/settings.env
 RUN chmod +x /home/settings.env
@@ -9,9 +9,6 @@ RUN chmod +x /home/settings.env
 RUN dnf -y install ant make
 RUN curl -sL https://rpm.nodesource.com/setup_20.x | bash
 RUN dnf install -y nodejs
-# grunt for figure
-RUN npm install -g grunt
-
 
 EXPOSE 4080
 
