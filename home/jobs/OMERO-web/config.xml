@@ -242,6 +242,9 @@ omero config set omero.web.public.url_filter &apos;^/&apos;
 omero config set omero.web.feedback.comment.enabled false
 omero config set omero.web.feedback.error.enabled false
 
+# CSRF 
+# omero config set omero.web.csrf_trusted_origins &apos;[&quot;https://YOURSERVER&quot;]&apos;
+
 BUILD_ID=DONT_KILL_ME omero web start
 omero web diagnostics
 
