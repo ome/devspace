@@ -106,7 +106,7 @@ deactivate
 
 # OMERO.java examples
 cd $OMERO_EXAMPLE_DIST/examples/Training/java/src
-javac -cp .:$OMERODIR/lib/client/* training/*.java
+javac --release 11 -cp .:$OMERODIR/lib/client/* training/*.java
 java -cp .:$OMERODIR/lib/client/* training/Setup</command>
     </hudson.tasks.Shell>
   </builders>
