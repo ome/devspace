@@ -126,6 +126,13 @@
                 build job: &apos;WEBSITE-push&apos;, wait: false
             }
         }
+        
+        stage(&apos;OMERO zarr-pixel-buffer&apos;) {
+            steps {
+                build job: &apos;OMERO-zarr-pixel-buffer-push&apos;
+                build job: &apos;OMERO-zarr-pixel-buffer-build&apos;
+            }
+        }
     }
 }</script>
     <sandbox>true</sandbox>
