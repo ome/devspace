@@ -69,6 +69,13 @@
             }
         }
 
+        stage(&apos;OMERO zarr-pixel-buffer&apos;) {
+            steps {
+                build job: &apos;OMERO-zarr-pixel-buffer-push&apos;
+                build job: &apos;OMERO-zarr-pixel-buffer-build&apos;
+            }
+        }
+        
         stage(&quot;OMERO Python&quot;) {
             steps {
                 build job: &apos;OMERO-python-superbuild-push&apos;, parameters: [string(name: &apos;STATUS&apos;, value: &quot;${params.STATUS}&quot;)]
@@ -127,12 +134,6 @@
             }
         }
         
-        stage(&apos;OMERO zarr-pixel-buffer&apos;) {
-            steps {
-                build job: &apos;OMERO-zarr-pixel-buffer-push&apos;
-                build job: &apos;OMERO-zarr-pixel-buffer-build&apos;
-            }
-        }
     }
 }</script>
     <sandbox>true</sandbox>
