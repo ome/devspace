@@ -96,6 +96,16 @@ rm -rf $WORKSPACE/*  # Should leave .venv3</command>
       <flatten>true</flatten>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
+        <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@770.va_6c69e063442">
+      <project>OMERO-zarr-pixel-buffer-build</project>
+      <filter></filter>
+      <target></target>
+      <includeBuildNumberInTargetPath>false</includeBuildNumberInTargetPath>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
       <command>
 source /home/settings.env
@@ -120,6 +130,15 @@ DIST=${ZIP%.zip}
 unzip $ZIP
 rm -f $ZIP
 mv $WORKSPACE/$DIST $OMERO_DIST
+
+# Install omero-zarr-pixel-buffer
+wget -P $OMERO_DIST/lib/server https://repo.maven.apache.org/maven2/com/github/ben-manes/caffeine/caffeine/3.1.8/caffeine-3.1.8.jar
+wget -P $OMERO_DIST/lib/server https://repo.maven.apache.org/maven2/dev/zarr/jzarr/0.4.2/jzarr-0.4.2.jar
+wget -P $OMERO_DIST/lib/server https://repo.maven.apache.org/maven2/org/lasersonlab/s3fs/2.2.3/s3fs-2.2.3.jar
+wget -P $OMERO_DIST/lib/server https://repo.maven.apache.org/maven2/com/amazonaws/aws-java-sdk-s3/1.12.659/aws-java-sdk-s3-1.12.659.jar
+for x in *.jar; do
+  mv $x $OMERO_DIST/lib/server
+done
 
 source $WORKSPACE/.venv3/bin/activate
 
