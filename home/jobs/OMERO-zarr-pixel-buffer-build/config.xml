@@ -23,7 +23,7 @@ cd omero-zarr-pixel-buffer
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>**/build/libs/*.jar, **/target/*.jar</artifacts>
+      <artifacts>**/build/libs/*.jar</artifacts>
       <allowEmptyArchive>false</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
