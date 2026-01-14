@@ -37,9 +37,7 @@
     repo: &apos;omero-zarr-pixel-buffer.git&apos;)
     
   recursiveMerge(
-    baseRepo: &apos;omero-zarr-pixel-buffer.git&apos;
-    parentVersions: &apos;OMERO-plugins-push&apos;,
-    versionFile: &apos;build/version.tsv&apos;)
+    baseRepo: &apos;omero-zarr-pixel-buffer.git&apos;)
 
 }</script>
     <sandbox>true</sandbox>
