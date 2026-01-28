@@ -157,6 +157,7 @@ pip install omero-py
 pip install git+https://github.com/$SPACE_USER/omero-metadata.git@$MERGE_PUSH_BRANCH#egg=omero-metadata
 pip install git+https://github.com/$SPACE_USER/omero-cli-render.git@$MERGE_PUSH_BRANCH#egg=omero-cli-render
 pip install git+https://github.com/$SPACE_USER/omero-cli-duplicate.git@$MERGE_PUSH_BRANCH#egg=omero-cli-duplicate
+pip install git+https://github.com/$SPACE_USER/omero-cli-zarr.git@$MERGE_PUSH_BRANCH#egg=omero-cli-zarr
 pip install omero-certificates
 
 for x in *.tar.gz; do
