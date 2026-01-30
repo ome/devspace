@@ -63,7 +63,6 @@ RUN dnf -y update
 RUN dnf -y install blosc
 
 RUN dnf install -y cronie
-RUN update-alternatives --set java java-11-openjdk.x86_64
 
 EXPOSE 14064
 EXPOSE 14063
