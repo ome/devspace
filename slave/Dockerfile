@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.authors="OME"
 
 ARG NAME=ome
 
-ARG GRADLEVER=6.8.2
+ARG GRADLEVER=6.9.3
 
 ADD ./settings.env  /home/settings.env
 RUN chmod +x /home/settings.env
