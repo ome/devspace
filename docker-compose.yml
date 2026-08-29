@@ -171,6 +171,10 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
             - ${REPO_CURATED}:${REPO_CURATED}:ro
             - ${REPO_CONFIG}:${REPO_CONFIG}:ro
+            # docker plugin requires a shared workspace
+            # docker-in-docker can't share an internal workspace so we need
+            # an external volume
+            - ./docker-workspace:/home/omero/workspace
         environment:
             - SLAVE_NAME=docker
             - SLAVE_PARAMS=-labels docker -disableClientsUniqueId -executors ${DOCKER_EXECUTORS}
