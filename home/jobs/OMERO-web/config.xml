@@ -147,12 +147,27 @@ for x in *.tar.gz; do
     pip install -U $x # install iviewer
 done
 
+# get back to /home/omero/workspace/OMERO-web/
+cd $WORKSPACE
 omero config append omero.web.apps &apos;&quot;omero_iviewer&quot;&apos;
 omero config set omero.web.viewer.view omero_iviewer.views.index
 omero config append omero.web.open_with &apos;[&quot;omero_iviewer&quot;, &quot;omero_iviewer_index&quot;, {&quot;supported_objects&quot;:[&quot;images&quot;, &quot;dataset&quot;, &quot;well&quot;], &quot;script_url&quot;: &quot;omero_iviewer/openwith.js&quot;, &quot;label&quot;: &quot;OMERO.iviewer&quot;}]&apos;
 
-# OMERO.figure installation
-pip install git+https://github.com/$SPACE_USER/omero-figure.git@$MERGE_PUSH_BRANCH#egg=omero-figure
+# OMERO.figure installation - including figure submodule
+pip uninstall -y omero-figure
+git clone --recurse-submodules -b $MERGE_PUSH_BRANCH https://github.com/$SPACE_USER/omero-figure.git
+cd omero-figure/figure
+git remote add $SPACE_USER https://github.com/$SPACE_USER/figure.git
+git fetch $SPACE_USER
+git checkout $SPACE_USER/$MERGE_PUSH_BRANCH
+# return to omero-figure repo to pip install it...
+cd $WORKSPACE/omero-figure
+python -m build
+cd dist
+for x in *.tar.gz; do
+    pip install -U $x # install figure
+done
+cd $WORKSPACE
 omero config append omero.web.apps &apos;&quot;omero_figure&quot;&apos;
 omero config append omero.web.ui.top_links &apos;[&quot;Figure&quot;, &quot;figure_index&quot;, {&quot;title&quot;: &quot;Open Figure in new tab&quot;, &quot;target&quot;: &quot;_blank&quot;}]&apos;
 omero config append omero.web.open_with &apos;[&quot;omero_figure&quot;, &quot;new_figure&quot;, {&quot;supported_objects&quot;:[&quot;images&quot;], &quot;target&quot;: &quot;_blank&quot;, &quot;label&quot;: &quot;OMERO.figure&quot;}]&apos;
