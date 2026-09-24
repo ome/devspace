@@ -55,3 +55,24 @@ Instructions
 * Start the docker service 
 
       systemctl start docker 
+
+
+Restart Issue:
+-------------
+
+The restart issue on the VM: the machine restarts, but the containers do not restart with it.  
+
+This has been investigated on the merge-ci host (**ome-devsp-ap1**), it occurred because the Docker image disk (**docker-storage_ap1.img**) was not properly mounted to **/var/lib/docker-xfs-ap1**. To resolve this, The **/etc/fstab** file has been updated so the mount depends on the scratch folder being available and retries every 30 seconds if it fails, i.e.:
+
+    /uod/idr/scratch/docker-storage_ap1.img /var/lib/docker-xfs-ap1 xfs loop,defaults,x-systemd.requires-mounts-for=/uod/idr/scratch,,x-systemd.mount-timeout=30  0 0
+
+The Docker service file has been updated so it relies on the mounted image disk. The following clause 
+
+    [Unit]
+    RequiresMountsFor=/var/lib/docker-xfs-ap1
+
+has been added to this file:
+    
+    /etc/systemd/system/docker.service.d/override.conf
+
+Following these adjustments, a system reboot successfully brought back all Docker containers. The identical fix should be deployed to the active merge-ci host (**idr3-slot2**).
