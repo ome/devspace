@@ -1,5 +1,6 @@
 #!/bin/bash
-sudo chmod 777 -R /home/omero
+
+sudo find /home/omero -path /home/omero/.ssh -prune -o -exec chmod 777 {} +
 workspace=/home/omero/workspace/OMERO-test-integration
 function shut_down() {
     if [ -d "$workspace" ]; then
