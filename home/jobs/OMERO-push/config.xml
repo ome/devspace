@@ -8,13 +8,11 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>MERGE_COMMAND</name>
-          <description></description>
           <defaultValue>merge develop --no-ask --reset --shallow</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>STATUS</name>
-          <description></description>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>success-only</string>
@@ -26,7 +24,7 @@
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.0.0-rc">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@5.10.1">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -42,7 +40,7 @@
     <browser class="hudson.plugins.git.browser.AssemblaWeb">
       <url></url>
     </browser>
-    <submoduleCfg class="list"/>
+    <submoduleCfg class="empty-list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.SubmoduleOption>
         <disableSubmodules>false</disableSubmodules>
@@ -55,7 +53,9 @@
       <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
         <relativeTargetDir>src</relativeTargetDir>
       </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
-      <hudson.plugins.git.extensions.impl.CleanCheckout/>
+      <hudson.plugins.git.extensions.impl.CleanCheckout>
+        <deleteUntrackedNestedRepositories>false</deleteUntrackedNestedRepositories>
+      </hudson.plugins.git.extensions.impl.CleanCheckout>
       <hudson.plugins.git.extensions.impl.CheckoutOption>
         <timeout>30</timeout>
       </hudson.plugins.git.extensions.impl.CheckoutOption>
@@ -76,10 +76,11 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.42">
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@795.ve8e151429b_27">
       <project>OMERO-python-superbuild-build</project>
       <filter>version.properties</filter>
       <target></target>
+      <includeBuildNumberInTargetPath>false</includeBuildNumberInTargetPath>
       <excludes></excludes>
       <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
@@ -102,14 +103,17 @@ echo &quot;versions.omero-pypi=$JENKINS_URL/job/OMERO-python-superbuild-build/la
 echo &quot;versions.omero-github=https://github.com/$SPACE_USER/PACKAGE/archive&quot; &gt;&gt; etc/omero.properties
 echo &quot;versions.scripts-prefix=&quot; &gt;&gt; etc/omero.properties
 echo &quot;versions.scripts=$MERGE_PUSH_BRANCH&quot; &gt;&gt; etc/omero.properties
+OZPB_VERSION=$(curl -fsSL $JENKINS_URL/job/OMERO-zarr-pixel-buffer-push/lastSuccessfulBuild/artifact/build/version.tsv | cut -f3)
+echo &quot;versions.omero-zarr-pixel-buffer=$OZPB_VERSION&quot; &gt;&gt; etc/omero.properties
 
 cat $WORKSPACE/version.properties &gt;&gt; etc/omero.properties
 git commit -a -m &quot;Add version.properties to etc/omero.properties&quot;
 git push -f git@github.com:$user/openmicroscopy.git HEAD:refs/heads/$MERGE_PUSH_BRANCH</command>
+      <configuredLocalRules/>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.30"/>
   </buildWrappers>
 </project>
