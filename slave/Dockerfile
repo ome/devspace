@@ -2,6 +2,10 @@ FROM openmicroscopy/devagent:0.8.2
 
 LABEL org.opencontainers.image.authors="OME"
 
+RUN dnf -y upgrade ca-certificates \
+    && update-ca-trust \
+    && dnf clean all
+
 ARG NAME=ome
 
 ARG GRADLEVER=6.9.3

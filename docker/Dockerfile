@@ -4,6 +4,10 @@ LABEL org.opencontainers.image.authors="OME"
 
 USER root
 
+RUN dnf -y upgrade ca-certificates \
+    && update-ca-trust \
+    && dnf clean all
+
 
 RUN dnf -y install -y yum-utils \
   device-mapper-persistent-data \

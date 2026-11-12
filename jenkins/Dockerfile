@@ -1,4 +1,11 @@
 FROM jenkins/jenkins:lts-jdk21
+
+USER root
+RUN apt-get update \
+    && apt-get install -y --only-upgrade ca-certificates \
+    && dpkg-query -W -f='${Version}\n' ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 LABEL org.opencontainers.image.authors="OME"
 
 # Temp fix robot test results

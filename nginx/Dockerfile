@@ -2,6 +2,10 @@ FROM openmicroscopy/devagent:0.8.2
 
 LABEL org.opencontainers.image.authors="OME"
 
+RUN dnf -y upgrade ca-certificates \
+    && update-ca-trust \
+    && dnf clean all
+
 COPY nginx-stable.repo /etc/yum.repos.d/
 RUN dnf -y install dnf-utils
 RUN yum-config-manager --enable nginx-stable

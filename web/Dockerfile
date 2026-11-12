@@ -2,6 +2,10 @@ FROM openmicroscopy/devagent:0.8.2
 
 LABEL org.opencontainers.image.authors="OME"
 
+RUN dnf -y upgrade ca-certificates \
+    && update-ca-trust \
+    && dnf clean all
+
 ADD ./settings.env  /home/settings.env
 RUN chmod +x /home/settings.env
 
