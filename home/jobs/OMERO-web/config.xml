@@ -41,7 +41,8 @@ if [ -e $OMERO_ENV ]; then
 fi
 
 rm -rf $HOME/static/web/
-rm -rf $WORKSPACE/*
+rm -rf "$OMERO_ENV"
+rm -rf "$WORKSPACE"/*
 
 python3.11 -m venv $OMERO_ENV
 source $OMERO_ENV/bin/activate
