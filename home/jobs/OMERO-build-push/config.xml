@@ -40,9 +40,14 @@
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.64">
     <script>node(&apos;testintegration&apos;) {
 
-  library identifier: &apos;recursiveMerge@master&apos;, retriever: modernSCM(
+// replaced by PW Oct2026 until my PR is merged
+// library identifier: &apos;recursiveMerge@master&apos;, retriever: modernSCM(
+//     [$class: &apos;GitSCMSource&apos;,
+//      remote: &apos;https://github.com/ome/jenkins-library-recursivemerge.git&apos;])
+
+  library identifier: &apos;recursiveMerge@pip-fix&apos;, retriever: modernSCM(
     [$class: &apos;GitSCMSource&apos;,
-     remote: &apos;https://github.com/ome/jenkins-library-recursivemerge.git&apos;])
+     remote: &apos;https://github.com/pwalczysko/jenkins-library-recursivemerge.git&apos;])
 
   recursiveCheckout(
     repo: &apos;omero-build.git&apos;)
