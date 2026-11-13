@@ -150,8 +150,7 @@ After the script has completed you can either leave it in place so it will overr
 The default deployment initializes a Jenkins server with a [predefined set of
 jobs](home/jobs).
 
-The table below lists the job names, the Jenkins node labels and the associated docker
-they are associated with and a short description of the jobs.
+The table below lists the job names, the Jenkins node labels (Name) and the name of the docker they are associated with and a short description of the jobs.
 
 | Job name                       | Name            | Description                                      | docker name                  |
 |--------------------------------|-----------------|--------------------------------------------------|-------------------------------|
