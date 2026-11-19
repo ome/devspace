@@ -9,8 +9,17 @@ RUN chmod +x  /home/settings.env
 WORKDIR /tmp/omero-install/linux
 
 
-RUN dnf install -y python3.11 python3.11-pip
-RUN pip3.11 install build
+# Install Python and refresh certificate trust before pip installs
+RUN dnf install -y ca-certificates python3.11 python3.11-pip && \
+    dnf upgrade -y ca-certificates && \
+    update-ca-trust
+
+RUN python3.11 -m pip install \
+    "pip @ https://files.pythonhosted.org/packages/3f/06/3e4420302363fbb71be3c7f35ce042f54bfca330e3e66b3a2e3c4cca579f/pip-26.2.2-py3-none-any.whl#sha256=fd7f4dfa8190e014013b9f08f3e973f4e4c26ffd179a204895533a7254813a70"
+
+RUN python3.11 -m pip install --upgrade "certifi>=2026.10.23"
+
+RUN python3.11 -m pip install build
 
 # Ice dependencies
 RUN dnf install -y 'dnf-command(config-manager)' && \
@@ -27,12 +36,16 @@ ENV ICE_HOME=/opt/ice-3.6.5
 ENV PATH=$ICE_HOME/bin:$PATH
 
 # install postgres tools for pg16 (default is 13)
+# Install PostgreSQL 16 tools (default is 13)
 RUN dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-RUN dnf -qy module disable postgresql
+RUN sed -i \
+    's/rhel-\$releasever_major\.\$releasever_minor-/rhel-\$releasever_major-/g' \
+    /etc/yum.repos.d/pgdg-redhat-all.repo && \
+    dnf --disablerepo="pgdg*" -qy module disable postgresql
 
 RUN dnf -y install postgresql16 \
     && dnf clean all
-
+RUN update-alternatives --set java java-21-openjdk.x86_64
 # For OME-zarr
 RUN dnf -y install epel-release
 RUN dnf -y update
@@ -58,7 +71,7 @@ RUN chmod a+x /tmp/run.sh
 
 
 # Change user id to fix permissions issues
-ARG USER_ID=1000
+ARG USER_ID=11593
 RUN usermod -u $USER_ID omero
 
 

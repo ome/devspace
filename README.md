@@ -150,23 +150,39 @@ After the script has completed you can either leave it in place so it will overr
 The default deployment initializes a Jenkins server with a [predefined set of
 jobs](home/jobs).
 
-The table below lists the job names, the Jenkins node labels and the associated docker
-they are associated with and a short description of the jobs.
+The table below lists the job names, the Jenkins node labels (Name) and the name of the docker they are associated with and a short description of the jobs.
 
-| Job name               | Name            | Description                               |     docker name            |
-| -----------------------|-----------------| ------------------------------------------|----------------------------|
-| Trigger                |                 | Runs all the following jobs in order      |                            |
-| BIOFORMATS-push        | testintegration | Merges all Bio-Formats PRs                | devspace-testintegration-1 |
-| BIOFORMATS-build       | testintegration | Builds Bio-Formats components             | devspace-testintegration-1 |
-| BIOFORMATS-image       | testintegration | Builds a Docker image of Bio-Formats      | devspace-docker-1          |
-| OMERO-push             | testintegration | Merges all OMERO PRs                      | devspace-testintegration-1 |
-| OMERO-build            | testintegration | Builds OMERO artifacts (server, clients)  | devspace-testintegration-1 |
-| OMERO-server           | omero           | Deploys an OMERO.server                   | devspace-omero-1           |
-| OMERO-web              | web             | Deploys an OMERO.web client               | devspace-web-1             |
-| OMERO-test-integration | testintegration | Runs the OMERO integration tests          | devspace-testintegration-1 |
-| OMERO-robot            | testintegration | Runs the Robot tests                      | devspace-testintegration-1 |
-| nginx                  | nginx           | Reloads the nginx server                  | devspace-nginx-1           |
-| OMERO-docs             | testintegration | Builds the OMERO documentation            | devspace-testintegration-1 |
+| Job name                       | Name            | Description                                      | docker name                  |
+|--------------------------------|-----------------|--------------------------------------------------|-------------------------------|
+| Trigger                        |                 | Runs all the following jobs in order             |                               |
+| BIOFORMATS-push                 | testintegration | Merges all Bio-Formats PRs                       | devspace-testintegration-1    |
+| BIOFORMATS-build                | testintegration | Builds Bio-Formats components                    | devspace-testintegration-1    |
+| BIOFORMATS-image                | docker           | Builds a Docker image of Bio-Formats             | devspace-docker-1             |
+| BIOFORMATS-linkcheck            | docker           | Checks links in the Bio-Formats documentation    | devspace-docker-1             |
+| OMERO-push                      | testintegration | Merges all OMERO PRs                             | devspace-testintegration-1    |
+| OMERO-build                     | testintegration | Builds OMERO artifacts (server, clients)         | devspace-testintegration-1    |
+| OMERO-build-push                | testintegration | Pushes OMERO build artifacts                     | devspace-testintegration-1    |
+| OMERO-build-build               | testintegration | Builds OMERO build artifacts                     | devspace-testintegration-1    |
+| OMERO-server                    | omero           | Deploys an OMERO.server                          | devspace-omero-1              |
+| OMERO-web                       | web             | Deploys an OMERO.web client                      | devspace-web-1                |
+| OMERO-test-integration          | testintegration | Runs the OMERO integration tests                 | devspace-testintegration-1    |
+| OMERO-docs                      | testintegration | Builds the OMERO documentation                   | devspace-testintegration-1    |
+| OMERO-gradle-plugins-push        | testintegration | Pushes OMERO Gradle plugin changes               | devspace-testintegration-1    |
+| OMERO-gradle-plugins-build       | testintegration | Builds OMERO Gradle plugins                      | devspace-testintegration-1    |
+| OMERO-guides-push               | testintegration | Pushes OMERO guides changes                      | devspace-testintegration-1    |
+| OMERO-insight-push              | testintegration | Pushes OMERO.insight changes                     | devspace-testintegration-1    |
+| OMERO-insight-build             | testintegration | Builds OMERO.insight                             | devspace-testintegration-1    |
+| OMERO-matlab-push               | testintegration | Pushes OMERO.matlab changes                      | devspace-testintegration-1    |
+| OMERO-matlab-build              | testintegration | Builds OMERO.matlab                              | devspace-testintegration-1    |
+| OMERO-plugins-push              | testintegration | Pushes OMERO plugin changes                      | devspace-testintegration-1    |
+| OMERO-python-superbuild-push    | testintegration | Pushes OMERO Python superbuild changes           | devspace-testintegration-1    |
+| OMERO-python-superbuild-build   | testintegration | Builds the OMERO Python superbuild               | devspace-testintegration-1    |
+| OMERO-training                  | omero           | Runs OMERO training                              | devspace-omero-1              |
+| OMERO-zarr-pixel-buffer-push    | testintegration | Pushes Zarr pixel buffer changes                 | devspace-testintegration-1    |
+| OMERO-zarr-pixel-buffer-build   | testintegration | Builds the Zarr pixel buffer                     | devspace-testintegration-1    |
+| IDRSITE-push                    | testintegration | Pushes IDR website changes                       | devspace-testintegration-1    |
+| WEBSITE-push                    | testintegration | Pushes OME website changes                       | devspace-testintegration-1    |
+| nginx                           | nginx           | Reloads the nginx server                         | devspace-nginx-1               |
 
 
 This means that by default the following repositories need to be
